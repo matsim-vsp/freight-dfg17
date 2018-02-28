@@ -6,9 +6,9 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.HasPlansAndId;
 
 import lsp.resources.Resource;
-import replanning.LSPReplanner;
-import scoring.LSPScorer;
-import shipment.LSPShipment;
+import lsp.replanning.LSPReplanner;
+import lsp.scoring.LSPScorer;
+import lsp.shipment.LSPShipment;
 
 public interface LSP extends HasPlansAndId<LSPPlan,LSP>{
 

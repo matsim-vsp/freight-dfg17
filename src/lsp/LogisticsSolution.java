@@ -7,8 +7,8 @@ import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.events.handler.EventHandler;
 
 import lsp.functions.Info;
-import shipment.LSPShipment;
-import tracking.SimulationTracker;
+import lsp.shipment.LSPShipment;
+import lsp.tracking.SimulationTracker;
 
 
 public interface LogisticsSolution {

@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import lsp.LogisticsSolutionElement;
 import lsp.ShipmentTuple;
-import shipment.ShipmentComparator;
+import lsp.shipment.ShipmentComparator;
 
 public abstract class ResourceScheduler {
 
@@ -16,7 +16,6 @@ public abstract class ResourceScheduler {
 	public void setBufferTime(int bufferTime) {
 		this.bufferTime = bufferTime;
 	}
-	
 	
 	public final void scheduleShipments(Resource resource) {
 		this.resource = resource;

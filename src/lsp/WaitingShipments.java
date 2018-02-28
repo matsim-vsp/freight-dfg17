@@ -2,7 +2,7 @@ package lsp;
 
 import java.util.Collection;
 
-import shipment.LSPShipment;
+import lsp.shipment.LSPShipment;
 
 public interface WaitingShipments {
 

@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-import shipment.LSPShipment;
-import shipment.ShipmentComparator;
+import lsp.shipment.LSPShipment;
+import lsp.shipment.ShipmentComparator;
 
 public class WaitingShipmentsImpl implements WaitingShipments {
 

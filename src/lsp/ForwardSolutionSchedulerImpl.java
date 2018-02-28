@@ -3,8 +3,9 @@ package lsp;
 import java.util.ArrayList;
 
 import lsp.resources.Resource;
+import lsp.shipment.LSPShipment;
 
-public class SolutionSchedulerImpl implements SolutionScheduler {
+public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 
 	private class ResourceNeighbours{
 		private ArrayList<Resource> predecessors;
@@ -30,7 +31,7 @@ public class SolutionSchedulerImpl implements SolutionScheduler {
 	private ArrayList<Resource> sortedResourceList;
 	private ArrayList<ResourceNeighbours> neighbourList;
 	
-	public SolutionSchedulerImpl() {
+	public ForwardSolutionSchedulerImpl() {
 		this.sortedResourceList = new ArrayList<Resource>();
 		this.neighbourList = new ArrayList<ResourceNeighbours>();
 	}
@@ -38,6 +39,7 @@ public class SolutionSchedulerImpl implements SolutionScheduler {
 	
 	@Override
 	public void scheduleSolutions() {
+		insertShipmentsAtBeginning();
 		setResourceNeighbours();
 		sortResources();
 		for(Resource resource : sortedResourceList ) {
@@ -105,5 +107,22 @@ public class SolutionSchedulerImpl implements SolutionScheduler {
 		return false;
 	}
 
+	private void insertShipmentsAtBeginning() {
+		for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
+			LogisticsSolutionElement firstElement = getFirstElement(solution);
+			for(LSPShipment shipment : solution.getShipments() ) {
+				firstElement.getIncomingShipments().addShipment(shipment.getStartTimeWindow().getStart(), shipment);
+			}	
+		}
+	}
 
+	private LogisticsSolutionElement getFirstElement(LogisticsSolution solution){
+		for(LogisticsSolutionElement element : solution.getSolutionElements()){
+			if(element.getPreviousElement() == null){
+				return element;
+			}
+			
+		}
+		return null;
+	}
 }

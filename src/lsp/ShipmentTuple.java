@@ -1,7 +1,7 @@
 package lsp;
 
 
-import shipment.LSPShipment;
+import lsp.shipment.LSPShipment;
 
 public class ShipmentTuple {
 	private LSPShipment shipment;

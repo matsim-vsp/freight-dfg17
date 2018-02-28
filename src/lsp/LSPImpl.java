@@ -8,9 +8,9 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.core.replanning.GenericStrategyManager;
 
 import lsp.resources.Resource;
-import replanning.LSPReplanner;
-import scoring.LSPScorer;
-import shipment.LSPShipment;
+import lsp.replanning.LSPReplanner;
+import lsp.scoring.LSPScorer;
+import lsp.shipment.LSPShipment;
 
 public class LSPImpl implements LSP {
 
@@ -161,7 +161,9 @@ public class LSPImpl implements LSP {
 
 	@Override
 	public void setSelectedPlan(LSPPlan selectedPlan) {
-		if(!plans.contains(selectedPlan)) plans.add(selectedPlan);
+		if(!plans.contains(selectedPlan)) {
+			plans.add(selectedPlan);
+		}
 		this.selectedPlan = selectedPlan;
 		
 	}
@@ -173,7 +175,8 @@ public class LSPImpl implements LSP {
 				copiedSolution.getSolutionElements().addAll(solution.getSolutionElements());		
 				copiedSolutions.add(copiedSolution);
 		}
-		LSPPlan copiedPlan = new LSPPlan(plan2copy.getAssigner());
+		LSPPlan copiedPlan = new LSPPlanImpl();
+		copiedPlan.setAssigner(plan2copy.getAssigner());
 		copiedPlan.setLSP(plan2copy.getLsp());
 		double initialScoreOfCopiedPlan = plan2copy.getScore();
 		copiedPlan.setScore(initialScoreOfCopiedPlan);

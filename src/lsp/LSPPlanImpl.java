@@ -6,16 +6,14 @@ import java.util.Collection;
 
 import org.matsim.api.core.v01.population.BasicPlan;
 
-public class LSPPlan implements BasicPlan{
+public class LSPPlanImpl implements LSPPlan{
 
 	private LSP lsp;
 	private double score;
 	private Collection<LogisticsSolution> solutions;
 	private ShipmentAssigner assigner;
 	
-	public LSPPlan(ShipmentAssigner assigner) {	
-		this.assigner = assigner;
-		this.assigner.setLSP(this.lsp);
+	public LSPPlanImpl() {	
 		this.solutions = new ArrayList<LogisticsSolution>();
 	}
 	
@@ -49,7 +47,9 @@ public class LSPPlan implements BasicPlan{
 
 	public void setLSP(LSP lsp) {
 		this.lsp = lsp;
-		this.assigner.setLSP(lsp);
+		if(assigner != null) {
+			this.assigner.setLSP(lsp);
+		}
 		for(LogisticsSolution solution : solutions) {
 			solution.setLSP(lsp);
 		}

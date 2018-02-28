@@ -8,8 +8,8 @@ import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.events.handler.EventHandler;
 
 import lsp.functions.Info;
-import shipment.LSPShipment;
-import tracking.SimulationTracker;
+import lsp.shipment.LSPShipment;
+import lsp.tracking.SimulationTracker;
 
 public class LogisticsSolutionImpl implements LogisticsSolution {
 
@@ -26,6 +26,9 @@ public class LogisticsSolutionImpl implements LogisticsSolution {
 	public static class Builder{
 		private Id<LogisticsSolution> id;	
 		private Collection<LogisticsSolutionElement> elements;
+		private Collection<Info> solutionInfos;
+		private Collection<EventHandler> eventHandlers;
+		private Collection<SimulationTracker>trackers;
 		
 		public static Builder newInstance(Id<LogisticsSolution>id){
 			return new Builder(id);
@@ -33,6 +36,9 @@ public class LogisticsSolutionImpl implements LogisticsSolution {
 	
 		private Builder(Id<LogisticsSolution> id){
 			this.elements = new ArrayList<LogisticsSolutionElement>();
+			this.solutionInfos = new ArrayList<Info>();
+			this.eventHandlers = new ArrayList<EventHandler>(); 
+			this.trackers = new ArrayList<SimulationTracker>();
 			this.id = id;
 		}
 	
@@ -40,7 +46,22 @@ public class LogisticsSolutionImpl implements LogisticsSolution {
 			elements.add(element);
 			return this;
 		}
-			
+		
+		public Builder addInfo(Info info) {
+			solutionInfos.add(info);
+			return this;
+		}
+		
+		public Builder addEventHandler(EventHandler handler) {
+			eventHandlers.add(handler);
+			return this;
+		}
+		
+		public Builder addTracker(SimulationTracker tracker) {
+			trackers.add(tracker);
+			return this;
+		}
+		
 		public LogisticsSolutionImpl build(){
 			//linkSolutionElements(elements);
 			return new LogisticsSolutionImpl(this);
@@ -73,10 +94,10 @@ public class LogisticsSolutionImpl implements LogisticsSolution {
 		for(LogisticsSolutionElement element : this.solutionElements) {
 			element.setLogisticsSolution(this);
 		}
-		this.shipments = new ArrayList <LSPShipment> ();
-		this.solutionInfos = new ArrayList<Info>();
-		this.eventHandlers = new ArrayList<EventHandler>(); 
-		this.trackers = new ArrayList<SimulationTracker>();
+		this.shipments = new ArrayList <LSPShipment>();
+		this.solutionInfos = builder.solutionInfos;
+		this.eventHandlers = builder.eventHandlers; 
+		this.trackers = builder.trackers;
 	}
 	
 	
@@ -108,20 +129,8 @@ public class LogisticsSolutionImpl implements LogisticsSolution {
 	@Override
 	public void assignShipment(LSPShipment shipment) {
 		shipments.add(shipment);	
-		getFirstElement().getIncomingShipments().addShipment(shipment.getStartTimeWindow().getStart(), shipment);
 	}
 	
-	private LogisticsSolutionElement getFirstElement(){
-		for(LogisticsSolutionElement element : solutionElements){
-			if(element.getPreviousElement() == null){
-				return element;
-			}
-			
-		}
-		return null;
-	}
-
-
 	@Override
 	public Collection<Info> getInfos() {
 		return solutionInfos;

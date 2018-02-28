@@ -1,6 +1,6 @@
 package lsp;
 
-import shipment.LSPShipment;
+import lsp.shipment.LSPShipment;
 
 public interface ShipmentAssigner {
 
