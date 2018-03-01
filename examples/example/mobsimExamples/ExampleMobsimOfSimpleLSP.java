@@ -1,7 +1,4 @@
-package example.MobsimOfSimpleLSP;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+package example.mobsimExamples;
 
 import java.util.ArrayList;
 import java.util.Collection;
