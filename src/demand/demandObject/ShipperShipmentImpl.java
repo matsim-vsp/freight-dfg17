@@ -1,18 +1,16 @@
-package testDemandObjectsWithLotsizes;
+package demand.demandObject;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 
-import demand.demandObject.DemandObject;
-import demand.demandObject.ShipperShipment;
 import lsp.shipment.LSPShipment;
 
-public class LotSizeShipment implements ShipperShipment{
+public class ShipperShipmentImpl implements ShipperShipment{
 
 	private Id<ShipperShipment> id;
 	private double shipmentSize;
-	public TimeWindow startTimeWindow;
-	public TimeWindow endTimeWindow;
+	private TimeWindow startTimeWindow;
+	private TimeWindow endTimeWindow;
 	private double serviceTime;
 	private LSPShipment lspShipment;
 	private DemandObject demandObject;
@@ -20,25 +18,25 @@ public class LotSizeShipment implements ShipperShipment{
 	public static class Builder{
 		private Id<ShipperShipment> id;
 		private double shipmentSize;
-		public TimeWindow startTimeWindow;
-		public TimeWindow endTimeWindow;
+		private TimeWindow startTimeWindow;
+		private TimeWindow endTimeWindow;
 		private double serviceTime;
 		private DemandObject demandObject;
 	
-		public Builder getInstance() {
+		public static Builder newInstance() {
 			return new Builder();
 		}
 	
-		public Builder setId(Id<ShipperShipment> id) { 
+		public Builder setId(Id<ShipperShipment> id) {
 			this.id = id;
 			return this;
 		}
-		
+	
 		public Builder setShipmentSize(double shipmentSize) {
 			this.shipmentSize = shipmentSize;
 			return this;
 		}
-		
+	
 		public Builder setStartTimeWindow(TimeWindow startTimeWindow) {
 			this.startTimeWindow = startTimeWindow;
 			return this;
@@ -48,28 +46,39 @@ public class LotSizeShipment implements ShipperShipment{
 			this.endTimeWindow = endTimeWindow;
 			return this;
 		}
-		
+	
 		public Builder setServiceTime(double serviceTime) {
 			this.serviceTime = serviceTime;
 			return this;
 		}
-		public LotSizeShipment build() {
-			return new LotSizeShipment(this);
-		}
 		
-		private Builder() {
-			
+		public Builder setDemandObject(DemandObject demandObject) {
+			this.demandObject = demandObject;
+			return this;
 		}
 	
-		
-	}	
+		public ShipperShipment build() {
+			return new ShipperShipmentImpl(this);
+		}
+	}
 	
-	private LotSizeShipment(Builder builder) {
+	private ShipperShipmentImpl(Builder builder) {
 		this.id = builder.id;
 		this.shipmentSize = builder.shipmentSize;
-		this.startTimeWindow  = builder.startTimeWindow;
-		this.endTimeWindow = builder.endTimeWindow;
+		if(builder.startTimeWindow == null) {
+			this.startTimeWindow = TimeWindow.newInstance(0, Double.MAX_VALUE);
+		}
+		else {
+			this.startTimeWindow = builder.startTimeWindow;
+		}
+		if(builder.endTimeWindow == null) {
+			this.endTimeWindow = TimeWindow.newInstance(0, Double.MAX_VALUE);
+		}
+		else {
+			this.endTimeWindow = builder.endTimeWindow;
+		}
 		this.serviceTime = builder.serviceTime;
+		this.demandObject = builder.demandObject;
 	}
 	
 	@Override
@@ -88,6 +97,11 @@ public class LotSizeShipment implements ShipperShipment{
 	}
 
 	@Override
+	public TimeWindow getEndTimeWindow() {
+		return endTimeWindow;
+	}
+
+	@Override
 	public double getServiceTime() {
 		return serviceTime;
 	}
@@ -103,19 +117,24 @@ public class LotSizeShipment implements ShipperShipment{
 	}
 
 	@Override
-	public TimeWindow getEndTimeWindow() {
-		return endTimeWindow;
-	}
-
-	@Override
 	public void setDemandObject(DemandObject demandObject) {
-		// TODO Auto-generated method stub
-		
+		this.demandObject = demandObject;
 	}
 
 	@Override
 	public DemandObject getDemandObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return demandObject;
 	}
+
+	@Override
+	public void setStartTimeWindow(TimeWindow timeWindow) {
+		this.startTimeWindow = timeWindow;
+	}
+
+	@Override
+	public void setEndTimeWindow(TimeWindow timeWindow) {
+		this.endTimeWindow = timeWindow;
+	}
+	
+
 }

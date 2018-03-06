@@ -93,7 +93,13 @@ public class LSPImpl implements LSP {
 		this.plans.add(builder.initialPlan);
 		this.resources = builder.resources;
 		this.scorer = builder.scorer;
+		if(this.scorer != null) {
+			this.scorer.setLSP(this);
+		}	
 		this.replanner = builder.replanner;
+		if(this.replanner != null) {
+			this.replanner.setLSP(this);
+		}	
 	}
 	
 	

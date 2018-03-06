@@ -2,6 +2,7 @@ package lsp.scoring;
 
 import org.matsim.core.controler.events.ScoringEvent;
 
+import demand.decoratedLSP.LSPDecorators;
 import lsp.LSP;
 import lsp.LSPs;
 
@@ -13,6 +14,7 @@ public class LSPScoringModuleImpl implements LSPScoringModule{
 		this.lsps = lsps;
 	}
 	
+		
 	@Override
 	public void notifyScoring(ScoringEvent arg0) {
 		scoreLSPs();

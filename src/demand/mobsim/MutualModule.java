@@ -1,61 +1,49 @@
-package demand.controler;
-
-import java.util.Collection;
+package demand.mobsim;
 
 import org.matsim.contrib.freight.CarrierConfig;
 import org.matsim.core.controler.AbstractModule;
 
 import com.google.inject.Provides;
-import com.google.inject.multibindings.Multibinder;
 
-import demand.decoratedLSP.LSPsWithOffers;
-import demand.demandObject.DemandObject;
+import demand.controler.MutualControlerListener;
+import demand.decoratedLSP.LSPDecorators;
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
-import demand.scoring.DemandScoringModule;
+import demand.scoring.MutualScoringModule;
 import lsp.mobsim.CarrierResourceTracker;
 import lsp.mobsim.FreightQSimFactory;
 import lsp.scoring.LSPScoringModule;
 
 public class MutualModule extends AbstractModule{
 
-	private LSPsWithOffers lsps;
+	private LSPDecorators lsps;
 	private DemandObjects demandObjects;
-	private DemandScoringModule demandScoringModule;
-	private LSPScoringModule lspScoringModule;
-	private MutualReplanningModule replanningModule;
-	
+	private MutualScoringModule mutualScoringModule;
+	private MutualReplanningModule replanningModule;	
 	private CarrierConfig carrierConfig = new CarrierConfig();
-	
-	
+
 	
 	public static class Builder{
 		
-		private LSPsWithOffers lsps;
+		private LSPDecorators lsps;
 		private DemandObjects demandObjects;
-		private DemandScoringModule demandScoringModule;
-		private LSPScoringModule lspScoringModule;
+		private MutualScoringModule mutualScoringModule;
 		private MutualReplanningModule replanningModule;
 		
-		public Builder newInstance() {
+		public static Builder newInstance() {
 			return new Builder();
 		}
 		
-		public Builder setLsps(LSPsWithOffers lsps) {
+		public Builder setLsps(LSPDecorators lsps) {
 			this.lsps = lsps;
 			return this;
 		}
 	
-		public Builder setDemandScoringModule(DemandScoringModule demandScoringModule) {
-			this.demandScoringModule = demandScoringModule;
+		public Builder setMutualScoringModule(MutualScoringModule demandScoringModule) {
+			this.mutualScoringModule = demandScoringModule;
 			return this;
 		}
-		
-		public Builder setLSPScoringModule(LSPScoringModule lspScoringModule) {
-			this.lspScoringModule = lspScoringModule;
-			return this;
-		}
-		
+				
 		public Builder setMutualReplanningModule(MutualReplanningModule replanningModule) {
 			this.replanningModule = replanningModule;
 			return this;
@@ -74,8 +62,7 @@ public class MutualModule extends AbstractModule{
 	private MutualModule(Builder builder) {
 		this.lsps = builder.lsps;
 		this.demandObjects = builder.demandObjects;
-		this.demandScoringModule = builder.demandScoringModule;
-		this.lspScoringModule = builder.lspScoringModule;
+		this.mutualScoringModule = builder.mutualScoringModule;
 		this.replanningModule = builder.replanningModule;
 	}
 	
@@ -83,19 +70,16 @@ public class MutualModule extends AbstractModule{
 	@Override
 	public void install() {
 			bind(CarrierConfig.class).toInstance(carrierConfig);
-			bind(LSPsWithOffers.class).toInstance(lsps);
+			bind(LSPDecorators.class).toInstance(lsps);
 			bind(DemandObjects.class).toInstance(demandObjects);
 			
 			if(replanningModule != null) {
 	        	bind(MutualReplanningModule.class).toInstance(replanningModule);
 	        }
-			if(demandScoringModule != null) {
-				 bind(DemandScoringModule.class).toInstance(demandScoringModule);
+			if(mutualScoringModule != null) {
+				 bind(MutualScoringModule.class).toInstance(mutualScoringModule);
 			}
-			if(lspScoringModule != null) {
-				 bind(LSPScoringModule.class).toInstance(lspScoringModule);
-			}
-	        bind(MutualControlerListener.class).asEagerSingleton();
+			bind(MutualControlerListener.class).asEagerSingleton();
 	        addControlerListenerBinding().to(MutualControlerListener.class);
 	        bindMobsim().toProvider(FreightQSimFactory.class);
 		

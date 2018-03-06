@@ -12,8 +12,6 @@ import lsp.replanning.LSPReplanningModule;
 import lsp.scoring.LSPScoringModule;
 
 
-
-
 public class LSPModule extends AbstractModule {
 
 	

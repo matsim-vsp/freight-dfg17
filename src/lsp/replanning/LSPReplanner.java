@@ -11,5 +11,5 @@ public interface LSPReplanner {
 	public void replan(ReplanningEvent event);
 	public GenericStrategyManager<LSPPlan,LSP> getStrategyManager();
 	public void setStrategyManager(GenericStrategyManager<LSPPlan,LSP> manager);
-	
+	public void setLSP(LSP lsp);
 }

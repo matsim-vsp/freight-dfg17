@@ -18,6 +18,14 @@ public class LSPReplannerImpl implements LSPReplanner{
 		this.lsp = lsp;
 	}
 	
+	public LSPReplannerImpl() {
+		
+	}
+	
+	@Override
+	public void setLSP(LSP lsp) {
+		this.lsp = lsp;
+	}
 	
 	@Override
 	public void replan(ReplanningEvent event) {
@@ -26,7 +34,6 @@ public class LSPReplannerImpl implements LSPReplanner{
 			lspList.add(lsp);
 			strategyManager.run(lspList, null, event.getIteration(), event.getReplanningContext());
 		}
-		
 	}
 
 	@Override

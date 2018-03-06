@@ -41,7 +41,7 @@ public class SimpleForwardSolutionScheduler implements SolutionScheduler {
 			LogisticsSolutionElement firstElement = getFirstElement(solution);
 			for(LSPShipment shipment : solution.getShipments() ) {
 				firstElement.getIncomingShipments().addShipment(shipment.getStartTimeWindow().getStart(), shipment);
-			}	
+			}
 		}
 	}
 	
