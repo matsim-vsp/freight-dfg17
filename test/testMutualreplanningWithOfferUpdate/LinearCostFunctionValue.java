@@ -1,14 +1,14 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
 import lsp.functions.InfoFunctionValue;
 
-public class FixedCostFunctionValue implements InfoFunctionValue {
+public class LinearCostFunctionValue implements InfoFunctionValue {
 
 	private String value;
-		
+	
 	@Override
 	public String getName() {
-		return "fixed";
+		return "linear";
 	}
 
 	@Override

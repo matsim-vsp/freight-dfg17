@@ -1,4 +1,4 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
 import lsp.functions.Info;
 import lsp.functions.InfoFunction;

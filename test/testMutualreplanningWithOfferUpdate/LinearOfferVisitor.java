@@ -1,7 +1,6 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
 import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.offer.Offer;
 import demand.offer.OfferVisitor;
 import lsp.LogisticsSolution;
@@ -20,8 +19,7 @@ public class LinearOfferVisitor implements OfferVisitor {
 		if(offer instanceof LinearOffer) {
 			LinearOffer linearOffer = (LinearOffer) offer;
 			linearOffer.update();
-		}
-		
+		}		
 	}
 
 	@Override

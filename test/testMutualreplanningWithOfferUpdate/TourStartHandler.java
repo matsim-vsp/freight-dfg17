@@ -1,4 +1,4 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
 import lsp.events.TourStartEvent;
 import lsp.events.TourStartEventHandler;

@@ -1,34 +1,39 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
+import java.util.Random;
+
+import demand.decoratedLSP.LSPDecorator;
+import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.offer.Offer;
 import demand.offer.OfferVisitor;
 import lsp.functions.Info;
 import lsp.functions.InfoFunctionValue;
-import lsp.LSP;
-import lsp.LogisticsSolution;
 
 
 public class LinearOffer implements Offer{
 
-	private LSP  lsp;
-	private LogisticsSolution solution;
+	private LSPDecorator  lsp;
+	private LogisticsSolutionDecorator solution;
 	private String type;
 	private double fix;
 	private double linear;
 	
-	public LinearOffer(LogisticsSolution solution) {
+	public LinearOffer(LogisticsSolutionDecorator solution) {
 		this.lsp =  solution.getLSP();
 		this.solution = solution;
 		this.type = "linear";
+		Random random = new Random(1);
+		fix = random.nextDouble() * 10;
+		linear = random.nextDouble() * 10;
 	}
 	
 	@Override
-	public LSP getLsp() {
+	public LSPDecorator getLsp() {
 		return lsp;
 	}
 
 	@Override
-	public LogisticsSolution getSolution() {
+	public LogisticsSolutionDecorator getSolution() {
 		return solution;
 	}
 
@@ -78,16 +83,15 @@ public class LinearOffer implements Offer{
 				}
 			}
 		}
-		
 	}
 
 	@Override
-	public void setLSP(LSP lsp) {
+	public void setLSP(LSPDecorator lsp) {
 		this.lsp = lsp;
 	}
 
 	@Override
-	public void setSolution(LogisticsSolution solution) {
+	public void setSolution(LogisticsSolutionDecorator solution) {
 		this.solution = solution;
 	}
 

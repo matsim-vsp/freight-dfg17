@@ -1,4 +1,4 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +19,7 @@ public class LinearOfferFactoryImpl implements OfferFactory{
 	
 	private ArrayList<Offer> offerList;
 	private LogisticsSolutionDecorator solution;
-	private LSP lsp;
+	private LSPDecorator lsp;
 	
 	public LinearOfferFactoryImpl(LogisticsSolutionDecorator solution) {
 		this.solution = solution;
@@ -45,7 +45,7 @@ public class LinearOfferFactoryImpl implements OfferFactory{
 	}
 
 	@Override
-	public LSP getLSP() {
+	public LSPDecorator getLSP() {
 		return	 lsp;
 	}
 
@@ -60,7 +60,7 @@ public class LinearOfferFactoryImpl implements OfferFactory{
 	}
 
 	@Override
-	public void setLSP(LSP lsp) {
+	public void setLSP(LSPDecorator lsp) {
 		this.lsp = lsp;
 	}
 

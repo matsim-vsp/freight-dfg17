@@ -1,4 +1,4 @@
-package testLSPWithCostTrackerAndOffer;
+package testMutualreplanningWithOfferUpdate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,13 +69,7 @@ public class LinearCostTracker implements SimulationTracker{
 		double totalCosts = distanceCosts + timeCosts + loadingCosts + vehicleFixedCosts;
 		fixedUnitCosts = (totalCosts * shareOfFixedCosts)/totalNumberOfShipments;
 		linearUnitCosts = (totalCosts * (1-shareOfFixedCosts))/totalWeightOfShipments;
-		System.out.println(fixedUnitCosts);
-		System.out.println(linearUnitCosts);
-		System.out.println(totalNumberOfShipments);
-		if(event.getIteration() ==1) {
-			System.exit(1);
-		}
-		
+				
 		CostInfo info = (CostInfo) infos.iterator().next();
 		for(InfoFunctionValue value : info.getFunction().getValues()) {
 			if(value instanceof FixedCostFunctionValue) {		
