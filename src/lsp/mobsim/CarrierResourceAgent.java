@@ -50,12 +50,6 @@ import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleUtils;
 
-
-
-
-
-
-
 class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler, PersonArrivalEventHandler,  LinkEnterEventHandler, LinkLeaveEventHandler, 
 							VehicleLeavesTrafficEventHandler {
 
