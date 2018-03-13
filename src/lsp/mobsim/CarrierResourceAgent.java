@@ -115,7 +115,6 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 		}
 
 		public void handleEvent(LinkLeaveEvent event) {
-            currentRoute.add(event.getLinkId());
             notifyLinkLeft(driverId , event.getVehicleId() , event.getLinkId() , event.getTime(), this.scheduledTour.getVehicle());
 		}
 		
