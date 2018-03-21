@@ -2,6 +2,7 @@ package lsp.controler;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -13,11 +14,13 @@ import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.events.AfterMobsimEvent;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
 import org.matsim.core.controler.events.IterationEndsEvent;
+import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.events.ReplanningEvent;
 import org.matsim.core.controler.events.ScoringEvent;
 import org.matsim.core.controler.listener.AfterMobsimListener;
 import org.matsim.core.controler.listener.BeforeMobsimListener;
 import org.matsim.core.controler.listener.IterationEndsListener;
+import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
 import org.matsim.core.events.handler.EventHandler;
@@ -29,6 +32,7 @@ import lsp.LSPPlanImpl;
 import lsp.LSPs;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
+import lsp.events.EventCreator;
 import lsp.mobsim.CarrierResourceTracker;
 import lsp.replanning.LSPReplanningModule;
 import lsp.resources.CarrierResource;
@@ -39,7 +43,7 @@ import lsp.tracking.SimulationTracker;
 
 
 public class LSPControlerListener implements FreightControlerListener, BeforeMobsimListener, AfterMobsimListener, ScoringListener,
-ReplanningListener, IterationEndsListener{
+ReplanningListener, IterationEndsListener, IterationStartsListener{
 
 	
 	private CarrierResourceTracker carrierResourceTracker;
@@ -47,7 +51,7 @@ ReplanningListener, IterationEndsListener{
 	private LSPs lsps;
 	private LSPReplanningModule replanningModule;
 	private LSPScoringModule scoringModule;
-	
+	private Collection<EventCreator> creators;
 	
 	private ArrayList <EventHandler> registeredHandlers;
 	
@@ -57,10 +61,11 @@ ReplanningListener, IterationEndsListener{
 
 	
 	@Inject
-	protected LSPControlerListener(LSPs lsps, LSPReplanningModule replanningModule, LSPScoringModule scoringModule) {
+	protected LSPControlerListener(LSPs lsps, LSPReplanningModule replanningModule, LSPScoringModule scoringModule, Collection<EventCreator> creators) {
 	        this.lsps = lsps;
 	        this.replanningModule = replanningModule;
 	        this.scoringModule = scoringModule;
+	        this.creators = creators;
 	        this.carriers = getCarriers();
 	}
 	
@@ -70,7 +75,7 @@ ReplanningListener, IterationEndsListener{
 		LSPRescheduler rescheduler = new LSPRescheduler(lsps);
 		rescheduler.notifyBeforeMobsim(event);
 		
-		carrierResourceTracker = new CarrierResourceTracker(carriers, network, this);
+		carrierResourceTracker = new CarrierResourceTracker(carriers, network, this, creators);
 		eventsManager.addHandler(carrierResourceTracker);
 		registeredHandlers = new ArrayList<EventHandler>();
 		
@@ -198,35 +203,50 @@ ReplanningListener, IterationEndsListener{
 	}
 
 	@Override
-	public void notifyIterationEnds(IterationEndsEvent arg0) {
+	public void notifyIterationEnds(IterationEndsEvent event) {
 		
-		for(EventHandler handler : registeredHandlers) {
-			eventsManager.removeHandler(handler);
-		}
 		
-		for(LSP lsp : lsps.getLSPs().values()) {
-			for(LSPShipment shipment : lsp.getShipments()) {
-				shipment.getEventHandlers().clear();
-			}
-			
-			for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
-				for(EventHandler handler : solution.getEventHandlers()) {
-					handler.reset(arg0.getIteration());
-				}
-				for(LogisticsSolutionElement element : solution.getSolutionElements()) {
-					for(EventHandler handler : element.getEventHandlers()) {
-						handler.reset(arg0.getIteration());
-					}
-					for(EventHandler handler : element.getResource().getEventHandlers()) {
-						handler.reset(arg0.getIteration());
-					}		
-				}			
-			}		
-		}
 	}
 
 	public CarrierResourceTracker getCarrierResourceTracker() {
 		return carrierResourceTracker;
 	}
-	
+
+	@Override
+	public void notifyIterationStarts(IterationStartsEvent event) {
+		if(event.getIteration() > 0) {
+			for(EventHandler handler : registeredHandlers) {
+				eventsManager.removeHandler(handler);
+			}
+		
+			for(LSP lsp : lsps.getLSPs().values()) {
+				for(LSPShipment shipment : lsp.getShipments()) {
+					shipment.getEventHandlers().clear();
+				}
+			
+				for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
+					for(EventHandler handler : solution.getEventHandlers()) {
+						handler.reset(event.getIteration());
+					}
+					for(SimulationTracker tracker : solution.getSimulationTrackers()) {
+						tracker.reset();
+					}			
+					for(LogisticsSolutionElement element : solution.getSolutionElements()) {
+						for(EventHandler handler : element.getEventHandlers()) {
+							handler.reset(event.getIteration());
+						}
+						for(SimulationTracker tracker : element.getSimulationTrackers()) {
+							tracker.reset();
+						}
+						for(EventHandler handler : element.getResource().getEventHandlers()) {
+							handler.reset(event.getIteration());
+						}		
+						for(SimulationTracker tracker : element.getResource().getSimulationTrackers()) {
+							tracker.reset();
+						}
+					}			
+				}		
+			}			
+		}	
+	}	
 }
