@@ -59,6 +59,10 @@ public class Schedule implements AbstractShipmentPlan{
 		return scheduleList.get(0);
 	}
 	
+	@Override
+	public void clear() {
+		scheduleElements.clear();
+	}
 
 }
 
