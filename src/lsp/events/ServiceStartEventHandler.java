@@ -3,8 +3,8 @@ package lsp.events;
 import org.matsim.core.events.handler.EventHandler;
 
 
-public interface ServiceBeginsEventHandler extends EventHandler {
+public interface ServiceStartEventHandler extends EventHandler {
 
-	public void handleEvent(ServiceBeginsEvent event);
+	public void handleEvent(ServiceStartEvent event);
 
 }

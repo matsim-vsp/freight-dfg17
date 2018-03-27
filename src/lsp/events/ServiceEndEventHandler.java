@@ -3,10 +3,10 @@ package lsp.events;
 
 import org.matsim.core.events.handler.EventHandler;
 
-public interface ServiceCompletedEventHandler extends EventHandler{
+public interface ServiceEndEventHandler extends EventHandler{
 	
 
-		public void handleEvent(ServiceCompletedEvent event);
+		public void handleEvent(ServiceEndEvent event);
 
 	
 }

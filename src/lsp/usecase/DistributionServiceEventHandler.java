@@ -3,8 +3,8 @@ package lsp.usecase;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.CarrierService;
 
-import lsp.events.ServiceCompletedEvent;
-import lsp.events.ServiceCompletedEventHandler;
+import lsp.events.ServiceEndEvent;
+import lsp.events.ServiceEndEventHandler;
 import lsp.LogisticsSolutionElement;
 import lsp.resources.CarrierResource;
 import lsp.shipment.AbstractShipmentPlanElement;
@@ -12,7 +12,7 @@ import lsp.shipment.LSPShipment;
 import lsp.shipment.LoggedShipmentTransport;
 import lsp.shipment.LoggedShipmentUnload;
 
-public class DistributionServiceEventHandler implements ServiceCompletedEventHandler {
+public class DistributionServiceEventHandler implements ServiceEndEventHandler {
 
 	private CarrierService carrierService;
 	private LSPShipment lspShipment;
@@ -33,14 +33,14 @@ public class DistributionServiceEventHandler implements ServiceCompletedEventHan
 	}
 
 	@Override
-	public void handleEvent(ServiceCompletedEvent event) {
+	public void handleEvent(ServiceEndEvent event) {
 		if (event.getService().getId() == carrierService.getId() && event.getCarrierId() == resource.getCarrier().getId()) {
 			logTransport(event);
 			logUnload(event);
 		}
 	}
 
-	private void logTransport(ServiceCompletedEvent event) {
+	private void logTransport(ServiceEndEvent event) {
 		String idString = resource.getId() + "" + solutionElement.getId() + "" + "TRANSPORT";
 		Id<AbstractShipmentPlanElement> id = Id.create(idString, AbstractShipmentPlanElement.class);
 		AbstractShipmentPlanElement abstractPlanElement = lspShipment.getLog().getPlanElements().get(id);
@@ -50,7 +50,7 @@ public class DistributionServiceEventHandler implements ServiceCompletedEventHan
 		}		
 	}
 
-	private void logUnload(ServiceCompletedEvent event) {
+	private void logUnload(ServiceEndEvent event) {
 		LoggedShipmentUnload.Builder builder = LoggedShipmentUnload.Builder.newInstance();
 		builder.setCarrierId(event.getCarrierId());
 		builder.setLinkId(event.getService().getLocationLinkId());

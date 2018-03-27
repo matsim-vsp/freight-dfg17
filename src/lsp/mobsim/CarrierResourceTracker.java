@@ -11,44 +11,40 @@ import org.matsim.api.core.v01.events.ActivityEndEvent;
 import org.matsim.api.core.v01.events.ActivityStartEvent;
 import org.matsim.api.core.v01.events.Event;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
+import org.matsim.api.core.v01.events.LinkLeaveEvent;
 import org.matsim.api.core.v01.events.PersonArrivalEvent;
 import org.matsim.api.core.v01.events.PersonDepartureEvent;
+import org.matsim.api.core.v01.events.PersonEntersVehicleEvent;
+import org.matsim.api.core.v01.events.PersonLeavesVehicleEvent;
 import org.matsim.api.core.v01.events.VehicleLeavesTrafficEvent;
 import org.matsim.api.core.v01.events.VehicleEntersTrafficEvent;
 import org.matsim.api.core.v01.events.handler.ActivityEndEventHandler;
 import org.matsim.api.core.v01.events.handler.ActivityStartEventHandler;
 import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
+import org.matsim.api.core.v01.events.handler.LinkLeaveEventHandler;
 import org.matsim.api.core.v01.events.handler.PersonArrivalEventHandler;
 import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
+import org.matsim.api.core.v01.events.handler.PersonEntersVehicleEventHandler;
+import org.matsim.api.core.v01.events.handler.PersonLeavesVehicleEventHandler;
 import org.matsim.api.core.v01.events.handler.VehicleLeavesTrafficEventHandler;
 import org.matsim.api.core.v01.events.handler.VehicleEntersTrafficEventHandler;
-import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Route;
 import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierService;
-import org.matsim.contrib.freight.carrier.CarrierShipment;
-import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.contrib.freight.carrier.Tour;
-import org.matsim.contrib.freight.events.ShipmentDeliveredEvent;
-import org.matsim.contrib.freight.events.ShipmentPickedUpEvent;
+import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.core.events.algorithms.Vehicle2DriverEventHandler;
-import org.matsim.vehicles.Vehicle;
-
 import lsp.controler.FreightControlerListener;
-import lsp.events.FreightLinkEnterEvent;
-import lsp.events.FreightLinkLeaveEvent;
-import lsp.events.FreightVehicleLeavesTrafficEvent;
-import lsp.events.ServiceBeginsEvent;
-import lsp.events.ServiceCompletedEvent;
-import lsp.events.TourEndEvent;
-import lsp.events.TourStartEvent;
+import lsp.events.EventCreator;
 import lsp.mobsim.CarrierResourceAgent.CarrierDriverAgent;
 
 
 
-public class CarrierResourceTracker implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler, PersonArrivalEventHandler,  LinkEnterEventHandler, VehicleEntersTrafficEventHandler, VehicleLeavesTrafficEventHandler {
+public class CarrierResourceTracker implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler, PersonArrivalEventHandler,  LinkEnterEventHandler, 
+ LinkLeaveEventHandler, VehicleEntersTrafficEventHandler, VehicleLeavesTrafficEventHandler, PersonEntersVehicleEventHandler,  PersonLeavesVehicleEventHandler{
 
 	
 	private final FreightControlerListener listener;
@@ -61,16 +57,19 @@ public class CarrierResourceTracker implements ActivityStartEventHandler, Activi
 	
 	private Map<Id<Person>, CarrierResourceAgent> driverAgentMap = new HashMap<Id<Person>, CarrierResourceAgent>();
 
-	public CarrierResourceTracker(Carriers carriers, Network network,  FreightControlerListener listener) {
+	private Collection<EventCreator> eventCreators;
+	
+	public CarrierResourceTracker(Carriers carriers, Network network,  FreightControlerListener listener, Collection<EventCreator> creators) {
 		this.carriers = carriers;
+		this.eventCreators = creators;
 		createCarrierResourceAgents();
 		this.listener = listener;
 	}
 
 	private void createCarrierResourceAgents() {
 		for (Carrier carrier : carriers.getCarriers().values()) {
-			CarrierResourceAgent carrierAgent = new CarrierResourceAgent(this, carrier, delegate);
-			carrierResourceAgents.add(carrierAgent);
+			CarrierResourceAgent carrierResourceAgent = new CarrierResourceAgent(this, carrier, delegate);
+			carrierResourceAgents.add(carrierResourceAgent);
 		}
 	}
 
@@ -98,43 +97,15 @@ public class CarrierResourceTracker implements ActivityStartEventHandler, Activi
 		listener.processEvent(event);
 	}
 	
-	public void notifyPickedUp(Id<Carrier> carrierId, Id<Person> driverId, CarrierShipment shipment, double time) {
-		processEvent(new ShipmentPickedUpEvent(carrierId, driverId, shipment, time));
+	public void notifyEventHappened(Event event, Carrier carrier, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId, int activityCounter) {
+		for(EventCreator eventCreator : eventCreators) {
+			Event customEvent = eventCreator.createEvent(event, carrier, activity, scheduledTour, driverId, activityCounter);
+			if(customEvent != null) {
+				processEvent(customEvent);
+			}
+		}
 	}
-
-	public void notifyDelivered(Id<Carrier> carrierId, Id<Person> driverId, CarrierShipment shipment, double time) {
-		processEvent(new ShipmentDeliveredEvent(carrierId, driverId, shipment,time));
-	}
-
-	public void notifyStart(Id<Carrier>  carrierId, Id<Person> driverId, Tour tour, double time, CarrierVehicle vehicle) {
-		processEvent(new TourStartEvent(carrierId, driverId, tour ,time, vehicle));
-	}
-	
-	public void notifyEnd(Id<Carrier>  carrierId, Id<Person> driverId, Tour tour, double time, CarrierVehicle vehicle) {
-		processEvent(new TourEndEvent(carrierId, driverId, tour ,time, vehicle));
-	}
-	
-	public void notifyServiceEnd(Id<Carrier>  carrierId, Id<Person> driverId, CarrierService service, double time, CarrierVehicle vehicle) {
-		processEvent(new ServiceCompletedEvent(carrierId, driverId, service ,time, vehicle));
-	}
-	
-	public void notifyServiceStart(Id<Carrier>  carrierId, Id<Person> driverId, CarrierService service, double time, CarrierVehicle vehicle) {
-		processEvent(new ServiceBeginsEvent(carrierId, driverId, service ,time, vehicle));
-	}
-
-	public void  notifyLinkEntered(Id<Carrier> carrierId, Id<Vehicle> vehicleId, Id<Person> driverId ,Id<Link> linkId, double time, CarrierVehicle vehicle) {
-		processEvent(new FreightLinkEnterEvent(carrierId, vehicleId,  driverId, linkId ,time, vehicle));
-	}
-	
-	public void  notifyLinkLeft(Id<Carrier> carrierId, Id<Vehicle> vehicleId, Id<Person> driverId ,Id<Link> linkId, double time, CarrierVehicle vehicle) {
-		processEvent(new FreightLinkLeaveEvent(carrierId, vehicleId,  driverId, linkId ,time, vehicle));
-	}
-	
-	public void notifyLeavesTraffic(Id<Carrier> carrierId, double time, Id<Person> driverId, Id<Link> linkId, Id<Vehicle> vehicleId, CarrierVehicle vehicle) {
-		processEvent(new FreightVehicleLeavesTrafficEvent(carrierId, time, driverId, linkId, vehicleId, vehicle));
-	}
-	
-	
+		
 	@Override
 	public void handleEvent(ActivityEndEvent event) {
 		CarrierResourceAgent carrierResourceAgent = getCarrierResourceAgent(event.getPersonId());
@@ -193,11 +164,38 @@ public class CarrierResourceTracker implements ActivityStartEventHandler, Activi
 	@Override
 	public void handleEvent(VehicleLeavesTrafficEvent event) {
 		delegate.handleEvent(event);
+		CarrierResourceAgent carrierResourceAgent = getCarrierResourceAgent(event.getPersonId());
+		if(carrierResourceAgent == null) return;
+		carrierResourceAgent.handleEvent(event);
 	}
 
 	@Override
 	public void handleEvent(VehicleEntersTrafficEvent event) {
 		delegate.handleEvent(event);
+		CarrierResourceAgent carrierResourceAgent = getCarrierResourceAgent(event.getPersonId());
+		if(carrierResourceAgent == null) return;
+		carrierResourceAgent.handleEvent(event);
+	}
+
+	@Override
+	public void handleEvent(LinkLeaveEvent event) {
+		CarrierResourceAgent carrierResourceAgent = getCarrierResourceAgent(delegate.getDriverOfVehicle(event.getVehicleId()));
+		if(carrierResourceAgent == null) return;
+		carrierResourceAgent.handleEvent(event);	
+	}
+
+	@Override
+	public void handleEvent(PersonEntersVehicleEvent event) {
+		CarrierResourceAgent carrierResourceAgent = getCarrierResourceAgent(event.getPersonId());
+		if(carrierResourceAgent == null) return;
+		carrierResourceAgent.handleEvent(event);
+	}
+
+	@Override
+	public void handleEvent(PersonLeavesVehicleEvent event) {
+		CarrierResourceAgent carrierResourceAgent = getCarrierResourceAgent(event.getPersonId());
+		if(carrierResourceAgent == null) return;
+		carrierResourceAgent.handleEvent(event);
 	}
 	
 }
