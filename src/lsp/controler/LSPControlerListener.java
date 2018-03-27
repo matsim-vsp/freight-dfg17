@@ -148,17 +148,14 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 						if(!alreadyUpdatedTrackers.contains(tracker)) {
 							tracker.notifyAfterMobsim(event);
 							alreadyUpdatedTrackers.add(tracker);
-							tracker.reset();
 						}
 					}
 					for(SimulationTracker tracker : element.getSimulationTrackers()) {
 						tracker.notifyAfterMobsim(event);
-						tracker.reset();
 					}
 				}
 				for(SimulationTracker tracker : solution.getSimulationTrackers()) {
 					tracker.notifyAfterMobsim(event);
-					tracker.reset();
 				}
 			}
 		}
