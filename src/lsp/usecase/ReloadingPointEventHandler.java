@@ -20,9 +20,9 @@ import lsp.shipment.ScheduledShipmentTransport;
 
 public class ReloadingPointEventHandler implements TourEndEventHandler {
 
-	class ReloadingPointEventHandlerPair{
-		private LSPShipment shipment;
-		private LogisticsSolutionElement element;
+	public class ReloadingPointEventHandlerPair{
+		public LSPShipment shipment;
+		public LogisticsSolutionElement element;
 				
 		public ReloadingPointEventHandlerPair(LSPShipment shipment, LogisticsSolutionElement element){
 			this.shipment = shipment;
