@@ -45,8 +45,7 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 	
 	@Override
 	public void reset(int iteration) {
-		// TODO Auto-generated method stub
-
+		servicesWaitedFor.clear();
 	}
 
 	public void addShipment(LSPShipment shipment, LogisticsSolutionElement solutionElement){
@@ -146,4 +145,8 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 		}	
 	}
 
+	public HashMap<CarrierService, ReloadingPointEventHandlerPair> getServicesWaitedFor() {
+		return servicesWaitedFor;
+	}
+	
 }
