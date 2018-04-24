@@ -128,7 +128,6 @@ public class CollectionCarrierScheduler extends ResourceScheduler {
 
         CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, solution);
         NetworkRouter.routePlan(plan, netbasedTransportcosts);
-        System.out.println(plan.getCarrier());
         carrier.setSelectedPlan(plan);
 	}
 	
