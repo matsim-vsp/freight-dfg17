@@ -1,15 +1,18 @@
-package demand.mobsim;
+package demand.controler;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.matsim.contrib.freight.CarrierConfig;
 import org.matsim.core.controler.AbstractModule;
 
 import com.google.inject.Provides;
 
-import demand.controler.MutualControlerListener;
 import demand.decoratedLSP.LSPDecorators;
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
+import lsp.events.EventCreator;
 import lsp.mobsim.CarrierResourceTracker;
 import lsp.mobsim.FreightQSimFactory;
 import lsp.scoring.LSPScoringModule;
@@ -21,7 +24,7 @@ public class MutualModule extends AbstractModule{
 	private MutualScoringModule mutualScoringModule;
 	private MutualReplanningModule replanningModule;	
 	private CarrierConfig carrierConfig = new CarrierConfig();
-
+	private Collection<EventCreator> creators;
 	
 	public static class Builder{
 		
@@ -29,6 +32,7 @@ public class MutualModule extends AbstractModule{
 		private DemandObjects demandObjects;
 		private MutualScoringModule mutualScoringModule;
 		private MutualReplanningModule replanningModule;
+		private Collection<EventCreator> creators;
 		
 		public static Builder newInstance() {
 			return new Builder();
@@ -54,6 +58,11 @@ public class MutualModule extends AbstractModule{
 			return this;
 		}
 		
+		public Builder setEventCreators(Collection<EventCreator> creators) {
+			this.creators = creators;
+			return this;
+		}
+		
 		public MutualModule build() {
 			return new MutualModule(this);
 		}
@@ -64,6 +73,7 @@ public class MutualModule extends AbstractModule{
 		this.demandObjects = builder.demandObjects;
 		this.mutualScoringModule = builder.mutualScoringModule;
 		this.replanningModule = builder.replanningModule;
+		this.creators = builder.creators; 
 	}
 	
 	
@@ -85,6 +95,10 @@ public class MutualModule extends AbstractModule{
 		
 	}
 
+	@Provides
+	Collection<EventCreator> provideEventCreators(){
+		return this.creators;
+	}
 	
 	@Provides
     CarrierResourceTracker provideCarrierResourceTracker(MutualControlerListener mutualControlerListener) {

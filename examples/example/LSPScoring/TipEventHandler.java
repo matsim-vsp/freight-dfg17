@@ -2,34 +2,31 @@ package example.LSPScoring;
 
 import java.util.Random;
 
-import lsp.events.ServiceBeginsEvent;
-import lsp.events.ServiceBeginsEventHandler;
-import lsp.events.ServiceCompletedEvent;
-import lsp.events.ServiceCompletedEventHandler;
+import lsp.events.ServiceEndEvent;
+import lsp.events.ServiceEndEventHandler;
 
-public class TipEventHandler implements ServiceCompletedEventHandler{
+public class TipEventHandler implements ServiceEndEventHandler{
 
-	private double trinkgeldSum;
-	private Random trinkgeldRandom;
+	private double tipSum;
+	private Random tipRandom;
 	
 	public TipEventHandler() {
-		trinkgeldRandom = new Random(1);
-		trinkgeldSum = 0;
+		tipRandom = new Random(1);
+		tipSum = 0;
 	}
 	
 	@Override
 	public void reset(int iteration) {
-		trinkgeldSum = 0;	
+		tipSum = 0;	
 	}
 
 	@Override
-	public void handleEvent(ServiceCompletedEvent event) {
-		double trinkgeld = trinkgeldRandom.nextDouble() * 5;
-		System.out.println("ServiceEvent " + trinkgeld);
-		trinkgeldSum += trinkgeld;
+	public void handleEvent(ServiceEndEvent event) {
+		double tip = tipRandom.nextDouble() * 5;
+		tipSum += tip;
 	}
 
-	public double getTrinkgeld() {
-		return trinkgeldSum;
+	public double getTip() {
+		return tipSum;
 	}
 }

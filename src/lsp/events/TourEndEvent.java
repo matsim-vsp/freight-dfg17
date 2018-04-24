@@ -1,5 +1,7 @@
 package lsp.events;
 
+import java.util.Map;
+
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;
 import org.matsim.api.core.v01.population.Person;
@@ -10,6 +12,14 @@ import org.matsim.contrib.freight.carrier.Tour.End;
 
 public class TourEndEvent extends Event{
 
+	public static final String EVENT_TYPE = "freight tour ended";
+	public static final String ATTRIBUTE_VEHICLE = "vehicle";
+	public static final String ATTRIBUTE_LINK = "link";
+	public static final String ATTRIBUTE_CARRIER = "carrier";
+	public static final String ATTRIBUTE_DRIVER = "driver";
+	public static final String ATTRIBUTE_TOUR = "tour";	
+	
+	
 	private Id<Carrier> carrierId;
 	private Id<Person> driverId;
 	private Tour tour;
@@ -25,7 +35,7 @@ public class TourEndEvent extends Event{
 
 	@Override
 	public String getEventType() {
-		return "end";
+		return EVENT_TYPE;
 	}
 
 	public Id<Carrier> getCarrierId() {
@@ -44,4 +54,14 @@ public class TourEndEvent extends Event{
 		return vehicle;
 	}
 
+	@Override
+	public Map<String, String> getAttributes() {
+		Map<String, String> attr = super.getAttributes();
+		attr.put(ATTRIBUTE_VEHICLE, this.vehicle.getVehicleId().toString());
+		attr.put(ATTRIBUTE_LINK, this.tour.getStartLinkId().toString());
+		attr.put(ATTRIBUTE_CARRIER, this.carrierId.toString());
+		attr.put(ATTRIBUTE_DRIVER, this.driverId.toString());
+		attr.put(ATTRIBUTE_TOUR, this.tour.toString());
+		return attr;
+	}
 }

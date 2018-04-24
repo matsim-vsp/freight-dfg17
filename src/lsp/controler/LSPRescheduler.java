@@ -35,6 +35,8 @@ public class LSPRescheduler implements BeforeMobsimListener{
 				}
 				
 				for(LSPShipment shipment : lsp.getShipments()) {
+					shipment.getSchedule().clear();
+					shipment.getLog().clear();
 					lsp.getSelectedPlan().getAssigner().assignShipment(shipment);
 				}
 				lsp.scheduleSoultions();

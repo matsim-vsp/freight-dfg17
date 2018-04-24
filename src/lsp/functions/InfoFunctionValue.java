@@ -1,9 +1,9 @@
 package lsp.functions;
 
-public interface InfoFunctionValue {
+public interface InfoFunctionValue <T> {
 
 	public String getName();
-	public Class<?> getDataType();
-	public String getValue();
-	public void setValue(String value);
+	public T getValue();
+	public void setValue(T value);
+
 }

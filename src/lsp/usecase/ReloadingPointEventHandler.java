@@ -20,9 +20,9 @@ import lsp.shipment.ScheduledShipmentTransport;
 
 public class ReloadingPointEventHandler implements TourEndEventHandler {
 
-	class ReloadingPointEventHandlerPair{
-		private LSPShipment shipment;
-		private LogisticsSolutionElement element;
+	public class ReloadingPointEventHandlerPair{
+		public LSPShipment shipment;
+		public LogisticsSolutionElement element;
 				
 		public ReloadingPointEventHandlerPair(LSPShipment shipment, LogisticsSolutionElement element){
 			this.shipment = shipment;
@@ -45,8 +45,7 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 	
 	@Override
 	public void reset(int iteration) {
-		// TODO Auto-generated method stub
-
+		servicesWaitedFor.clear();
 	}
 
 	public void addShipment(LSPShipment shipment, LogisticsSolutionElement solutionElement){
@@ -146,4 +145,22 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 		}	
 	}
 
+	public HashMap<CarrierService, ReloadingPointEventHandlerPair> getServicesWaitedFor() {
+		return servicesWaitedFor;
+	}
+
+	public ReloadingPoint getReloadingPoint() {
+		return reloadingPoint;
+	}
+
+	public Id<Resource> getResourceId() {
+		return resourceId;
+	}
+
+	public Id<Link> getLinkId() {
+		return linkId;
+	}
+	
+	
+	
 }

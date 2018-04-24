@@ -57,5 +57,8 @@ public class Log implements AbstractShipmentPlan {
 		return logList.get(0);
 	}
 
-	
+	@Override
+	public void clear() {
+		logElements.clear();
+	}
 }
