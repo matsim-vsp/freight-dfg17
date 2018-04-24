@@ -63,4 +63,23 @@ public class DistributionServiceEventHandler implements ServiceEndEventHandler {
 		Id<AbstractShipmentPlanElement> unloadId = Id.create(idString, AbstractShipmentPlanElement.class);
 		lspShipment.getLog().getPlanElements().put(unloadId, unload);
 	}
+
+	public CarrierService getCarrierService() {
+		return carrierService;
+	}
+
+	public LSPShipment getLspShipment() {
+		return lspShipment;
+	}
+
+	public LogisticsSolutionElement getSolutionElement() {
+		return solutionElement;
+	}
+
+	public CarrierResource getResource() {
+		return resource;
+	}
+
+	
+
 }
