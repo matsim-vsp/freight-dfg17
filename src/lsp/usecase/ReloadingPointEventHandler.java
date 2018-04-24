@@ -148,5 +148,19 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 	public HashMap<CarrierService, ReloadingPointEventHandlerPair> getServicesWaitedFor() {
 		return servicesWaitedFor;
 	}
+
+	public ReloadingPoint getReloadingPoint() {
+		return reloadingPoint;
+	}
+
+	public Id<Resource> getResourceId() {
+		return resourceId;
+	}
+
+	public Id<Link> getLinkId() {
+		return linkId;
+	}
+	
+	
 	
 }

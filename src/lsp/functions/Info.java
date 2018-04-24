@@ -22,6 +22,10 @@ public abstract class Info {
 		}
 	}
 	
+	public Set<Info> getPredecessorInfos() {
+		return predecessorInfos;
+	}
+	
 	public abstract void setName(String name);
 	public abstract String getName();
 	public abstract InfoFunction getFunction();
