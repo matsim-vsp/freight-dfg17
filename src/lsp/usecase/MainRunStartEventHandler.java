@@ -90,4 +90,27 @@ public class MainRunStartEventHandler implements TourStartEventHandler {
 		Id<AbstractShipmentPlanElement> transportId = Id.create(idString, AbstractShipmentPlanElement.class);
 		lspShipment.getLog().getPlanElements().put(transportId, transport);
 	}
+
+
+	public LSPShipment getLspShipment() {
+		return lspShipment;
+	}
+
+
+	public CarrierService getCarrierService() {
+		return carrierService;
+	}
+
+
+	public LogisticsSolutionElement getSolutionElement() {
+		return solutionElement;
+	}
+
+
+	public CarrierResource getResource() {
+		return resource;
+	}
+
+	
+	
 }

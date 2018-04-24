@@ -87,4 +87,26 @@ public class MainRunEndEventHandler implements TourEndEventHandler{
 		return totalTime;
 	}
 
+
+	public LSPShipment getLspShipment() {
+		return lspShipment;
+	}
+
+
+	public CarrierService getCarrierService() {
+		return carrierService;
+	}
+
+
+	public LogisticsSolutionElement getSolutionElement() {
+		return solutionElement;
+	}
+
+
+	public CarrierResource getResource() {
+		return resource;
+	}
+
+	
+	
 }
