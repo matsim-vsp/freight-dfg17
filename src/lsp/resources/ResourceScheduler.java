@@ -52,6 +52,7 @@ public abstract class ResourceScheduler {
 			for(LogisticsSolutionElement element : resource.getClientElements()){
 				if(element.getIncomingShipments().getShipments().contains(tuple)){
 					element.getOutgoingShipments().getShipments().add(outgoingTuple);
+					element.getIncomingShipments().getShipments().remove(tuple);
 					if(element.getNextElement() != null) {
 						element.getNextElement().getIncomingShipments().getShipments().add(outgoingTuple);
 					}
