@@ -115,15 +115,7 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 
 	@Override
 	public void notifyScoring(ScoringEvent event) {
-		boolean score = true;
-		for(LSP lsp : lsps.getLSPs().values()) {
-			if(lsp.getScorer() == null) {
-				score = false;
-			}
-			if(score == true) {
-				scoringModule.scoreLSPs();	
-			}		
-		}	
+		scoringModule.scoreLSPs(event);	
 	}
 
 	@Override

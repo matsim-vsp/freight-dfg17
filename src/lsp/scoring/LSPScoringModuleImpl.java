@@ -13,17 +13,18 @@ public class LSPScoringModuleImpl implements LSPScoringModule{
 	public LSPScoringModuleImpl(LSPs lsps) {
 		this.lsps = lsps;
 	}
-	
 		
 	@Override
-	public void notifyScoring(ScoringEvent arg0) {
-		scoreLSPs();
+	public void notifyScoring(ScoringEvent event) {
+		scoreLSPs(event);
 	}
 
 	@Override
-	public void scoreLSPs() {
+	public void scoreLSPs(ScoringEvent arg0) {
 		for(LSP lsp : lsps.getLSPs().values()) {
-			lsp.scoreSelectedPlan();
+			if(lsp.getScorer() != null) {
+				lsp.scoreSelectedPlan();
+			}
 		}	
 	}
 }
