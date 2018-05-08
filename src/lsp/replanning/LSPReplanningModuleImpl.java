@@ -1,7 +1,5 @@
 package lsp.replanning;
 
-import java.util.ArrayList;
-
 import org.matsim.core.controler.events.ReplanningEvent;
 
 import lsp.LSP;
@@ -14,19 +12,19 @@ public class LSPReplanningModuleImpl implements LSPReplanningModule{
 	public LSPReplanningModuleImpl(LSPs lsps) {
 		this.lsps = lsps;
 	}
-	
-	
+		
 	@Override
 	public void notifyReplanning(ReplanningEvent arg0) {
 		replanLSPs(arg0);
 		
 	}
-
+	
 	@Override
 	public void replanLSPs(ReplanningEvent arg0) {
 		for(LSP lsp : lsps.getLSPs().values()) {
-			lsp.getReplanner().replan(arg0);		
+			if(lsp.getReplanner() != null) {
+				lsp.getReplanner().replan(arg0);
+			}					
 		}
 	}
-
 }
