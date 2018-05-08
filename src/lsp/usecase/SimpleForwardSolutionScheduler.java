@@ -13,6 +13,7 @@ public class SimpleForwardSolutionScheduler implements SolutionScheduler {
 
 	private LSP lsp;
 	private ArrayList<Resource> resources;
+	private int bufferTime;
 	
 	public SimpleForwardSolutionScheduler(ArrayList<Resource> resources) {
 		this.resources = resources;
@@ -24,7 +25,7 @@ public class SimpleForwardSolutionScheduler implements SolutionScheduler {
 		for(Resource resource : resources) {
 			for(Resource lspResource : lsp.getResources()) {
 				if(lspResource == resource) {
-					lspResource.schedule();
+					lspResource.schedule(bufferTime);
 				}
 			}
 		}
@@ -53,5 +54,10 @@ public class SimpleForwardSolutionScheduler implements SolutionScheduler {
 			
 		}
 		return null;
+	}
+
+	@Override
+	public void setBufferTime(int bufferTime) {
+		this.bufferTime = bufferTime;
 	}
 }

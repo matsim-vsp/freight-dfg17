@@ -24,7 +24,7 @@ public interface Resource {
 	
     public Collection <LogisticsSolutionElement> getClientElements();
     
-    public void schedule();
+    public void schedule(int bufferTime);
     
     public Collection <EventHandler> getEventHandlers();
     
