@@ -23,5 +23,5 @@ public class InfoFunctionValueImpl<T> implements InfoFunctionValue<T> {
 	public void setValue(T value) {
 		this.value = value;
 	}
-
+	
 }
