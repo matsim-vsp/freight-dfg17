@@ -14,7 +14,6 @@ import lsp.shipment.ScheduledShipmentHandle;
 public class ReloadingPointScheduler extends ResourceScheduler {
 
 	private ReloadingPoint reloadingPoint;
-	//private ArrayList<ShipmentTuple> shipments;
 	private double capacityNeedLinear;
 	private double capacityNeedFixed;
 	private ReloadingPointEventHandler eventHandler;
