@@ -129,8 +129,8 @@ public static class Builder {
 	}
 
 	@Override
-	public void schedule() {
-		collectionScheduler.scheduleShipments(this);	
+	public void schedule(int bufferTime) {
+		collectionScheduler.scheduleShipments(this, bufferTime);	
 	}
 
 	public Carrier getCarrier(){

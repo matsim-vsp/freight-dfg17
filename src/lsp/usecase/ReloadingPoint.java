@@ -95,8 +95,8 @@ public class ReloadingPoint implements Resource {
 	}
 
 	@Override
-	public void schedule() {
-		reloadingScheduler.scheduleShipments(this);	
+	public void schedule(int bufferTime) {
+		reloadingScheduler.scheduleShipments(this, bufferTime);	
 	}
 
 	public double getCapacityNeedFixed(){
