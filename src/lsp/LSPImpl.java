@@ -229,4 +229,10 @@ public class LSPImpl implements LSP {
 		this.replanner = replanner;
 	}
 
+
+	@Override
+	public SolutionScheduler getScheduler() {
+		return solutionScheduler;
+	}
+
 }
