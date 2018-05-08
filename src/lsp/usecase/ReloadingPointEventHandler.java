@@ -69,7 +69,8 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 				if(tourElement instanceof ServiceActivity){
 					ServiceActivity serviceActivity = (ServiceActivity) tourElement;
 					if(serviceActivity.getLocation() == reloadingPoint.getStartLinkId()
-							&& allServicesAreInOnePoint(event.getTour())) {
+							&& allServicesAreInOnePoint(event.getTour())
+							&& (event.getTour().getStartLinkId() != reloadingPoint.getStartLinkId())) {
 						logReloadAfterMainRun(serviceActivity.getService(), event);
 					}
 					else {
