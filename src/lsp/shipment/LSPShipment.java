@@ -40,7 +40,7 @@ public interface LSPShipment {
 	
 	public Collection<Info> getInfos();
 	
-	public void setSolution(LogisticsSolution solution);
+	public void setSolutionId(Id<LogisticsSolution> id);
 	
-	public LogisticsSolution getSolution();
+	public Id<LogisticsSolution> getSolutionId();
 }

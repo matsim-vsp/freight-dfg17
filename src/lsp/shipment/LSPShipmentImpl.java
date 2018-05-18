@@ -27,7 +27,7 @@ public class LSPShipmentImpl implements LSPShipment {
 	private ArrayList<Requirement> requirements;
 	private ArrayList<UtilityFunction> utilityFunctions;
 	private ArrayList<Info> infos;
-	private LogisticsSolution solution;
+	private Id<LogisticsSolution> solutionId;
 	
 	public static class Builder {	
 
@@ -201,14 +201,14 @@ public class LSPShipmentImpl implements LSPShipment {
 
 
 	@Override
-	public void setSolution(LogisticsSolution solution) {
-		this.solution = solution;
+	public void setSolutionId(Id<LogisticsSolution> solutionId) {
+		this.solutionId = solutionId;
 	}
 
 
 	@Override
-	public LogisticsSolution getSolution() {
-		return solution;
+	public Id<LogisticsSolution> getSolutionId() {
+		return solutionId;
 	}
 	
 }
