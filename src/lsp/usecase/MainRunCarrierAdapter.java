@@ -117,8 +117,8 @@ public class MainRunCarrierAdapter implements CarrierResource {
 	}
 
 	@Override
-	public void schedule() {
-		mainRunScheduler.scheduleShipments(this);
+	public void schedule(int bufferTime) {
+		mainRunScheduler.scheduleShipments(this, bufferTime);
 	}
 
 	public Carrier getCarrier(){

@@ -28,7 +28,6 @@ import org.matsim.core.events.handler.EventHandler;
 import lsp.functions.Info;
 import lsp.LSP;
 import lsp.LSPPlan;
-import lsp.LSPPlanImpl;
 import lsp.LSPs;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
@@ -111,29 +110,12 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 	//Das kann durch ein entsprechendes replanningModule erreicht werden. Hier muss man dann nix ändern
 	@Override
 	public void notifyReplanning(ReplanningEvent event) {
-		
-		boolean replan = true;
-		for(LSP lsp : lsps.getLSPs().values()) {	
-			if(lsp.getReplanner() == null) {
-				replan = false;
-			}
-			if(replan == true) {
-				replanningModule.replanLSPs(event);
-			}	
-		}	
+		replanningModule.replanLSPs(event);	
 	}
 
 	@Override
 	public void notifyScoring(ScoringEvent event) {
-		boolean score = true;
-		for(LSP lsp : lsps.getLSPs().values()) {
-			if(lsp.getScorer() == null) {
-				score = false;
-			}
-			if(score == true) {
-				scoringModule.scoreLSPs();	
-			}		
-		}	
+		scoringModule.scoreLSPs(event);	
 	}
 
 	@Override

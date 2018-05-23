@@ -68,7 +68,9 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 			for(TourElement tourElement : event.getTour().getTourElements()){
 				if(tourElement instanceof ServiceActivity){
 					ServiceActivity serviceActivity = (ServiceActivity) tourElement;
-					if(serviceActivity.getLocation() == reloadingPoint.getStartLinkId()) {
+					if(serviceActivity.getLocation() == reloadingPoint.getStartLinkId()
+							&& allServicesAreInOnePoint(event.getTour())
+							&& (event.getTour().getStartLinkId() != reloadingPoint.getStartLinkId())) {
 						logReloadAfterMainRun(serviceActivity.getService(), event);
 					}
 					else {
@@ -145,6 +147,19 @@ public class ReloadingPointEventHandler implements TourEndEventHandler {
 		}	
 	}
 
+	private boolean allServicesAreInOnePoint(Tour tour) {
+		for(TourElement element : tour.getTourElements()) {
+			if(element instanceof ServiceActivity) {
+				ServiceActivity activity = (ServiceActivity) element;
+				if(activity.getLocation() != tour.getEndLinkId()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	
 	public HashMap<CarrierService, ReloadingPointEventHandlerPair> getServicesWaitedFor() {
 		return servicesWaitedFor;
 	}

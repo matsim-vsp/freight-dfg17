@@ -38,4 +38,5 @@ public interface LSP extends HasPlansAndId<LSPPlan,LSP>{
 	
 	public void setReplanner(LSPReplanner replanner);
 	
+	public SolutionScheduler getScheduler();
 }    

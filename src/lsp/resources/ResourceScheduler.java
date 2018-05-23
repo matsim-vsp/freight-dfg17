@@ -13,20 +13,16 @@ public abstract class ResourceScheduler {
 
 	protected Resource resource;
 	protected ArrayList<ShipmentTuple>shipments;
-	private int bufferTime;
 	
-	public void setBufferTime(int bufferTime) {
-		this.bufferTime = bufferTime;
-	}
 	
-	public final void scheduleShipments(Resource resource) {
+	public final void scheduleShipments(Resource resource, int bufferTime) {
 		this.resource = resource;
 		this.shipments = new ArrayList<ShipmentTuple>();
 		initializeValues(resource);
 		presortIncomingShipments();	
 		scheduleResource();
 		updateShipments();
-		switchHandeledShipments();
+		switchHandeledShipments(bufferTime);
 		shipments.clear();	
 	}		
 	
@@ -45,15 +41,17 @@ public abstract class ResourceScheduler {
 	}
 	
 	
-	public final void switchHandeledShipments(){
+	public final void switchHandeledShipments(int bufferTime){
 		for(ShipmentTuple tuple : shipments) {
 			double endOfTransportTime = tuple.getShipment().getSchedule().getMostRecentEntry().getEndTime() + bufferTime;
 			ShipmentTuple outgoingTuple = new ShipmentTuple(endOfTransportTime,tuple.getShipment());
 			for(LogisticsSolutionElement element : resource.getClientElements()){
 				if(element.getIncomingShipments().getShipments().contains(tuple)){
 					element.getOutgoingShipments().getShipments().add(outgoingTuple);
+					element.getIncomingShipments().getShipments().remove(tuple);
 					if(element.getNextElement() != null) {
 						element.getNextElement().getIncomingShipments().getShipments().add(outgoingTuple);
+						element.getOutgoingShipments().getShipments().remove(outgoingTuple);
 					}
 				}
 			}

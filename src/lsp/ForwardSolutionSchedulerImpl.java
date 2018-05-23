@@ -11,7 +11,7 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 		private ArrayList<Resource> predecessors;
 		private ArrayList<Resource> successors;
 		private Resource resource;
-		
+				
 		private ResourceNeighbours(Resource resource) {
 			this.resource = resource;
 			this.predecessors = new ArrayList<Resource>();
@@ -30,6 +30,7 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 	private LSP lsp;
 	private ArrayList<Resource> sortedResourceList;
 	private ArrayList<ResourceNeighbours> neighbourList;
+	private int bufferTime;
 	
 	public ForwardSolutionSchedulerImpl() {
 		this.sortedResourceList = new ArrayList<Resource>();
@@ -43,7 +44,7 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 		setResourceNeighbours();
 		sortResources();
 		for(Resource resource : sortedResourceList ) {
-			resource.schedule();
+			resource.schedule(bufferTime);
 		}
 
 	}
@@ -124,5 +125,11 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 			
 		}
 		return null;
+	}
+
+
+	@Override
+	public void setBufferTime(int bufferTime) {
+		this.bufferTime = bufferTime;
 	}
 }

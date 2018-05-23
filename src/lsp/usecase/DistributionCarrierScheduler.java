@@ -15,6 +15,7 @@ import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.contrib.freight.carrier.Tour;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.contrib.freight.carrier.Tour.Leg;
+import org.matsim.contrib.freight.carrier.Tour.ServiceActivity;
 import org.matsim.contrib.freight.carrier.Tour.TourElement;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
@@ -116,7 +117,7 @@ public class DistributionCarrierScheduler extends ResourceScheduler {
 		
 	private CarrierService convertToCarrierService(ShipmentTuple tuple){
 		Id<CarrierService> serviceId = Id.create(tuple.getShipment().getId().toString(), CarrierService.class);
-		CarrierService.Builder builder = CarrierService.Builder.newInstance(serviceId, tuple.getShipment().getFromLinkId());
+		CarrierService.Builder builder = CarrierService.Builder.newInstance(serviceId, tuple.getShipment().getToLinkId());
 		builder.setCapacityDemand(tuple.getShipment().getCapacityDemand());
 		builder.setServiceDuration(tuple.getShipment().getServiceTime());
 		CarrierService service = builder.build();
@@ -241,9 +242,9 @@ public class DistributionCarrierScheduler extends ResourceScheduler {
 			}
 		}
 		int serviceIndex = tour.getTourElements().indexOf(serviceActivity);
-		Leg legAfterService = (Leg) tour.getTourElements().get(serviceIndex+1);
-		builder.setStartTime(legAfterService.getExpectedDepartureTime());
-		builder.setEndTime(legAfterService.getExpectedDepartureTime() + tuple.getShipment().getServiceTime());
+		ServiceActivity service = (ServiceActivity) tour.getTourElements().get(serviceIndex);
+		builder.setStartTime(service.getExpectedArrival());
+		builder.setEndTime(service.getDuration() + service.getExpectedArrival());
 		builder.setCarrierId(carrier.getId());
 		builder.setLinkId(serviceActivity.getLocation());
 		builder.setCarrierService(serviceActivity.getService());

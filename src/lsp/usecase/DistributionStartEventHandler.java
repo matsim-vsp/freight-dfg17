@@ -90,4 +90,24 @@ public class DistributionStartEventHandler implements TourStartEventHandler {
 	}
 
 
+	public CarrierService getCarrierService() {
+		return carrierService;
+	}
+
+
+	public LSPShipment getLspShipment() {
+		return lspShipment;
+	}
+
+
+	public LogisticsSolutionElement getElement() {
+		return element;
+	}
+
+
+	public CarrierResource getResource() {
+		return resource;
+	}
+
+
 }

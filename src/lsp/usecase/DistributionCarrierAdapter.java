@@ -127,8 +127,8 @@ public class DistributionCarrierAdapter implements CarrierResource {
 	}
 
 	@Override
-	public void schedule() {
-		distributionHandler.scheduleShipments(this);
+	public void schedule(int bufferTime) {
+		distributionHandler.scheduleShipments(this, bufferTime);
 		
 	}
 
