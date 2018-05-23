@@ -47,10 +47,6 @@ import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.DeterministicShipmentAssigner;
 import lsp.usecase.SimpleForwardSolutionScheduler;
-import testLSPWithCostTracker.CollectionServiceHandler;
-import testLSPWithCostTracker.DistanceAndTimeHandler;
-import testLSPWithCostTracker.LinearCostTracker;
-import testLSPWithCostTracker.TourStartHandler;
 
 public class ExampleSimulationTrackers {
 
@@ -105,10 +101,10 @@ public static LSP createLSPWithTracker(Network network) {
 		LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
 		
 		//Create cost tracker and add it to solution
-		LinearCostTracker tracker = new LinearCostTracker(0.2);
-		tracker.getEventHandlers().add(new TourStartHandler());
-		tracker.getEventHandlers().add(new CollectionServiceHandler());
-		tracker.getEventHandlers().add(new DistanceAndTimeHandler(network));
+		example.simulationTrackers.LinearCostTracker tracker = new example.simulationTrackers.LinearCostTracker(0.2);
+		tracker.getEventHandlers().add(new example.simulationTrackers.TourStartHandler());
+		tracker.getEventHandlers().add(new example.simulationTrackers.CollectionServiceHandler());
+		tracker.getEventHandlers().add(new example.simulationTrackers.DistanceAndTimeHandler(network));
 		collectionSolution.addSimulationTracker(tracker);
 		
 		

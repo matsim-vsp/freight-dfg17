@@ -5,21 +5,19 @@ import java.util.Collection;
 
 import lsp.functions.InfoFunction;
 import lsp.functions.InfoFunctionValue;
-import testLSPWithCostTracker.FixedCostFunctionValue;
-import testLSPWithCostTracker.LinearCostFunctionValue;
 
 
 
 public class CostInfoFunction implements InfoFunction {
 
-	private FixedCostFunctionValue fixedValue;
-	private LinearCostFunctionValue linearValue;
+	private example.simulationTrackers.FixedCostFunctionValue fixedValue;
+	private example.simulationTrackers.LinearCostFunctionValue linearValue;
 	private Collection<InfoFunctionValue<?>> values;
 	
 	public CostInfoFunction() {
 		values = new ArrayList<InfoFunctionValue<?>>();
-		fixedValue = new FixedCostFunctionValue();
-		linearValue = new LinearCostFunctionValue();
+		fixedValue = new example.simulationTrackers.FixedCostFunctionValue();
+		linearValue = new example.simulationTrackers.LinearCostFunctionValue();
 		values.add(fixedValue);
 		values.add(linearValue);
 		

@@ -2,14 +2,13 @@ package example.simulationTrackers;
 
 import lsp.functions.Info;
 import lsp.functions.InfoFunction;
-import testLSPWithCostTracker.CostInfoFunction;
 
 public class CostInfo extends Info {
 
-private CostInfoFunction costFunction;
+private example.simulationTrackers.CostInfoFunction costFunction;
 	
 	public CostInfo() {
-		this.costFunction = new CostInfoFunction();
+		this.costFunction = new example.simulationTrackers.CostInfoFunction();
 	}
 	
 	
