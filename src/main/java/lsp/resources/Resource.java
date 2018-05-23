@@ -19,6 +19,7 @@ public interface Resource {
 	public Id<Link> getStartLinkId();
 	
 	public Class<?> getClassOfResource();
+	// yyyyyy is it really necessary to use reflection in a code that we fully own?  kai, may'18
 	
 	public Id<Link> getEndLinkId();
 	
