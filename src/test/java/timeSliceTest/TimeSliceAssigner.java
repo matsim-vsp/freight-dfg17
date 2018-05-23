@@ -11,9 +11,9 @@ public class TimeSliceAssigner implements ShipmentAssigner{
 	
 	@Override
 	public void assignShipment(LSPShipment shipment) {
-		for(LogisticsSolution solution ) {
-			
-		}
+//		for(LogisticsSolution solution ) {
+//
+//		}
 		
 	}
 

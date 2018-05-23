@@ -82,15 +82,15 @@ public class TimeSliceScheduler extends ResourceScheduler{
 		int i = 0;
 		for(ShipmentTuple tupleToBeAssigned: shipments){
 			CarrierService carrierService = convertToCarrierService(tupleToBeAssigned);
-			if(auxiliaryCarriers.containsKey(tupleToBeAssigned.getShipment().getSolutionId())) {
-				auxiliaryCarriers.get(tupleToBeAssigned.getShipment().getSolutionId()).getServices().add(carrierService);
-			}
-			else {
-				Carrier auxiliaryCarrier = createAuxiliaryCarrier(Id.create("AuxiliaryCarrier_"+i, Carrier.class), tupleToBeAssigned);
-				i++;
-				auxiliaryCarrier.getServices().add(carrierService);
-				auxiliaryCarriers.put(tupleToBeAssigned.getShipment().getSolutionId(), auxiliaryCarrier);
-			}
+//			if(auxiliaryCarriers.containsKey(tupleToBeAssigned.getShipment().getSolutionId())) {
+//				auxiliaryCarriers.get(tupleToBeAssigned.getShipment().getSolutionId()).getServices().add(carrierService);
+//			}
+//			else {
+//				Carrier auxiliaryCarrier = createAuxiliaryCarrier(Id.create("AuxiliaryCarrier_"+i, Carrier.class), tupleToBeAssigned);
+//				i++;
+//				auxiliaryCarrier.getServices().add(carrierService);
+//				auxiliaryCarriers.put(tupleToBeAssigned.getShipment().getSolutionId(), auxiliaryCarrier);
+//			}
 		}		
 	
 		for(Carrier carrier : auxiliaryCarriers.values()) {
