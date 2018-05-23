@@ -90,7 +90,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		Config config = new Config();
 		config.addCoreModules();
 		Scenario scenario = ScenarioUtils.createScenario(config);
-		new MatsimNetworkReader(scenario.getNetwork()).readFile("input\\lsp\\network\\2regions.xml");
+		new MatsimNetworkReader(scenario.getNetwork()).readFile("input/lsp/network/2regions.xml");
 		Network network = scenario.getNetwork();
 		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
 		Random random = new Random(1);
@@ -248,7 +248,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(2);
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
-		config.network().setInputFile("input\\lsp\\network\\2regions.xml");
+		config.network().setInputFile("input/lsp/network/2regions.xml");
 		controler.run();
 		
 		
