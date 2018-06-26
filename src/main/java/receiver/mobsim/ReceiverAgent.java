@@ -27,7 +27,6 @@ import org.matsim.core.scoring.ScoringFunction;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.collaboration.ProportionalCostSharing;
 
 /**
  * This keeps track of a single receiver during simulation.

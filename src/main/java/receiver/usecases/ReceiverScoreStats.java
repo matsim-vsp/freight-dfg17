@@ -155,11 +155,6 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 				}
 			}
 			log.info("-- avg. score of the executed plan of each agent: " + (sumExecutedScores / nofExecutedScores));
-//			log.info("-- number of executed plans: "  + nofExecutedScores);
-//			log.info("-- number of executed iv plans: "  + nofExecutedIvPlans);
-//			log.info("-- number of executed oev plans: "  + nofExecutedOevPlans);
-//			log.info("-- modal split iv: "  + ((nofExecutedScores == 0) ? 0 : ((double)nofExecutedIvPlans / (double)nofExecutedScores * 100d)) +
-//					" % oev: " + ((nofExecutedScores == 0) ? 0 : ((double)nofExecutedOevPlans / (double)nofExecutedScores * 100d)) + " %");
 			log.info("-- avg. score of the worst plan of each agent: " + (sumScoreWorst / nofScoreWorst));
 			log.info("-- avg. of the avg. plan score per agent: " + (sumAvgScores / nofAvgScores));
 			log.info("-- avg. score of the best plan of each agent: " + (sumScoreBest / nofScoreBest));

@@ -58,11 +58,9 @@ import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.scenario.ScenarioUtils;
 
-import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.ReceiverModule;
 import receiver.Receivers;
-import receiver.collaboration.ProportionalCostSharing;
 import receiver.io.ReceiversReader;
 import receiver.io.ReceiversWriter;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
