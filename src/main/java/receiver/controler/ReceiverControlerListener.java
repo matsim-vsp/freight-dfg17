@@ -76,7 +76,11 @@ ReplanningListener, BeforeMobsimListener {
 
 
 	@Override
-	public void notifyReplanning(ReplanningEvent event) {
+	public void notifyReplanning(final ReplanningEvent event) {
+		
+		if (stratManFac == null){
+			return;
+		}
 	
 		GenericStrategyManager<ReceiverPlan, Receiver> stratMan = stratManFac.createReceiverStrategyManager();
 		

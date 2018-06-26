@@ -242,4 +242,10 @@ public class Order {
 		}
 	}
 
+	public Order setServiceDuration(double duration) {
+		this.serviceTime = duration;
+		return this;
+		
+	}
+
 }

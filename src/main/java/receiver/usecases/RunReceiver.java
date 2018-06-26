@@ -143,9 +143,7 @@ public class RunReceiver {
 		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
 		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
 		controler.addOverridingModule(carrierControler);
-		
-		
-		
+			
 		return carriers;
 	}
 
@@ -166,6 +164,7 @@ public class RunReceiver {
 		 * Create a new instance of a receiver plan strategy manager factory.
 		 */
 		final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
+		
 		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 		controler.addOverridingModule(receiverControler);
 		
