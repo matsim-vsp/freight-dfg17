@@ -62,7 +62,7 @@ public class ReceiverModule extends AbstractModule {
 		/*
 		 * Need a controler listener. Keeping it simple for now.
 		 */
-		//bind(ReceiverControlerListener.class).asEagerSingleton();
+
 		addControlerListenerBinding().to(ReceiverControlerListener.class);
 		
     }
