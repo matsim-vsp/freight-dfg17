@@ -245,7 +245,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 	
 	private void startPlan(Attributes atts) {
 		this.currentOrders = new ArrayList<Order>();
-		currentPlanBuilder = ReceiverPlan.Builder.newInstance().setReceiver(currentReceiver);
+		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver);
 		
 		String score = atts.getValue(ATTR_PLAN_SCORE);
 		if(score != null) {

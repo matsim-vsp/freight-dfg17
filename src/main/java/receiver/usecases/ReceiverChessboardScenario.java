@@ -177,11 +177,11 @@ public class ReceiverChessboardScenario {
 		/* Create generic product types */
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
 		productTypeOne.setProductDescription("Product 1");
-		productTypeOne.setRequiredCapacity(5.0);
+		productTypeOne.setRequiredCapacity(4);
 
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
 		productTypeTwo.setProductDescription("Product 2");
-		productTypeTwo.setRequiredCapacity(10.0);
+		productTypeTwo.setRequiredCapacity(6);
 
 		/* Create receiver-specific products */
 		Receiver receiverOne = receivers.getReceivers().get(Id.create("1", Receiver.class));
@@ -209,7 +209,7 @@ public class ReceiverChessboardScenario {
 
 		/* Combine product orders into single receiver order for a specific carrier. */
 		ReceiverOrder receiver1order = new ReceiverOrder(receiverOne.getId(), r1orders, carrierOne.getId());
-		ReceiverPlan receiverOnePlan = ReceiverPlan.Builder.newInstance().setReceiver(receiverOne).addReceiverOrder(receiver1order).build();
+		ReceiverPlan receiverOnePlan = ReceiverPlan.Builder.newInstance(receiverOne).addReceiverOrder(receiver1order).build();
 		receiverOne.setSelectedPlan(receiverOnePlan);
 
 		/* Convert receiver orders to initial carrier services. */
@@ -220,7 +220,7 @@ public class ReceiverChessboardScenario {
 			if(receiverOne.getTimeWindows().size() > 1) {
 				LOG.warn("Multiple time windows set. Only the first is used");
 			}
-			CarrierService newService = serBuilder.setCapacityDemand(order.getOrderQuantity()).
+			CarrierService newService = serBuilder.setCapacityDemand((int) Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())).
 					setServiceStartTimeWindow(receiverOne.getTimeWindows().get(0)).
 					setServiceDuration(order.getServiceDuration()).
 					build();
@@ -239,7 +239,7 @@ public class ReceiverChessboardScenario {
 
 		/* Combine product orders into single receiver order for a specific carrier. */
 		ReceiverOrder receiver2order = new ReceiverOrder(receiverTwo.getId(), r2orders, carrierOne.getId());
-		ReceiverPlan receiverTwoPlan = ReceiverPlan.Builder.newInstance().setReceiver(receiverTwo).addReceiverOrder(receiver2order).build();
+		ReceiverPlan receiverTwoPlan = ReceiverPlan.Builder.newInstance(receiverTwo).addReceiverOrder(receiver2order).build();
 		receiverTwo.setSelectedPlan(receiverTwoPlan);
 
 		/* Convert receiver orders to initial carrier services. */
@@ -251,7 +251,7 @@ public class ReceiverChessboardScenario {
 				LOG.warn("Multiple time windows set. Only the first is used");
 			}
 			CarrierService newService = serBuilder.
-					setCapacityDemand(order.getOrderQuantity()).
+					setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
 					setServiceStartTimeWindow(receiverTwo.getTimeWindows().get(0)).
 					setServiceDuration(order.getServiceDuration()).
 					build();

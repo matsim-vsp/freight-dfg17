@@ -130,7 +130,7 @@ public class ReceiverPlan implements BasicPlan, Attributable {
 	}
 	
 	public ReceiverPlan createCopy() {
-		Builder builder = Builder.newInstance().setReceiver(receiver);
+		Builder builder = Builder.newInstance(receiver);
 		for(ReceiverOrder ro : this.orderMap.values()) {
 			builder = builder.addReceiverOrder(ro);
 		}
@@ -150,18 +150,15 @@ public class ReceiverPlan implements BasicPlan, Attributable {
 		private boolean selected = false;
 		private Double score = null;
 		
-		private Builder() {
+		private Builder(Receiver receiver) {
+			this.receiver = receiver;
 		}
 		
-		public static Builder newInstance() {
-			return new Builder();
+		public static Builder newInstance(Receiver receiver) {
+			return new Builder(receiver);
 		};
 		
-		public Builder setReceiver(Receiver receiver) {
-			this.receiver = receiver;
-			return this;
-		}
-		
+
 		public Builder addReceiverOrder(ReceiverOrder ro) {
 			this.map.put(ro.getCarrierId(), ro);
 			return this;

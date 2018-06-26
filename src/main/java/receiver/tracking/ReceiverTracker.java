@@ -28,8 +28,9 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
 
+import receiver.FreightScenario;
 import receiver.Receiver;
-import receiver.Receivers;
+import receiver.collaboration.ProportionalCostSharing;
 import receiver.mobsim.ReceiverAgent;
 import receiver.scoring.ReceiverScoringFunctionFactory;
 
@@ -40,12 +41,12 @@ import receiver.scoring.ReceiverScoringFunctionFactory;
  *
  */
 public class ReceiverTracker implements EventHandler {
-
-	private final Receivers receivers;
+	private final FreightScenario fsc;
+	//private final Receivers receivers;
 	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
 
-	public ReceiverTracker(Receivers receivers, ReceiverScoringFunctionFactory scorFuncFac){
-		this.receivers = receivers;
+	public ReceiverTracker(FreightScenario fsc, ReceiverScoringFunctionFactory scorFuncFac){
+		this.fsc = fsc;
 		createReceiverAgents(scorFuncFac);
 	}
 
@@ -53,7 +54,11 @@ public class ReceiverTracker implements EventHandler {
 	 * Scores the selected receiver order.
 	 */
 	public void scoreSelectedPlans() {
-		for (Receiver receiver : receivers.getReceivers().values()){
+		
+		ProportionalCostSharing pcs = new ProportionalCostSharing();
+		pcs.allocateCoalitionCosts(fsc);
+		
+		for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
 			ReceiverAgent rAgent = findReceiver(receiver.getId());
 			rAgent.scoreSelectedPlan();
 		}		
@@ -64,7 +69,7 @@ public class ReceiverTracker implements EventHandler {
 	 * Creates the list of all receiver agents.
 	 */
 	private void createReceiverAgents(ReceiverScoringFunctionFactory scorFuncFac) {
-		for (Receiver receiver: receivers.getReceivers().values()){
+		for (Receiver receiver: fsc.getReceivers().getReceivers().values()){
 			ScoringFunction receiverScorFunc = scorFuncFac.createScoringFunction(receiver);
 			ReceiverAgent rAgent = new ReceiverAgent(receiver, receiverScorFunc);
 			receiverAgents.add(rAgent);

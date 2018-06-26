@@ -104,9 +104,9 @@ public class ReceiverProduct {
 	 * Returns the required capacity of the product type of this particular receiver product.
 	 */
 	
-	public double getRequiredCapacity(){
-		return productType.getRequiredCapacity();
-	}
+	//public double getRequiredCapacity(){
+	//	return productType.getRequiredCapacity();
+	//}
 
 	/** 
 	 * A builder that is used to build the product instance for the receiver.

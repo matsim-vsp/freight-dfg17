@@ -32,7 +32,7 @@ import receiver.Receiver;
  *
  */
 public interface ReceiverScoringFunctionFactory {
-
+	
 	ScoringFunction createScoringFunction(Receiver receiver);
 	
 }

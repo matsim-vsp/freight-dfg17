@@ -36,6 +36,7 @@ import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
 import org.matsim.core.replanning.GenericStrategyManager;
 
+import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
@@ -56,6 +57,7 @@ ReplanningListener, BeforeMobsimListener {
 	private ReceiverOrderStrategyManagerFactory stratManFac;
 	private ReceiverScoringFunctionFactory scorFuncFac;
 	private ReceiverTracker tracker;
+	private FreightScenario fsc;
 	@Inject EventsManager eMan;
 	
 	/**
@@ -65,10 +67,11 @@ ReplanningListener, BeforeMobsimListener {
 	 */
 	
 	@Inject
-	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
+	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac, FreightScenario fsc){
 		this.receivers = receivers;
 		this.stratManFac = stratManFac;
 		this.scorFuncFac = scorFuncFac;
+		this.fsc = fsc;
 			}
 
 
@@ -98,7 +101,7 @@ ReplanningListener, BeforeMobsimListener {
 
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
-		tracker = new ReceiverTracker(receivers, scorFuncFac);
+		tracker = new ReceiverTracker(fsc, scorFuncFac);
 		eMan.addHandler(tracker);		
 	}
 

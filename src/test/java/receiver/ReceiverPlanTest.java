@@ -30,19 +30,12 @@ import receiver.ReceiverPlan.Builder;
 
 public class ReceiverPlanTest {
 
-	@Test
-	public void testBuilderOne() {
-		Builder builder = Builder.newInstance();
-		ReceiverPlan plan = builder.build();
-		Assert.assertNull("Receiver Id should be null", plan.getScore());
-		Assert.assertNull("Score should be null", plan.getScore());
-	}
-
+	
 	@Test
 	public void testBuilderTwo() {
 		Receiver receiver = ReceiverImpl.newInstance(Id.create("1", Receiver.class));
-		Builder builder = Builder.newInstance();
-		ReceiverPlan plan = builder.setReceiver(receiver).build();
+		Builder builder = Builder.newInstance(receiver);
+		ReceiverPlan plan = builder.build();
 		Assert.assertEquals("Wrong receiver Id", Id.create("1", Receiver.class), plan.getReceiver().getId());
 		Assert.assertNull("Score should be null", plan.getScore());
 	}

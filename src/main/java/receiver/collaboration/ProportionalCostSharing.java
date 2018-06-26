@@ -80,7 +80,13 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 		log.info("   Cross-referencing all carrier-receiver relationships...");
 		Map<Id<Carrier>, List<Id<Receiver>>> carrierCustomers = new HashMap<>();
 		for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {
+			
 			ReceiverPlan plan = receiver.getSelectedPlan();
+			if (plan == null) {
+				log.warn("Receiver plan not yet selected.");
+				return scenario;
+			}
+			
 			
 			for(ReceiverOrder ro : plan.getReceiverOrders()) {
 				Id<Carrier> carrierId = ro.getCarrierId();
@@ -111,7 +117,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 				double thisVolume = 0.0;
 				ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 				for(Order order : ro.getReceiverOrders()) {
-					thisVolume += order.getOrderQuantity()*order.getProduct().getRequiredCapacity();
+					thisVolume += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 				}
 				
 				if(!proportionalMap.containsKey(carriedId)) {

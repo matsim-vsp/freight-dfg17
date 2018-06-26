@@ -58,8 +58,11 @@ import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.scenario.ScenarioUtils;
 
+import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.ReceiverModule;
 import receiver.Receivers;
+import receiver.collaboration.ProportionalCostSharing;
 import receiver.io.ReceiversReader;
 import receiver.io.ReceiversWriter;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
@@ -87,7 +90,6 @@ public class RunReceiver {
 		/*TODO We may want to fix this up to rather use the FreightScenario. */
 		String outputfolder = String.format("./output/run_%03d/", run);
 		new File(outputfolder).mkdirs();
-		
 		ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
 
 		/* Read basic scenario elements. */
@@ -105,8 +107,22 @@ public class RunReceiver {
 
 		/* Set up freight portion. */
 		Carriers carriers = setupCarriers(controler, outputfolder);
-		Receivers receivers = setupReceivers(controler, carriers, outputfolder);
+		MutableFreightScenario mfs = new MutableFreightScenario(sc, carriers);
+		
+		Receivers receivers = setupReceivers(controler, mfs, outputfolder);
+		//mfs.setReceivers(receivers);
+		
+		/*controler.addControlerListener(new IterationEndsListener() {
 
+			@Override
+			public void notifyIterationEnds(IterationEndsEvent event) {
+				
+				ProportionalCostSharing pcs = new ProportionalCostSharing();
+				pcs.allocateCoalitionCosts(mfs);
+								
+			}
+		});
+		
 		/* TODO This stats must be set up automatically. */
 		prepareFreightOutputDataAndStats(controler, carriers, outputfolder, receivers);
 		controler.run();
@@ -129,26 +145,32 @@ public class RunReceiver {
 		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
 		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
 		controler.addOverridingModule(carrierControler);
+		
+		
+		
 		return carriers;
 	}
 
 
-	private static Receivers setupReceivers(Controler controler, Carriers carriers, String outputfolder) {
+	//private static Receivers setupReceivers(Controler controler, Carriers carriers, String outputfolder) {
+	private static Receivers setupReceivers(Controler controler, MutableFreightScenario fsc, String outputfolder) {
 		final Receivers finalReceivers = new Receivers();
 		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
-		finalReceivers.linkReceiverOrdersToCarriers(carriers);
-
+		
+		finalReceivers.linkReceiverOrdersToCarriers(fsc.getCarriers());
+		fsc.setReceivers(finalReceivers);
 		/*
 		 * Create a new instance of a receiver scoring function factory.
 		 */
-		final ReceiverScoringFunctionFactory rScorFuncFac = new MyReceiverScoringFunctionFactoryImpl();
+		final ReceiverScoringFunctionFactory rScorFuncFac = new ProportionalReceiverScoringFunctionFactoryImpl();
 
 		/*
 		 * Create a new instance of a receiver plan strategy manager factory.
 		 */
 		final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
-		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac);
+		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 		controler.addOverridingModule(receiverControler);
+		
 		return finalReceivers;
 	}
 
@@ -212,6 +234,8 @@ public class RunReceiver {
 
 			@Override
 			public void notifyIterationEnds(IterationEndsEvent event) {
+				
+				
 				if(event.getIteration() % statInterval != 0) return;
 				//write plans
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
@@ -225,7 +249,5 @@ public class RunReceiver {
 			}
 		});		
 	}
-
-
 
 }

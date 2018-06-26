@@ -21,13 +21,13 @@
  */
 package receiver.mobsim;
 
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.core.scoring.ScoringFunction;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.product.ReceiverOrder;
+import receiver.collaboration.ProportionalCostSharing;
 
 /**
  * This keeps track of a single receiver during simulation.
@@ -39,13 +39,14 @@ public class ReceiverAgent {
 
 	private final Receiver receiver;
 	private final ScoringFunction scorFunc;
-	private Id<Receiver> id;
+	final private Logger log = Logger.getLogger(ReceiverAgent.class);
+	//private Id<Receiver> id;
 
 
 	public ReceiverAgent(Receiver receiver, ScoringFunction receiverScorFunc) {
 		this.receiver = receiver;
 		this.scorFunc = receiverScorFunc;
-		this.id = receiver.getId();		
+		//this.id = receiver.getId();		
 	}
 
 
@@ -63,33 +64,25 @@ public class ReceiverAgent {
 	 * @author wlbean, jwjoubert
 	 */
 	public void scoreSelectedPlan() {
-		double cost = 0.0;
+		double cost;
 
+
+		
 		ReceiverPlan selectedPlan = receiver.getSelectedPlan();
 		if (selectedPlan == null) {
+			log.warn("Receiver plan not yet selected.");
 			return;
 		}
 
-		for(ReceiverOrder ro : selectedPlan.getReceiverOrders()) {
-
-			/* TODO We need to find the carrier in a different way to find the Carrier.
-			 * If we read the receivers from file, we have no way to get the 
-			 * Carrier from there. There must be an explicit call to first link
-			 * the carriers and receivers. */
-			Carrier thisCarrier = ro.getCarrier();
-			if(thisCarrier.getSelectedPlan() == null) {
-				continue;
-			}
-
-			double thisCost = ro.getCarrier().getSelectedPlan().getScore();
-			cost += thisCost;
-		}
-
+		cost = receiver.getSelectedPlan().getScore();
+		
 		scorFunc.addMoney(cost);
 		scorFunc.finish();
+		
 		receiver.getSelectedPlan().setScore(scorFunc.getScore());
 		return;
 	}
+	
 
 
 	/**
@@ -98,7 +91,7 @@ public class ReceiverAgent {
 	 */
 
 	public Id<Receiver> getId() {
-		return id;
+		return receiver.getId();
 	}
 
 
