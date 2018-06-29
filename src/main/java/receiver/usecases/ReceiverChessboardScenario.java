@@ -86,11 +86,12 @@ public class ReceiverChessboardScenario {
 	/**
 	 * Build the entire chessboard example.
 	 */
-	public static FreightScenario createChessboardScenario(long seed, int run, boolean write) {
+	public static MutableFreightScenario createChessboardScenario(long seed, int run, boolean write) {
 		Scenario sc = setupChessboardScenario(seed, run);
 		Carriers carriers = createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
+		fs.setReplanInterval(10);
 		
 		createAndAddChessboardReceivers(fs);
 		createReceiverOrders(fs);
@@ -174,25 +175,25 @@ public class ReceiverChessboardScenario {
 		
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
-		/* Create generic product types */
+		/* Create generic product types with a description and required capacity (in kg per item)*/
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
 		productTypeOne.setProductDescription("Product 1");
-		productTypeOne.setRequiredCapacity(4);
+		productTypeOne.setRequiredCapacity(3);
 
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
 		productTypeTwo.setProductDescription("Product 2");
-		productTypeTwo.setRequiredCapacity(6);
+		productTypeTwo.setRequiredCapacity(2);
 
 		/* Create receiver-specific products */
 		Receiver receiverOne = receivers.getReceivers().get(Id.create("1", Receiver.class));
-		ReceiverProduct receiverOneProductOne = createReceiverProduct(receiverOne, productTypeOne, 200, 1000);
-		ReceiverProduct receiverOneProductTwo = createReceiverProduct(receiverOne, productTypeTwo, 800, 2000);
+		ReceiverProduct receiverOneProductOne = createReceiverProduct(receiverOne, productTypeOne, 200, 500);
+		ReceiverProduct receiverOneProductTwo = createReceiverProduct(receiverOne, productTypeTwo, 800, 1200);
 		receiverOne.getProducts().add(receiverOneProductOne);
 		receiverOne.getProducts().add(receiverOneProductTwo);
 
 		Receiver receiverTwo = receivers.getReceivers().get(Id.create("2", Receiver.class));
-		ReceiverProduct receiverTwoProductOne = createReceiverProduct(receiverTwo, productTypeOne, 200, 800);
-		ReceiverProduct receiverTwoProductTwo = createReceiverProduct(receiverTwo, productTypeTwo, 600, 1500);
+		ReceiverProduct receiverTwoProductOne = createReceiverProduct(receiverTwo, productTypeOne, 200, 400);
+		ReceiverProduct receiverTwoProductTwo = createReceiverProduct(receiverTwo, productTypeTwo, 600, 1000);
 		receiverTwo.getProducts().add(receiverTwoProductOne);
 		receiverTwo.getProducts().add(receiverTwoProductTwo);
 
@@ -201,8 +202,10 @@ public class ReceiverChessboardScenario {
 		/* -----  Receiver 1. ----- */
 		Order r1order1 = createProductOrder(Id.create("Order1",  Order.class), receiverOne, 
 				receiverOneProductOne, Time.parseTime("00:30:00"));
+			r1order1.setNumberOfWeeklyDeliveries(5);
 		Order r1order2 = createProductOrder(Id.create("Order2",  Order.class), receiverOne, 
 				receiverOneProductTwo, Time.parseTime("00:30:00"));
+			r1order2.setNumberOfWeeklyDeliveries(5);
 		Collection<Order> r1orders = new ArrayList<Order>();
 		r1orders.add(r1order1);
 		r1orders.add(r1order2);
@@ -231,8 +234,10 @@ public class ReceiverChessboardScenario {
 		/* -----  Receiver 2. ----- */
 		Order r2order1 = createProductOrder(Id.create("Order3",  Order.class), receiverTwo, 
 				receiverTwoProductOne, Time.parseTime("01:00:00"));
+			r2order1.setNumberOfWeeklyDeliveries(5);
 		Order r2order2 = createProductOrder(Id.create("Order4",  Order.class), receiverTwo, 
 				receiverTwoProductTwo, Time.parseTime("01:00:00"));
+			r2order2.setNumberOfWeeklyDeliveries(5);
 		Collection<Order> r2orders = new ArrayList<Order>();
 		r2orders.add(r2order1);
 		r2orders.add(r2order2);
@@ -267,7 +272,7 @@ public class ReceiverChessboardScenario {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(20);
+		config.controler().setLastIteration(50);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(1);
 		config.global().setRandomSeed(seed);

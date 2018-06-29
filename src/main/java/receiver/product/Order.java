@@ -49,6 +49,7 @@ public class Order {
 	private ReceiverProduct receiverProduct;
 	private Double orderQuantity;
 	private Double serviceTime;
+	private double numDel = 5;
 	
 	
 	/* protected */ 
@@ -69,6 +70,7 @@ public class Order {
 		this.receiver = builder.receiver;
 		this.receiverProduct = builder.receiverProduct;
 		this.serviceTime = builder.serviceTime;
+		this.numDel = builder.numDel;
 	}
 
 
@@ -118,7 +120,7 @@ public class Order {
 	}
 
 	/**
-	 * Returns the order quantity.
+	 * Returns the order quantity in units.
 	 * @return
 	 */
 
@@ -126,6 +128,14 @@ public class Order {
 		return (int) Math.round(orderQuantity);
 	}
 
+	/**
+	 * Returns the number of weekly deliveries of a receiver. The default is set to 5 since MATSim runs only for a single day, we assume there is a delivery of the specified Order quantity each day.
+	 * @return
+	 */
+	public double getNumberOfWeeklyDeliveries(){
+		return numDel;
+	}
+	
 	/**
 	 * Returns a single carrier service containing the order information.
 	 * 
@@ -172,6 +182,7 @@ public class Order {
 		private Double serviceTime = null;
 		private String orderName = "service";
 		private Double orderQuantity = null;
+		int numDel = 5;
 	
 	
 		private Builder(final Id<Order> orderId, final Receiver receiver, final ReceiverProduct receiverProduct){
@@ -199,14 +210,14 @@ public class Order {
 			return this;
 		}
 		
-		//public Builder setOrderName(String name) {
-		//	this.orderName = name;
-		//	return this;
-		//}
+		public Builder setNumberOfWeeklyDeliveries(int numDel) {
+			this.numDel = numDel;
+			return this;
+		}
 		
 	
 		/**
-		 * Determines the order quantity (in kg) based on the receivers min and max inventory levels (in units) and the capacity demand per unit (in kg) and create a new order.
+		 * Determines the order quantity in units based on the receivers min and max inventory levels (in units) and create a new order.
 		 * 
 		 * This should be expanded later on when including demand rate for products.
 		 * @param receiverProduct
@@ -245,6 +256,18 @@ public class Order {
 	public Order setServiceDuration(double duration) {
 		this.serviceTime = duration;
 		return this;
+		
+	}
+
+
+	public void setOrderQuantity(double sdemand) {
+		this.orderQuantity = sdemand;
+		
+	}
+
+
+	public void setNumberOfWeeklyDeliveries(double newNumDel) {
+		this.numDel = newNumDel;
 		
 	}
 

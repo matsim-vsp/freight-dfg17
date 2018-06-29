@@ -36,5 +36,7 @@ public interface FreightScenario{
 	
 	public Receivers getReceivers();
 	
+	public int getReplanInterval();
+	
 
 }

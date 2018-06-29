@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.BasicPlan;
 import org.matsim.contrib.freight.carrier.Carrier;
-
 import receiver.Receiver;
 
 /**
@@ -33,7 +32,7 @@ import receiver.Receiver;
  * @author wlbean, jwjoubert
  */
 
-public class ReceiverOrder implements BasicPlan {
+public class ReceiverOrder implements BasicPlan{
 	
 	private final Logger log = Logger.getLogger(ReceiverOrder.class);
 	private final Id<Receiver> receiverId;
@@ -107,6 +106,7 @@ public class ReceiverOrder implements BasicPlan {
 	public void setCarrier(final Carrier carrier) {
 		this.carrier = carrier;
 	}
+
 	
 }
 

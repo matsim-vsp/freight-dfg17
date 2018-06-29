@@ -16,14 +16,8 @@
  *                                                                         *
  * *********************************************************************** */
   
-package receiver.usecases;
+package receiver.replanning;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.matsim.contrib.freight.carrier.CarrierService;
-import org.matsim.contrib.freight.carrier.CarrierService.Builder;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import receiver.ReceiverPlan;
@@ -62,8 +56,6 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 			
 			/* Increase or decrease the service time with specified value until range min or range max is reached.*/
 			for(Order order: ro.getReceiverOrders()){
-				List<CarrierService> services = new ArrayList<>(ro.getCarrier().getServices().size());
-				List<CarrierService> servicesToRemove = new ArrayList<>(ro.getCarrier().getServices().size());
 				
 				double duration = order.getServiceDuration();
 				if (increase == true){
@@ -77,25 +69,7 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 				}
 				order.setServiceDuration(duration);
 				
-			/*  Check to see if a particular carrier service does indeed belong to the receiver and then changes the service time of that service. Currently it compares carrier service id with receiver order id. This might be changed in the future. */
-					
-			Iterator<CarrierService> iterator = ro.getCarrier().getServices().iterator();		
-			while(iterator.hasNext()){
-				CarrierService newService = null;
-				CarrierService service = iterator.next();
-				Builder builder = CarrierService.Builder.newInstance(service.getId(), service.getLocationLinkId());
-				if (service.getId().toString() == order.getId().toString()){
-				newService = builder.setCapacityDemand(service.getCapacityDemand()).setServiceStartTimeWindow(service.getServiceStartTimeWindow()).setServiceDuration(duration).build();
-				}
-				else newService = builder.setCapacityDemand(service.getCapacityDemand()).setServiceStartTimeWindow(service.getServiceStartTimeWindow()).setServiceDuration(service.getServiceDuration()).build();
-			
-				services.add(newService);
-				servicesToRemove.add(service);
 			}
-			
-			ro.getCarrier().getServices().removeAll(servicesToRemove);
-			ro.getCarrier().getServices().addAll(services);
-		}
 
 		}
 					

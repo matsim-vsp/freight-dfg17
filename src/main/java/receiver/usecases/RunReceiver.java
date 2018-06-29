@@ -24,7 +24,11 @@
 package receiver.usecases;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
@@ -36,28 +40,34 @@ import org.matsim.contrib.freight.carrier.CarrierVehicleTypeReader;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.controler.CarrierModule;
+import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
+import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
+import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.replanning.CarrierPlanStrategyManagerFactory;
 import org.matsim.contrib.freight.replanning.modules.ReRouteVehicles;
 import org.matsim.contrib.freight.replanning.modules.TimeAllocationMutator;
 import org.matsim.contrib.freight.scoring.CarrierScoringFunctionFactory;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
-import org.matsim.contrib.freight.usecases.analysis.LegHistogram;
 import org.matsim.contrib.freight.usecases.chessboard.TravelDisutilities;
-import org.matsim.core.config.Config;
-import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.controler.events.IterationEndsEvent;
+import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
+import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
-import org.matsim.core.scenario.ScenarioUtils;
+import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
+import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
+import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
+import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
+import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.ReceiverModule;
 import receiver.Receivers;
@@ -85,45 +95,112 @@ public class RunReceiver {
 	
 	
 	public static void run(int run) {
-		/*TODO We may want to fix this up to rather use the FreightScenario. */
+
 		String outputfolder = String.format("./output/run_%03d/", run);
 		new File(outputfolder).mkdirs();
-		ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
+		MutableFreightScenario mfs = ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
 
 		/* Read basic scenario elements. */
-		Config config = ConfigUtils.loadConfig(outputfolder + "config.xml");
+		/*Config config = ConfigUtils.loadConfig(outputfolder + "config.xml");
 		config.controler().setOutputDirectory(outputfolder + "./output/");
 		config.network().setInputFile("../../input/usecases/chessboard/network/grid9x9.xml");
 		config.controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(20);
+		config.controler().setLastIteration(40);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(1);
-		Scenario sc = ScenarioUtils.loadScenario(config);
-
+		Scenario sc = ScenarioUtils.loadScenario(config);*/
+		
+		Scenario sc = mfs.getScenario();
+		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
+		
 		Controler controler = new Controler(sc);
 
-		/* Set up freight portion. */
+		/* Set up freight portion.To be repeated every iteration*/
+		receiverAndCarrierReplan(controler, mfs, outputfolder);
+		
 		Carriers carriers = setupCarriers(controler, outputfolder);
-		MutableFreightScenario mfs = new MutableFreightScenario(sc, carriers);
+		mfs.setCarriers(carriers);
 		
-		Receivers receivers = setupReceivers(controler, mfs, outputfolder);
-		//mfs.setReceivers(receivers);
+		FreightScenario nfs = setupReceivers(controler, mfs, outputfolder);	
 		
-		/*controler.addControlerListener(new IterationEndsListener() {
-
-			@Override
-			public void notifyIterationEnds(IterationEndsEvent event) {
-				
-				ProportionalCostSharing pcs = new ProportionalCostSharing();
-				pcs.allocateCoalitionCosts(mfs);
-								
-			}
-		});
 		
 		/* TODO This stats must be set up automatically. */
-		prepareFreightOutputDataAndStats(controler, carriers, outputfolder, receivers);
+		prepareFreightOutputDataAndStats(controler, nfs.getCarriers(), outputfolder, nfs.getReceivers());
 		controler.run();
+	}
+
+
+	private static void receiverAndCarrierReplan(MatsimServices controler, FreightScenario mfs, String outputFolder) {
+
+		
+		controler.addControlerListener(new IterationStartsListener() {
+
+			//@Override
+			public void notifyIterationStarts(IterationStartsEvent event) {
+				
+				//if(event.getIteration() == 0) return;
+					
+					if(event.getIteration() % mfs.getReplanInterval() != 0) {
+						return;
+					}
+				
+				/*
+				 * Carrier replan with receiver changes.
+				 */
+				
+				Carrier carrier = mfs.getCarriers().getCarriers().get(Id.create("Carrier1", Carrier.class)); 
+				ArrayList<CarrierPlan> carrierPlans = new ArrayList<CarrierPlan>();
+						
+				/* Remove all existing carrier plans. */
+				
+				for (CarrierPlan plan : carrier.getPlans()){
+					carrierPlans.add(plan);
+				}
+					
+						Iterator<CarrierPlan> planIterator = carrierPlans.iterator();
+						while (planIterator.hasNext()){
+							CarrierPlan plan = planIterator.next();							
+							carrier.removePlan(plan);
+						}
+						
+				
+				VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, mfs.getScenario().getNetwork());
+
+				NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(mfs.getScenario().getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
+				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
+
+				//read and create a pre-configured algorithms to solve the vrp
+				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./input/usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+
+				//solve the problem
+				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
+
+				//get best (here, there is only one)
+				VehicleRoutingProblemSolution solution = null;
+
+				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
+
+				while(iterator.hasNext()){
+					solution = iterator.next();
+				}
+
+				//create a new carrierPlan from the solution 
+				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, solution);
+
+				//route plan 
+				NetworkRouter.routePlan(newPlan, netBasedCosts);
+				
+
+				//assign this plan now to the carrier and make it the selected carrier plan
+				carrier.setSelectedPlan(newPlan);
+			
+				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(outputFolder + "carriers.xml");
+				new ReceiversWriter(mfs.getReceivers()).write(outputFolder + "receivers.xml");
+			}
+
+		});		
+		
 	}
 
 
@@ -148,13 +225,16 @@ public class RunReceiver {
 	}
 
 
-	//private static Receivers setupReceivers(Controler controler, Carriers carriers, String outputfolder) {
-	private static Receivers setupReceivers(Controler controler, MutableFreightScenario fsc, String outputfolder) {
+	private static FreightScenario setupReceivers(Controler controler, MutableFreightScenario fsc, String outputfolder) {
 		final Receivers finalReceivers = new Receivers();
 		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
 		
+		/* 
+		 * Adds receivers to freight scenario.
+		 */		
 		finalReceivers.linkReceiverOrdersToCarriers(fsc.getCarriers());
 		fsc.setReceivers(finalReceivers);
+		
 		/*
 		 * Create a new instance of a receiver scoring function factory.
 		 */
@@ -168,7 +248,7 @@ public class RunReceiver {
 		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 		controler.addOverridingModule(receiverControler);
 		
-		return finalReceivers;
+		return fsc;
 	}
 
 
@@ -216,7 +296,7 @@ public class RunReceiver {
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
 		final int statInterval = 1;
-		final LegHistogram freightOnly = new LegHistogram(20);
+		//final LegHistogram freightOnly = new LegHistogram(20);
 
 		// freightOnly.setPopulation(controler.getScenario().getPopulation());
 		//freightOnly.setInclPop(false);
@@ -224,7 +304,7 @@ public class RunReceiver {
 		CarrierScoreStats scoreStats = new CarrierScoreStats(carriers, outputDir + "/carrier_scores", true);
 		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(receivers, outputDir + "/receiver_scores", true);
 
-		controler.getEvents().addHandler(freightOnly);
+		//controler.getEvents().addHandler(freightOnly);
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(rScoreStats);
 		controler.addControlerListener(new IterationEndsListener() {
@@ -234,6 +314,7 @@ public class RunReceiver {
 				
 				
 				if(event.getIteration() % statInterval != 0) return;
+				
 				//write plans
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 				new CarrierPlanXmlWriterV2(carriers).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
@@ -241,8 +322,8 @@ public class RunReceiver {
 				new ReceiversWriter(receivers).write(dir + "/" + event.getIteration() + ".receivers.xml");
 
 				//write stats
-				freightOnly.writeGraphic(dir + "/" + event.getIteration() + ".legHistogram_freight.png");
-				freightOnly.reset(event.getIteration());
+				//freightOnly.writeGraphic(dir + "/" + event.getIteration() + ".legHistogram_freight.png");
+				//freightOnly.reset(event.getIteration());
 			}
 		});		
 	}

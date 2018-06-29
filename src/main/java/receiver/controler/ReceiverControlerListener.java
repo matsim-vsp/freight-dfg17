@@ -90,6 +90,13 @@ ReplanningListener, BeforeMobsimListener {
 			receiverCollection.add(receiver);
 		}
 		
+		if (event.getIteration() != 1) {
+					
+			if (event.getIteration() % fsc.getReplanInterval() != 0) {
+				return;
+			}
+		}
+
 		stratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());		
 	}
 

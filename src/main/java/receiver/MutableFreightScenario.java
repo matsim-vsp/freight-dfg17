@@ -34,6 +34,7 @@ public class MutableFreightScenario implements FreightScenario {
 	private Scenario sc;
 	private Carriers carriers;
 	private Receivers receivers;
+	private int replanInterval;
 	
 	public MutableFreightScenario(Scenario sc, Carriers carriers) {
 		this.sc = sc;
@@ -56,6 +57,10 @@ public class MutableFreightScenario implements FreightScenario {
 		this.receivers = receivers;
 	}
 	
+	public void setReplanInterval(int interval){
+		this.replanInterval = interval;
+	}
+	
 	@Override
 	public Receivers getReceivers() {
 		if(this.receivers == null) {
@@ -64,6 +69,18 @@ public class MutableFreightScenario implements FreightScenario {
 		}
 		
 		return this.receivers;
+	}
+
+
+	@Override
+	public int getReplanInterval() {
+		return replanInterval;
+	}
+
+
+	public void setCarriers(Carriers carriers) {
+		this.carriers = carriers;
+		
 	}
 
 }
