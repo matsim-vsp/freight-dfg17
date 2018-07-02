@@ -109,6 +109,24 @@ public class ReceiverChessboardScenario {
 		return fs;
 	}
 	
+	/**
+	 * FIXME Need to complete this. 
+	 * @return
+	 */
+	public static Scenario setupChessboardScenario(long seed, int run) {
+		Config config = ConfigUtils.createConfig();
+		config.controler().setFirstIteration(0);
+		config.controler().setLastIteration(50);
+		config.controler().setMobsim("qsim");
+		config.controler().setWriteSnapshotsInterval(1);
+		config.global().setRandomSeed(seed);
+		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
+		config.controler().setOutputDirectory(String.format("./output/run_%03d/", run));
+
+		Scenario sc = ScenarioUtils.loadScenario(config);
+		return sc;
+	}
+	
 	private static void writeFreightScenario(FreightScenario fs) {
 		/* Write the necessary bits to file. */
 		String outputFolder = fs.getScenario().getConfig().controler().getOutputDirectory();
@@ -265,23 +283,7 @@ public class ReceiverChessboardScenario {
 	}
 
 
-	/**
-	 * FIXME Need to complete this. 
-	 * @return
-	 */
-	public static Scenario setupChessboardScenario(long seed, int run) {
-		Config config = ConfigUtils.createConfig();
-		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(50);
-		config.controler().setMobsim("qsim");
-		config.controler().setWriteSnapshotsInterval(1);
-		config.global().setRandomSeed(seed);
-		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/", run));
 
-		Scenario sc = ScenarioUtils.loadScenario(config);
-		return sc;
-	}
 
 
 	public static void createAndAddChessboardReceivers(MutableFreightScenario fs) {

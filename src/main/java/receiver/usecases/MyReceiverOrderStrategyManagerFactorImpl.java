@@ -34,7 +34,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 1.0);
+			stratMan.addStrategy(strategy, null, 2.0);
 
 		}
 		
@@ -68,7 +68,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(true));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.0);		
+			stratMan.addStrategy(strategy, null, 0.5);		
 		}
 		
 		/*
@@ -79,7 +79,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(false));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.0);		
+			stratMan.addStrategy(strategy, null, 0.5);		
 		}
 		
 		/*TODO:

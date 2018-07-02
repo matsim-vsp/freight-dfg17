@@ -119,14 +119,14 @@ public class RunReceiver {
 		/* Set up freight portion.To be repeated every iteration*/
 		receiverAndCarrierReplan(controler, mfs, outputfolder);
 		
-		Carriers carriers = setupCarriers(controler, outputfolder);
+		Carriers carriers = setupCarriers(controler, mfs);
 		mfs.setCarriers(carriers);
 		
 		FreightScenario nfs = setupReceivers(controler, mfs, outputfolder);	
 		
 		
 		/* TODO This stats must be set up automatically. */
-		prepareFreightOutputDataAndStats(controler, nfs.getCarriers(), outputfolder, nfs.getReceivers());
+		prepareFreightOutputDataAndStats(controler, nfs);
 		controler.run();
 	}
 
@@ -194,9 +194,12 @@ public class RunReceiver {
 
 				//assign this plan now to the carrier and make it the selected carrier plan
 				carrier.setSelectedPlan(newPlan);
+				
+				//write out the carrierPlan to an xml-file
+				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../input/carrierPlanned.xml");
 			
-				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(outputFolder + "carriers.xml");
-				new ReceiversWriter(mfs.getReceivers()).write(outputFolder + "receivers.xml");
+				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
+				new ReceiversWriter(mfs.getReceivers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
 			}
 
 		});		
@@ -204,18 +207,18 @@ public class RunReceiver {
 	}
 
 
-	private static Carriers setupCarriers(Controler controler, String outputfolder) {
+	private static Carriers setupCarriers(Controler controler, FreightScenario fs) {
 		final Carriers carriers = new Carriers();							
-		new CarrierPlanXmlReaderV2(carriers).readFile(outputfolder + "carriers.xml");	
+		new CarrierPlanXmlReaderV2(carriers).readFile(fs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");	
 		CarrierVehicleTypes types = new CarrierVehicleTypes();
-		new CarrierVehicleTypeReader(types).readFile(outputfolder + "carrierVehicleTypes.xml");
+		new CarrierVehicleTypeReader(types).readFile(fs.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
 		new CarrierVehicleTypeLoader(carriers).loadVehicleTypes(types);
 
 		/* Create a new instance of a carrier scoring function factory. */
-		final CarrierScoringFunctionFactory cScorFuncFac = new MyCarrierScoringFunctionFactoryImpl(controler.getScenario().getNetwork());
+		final CarrierScoringFunctionFactory cScorFuncFac = new MyCarrierScoringFunctionFactoryImpl(fs.getScenario().getNetwork());
 
 		/* Create a new instance of a carrier plan strategy manager factory. */
-		final CarrierPlanStrategyManagerFactory cStratManFac = new MyCarrierPlanStrategyManagerFactoryImpl(types, controler.getScenario().getNetwork(), controler);
+		final CarrierPlanStrategyManagerFactory cStratManFac = new MyCarrierPlanStrategyManagerFactoryImpl(types, fs.getScenario().getNetwork(), controler);
 
 		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
 		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
@@ -291,7 +294,7 @@ public class RunReceiver {
 	}
 
 
-	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final Carriers carriers, String outputDir, final Receivers receivers) {
+	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs) {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
@@ -301,8 +304,8 @@ public class RunReceiver {
 		// freightOnly.setPopulation(controler.getScenario().getPopulation());
 		//freightOnly.setInclPop(false);
 
-		CarrierScoreStats scoreStats = new CarrierScoreStats(carriers, outputDir + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(receivers, outputDir + "/receiver_scores", true);
+		CarrierScoreStats scoreStats = new CarrierScoreStats(fs.getCarriers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(fs.getReceivers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
 
 		//controler.getEvents().addHandler(freightOnly);
 		controler.addControlerListener(scoreStats);
@@ -317,9 +320,9 @@ public class RunReceiver {
 				
 				//write plans
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-				new CarrierPlanXmlWriterV2(carriers).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
+				new CarrierPlanXmlWriterV2(fs.getCarriers()).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
 
-				new ReceiversWriter(receivers).write(dir + "/" + event.getIteration() + ".receivers.xml");
+				new ReceiversWriter(fs.getReceivers()).write(dir + "/" + event.getIteration() + ".receivers.xml");
 
 				//write stats
 				//freightOnly.writeGraphic(dir + "/" + event.getIteration() + ".legHistogram_freight.png");
