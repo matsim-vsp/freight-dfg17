@@ -30,7 +30,15 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 	boolean increase;
 	
 	/**
-	 * This class changes the service time of a receivers' orders with the specified time. If increase is true, the service time will increase until the max duration (mutationRange) is reached. Conversely, if increase is false, the service time will decrease until the min duration (mutationRange) is reached.
+	 * This class changes the service time of a receivers' orders with the 
+	 * specified time. If increase is true, the service time will increase 
+	 * until the max duration (mutationRange) is reached. Conversely, if 
+	 * increase is false, the service time will decrease until the minimum 
+	 * duration (mutationRange) is reached.
+	 * 
+	 * TODO Maybe expand the descriptions below so it is easier to understand
+	 * what exactly the parameters mean.
+	 * 
 	 * @param mutationTime
 	 * @param mutationRange
 	 * @param increase

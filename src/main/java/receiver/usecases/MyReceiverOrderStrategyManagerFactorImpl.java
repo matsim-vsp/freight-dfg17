@@ -19,11 +19,16 @@ import receiver.replanning.ServiceTimeMutator;
 /**
  * Collection of receiver replanning strategies.
  * 
+ * TODO Currently the carrier does not reroute its plan every iteration, so it 
+ * basically "ignores" any changes the receiver makes to his orders during each 
+ * run. We should update the code to allow the receiver to only make changes 
+ * every 10 iterations (or so) and then reroute the Carrier in jsprit after 
+ * these changes were made.
+ * 
  * @author wlbean
  *
  */
 
-/* TODO Currently the carrier does not reroute its plan every iteration, so it basically "ignores" any changes the receiver makes to his orders during each run. We should update the code to allow the receiver to only make changes every 10 iterations (or so) and then reroute the Carrier in jsprit after these changes were made. */
 
 public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderStrategyManagerFactory {
 
