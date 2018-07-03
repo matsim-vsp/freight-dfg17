@@ -178,7 +178,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 			counter.incCounter();
 			break;
 		case TIME_WINDOW:
-			currentReceiver.addTimeWindow(currentTimeWindow);
+			currentPlanBuilder.addTimeWindow(currentTimeWindow);
 			break;
 		case ORDER:
 			endOrder();
@@ -265,7 +265,11 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 	
 	private void endPlan() {
 		ReceiverPlan plan = currentPlanBuilder.build();
-		currentReceiver.addPlan(plan);
+		if(plan.isSelected()) {
+			currentReceiver.setSelectedPlan(plan);
+		} else {
+			currentReceiver.addPlan(plan);
+		}
 	}
 
 	private void startOrder(Attributes atts) {

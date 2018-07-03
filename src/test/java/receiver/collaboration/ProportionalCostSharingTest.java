@@ -27,6 +27,7 @@ import org.matsim.testcases.MatsimTestUtils;
 
 import receiver.FreightScenario;
 import receiver.Receiver;
+import receiver.product.Order;
 import receiver.usecases.ReceiverChessboardScenario;
 
 public class ProportionalCostSharingTest {
@@ -41,7 +42,19 @@ public class ProportionalCostSharingTest {
 		Carrier carrier = fs.getCarriers().getCarriers().get(Id.create("Carrier1", Carrier.class));
 		double carrierCost = carrier.getSelectedPlan().getScore();
 		
-		double pOne = 25.0/44.0;
+		double total = 0.0;
+		for(Receiver receiver : fs.getReceivers().getReceivers().values()) {
+			for(Order order : receiver.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverOrders()) {
+				total += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+			}
+		}
+		Receiver receiverOne = fs.getReceivers().getReceivers().get(Id.create("1", Receiver.class));
+		double receiverOneTotal = 0.0;
+		for(Order order : receiverOne.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverOrders()) {
+			receiverOneTotal += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+		}
+		
+		double pOne = receiverOneTotal / total;
 		double pTwo = 1-pOne;
 		
 		ProportionalCostSharing pcs = new ProportionalCostSharing();
@@ -53,7 +66,7 @@ public class ProportionalCostSharingTest {
 				MatsimTestUtils.EPSILON);
 		
 		Id<Receiver> r2Id = Id.create("2", Receiver.class);
-		Assert.assertEquals("Wrong cost allocated to receiver 1",
+		Assert.assertEquals("Wrong cost allocated to receiver 2",
 				pTwo*carrierCost, 
 				fs.getReceivers().getReceivers().get(r2Id).getSelectedPlan().getScore(), 
 				MatsimTestUtils.EPSILON);

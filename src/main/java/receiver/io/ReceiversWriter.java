@@ -90,14 +90,6 @@ public class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
 			for(Receiver receiver : this.receivers.getReceivers().values()) {
 				handler.startReceiver(receiver, writer);
 				
-				/* Write the time windows, if there are any. */
-				if(!receiver.getTimeWindows().isEmpty()) {
-					for(TimeWindow window : receiver.getTimeWindows()) {
-						handler.startTimeWindow(window, writer);
-						handler.endTimeWindow(writer);
-					}
-				}
-					
 				/* Write the products, if there are any. */
 				if(!receiver.getProducts().isEmpty()) {
 					for(ReceiverProduct product : receiver.getProducts()) {
@@ -111,6 +103,15 @@ public class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
 				/* Build receiver orders. */
 				for(ReceiverPlan plan : receiver.getPlans()) {
 					handler.startPlan(plan, writer);
+					
+					/* Write the time windows, if there are any. */
+					if(plan.getTimeWindows().size() > 0) {
+						for(TimeWindow tw : plan.getTimeWindows()) {
+							handler.startTimeWindow(tw, writer);
+							handler.endTimeWindow(writer);
+						}
+					}
+					
 					for(ReceiverOrder order : plan.getReceiverOrders()) {
 						handler.startOrder(order, writer);
 						for(Order item : order.getReceiverOrders()) {

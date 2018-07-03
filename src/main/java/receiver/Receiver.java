@@ -85,19 +85,5 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	@Override
 	public abstract void setSelectedPlan(ReceiverPlan plan);
 
-	/**
-	 * TODO (2018/04, jwj & wlb): currently we assume that time windows are set per receiver, and not per
-	 * product. This may be changed in future if a receiver (specific location) will allow certain products
-	 * during certain times of the day. Then the time window must be (re)located to the {@link ReceiverProduct}, 
-	 * for example.
-
-	 * @param window
-	 * @return
-	 */
-	public abstract Receiver addTimeWindow(final TimeWindow window);
-
-	public abstract boolean isInTimeWindow(double time);
-
-	public abstract List<TimeWindow> getTimeWindows();
 }
 

@@ -56,7 +56,11 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 				List<CarrierService> services = new ArrayList<>(ro.getCarrier().getServices().size());
 				List<CarrierService> servicesToRemove = new ArrayList<>(ro.getCarrier().getServices().size());
 
-				/*  Check to see if a particular carrier service does indeed belong to the receiver and then changes the service parameters according to the receiver's order. Currently it compares carrier service id with receiver order id. This might be changed in the future. */
+				/*  Check to see if a particular carrier service does indeed 
+				 * belong to the receiver and then changes the service parameters 
+				 * according to the receiver's order. Currently it compares carrier 
+				 * service id with receiver order id. This might be changed in the 
+				 * future. */
 
 				Iterator<CarrierService> iterator = ro.getCarrier().getServices().iterator();		
 				while(iterator.hasNext()){
@@ -68,7 +72,10 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 					if (service.getId().toString() == order.getId().toString()){
 						newService = builder
 								.setCapacityDemand((int) (order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))
-								.setServiceStartTimeWindow(receiverPlan.getReceiver().getTimeWindows().get(0))
+								/*TODO This only looks at the FIRST time window. 
+								 * This may need revision once we handle multiple 
+								 * time windows. */
+								.setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0))
 								.setServiceDuration(order.getServiceDuration())
 								.build();
 					} else {

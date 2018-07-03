@@ -202,7 +202,7 @@ public class ReceiversWriterHandlerImpl_v1 implements ReceiversWriterHandler {
 
 	@Override
 	public void startTimeWindow(TimeWindow window, BufferedWriter out) throws IOException {
-		out.write("\t\t<timeWindow start=\"");
+		out.write("\t\t\t<timeWindow start=\"");
 		out.write(Time.writeTime(window.getStart(), Time.TIMEFORMAT_HHMMSS));
 		out.write("\" end=\"");
 		out.write(Time.writeTime(window.getEnd(), Time.TIMEFORMAT_HHMMSS));

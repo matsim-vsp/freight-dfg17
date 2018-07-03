@@ -174,45 +174,6 @@ public class ReceiverImpl implements Receiver {
 
 	
 	@Override
-	public Receiver addTimeWindow(TimeWindow window) {
-		/*TODO May want to check/consolidate time windows. */
-		this.timeWindows.add(window);
-		return this;
-	}
-	
-	
-	/**
-	 * Checks if a given time is within the allowable time window(s).
-	 * 
-	 * @return true if the time is within at leats one of the set time 
-	 * window(s), or <i>if no time windows are set</i>.
-	 */
-	@Override
-	public boolean isInTimeWindow(double time) {
-		if(this.timeWindows.isEmpty()) {
-			log.warn("No time windows are set! Assuming any time is suitable.");
-			return true;
-		}
-		
-		boolean inTimeWindow = false;
-		Iterator<TimeWindow> iterator = this.timeWindows.iterator();
-		
-		while(!inTimeWindow & iterator.hasNext()) {
-			TimeWindow tw = iterator.next();
-			if(time >= tw.getStart() && time <= tw.getEnd()) {
-				inTimeWindow = true;
-			}
-		}
-		return false;
-	}
-	
-	
-	public List<TimeWindow> getTimeWindows(){
-		return this.timeWindows;
-	}
-
-	
-	@Override
 	public Receiver setLinkId(Id<Link> linkId) {
 		this.location = linkId;
 		return this;

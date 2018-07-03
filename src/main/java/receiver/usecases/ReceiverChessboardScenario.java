@@ -230,7 +230,10 @@ public class ReceiverChessboardScenario {
 
 		/* Combine product orders into single receiver order for a specific carrier. */
 		ReceiverOrder receiver1order = new ReceiverOrder(receiverOne.getId(), r1orders, carrierOne.getId());
-		ReceiverPlan receiverOnePlan = ReceiverPlan.Builder.newInstance(receiverOne).addReceiverOrder(receiver1order).build();
+		ReceiverPlan receiverOnePlan = ReceiverPlan.Builder.newInstance(receiverOne)
+				.addReceiverOrder(receiver1order)
+				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")))
+				.build();
 		receiverOne.setSelectedPlan(receiverOnePlan);
 
 		/* Convert receiver orders to initial carrier services. */
@@ -238,11 +241,11 @@ public class ReceiverChessboardScenario {
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
-			if(receiverOne.getTimeWindows().size() > 1) {
+			if(receiverOnePlan.getTimeWindows().size() > 1) {
 				LOG.warn("Multiple time windows set. Only the first is used");
 			}
 			CarrierService newService = serBuilder.setCapacityDemand((int) Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())).
-					setServiceStartTimeWindow(receiverOne.getTimeWindows().get(0)).
+					setServiceStartTimeWindow(receiverOnePlan.getTimeWindows().get(0)).
 					setServiceDuration(order.getServiceDuration()).
 					build();
 			carriers.getCarriers().get(receiver1order.getCarrierId()).getServices().add(newService);		
@@ -262,7 +265,10 @@ public class ReceiverChessboardScenario {
 
 		/* Combine product orders into single receiver order for a specific carrier. */
 		ReceiverOrder receiver2order = new ReceiverOrder(receiverTwo.getId(), r2orders, carrierOne.getId());
-		ReceiverPlan receiverTwoPlan = ReceiverPlan.Builder.newInstance(receiverTwo).addReceiverOrder(receiver2order).build();
+		ReceiverPlan receiverTwoPlan = ReceiverPlan.Builder.newInstance(receiverTwo)
+				.addReceiverOrder(receiver2order)
+				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")))
+				.build();
 		receiverTwo.setSelectedPlan(receiverTwoPlan);
 
 		/* Convert receiver orders to initial carrier services. */
@@ -270,12 +276,12 @@ public class ReceiverChessboardScenario {
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
-			if(receiverTwo.getTimeWindows().size() > 1) {
+			if(receiverTwoPlan.getTimeWindows().size() > 1) {
 				LOG.warn("Multiple time windows set. Only the first is used");
 			}
 			CarrierService newService = serBuilder.
 					setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
-					setServiceStartTimeWindow(receiverTwo.getTimeWindows().get(0)).
+					setServiceStartTimeWindow(receiverTwoPlan.getTimeWindows().get(0)).
 					setServiceDuration(order.getServiceDuration()).
 					build();
 			carriers.getCarriers().get(receiver2order.getCarrierId()).getServices().add(newService);		
@@ -292,15 +298,15 @@ public class ReceiverChessboardScenario {
 		/* Create first receiver */
 		Id<Link> receiverOneLocation = selectRandomLink(network);
 		Receiver receiverOne = ReceiverImpl.newInstance(Id.create("1", Receiver.class))
-				.setLinkId(receiverOneLocation)
-				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")));
+				.setLinkId(receiverOneLocation);
+//				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")));
 		/* FIXME Add a toString() method. */
 		
 		/* Create second receiver */
 		Id<Link> receiverTwoLocation = selectRandomLink(network);
 		Receiver receiverTwo = ReceiverImpl.newInstance(Id.create("2", Receiver.class))
-				.setLinkId(receiverTwoLocation)
-				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")));
+				.setLinkId(receiverTwoLocation);
+//				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")));
 
 		Receivers receivers = new Receivers();
 		
