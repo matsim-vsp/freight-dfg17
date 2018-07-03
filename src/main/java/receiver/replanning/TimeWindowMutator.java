@@ -30,7 +30,6 @@ import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import org.matsim.core.utils.misc.Time;
 
-import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.product.ReceiverOrder;
 
@@ -39,7 +38,6 @@ import receiver.product.ReceiverOrder;
  * @author jwjoubert
  */
 public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan> {
-	final private Logger log = Logger.getLogger(TimeWindowMutator.class);
 	final private double stepSize;
 	final private double MINIMUM_TIME_WINDOW = Time.parseTime("00:15:00"); 
 	
@@ -54,8 +52,10 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 
 	@Override
 	public void handlePlan(ReceiverPlan plan) {
-		TimeWindow window = pickRandomTimeWindow(plan);
-		
+		TimeWindow oldWindow = pickRandomTimeWindow(plan);
+		TimeWindow newWindow = wiggleTimeWindow(oldWindow);
+		plan.getTimeWindows().remove(oldWindow);
+		plan.getTimeWindows().add(newWindow);
 	}
 	
 	public TimeWindow pickRandomTimeWindow(ReceiverPlan plan) {

@@ -28,6 +28,7 @@ import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.testcases.MatsimTestUtils;
 
+import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -102,6 +103,20 @@ public class TimeWindowMutatorTest {
 		
 		Assert.assertEquals("Wrong time window start.", Time.parseTime("08:55:40"), tw.getStart(), 1.0);
 		Assert.assertEquals("Wrong time window end.", getTimeWindow().getEnd(), tw.getEnd(), 1.0);
+	}
+	
+	@Test
+	public void testHandlePlan() {
+		FreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		ReceiverPlan plan = fs.getReceivers().getReceivers().get(Id.create("1", Receiver.class)).getSelectedPlan();
+		TimeWindowMutator twm = new TimeWindowMutator(Time.parseTime("01:00:00"));
+		twm.handlePlan(plan);
+		
+		Assert.assertEquals("Wrong number of time windows.", 1, plan.getTimeWindows().size());
+		TimeWindow tw = plan.getTimeWindows().get(0);
+		LOG.info("Test adapted plan: " + tw.toString());
+		Assert.assertEquals("Wrong time window start.", Time.parseTime("10:00:00"), tw.getStart(), 1.0);
+		Assert.assertEquals("Wrong time window end.", Time.parseTime("13:49:31"), tw.getEnd(), 1.0);
 	}
 	
 	
