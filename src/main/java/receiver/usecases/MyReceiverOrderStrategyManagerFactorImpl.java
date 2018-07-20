@@ -15,15 +15,10 @@ import receiver.replanning.OrderChanger;
 import receiver.replanning.OrderSizeMutator;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.replanning.ServiceTimeMutator;
+import receiver.replanning.TimeWindowMutator;
 
 /**
  * Collection of receiver replanning strategies.
- * 
- * TODO Currently the carrier does not reroute its plan every iteration, so it 
- * basically "ignores" any changes the receiver makes to his orders during each 
- * run. We should update the code to allow the receiver to only make changes 
- * every 10 iterations (or so) and then reroute the Carrier in jsprit after 
- * these changes were made.
  * 
  * @author wlbean
  *
@@ -32,6 +27,10 @@ import receiver.replanning.ServiceTimeMutator;
 
 public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderStrategyManagerFactory {
 
+	
+	public MyReceiverOrderStrategyManagerFactorImpl(){
+	}
+
 	@Override
 	public GenericStrategyManager<ReceiverPlan, Receiver> createReceiverStrategyManager() {
 		final GenericStrategyManager<ReceiverPlan, Receiver> stratMan = new GenericStrategyManager<>();
@@ -39,7 +38,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 2.0);
+			stratMan.addStrategy(strategy, null, 1.0);
 
 		}
 		
@@ -51,7 +50,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("00:30:00"), Time.parseTime("04:00:00"), true));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.5);
+			stratMan.addStrategy(strategy, null, 0.0);
 		}
 		
 		/* 
@@ -62,7 +61,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("00:30:00"), Time.parseTime("0:30:00"), false));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.5);
+			stratMan.addStrategy(strategy, null, 0.0);
 		}
 		
 		/*
@@ -73,7 +72,7 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(true));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.5);		
+			stratMan.addStrategy(strategy, null, 0.0);		
 		}
 		
 		/*
@@ -84,15 +83,19 @@ public class MyReceiverOrderStrategyManagerFactorImpl implements ReceiverOrderSt
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(false));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.5);		
+			stratMan.addStrategy(strategy, null, 0.0);		
 		}
 		
-		/*TODO:
-		 * 1. Consider a "time window wiggle" replanning strategy that searches 
-		 *    randomly within the current time window, but also between different
-		 *    time windows if there are multiple.
-		 * 2. Consider/Add a ConfigModule.
+		/*
+		 * Increases or decreases the time window start or time window end times.
 		 */
+		
+		{
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+			strategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("02:00:00")));
+			strategy.addStrategyModule(new OrderChanger());
+			stratMan.addStrategy(strategy, null, 1.0);		
+		}
 
 		return stratMan;
 	}

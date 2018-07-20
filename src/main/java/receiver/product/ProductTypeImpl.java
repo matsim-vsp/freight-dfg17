@@ -50,7 +50,7 @@ public class ProductTypeImpl implements ProductType{
 	 * Set default values.
 	 */
 	private String descr = "";
-	private double reqCapacity = 5;
+	private double reqCapacity = 1;
 	private Id<ProductType> typeId;
 	
 	public ProductTypeImpl(final Id<ProductType> typeId){

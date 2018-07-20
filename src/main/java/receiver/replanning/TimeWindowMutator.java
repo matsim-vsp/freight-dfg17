@@ -23,7 +23,6 @@ package receiver.replanning;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
@@ -39,7 +38,7 @@ import receiver.product.ReceiverOrder;
  */
 public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan> {
 	final private double stepSize;
-	final private double MINIMUM_TIME_WINDOW = Time.parseTime("00:15:00"); 
+	final private double MINIMUM_TIME_WINDOW = Time.parseTime("01:00:00"); 
 	
 	
 	public TimeWindowMutator(double stepSize) {
@@ -52,7 +51,8 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 
 	@Override
 	public void handlePlan(ReceiverPlan plan) {
-		TimeWindow oldWindow = pickRandomTimeWindow(plan);
+		//TimeWindow oldWindow = pickRandomTimeWindow(plan);
+		TimeWindow oldWindow = plan.getTimeWindows().get(0);
 		TimeWindow newWindow = wiggleTimeWindow(oldWindow);
 		plan.getTimeWindows().remove(oldWindow);
 		plan.getTimeWindows().add(newWindow);
@@ -110,8 +110,16 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 	 * @return
 	 */
 	public TimeWindow extendTimeWindowDownwards(final TimeWindow tw) {
-		double newLow = tw.getStart() - MatsimRandom.getLocalInstance().nextDouble()*this.stepSize;
-		return TimeWindow.newInstance(newLow, tw.getEnd());
+		//double newLow = tw.getStart() - MatsimRandom.getLocalInstance().nextDouble()*this.stepSize;
+		double newLow = tw.getStart() - this.stepSize;
+		
+		if (newLow > Time.parseTime("06:00:00")){
+			return TimeWindow.newInstance(newLow, tw.getEnd());
+		}
+		else {
+			return TimeWindow.newInstance(Time.parseTime("06:00:00"), tw.getEnd());
+		}
+		
 	}
 	
 	
@@ -124,8 +132,16 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 	 * @return
 	 */
 	public TimeWindow extendTimeWindowUpwards(final TimeWindow tw) {
-		double newHigh = tw.getEnd() + MatsimRandom.getLocalInstance().nextDouble()*this.stepSize;
-		return TimeWindow.newInstance(tw.getStart(), newHigh);
+		//double newHigh = tw.getEnd() + MatsimRandom.getLocalInstance().nextDouble()*this.stepSize;
+		double newHigh = tw.getEnd() + this.stepSize;
+		
+		if (newHigh < Time.parseTime("18:00:00")){
+			return TimeWindow.newInstance(tw.getStart(), newHigh);
+		}
+		else {
+			return TimeWindow.newInstance(tw.getStart(), Time.parseTime("18:00:00"));
+		}
+		
 	}
 	
 	
@@ -140,8 +156,15 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 	public TimeWindow contractTimeWindowBottom(final TimeWindow tw) {
 		double gap = Math.max(0, (tw.getEnd() - tw.getStart()) - MINIMUM_TIME_WINDOW);
 		double step = Math.min(gap, stepSize);
-		double newLow = tw.getStart() + MatsimRandom.getLocalInstance().nextDouble()*step;
-		return TimeWindow.newInstance(newLow, tw.getEnd());
+		//double newLow = tw.getStart() + MatsimRandom.getLocalInstance().nextDouble()*step;
+		double newLow = tw.getStart() + step;
+		
+		if (newLow > Time.parseTime("06:00:00")){
+			return TimeWindow.newInstance(newLow, tw.getEnd());
+		}
+		else {
+			return TimeWindow.newInstance(Time.parseTime("06:00:00"), tw.getEnd());
+		}
 	}
 	
 	
@@ -156,8 +179,16 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 	public TimeWindow contractTimeWindowTop(final TimeWindow tw) {
 		double gap = Math.max(0, (tw.getEnd() - tw.getStart()) - MINIMUM_TIME_WINDOW);
 		double step = Math.min(gap, stepSize);
-		double newHigh = tw.getEnd() - MatsimRandom.getLocalInstance().nextDouble()*step;
-		return TimeWindow.newInstance(tw.getStart(), newHigh);
+		//double newHigh = tw.getEnd() - MatsimRandom.getLocalInstance().nextDouble()*step;
+		double newHigh = tw.getEnd() - step;
+
+		if (newHigh < Time.parseTime("18:00:00")){
+			return TimeWindow.newInstance(tw.getStart(), newHigh);
+		}
+		else {
+			return TimeWindow.newInstance(tw.getStart(), Time.parseTime("18:00:00"));
+		}
+		
 	}
 	
 

@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
 import receiver.product.ProductType;
@@ -45,7 +44,7 @@ public class ReceiverImpl implements Receiver {
 	
 	private Attributes attributes = new Attributes();
 	private Id<Link> location;
-	private List<TimeWindow> timeWindows = new ArrayList<>();
+	//private List<TimeWindow> timeWindows = new ArrayList<>();
 	
 	
 	
@@ -146,11 +145,6 @@ public class ReceiverImpl implements Receiver {
 		this.selectedPlan = selectedPlan;	
 	}
 
-	/**
-	 * Sets the receiver's characteristics.
-	 * @param receiverCharacteristics
-	 */
-	
 
 	@Override
 	public Attributes getAttributes() {

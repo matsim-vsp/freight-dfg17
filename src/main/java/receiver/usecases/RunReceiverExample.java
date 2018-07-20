@@ -23,7 +23,9 @@
  */
 package receiver.usecases;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -62,6 +64,7 @@ import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
+import org.matsim.core.utils.io.IOUtils;
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
@@ -69,19 +72,23 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
+import receiver.Receiver;
 import receiver.ReceiverModule;
 import receiver.Receivers;
 import receiver.io.ReceiversReader;
 import receiver.io.ReceiversWriter;
+import receiver.product.Order;
+import receiver.product.ReceiverOrder;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.scoring.ReceiverScoringFunctionFactory;
 
 /**
- *
+ * Specific example for my (wlbean) thesis chapters 5 and 6.
  * @author jwjoubert, wlbean
  */
-public class RunReceiver {
-	final private static long SEED_BASE = 20180413l;
+
+public class RunReceiverExample {
+	final private static long SEED_BASE = 20180709l;
 
 	/**
 	 * @param args
@@ -95,9 +102,36 @@ public class RunReceiver {
 	
 	
 	public static void run(int run) {
-		String outputfolder = String.format("./output/run_%03d/", run);
+
+		String outputfolder = String.format("./output/run_%03d/tw/", run);
 		new File(outputfolder).mkdirs();
-		MutableFreightScenario mfs = ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
+		MutableFreightScenario mfs = ReceiverChessboardScenarioExample.createChessboardScenario(SEED_BASE*run, run, true);
+		
+		/* Write headings */
+        BufferedWriter bw = IOUtils.getBufferedWriter(mfs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+    	try {
+    		bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", 
+    				"iteration", 
+    				"receiver_id", 
+    				"score", 
+    				"timewindow_start", 
+    				"timewindow_end", 
+    				"order_id", 
+    				"volume", 	        				
+    				"frequency", 
+    				"serviceduration"));
+			bw.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Cannot write initial headings");  
+		} finally{
+        	try {
+				bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Cannot close receiver stats file");
+			}
+		}
 
 		/* Read basic scenario elements. */
 		/*Config config = ConfigUtils.loadConfig(outputfolder + "config.xml");
@@ -116,32 +150,35 @@ public class RunReceiver {
 		Controler controler = new Controler(sc);
 
 		/* Set up freight portion.To be repeated every iteration*/
-		receiverAndCarrierReplan(controler, mfs, outputfolder);
+		MutableFreightScenario nmfs = receiverAndCarrierReplan(controler, mfs, outputfolder);
 		
-		Carriers carriers = setupCarriers(controler, mfs);
-		mfs.setCarriers(carriers);
+		Carriers carriers = setupCarriers(controler, nmfs);
+		nmfs.setCarriers(carriers);
 		
-		FreightScenario nfs = setupReceivers(controler, mfs, outputfolder);	
+		FreightScenario nfs = setupReceivers(controler, nmfs, outputfolder);	
 		
 		
 		/* TODO This stats must be set up automatically. */
-		prepareFreightOutputDataAndStats(controler, nfs);
+		prepareFreightOutputDataAndStats(controler, nfs, run);
+		
 		controler.run();
 	}
 
 
-	private static void receiverAndCarrierReplan(MatsimServices controler, FreightScenario mfs, String outputFolder) {
-		
-		
+	private static MutableFreightScenario receiverAndCarrierReplan(MatsimServices controler, MutableFreightScenario mfs, String outputFolder) {
+
+		MutableFreightScenario fs = mfs;
 		controler.addControlerListener(new IterationStartsListener() {
-			 
+
 			//@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
-				//if(event.getIteration() == 0) return;
+
 					
 					if(event.getIteration() % mfs.getReplanInterval() != 0) {
 						return;
 					}
+					
+					
 				
 				/*
 				 * Carrier replan with receiver changes.
@@ -194,14 +231,18 @@ public class RunReceiver {
 				carrier.setSelectedPlan(newPlan);
 				
 				//write out the carrierPlan to an xml-file
-				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../input/carrierPlanned.xml");
+				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
 			
 				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter(mfs.getReceivers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
+				
+				fs.setCarriers(mfs.getCarriers());
+				fs.setReceivers(mfs.getReceivers());
 			}
 
 		});		
 		
+		return fs;
 	}
 
 
@@ -227,8 +268,10 @@ public class RunReceiver {
 
 
 	private static FreightScenario setupReceivers(Controler controler, MutableFreightScenario fsc, String outputfolder) {
-		final Receivers finalReceivers = new Receivers();
+		Receivers finalReceivers = new Receivers();
 		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
+		finalReceivers = fsc.getReceivers();
+
 		
 		/* 
 		 * Adds receivers to freight scenario.
@@ -292,7 +335,8 @@ public class RunReceiver {
 	}
 
 
-	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs) {
+	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs, int run) {
+		
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
@@ -309,24 +353,89 @@ public class RunReceiver {
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(rScoreStats);
 		controler.addControlerListener(new IterationEndsListener() {
-
+						
 			@Override
 			public void notifyIterationEnds(IterationEndsEvent event) {
-				
-				
+				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
+						
 				if(event.getIteration() % statInterval != 0) return;
 				
 				//write plans
-				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
+				
 				new CarrierPlanXmlWriterV2(fs.getCarriers()).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
 
 				new ReceiversWriter(fs.getReceivers()).write(dir + "/" + event.getIteration() + ".receivers.xml");
+				
+
+					
+	        	/* Record receiver stats */
+	    		int numberOfReceivers = fs.getReceivers().getReceivers().size();
+	    		for(int i = 1; i < numberOfReceivers+1; i++) {
+	 	    		Receiver receiver = fs.getReceivers().getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+		        	for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
+		        		for (Order order : rorder.getReceiverOrders()){
+		    				//if(event.getIteration()== 0){
+		    				//	order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
+		    				//}
+		        			String score = receiver.getSelectedPlan().getScore().toString();
+		        			float start = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getStart();
+		        			float end = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getEnd();
+		        			float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
+		        			float freq = (float) order.getNumberOfWeeklyDeliveries();
+		        			float dur =  (float) order.getServiceDuration();
+						
+				        	BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(fs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+			        		try {
+									bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f", 
+											event.getIteration(), 
+											receiver.getId(), 
+											score, 
+											start, 
+											end,
+											order.getId(), 
+											size,
+											freq,
+											dur));											 							
+									bw1.newLine();
+				
+								} catch (IOException e) {
+									e.printStackTrace();
+									throw new RuntimeException("Cannot write receiver stats");    
+						
+							} finally{
+					        	try {
+									bw1.close();
+								} catch (IOException e) {
+									e.printStackTrace();
+									throw new RuntimeException("Cannot close receiver stats file");
+								}
+							}	
+		        		}	
+		        	}
+	    		}
+	        	
+			}
+		});	
+		
+	}
+}
+
+	
+        		
+			/*	} finally{
+				try {
+					bw1.close();
+					} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException("Cannot close receiver stats file");
+						}
+					}       		
 
 				//write stats
 				//freightOnly.writeGraphic(dir + "/" + event.getIteration() + ".legHistogram_freight.png");
 				//freightOnly.reset(event.getIteration());
 			}
-		});		
+		});	
+		
 	}
-
-}
+}*/

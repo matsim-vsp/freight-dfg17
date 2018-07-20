@@ -32,8 +32,8 @@ import receiver.reorderPolicy.ReorderPolicy;
  * A concrete assignment of a receiver product, order quantity, delivery 
  * time windows, delivery service time and delivery location.
  * 
- * Default value for delivery service time is 1 hour and order quantity is 
- * 1000 units.
+ * Default value for delivery service time is 1 hour and daily order quantity is 
+ * 1000 units (5000 units per week, 5 deliveries per week).
  * 
  * @author wlbean
  * 
@@ -46,10 +46,12 @@ public class Order {
 	private Id<Order> orderId;
 	private String orderName;
 	private Receiver receiver;
-	private ReceiverProduct receiverProduct;
+	private ReceiverProduct receiverProduct;	
 	private Double orderQuantity;
+	private Double dailyOrderQuantity;
 	private Double serviceTime;
 	private double numDel = 5;
+
 	
 	
 	/* protected */ 
@@ -71,6 +73,7 @@ public class Order {
 		this.receiverProduct = builder.receiverProduct;
 		this.serviceTime = builder.serviceTime;
 		this.numDel = builder.numDel;
+		this.dailyOrderQuantity = builder.dOrderQuantity;
 	}
 
 
@@ -120,13 +123,24 @@ public class Order {
 	}
 
 	/**
-	 * Returns the order quantity in units.
+	 * Returns the weekly order quantity in units.
 	 * @return
 	 */
 
-	public int getOrderQuantity(){
-		return (int) Math.round(orderQuantity);
+	public double getOrderQuantity(){
+		return orderQuantity;
 	}
+	
+	/**
+	 * Returns the daily order quantity in units.
+	 * @return
+	 */
+
+	public double getDailyOrderQuantity(){
+		return dailyOrderQuantity;
+	}
+	
+	
 
 	/**
 	 * Returns the number of weekly deliveries of a receiver. The default is set to 5 since MATSim runs only for a single day, we assume there is a delivery of the specified Order quantity each day.
@@ -142,15 +156,17 @@ public class Order {
 	 * FIXME I (jwj) removed the time window since it is no longer a single 
 	 * value, but rather a list of time windows.
 	 */
-	@Override
+/*	@Override
 	public String toString(){
-		return "[id=" + orderId + "][linkId=" + receiver.getLinkId() + "][capacityDemand=" + orderQuantity + "][serviceDuration=" + Time.writeTime(serviceTime) + "]";
-	}
+		return "[id=" + orderId + "][linkId=" + receiver.getLinkId() + "][capacityDemand=" + dailyOrderQuantity + "][serviceDuration=" + Time.writeTime(serviceTime) + "]";
+	}*/
 	
 	public Order createCopy() {
 		return Order.Builder.newInstance(orderId, receiver, receiverProduct)
-				.setOrderQuantity(orderQuantity)
+				.setOrderQuantity(getOrderQuantity())
 				.setServiceTime(getServiceDuration())
+				.setNumberOfWeeklyDeliveries(getNumberOfWeeklyDeliveries())
+				.setDailyOrderQuantity(getDailyOrderQuantity())
 				.build();
 	}
 
@@ -182,7 +198,8 @@ public class Order {
 		private Double serviceTime = null;
 		private String orderName = "service";
 		private Double orderQuantity = null;
-		int numDel = 5;
+		private Double dOrderQuantity = null;
+		private double numDel = 5;
 	
 	
 		private Builder(final Id<Order> orderId, final Receiver receiver, final ReceiverProduct receiverProduct){
@@ -210,10 +227,16 @@ public class Order {
 			return this;
 		}
 		
-		public Builder setNumberOfWeeklyDeliveries(int numDel) {
-			this.numDel = numDel;
+		public Builder setNumberOfWeeklyDeliveries(double d) {
+			this.numDel = d;
 			return this;
 		}
+		
+		public Builder setDailyOrderQuantity(Double quantity) {
+			this.dOrderQuantity = quantity;
+			return this;
+		}	
+		
 		
 	
 		/**
@@ -234,6 +257,7 @@ public class Order {
 			//			int maxLevel = receiverProduct.getMaxLevel();
 			//			double orderQuantity = (maxLevel - minLevel)*receiverProduct.getRequiredCapacity();
 			this.orderQuantity = orderQuantity;
+			this.dOrderQuantity = orderQuantity/this.numDel;
 			return this;
 		}
 	
@@ -270,5 +294,12 @@ public class Order {
 		this.numDel = newNumDel;
 		
 	}
+
+
+	public void setDailyOrderQuantity(double sdemand) {
+		this.dailyOrderQuantity = sdemand;
+		
+	}
+
 
 }

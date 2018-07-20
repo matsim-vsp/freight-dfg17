@@ -24,6 +24,12 @@ import receiver.ReceiverPlan;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 
+/**
+ * Changes the service time of a receivers' orders.
+ * 
+ * @author wlbean
+ */
+
 public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
 	private double time;
 	private double range;
@@ -31,13 +37,11 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 	
 	/**
 	 * This class changes the service time of a receivers' orders with the 
-	 * specified time. If increase is true, the service time will increase 
-	 * until the max duration (mutationRange) is reached. Conversely, if 
-	 * increase is false, the service time will decrease until the minimum 
-	 * duration (mutationRange) is reached.
-	 * 
-	 * TODO Maybe expand the descriptions below so it is easier to understand
-	 * what exactly the parameters mean.
+	 * specified time. If {@link increase} is true, the service time will increase
+	 * by {@link mutationTime} until the max duration {@link mutationRange} is 
+	 * reached. Conversely, if increase is false, the service time will decrease 
+	 * by {@link mutationTime} until the minimum duration {@link mutationRange} 
+	 * is reached.
 	 * 
 	 * @param mutationTime
 	 * @param mutationRange

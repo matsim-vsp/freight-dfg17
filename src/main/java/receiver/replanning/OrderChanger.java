@@ -22,19 +22,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.CarrierService;
 import org.matsim.contrib.freight.carrier.CarrierService.Builder;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
+import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
+
+/**
+ * Rewrites a carrier's services after a receiver changed its plan.
+ * 
+ * @author wlbean
+ *
+ */
 
 public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 
 	/**
 	 * This class rewrites a carrier's services after a receiver changed its plan.
+	 * 
 	 */
 
 	public OrderChanger(){		
@@ -51,47 +61,84 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 
 		/* Create list of receiver orders. */
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
-
+			int n = 0;
+					
 			for(Order order: ro.getReceiverOrders()){
-				List<CarrierService> services = new ArrayList<>(ro.getCarrier().getServices().size());
-				List<CarrierService> servicesToRemove = new ArrayList<>(ro.getCarrier().getServices().size());
-
+				List<CarrierService> services = new ArrayList<>();
+				List<CarrierService> servicesToRemove = new ArrayList<>();
+				n = n + 1;
 				/*  Check to see if a particular carrier service does indeed 
 				 * belong to the receiver and then changes the service parameters 
 				 * according to the receiver's order. Currently it compares carrier 
 				 * service id with receiver order id. This might be changed in the 
 				 * future. */
-
-				Iterator<CarrierService> iterator = ro.getCarrier().getServices().iterator();		
-				while(iterator.hasNext()){
-					CarrierService newService = null;
+				Iterator<CarrierService> iterator = ro.getCarrier().getServices().iterator();	
+				int counter = 0;
+				
+				while(iterator.hasNext()){					
 					CarrierService service = iterator.next();
-
-					/* Check to see if this carrier service is indeed this receiver's order. Before updating. */
-					Builder builder = CarrierService.Builder.newInstance(service.getId(), service.getLocationLinkId());
-					if (service.getId().toString() == order.getId().toString()){
-						newService = builder
-								.setCapacityDemand((int) (order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))
-								/*TODO This only looks at the FIRST time window. 
-								 * This may need revision once we handle multiple 
-								 * time windows. */
-								.setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0))
-								.setServiceDuration(order.getServiceDuration())
-								.build();
-					} else {
-						newService = builder
-								.setCapacityDemand(service.getCapacityDemand())
-								.setServiceStartTimeWindow(service.getServiceStartTimeWindow())
-								.setServiceDuration(service.getServiceDuration())
-								.build();
+					if (service.getId().toString() == order.getId().toString()){	
+						counter = 1;
 					}
-
-					services.add(newService);
-					servicesToRemove.add(service);
 				}
-
-				ro.getCarrier().getServices().removeAll(servicesToRemove);
-				ro.getCarrier().getServices().addAll(services);
+				
+				if (counter == 1){
+					Iterator<CarrierService> iterator2 = ro.getCarrier().getServices().iterator();		
+					
+					while(iterator2.hasNext()){					
+						CarrierService service = iterator2.next();
+						CarrierService newService = null;
+										
+						/* Check to see if this unique order exists as a carrier service, if so check to see if this particular 
+						 * carrier service is indeed this receiver's order. Before updating. */
+						
+					
+						if (service.getId().toString() == order.getId().toString()){		
+							Builder builder = CarrierService.Builder.newInstance(Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierService.class), receiverPlan.getReceiver().getLinkId());
+							newService = builder
+									.setCapacityDemand((int) ((order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())))
+									/*TODO This only looks at the FIRST time window. 
+									 * This may need revision once we handle multiple 
+									 * time windows. */
+									.setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0))
+									.setServiceDuration(order.getServiceDuration())
+									.build();
+						} else {
+							newService = service;
+						}
+							
+						/*Check to see if the service has a 0 capacity demand, and if that is the case,
+						 * remove it from the carrier's list of services.
+						 */
+						if (newService.getCapacityDemand() != 0) {
+							services.add(newService);
+	
+						}
+						
+						servicesToRemove.add(service);
+					}
+					
+					ro.getCarrier().getServices().removeAll(servicesToRemove);
+					ro.getCarrier().getServices().addAll(services);
+								
+				} else if (counter == 0){
+					
+					CarrierService newService2 = null;				
+					
+					Builder builder = CarrierService.Builder.newInstance(Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierService.class), receiverPlan.getReceiver().getLinkId());
+					newService2 = builder
+							.setCapacityDemand((int) ((order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())))
+							.setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0))
+							.setServiceDuration(order.getServiceDuration())
+							.build();
+					
+					if (newService2.getCapacityDemand() != 0) {
+						ro.getCarrier().getServices().add(newService2);
+					}
+				}
+	
+				counter = 0;
+				
 			}
 		}
 	}

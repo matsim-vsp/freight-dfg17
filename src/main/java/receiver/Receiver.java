@@ -24,7 +24,6 @@ import java.util.List;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.HasPlansAndId;
-import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.utils.objectattributes.attributable.Attributable;
 
 import receiver.product.ProductType;

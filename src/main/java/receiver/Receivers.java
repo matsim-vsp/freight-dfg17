@@ -32,6 +32,7 @@ import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.utils.objectattributes.attributable.Attributable;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
+import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ProductTypeImpl;
 import receiver.product.ReceiverOrder;
@@ -47,6 +48,7 @@ public class Receivers implements Attributable{
 	private Logger log = Logger.getLogger(Receivers.class);
 	private Attributes attributes = new Attributes();
 	private String desc = "";
+	double dquantity;
 	
 	/**
 	 * Create empty receiver collection.
@@ -145,19 +147,33 @@ public class Receivers implements Attributable{
 	 * {@link Carrier}'s {@link Id}.
 	 */
 	public void linkReceiverOrdersToCarriers(Carriers carriers) {
+
 		for(Receiver receiver : this.receiverMap.values()) {
 			for(ReceiverPlan plan : receiver.getPlans()) {
-				for(ReceiverOrder order : plan.getReceiverOrders()) {
+				for(ReceiverOrder rorder : plan.getReceiverOrders()) {
+					
+					/* 
+					 * TODO Trying to determine daily order quantity at the beginning of every iteration. But this must 
+					 * be updated to write dailyQuantity to the receivers.xml file.
+					 */
+					
+					//for(Order order : rorder.getReceiverOrders()){
+					//		order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
+					//	}
+					
+					
 					/* Check that the carrier actually exists. */
-					if(!carriers.getCarriers().containsKey(order.getCarrierId())) {
+					if(!carriers.getCarriers().containsKey(rorder.getCarrierId())) {
 						throw new RuntimeException("Cannot find carrier \"" 
-								+ order.getCarrierId().toString() + "\" for receiver \"" 
+								+ rorder.getCarrierId().toString() + "\" for receiver \"" 
 								+ receiver.getId().toString() + "\"'s order. ");
 					}
 					
-					order.setCarrier(carriers.getCarriers().get(order.getCarrierId()));
+					
+					rorder.setCarrier(carriers.getCarriers().get(rorder.getCarrierId()));
 				}
 			}
+			
 		}
 	}
 	

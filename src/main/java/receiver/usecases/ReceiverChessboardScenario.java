@@ -91,7 +91,7 @@ public class ReceiverChessboardScenario {
 		Carriers carriers = createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
-		fs.setReplanInterval(10);
+		fs.setReplanInterval(20);
 		
 		createAndAddChessboardReceivers(fs);
 		createReceiverOrders(fs);
@@ -116,7 +116,7 @@ public class ReceiverChessboardScenario {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(50);
+		config.controler().setLastIteration(400);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(1);
 		config.global().setRandomSeed(seed);

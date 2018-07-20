@@ -74,6 +74,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 
 	@Override
 	public FreightScenario allocateCoalitionCosts(FreightScenario scenario) {
+		
 		log.info("Performing proportional cost allocation based on volume.");
 		
 		/* Get all the the cross-referenced receiver-carriers. */
@@ -102,7 +103,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 		Map<Id<Carrier>, Map<Id<Receiver>, Double>> proportionalMap = new HashMap<>();
 		log.info("   Calculating receivers' proportional volume from each carrier's perspective...");
 		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
-			double totalVolume = 0.0;
+			double totalVolume = 0.00001;
 			/* Calculate this receiver's total volume with the carrier. */
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
@@ -117,7 +118,9 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 				double thisVolume = 0.0;
 				ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 				for(Order order : ro.getReceiverOrders()) {
-					thisVolume += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+
+					thisVolume += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+
 				}
 				
 				if(!proportionalMap.containsKey(carriedId)) {
@@ -158,7 +161,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 	private double getReceiverOrderTotal(ReceiverOrder ro) {
 		double total = 0.0;
 		for(Order order : ro.getReceiverOrders()) {
-			total += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+			total += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 		}
 		return total;
 	}

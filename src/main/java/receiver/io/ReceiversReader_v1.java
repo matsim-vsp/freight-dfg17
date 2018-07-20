@@ -85,6 +85,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 	private final static String ATTR_ITEM_NAME = "name";
 	private final static String ATTR_ITEM_PRODUCT = "productId";
 	private final static String ATTR_ITEM_QUANTITY = "quantity";
+	//private final static String ATTR_ITEM_DAILYQUANTITY = "dailyQuantity";
 	private final static String ATTR_ITEM_SERVICETIME = "serviceTime";
 
 	private final AttributesXmlReaderDelegate attributesReader = new AttributesXmlReaderDelegate();
@@ -303,6 +304,13 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 			quantity = Double.parseDouble(quantityString);
 			orderBuilder.setOrderQuantity(quantity);
 		}
+		
+		/*String dailyQuantityString = atts.getValue(ATTR_ITEM_DAILYQUANTITY);
+		double dailyQuantity = 0.0;
+		if(dailyQuantityString != null) {
+			dailyQuantity = Double.parseDouble(dailyQuantityString);
+			orderBuilder.setOrderQuantity(dailyQuantity);
+		}*/
 		
 		String serviceTime = atts.getValue(ATTR_ITEM_SERVICETIME);
 		if(serviceTime != null) {

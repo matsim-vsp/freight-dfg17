@@ -40,6 +40,8 @@ import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
+import receiver.product.Order;
+import receiver.product.ReceiverOrder;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.scoring.ReceiverScoringFunctionFactory;
 import receiver.tracking.ReceiverTracker;
@@ -77,7 +79,7 @@ ReplanningListener, BeforeMobsimListener {
 
 	@Override
 	public void notifyReplanning(final ReplanningEvent event) {
-		
+
 		if (stratManFac == null){
 			return;
 		}
@@ -89,13 +91,10 @@ ReplanningListener, BeforeMobsimListener {
 		for(Receiver receiver : receivers.getReceivers().values()){
 			receiverCollection.add(receiver);
 		}
-		
-		if (event.getIteration() != 1) {
-					
+			
 			if (event.getIteration() % fsc.getReplanInterval() != 0) {
 				return;
 			}
-		}
 
 		stratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());		
 	}

@@ -126,7 +126,7 @@ public class ReceiverProduct {
 			return new Builder();
 		}
 		
-		private ReorderPolicy policy = new SSReorderPolicy(100000.0, 500000.0);
+		private ReorderPolicy policy = new SSReorderPolicy(1000, 5000);
 		private double onHand = 0.0;
 		//private Id<Link> locationId;
 		private ProductType productType;

@@ -162,6 +162,8 @@ public class ReceiversWriterHandlerImpl_v1 implements ReceiversWriterHandler {
 		/*TODO Add both weight and quantity on order */
 		out.write("\" quantity=\"");
 		out.write(String.valueOf(item.getOrderQuantity()));
+		//out.write("\" dailyQuantity=\"");
+		//out.write(String.valueOf(item.getDailyOrderQuantity()));
 		out.write("\" serviceTime=\"");
 		out.write(Time.writeTime(item.getServiceDuration(), Time.TIMEFORMAT_HHMMSS));
 		out.write("\"");

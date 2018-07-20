@@ -65,6 +65,7 @@ public class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
 	
 	public void writeV1(String filename) {
 		String dtd = "http://matsim.org/files/dtd/freightReceivers_v1.dtd";
+		//String dtd = "C:/Users/u04416422/Documents/matsim/matsim/src/main/resources/dtd/freightReceivers_v1.dtd";
 		ReceiversWriterHandler handler = new ReceiversWriterHandlerImpl_v1();
 
 		try {
