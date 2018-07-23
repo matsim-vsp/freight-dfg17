@@ -122,7 +122,7 @@ public class ReceiverChessboardScenarioExample {
 		config.controler().setWriteSnapshotsInterval(1);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/tw/", run));
+		config.controler().setOutputDirectory(String.format("./output/run_%03d/freq/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;

@@ -103,7 +103,7 @@ public class RunReceiverExample {
 	
 	public static void run(int run) {
 
-		String outputfolder = String.format("./output/run_%03d/tw/", run);
+		String outputfolder = String.format("./output/run_%03d/freq/", run);
 		new File(outputfolder).mkdirs();
 		MutableFreightScenario mfs = ReceiverChessboardScenarioExample.createChessboardScenario(SEED_BASE*run, run, true);
 		
