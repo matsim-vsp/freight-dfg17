@@ -83,6 +83,29 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	 */
 	@Override
 	public abstract void setSelectedPlan(ReceiverPlan plan);
+	
+
+	/**
+	 * Sets the receiver collaboration status
+	 * @return 
+	 */
+	public abstract Receiver setCollaborationStatus(boolean status);
+	
+	/**
+	 * Gets the receiver collaboration status
+	 */
+	public abstract boolean getCollaborationStatus();
+	
+	/**
+	 * Sets the receiver's initial cost (in order to calculate the coalition cost allocations)
+	 */
+	public abstract void setInitialCost(double cost);
+	
+	/**
+	 * Gets the receiver collaboration status
+	 */
+	public abstract double getInitialCost();
+	
 
 }
 

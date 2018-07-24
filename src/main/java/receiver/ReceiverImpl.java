@@ -59,7 +59,9 @@ public class ReceiverImpl implements Receiver {
 	private final List<ReceiverPlan> plans;
 	private final List<ReceiverProduct> products;
 	private ReceiverPlan selectedPlan;
-	
+	private boolean status = false;
+	private double cost = 0.0;
+
 	private ReceiverImpl(final Id<Receiver> id){
 		super();
 		this.id = id;
@@ -152,10 +154,10 @@ public class ReceiverImpl implements Receiver {
 	}
 
 	
-	public Receiver setLocation(Id<Link> linkId) {
+/*	public Receiver setLocation(Id<Link> linkId) {
 		this.location = linkId;
 		return this;
-	}
+	}*/
 	
 	/**
 	 * Returns the link from which the receiver is accessed.
@@ -188,6 +190,38 @@ public class ReceiverImpl implements Receiver {
 			+ "\" does not have the requested product type \"" + productType.toString() + "\". Returning null.");
 		}
 		return product;
+	}
+
+	/*
+	 * Sets a receiver's collaboration status.
+	 */
+
+	@Override
+	public Receiver setCollaborationStatus(boolean status) {
+		this.status = status;
+		return this;
+		
+	}
+
+	/*
+	 * Returns a specific receiver's collaboration status. Default is false, meaning a receiver is not willing to collaborate.
+	 */
+
+	@Override
+	public boolean getCollaborationStatus() {
+		return this.status;
+	}
+
+
+	@Override
+	public void setInitialCost(double cost) {
+		this.cost = cost;
+	}
+
+
+	@Override
+	public double getInitialCost() {
+		return this.cost;
 	}
 
 }

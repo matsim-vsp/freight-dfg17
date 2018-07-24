@@ -30,7 +30,7 @@ import receiver.FreightScenario;
  *
  * @author jwjoubert, wlbean
  */
-public interface ReceiverCarrierCollaboration extends Attributable {
+public interface ReceiverCarrierCostAllocation extends Attributable {
 	
 	
 	/**
@@ -45,4 +45,5 @@ public interface ReceiverCarrierCollaboration extends Attributable {
 	public FreightScenario allocateCoalitionCosts(FreightScenario scenario);
 	
 	public String getDescription();
+	
 }

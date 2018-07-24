@@ -117,12 +117,12 @@ public class ReceiverChessboardScenarioExample {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(400);
+		config.controler().setLastIteration(100);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(1);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/freq/", run));
+		config.controler().setOutputDirectory(String.format("./output/run_%03d/serdur/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -545,55 +545,60 @@ public class ReceiverChessboardScenarioExample {
 		
 	}
 
-
-
-
-
 	public static void createAndAddChessboardReceivers(MutableFreightScenario fs) {
 		Network network = fs.getScenario().getNetwork();
 
 		/* Create first receiver */
 		Id<Link> receiverOneLocation = selectRandomLink(network);
 		Receiver receiverOne = ReceiverImpl.newInstance(Id.create("1", Receiver.class))
-				.setLinkId(receiverOneLocation);
+				.setLinkId(receiverOneLocation)
+				.setCollaborationStatus(true);
 //				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")));
+		
 		/* FIXME Add a toString() method. */
 		
 		/* Create second receiver */
 		Id<Link> receiverTwoLocation = selectRandomLink(network);
 		Receiver receiverTwo = ReceiverImpl.newInstance(Id.create("2", Receiver.class))
-				.setLinkId(receiverTwoLocation);
+				.setLinkId(receiverTwoLocation)
+				.setCollaborationStatus(true);
 //				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")));
 		
 		/* Create third receiver */
 		Id<Link> receiverThreeLocation = selectRandomLink(network);
 		Receiver receiverThree = ReceiverImpl.newInstance(Id.create("3", Receiver.class))
-				.setLinkId(receiverThreeLocation);
+				.setLinkId(receiverThreeLocation)
+				.setCollaborationStatus(true);
 		
 		/* Create fourth receiver */
 		Id<Link> receiverFourLocation = selectRandomLink(network);
 		Receiver receiverFour = ReceiverImpl.newInstance(Id.create("4", Receiver.class))
-				.setLinkId(receiverFourLocation);
+				.setLinkId(receiverFourLocation)
+				.setCollaborationStatus(true);
 		
 		/* Create fifth receiver */
 		Id<Link> receiverFiveLocation = selectRandomLink(network);
 		Receiver receiverFive = ReceiverImpl.newInstance(Id.create("5", Receiver.class))
-				.setLinkId(receiverFiveLocation);
+				.setLinkId(receiverFiveLocation)
+				.setCollaborationStatus(true);
 		
 		/* Create sixth receiver */
 		Id<Link> receiverSixLocation = selectRandomLink(network);
 		Receiver receiverSix = ReceiverImpl.newInstance(Id.create("6", Receiver.class))
-				.setLinkId(receiverSixLocation);
+				.setLinkId(receiverSixLocation)
+				.setCollaborationStatus(true);
 		
 		/* Create seventh receiver */
 		Id<Link> receiverSevenLocation = selectRandomLink(network);
 		Receiver receiverSeven = ReceiverImpl.newInstance(Id.create("7", Receiver.class))
-				.setLinkId(receiverSevenLocation);
+				.setLinkId(receiverSevenLocation)
+				.setCollaborationStatus(true);
 		
 		/* Create eighth receiver */
 		Id<Link> receiverEightLocation = selectRandomLink(network);
 		Receiver receiverEight = ReceiverImpl.newInstance(Id.create("8", Receiver.class))
-				.setLinkId(receiverEightLocation);
+				.setLinkId(receiverEightLocation)
+				.setCollaborationStatus(true);
 
 		Receivers receivers = new Receivers();
 		

@@ -82,7 +82,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 	private final static String ATTR_PLAN_SELECTED = "selected";
 	private final static String ATTR_ORDER_CARRIER = "carrierId";
 	private final static String ATTR_ITEM_ID = "id";
-	private final static String ATTR_ITEM_NAME = "name";
+	//private final static String ATTR_ITEM_NAME = "name";
 	private final static String ATTR_ITEM_PRODUCT = "productId";
 	private final static String ATTR_ITEM_QUANTITY = "quantity";
 	//private final static String ATTR_ITEM_DAILYQUANTITY = "dailyQuantity";
@@ -287,7 +287,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 		Id<Order> id = Id.create(atts.getValue(ATTR_ITEM_ID), Order.class);
 		
 		/* TODO Is this necessary? It is hard-coded in the builder. */
-		String name = atts.getValue(ATTR_ITEM_NAME);
+		//String name = atts.getValue(ATTR_ITEM_NAME);
 		
 		Id<ProductType> productId = Id.create(atts.getValue(ATTR_ITEM_PRODUCT), ProductType.class);
 		ProductType pt = receivers.getProductType(productId);

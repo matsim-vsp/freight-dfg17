@@ -44,12 +44,15 @@ import receiver.product.ReceiverOrder;
  * 
  * @author jwjoubert, wlbean
  */
-public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
+public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
 	private Attributes attributes;
 	private String descr = "Proportional sharing of costs between carrier(s) and receiver(s)";
-	
-	
+	private double allocatedCost = 0.0;
+	/*
+	 * Fixed cost per tonne the carrier charges non-collaborating receivers for delivery.
+	 */
+	private double fee = 600.0;
 	
 	
 	public ProportionalCostSharing() {
@@ -103,61 +106,103 @@ public class ProportionalCostSharing implements ReceiverCarrierCollaboration {
 		Map<Id<Carrier>, Map<Id<Receiver>, Double>> proportionalMap = new HashMap<>();
 		log.info("   Calculating receivers' proportional volume from each carrier's perspective...");
 		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
-			double totalVolume = 0.00001;
+			double totalVolume = 0.000001;
+			
 			/* Calculate this receiver's total volume with the carrier. */
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
-				ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
-				totalVolume += getReceiverOrderTotal(ro);
+				
+				if (thisReceiver.getCollaborationStatus() == true){					
+			
+					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
+					totalVolume += getReceiverOrderTotal(ro);
+				} 
 			}
 			
 			/* Now calculate each receiver's proportion of the total volume. */ 
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
 				
-				double thisVolume = 0.0;
-				ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
-				for(Order order : ro.getReceiverOrders()) {
+				if (thisReceiver.getCollaborationStatus() == true){
+					
+					double thisVolume = 0.0;
+					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
+					
+					thisVolume += getReceiverOrderTotal(ro);
 
-					thisVolume += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
-
+					if(!proportionalMap.containsKey(carriedId)) {
+						proportionalMap.put(carriedId, new HashMap<>());
+					}
+					
+					/* The essence of the proportional assignment.*/
+					proportionalMap.get(carriedId).put(receiverId, thisVolume / (totalVolume));
 				}
-				
-				if(!proportionalMap.containsKey(carriedId)) {
-					proportionalMap.put(carriedId, new HashMap<>());
-				}
-				
-				/* The essence of the proportional assignment. */
-				proportionalMap.get(carriedId).put(receiverId, thisVolume / totalVolume);
 			}
+		
 		}
 
-		/* Score the individual receiver plans. */
+		/* Score non-collaborating receivers and calculate the total cost allocated to them. */
+		
 		log.info("  Scoring the individual receivers...");
 		for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {
-			double total = 0.0;
+			double total = 0.0;			
 			
 			ReceiverPlan plan = receiver.getSelectedPlan();
 			for(ReceiverOrder ro : plan.getReceiverOrders()) {
-				double cost = ro.getCarrier().getSelectedPlan().getScore() * proportionalMap.get(ro.getCarrierId()).get(receiver.getId());
-				ro.setScore(cost);
-				total += cost;
+									
+				if (receiver.getCollaborationStatus() == false){
+					double thisVolume = 0.0;
+					thisVolume = getReceiverOrderTotal(ro);
+
+					/* TODO We need to change the scoring of a receiver if he is not collaborating. Currently, the carrier charges a fixed cost per tonne
+					 * regardless of its own cost. Where should this fixed rate per tonne be set? This is not the best place.
+					 * 
+					 */
+					double cost = (thisVolume/1000)*-1*fee;
+					ro.setScore(cost);
+					total += cost;	
+					allocatedCost += cost;
+				}
 			}
-			plan.setScore(total);
+			
+			if (receiver.getCollaborationStatus() == false){
+				plan.setScore(total);
+			}
+				
 		}
+			
+			/* Score the individual receiver plans. */
+			for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {
+					double total = 0.0;
+					
+					
+					ReceiverPlan plan = receiver.getSelectedPlan();
+					for(ReceiverOrder ro : plan.getReceiverOrders()) {
+											
+						if (receiver.getCollaborationStatus() == true){
+							double cost = (ro.getCarrier().getSelectedPlan().getScore() - allocatedCost) * proportionalMap.get(ro.getCarrierId()).get(receiver.getId());
+							ro.setScore(cost);
+							total += cost;
+						} 
+
+			}
+					
+				if (receiver.getCollaborationStatus() == true){
+					plan.setScore(total);
+				}
+				
+		}
+		
+		/* TODO We should think about changing carrier scores, based on cost allocations...
+		 * 
+		 */
+		
 		
 		log.info("Done with proportional cost calculation.");
 		return scenario;
 	}
 
-	/**
-	 * TODO Check that this is indeed correct. There seems to be two ways of 
-	 * getting the 'requiredCapacity':<br><br>
-	 * 
-	 *  <code>order.getProduct().getRequiredCapacity(); </code>
-	 *  <br>&nbsp&nbsp or<br>
-	 *  <code>order.getProduct().getProductType().getRequiredCapacity(); </code>
-	 */
+
 	private double getReceiverOrderTotal(ReceiverOrder ro) {
 		double total = 0.0;
 		for(Order order : ro.getReceiverOrders()) {

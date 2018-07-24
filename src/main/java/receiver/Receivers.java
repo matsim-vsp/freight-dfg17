@@ -32,7 +32,6 @@ import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.utils.objectattributes.attributable.Attributable;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
-import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ProductTypeImpl;
 import receiver.product.ReceiverOrder;
@@ -151,16 +150,6 @@ public class Receivers implements Attributable{
 		for(Receiver receiver : this.receiverMap.values()) {
 			for(ReceiverPlan plan : receiver.getPlans()) {
 				for(ReceiverOrder rorder : plan.getReceiverOrders()) {
-					
-					/* 
-					 * TODO Trying to determine daily order quantity at the beginning of every iteration. But this must 
-					 * be updated to write dailyQuantity to the receivers.xml file.
-					 */
-					
-					//for(Order order : rorder.getReceiverOrders()){
-					//		order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
-					//	}
-					
 					
 					/* Check that the carrier actually exists. */
 					if(!carriers.getCarriers().containsKey(rorder.getCarrierId())) {

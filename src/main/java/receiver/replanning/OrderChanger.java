@@ -28,7 +28,6 @@ import org.matsim.contrib.freight.carrier.CarrierService.Builder;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
-import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;

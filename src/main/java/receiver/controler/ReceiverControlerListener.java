@@ -40,8 +40,6 @@ import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
-import receiver.product.Order;
-import receiver.product.ReceiverOrder;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.scoring.ReceiverScoringFunctionFactory;
 import receiver.tracking.ReceiverTracker;
@@ -89,12 +87,27 @@ ReplanningListener, BeforeMobsimListener {
 		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverCollection = new ArrayList<>();
 		
 		for(Receiver receiver : receivers.getReceivers().values()){
+
+			/*
+			 * Checks to see if a receiver is collaborating, if not, the receiver are not allowed to replan (for now).
+			 * If the receiver is collaborating, the receiver will be allowed to replan.
+			 */
+			
+			if (receiver.getCollaborationStatus() == true){	
+				
+				if (event.getIteration() % fsc.getReplanInterval() == 0) {
+					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
+				}
+				
 			receiverCollection.add(receiver);
+			}			
+
 		}
+
 			
 			if (event.getIteration() % fsc.getReplanInterval() != 0) {
 				return;
-			}
+			} 
 
 		stratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());		
 	}
