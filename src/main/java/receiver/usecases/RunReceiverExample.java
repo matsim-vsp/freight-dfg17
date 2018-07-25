@@ -58,6 +58,7 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
+import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
@@ -79,7 +80,10 @@ import receiver.io.ReceiversReader;
 import receiver.io.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
+import receiver.replanning.NumDelReceiverOrderStrategyManagerImpl;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
+import receiver.replanning.ServiceTimeReceiverOrderStrategyManagerImpl;
+import receiver.replanning.TimeWindowReceiverOrderStrategyManagerImpl;
 import receiver.scoring.ReceiverScoringFunctionFactory;
 
 /**
@@ -287,7 +291,7 @@ public class RunReceiverExample {
 		/*
 		 * Create a new instance of a receiver plan strategy manager factory.
 		 */
-		/*int selector = MatsimRandom.getLocalInstance().nextInt(2);
+		int selector = MatsimRandom.getLocalInstance().nextInt(2);
 			switch (selector) {
 			case 0: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
@@ -310,11 +314,11 @@ public class RunReceiverExample {
 				controler.addOverridingModule(receiverControler);
 				//throw new IllegalArgumentException("Cannot change receiver plan manager.");	
 				}				
-			}*/
+			}
 			
-		final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
+		/*final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
 		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-		controler.addOverridingModule(receiverControler);
+		controler.addOverridingModule(receiverControler);*/
 		
 		return fsc;
 		
