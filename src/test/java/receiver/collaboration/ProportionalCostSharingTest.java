@@ -57,7 +57,7 @@ public class ProportionalCostSharingTest {
 		double pOne = receiverOneTotal / total;
 		double pTwo = 1-pOne;
 		
-		ProportionalCostSharing pcs = new ProportionalCostSharing();
+		ProportionalCostSharing pcs = new ProportionalCostSharing(350);
 		pcs.allocateCoalitionCosts(fs);
 		Id<Receiver> r1Id = Id.create("1", Receiver.class);
 		Assert.assertEquals("Wrong cost allocated to receiver 1",

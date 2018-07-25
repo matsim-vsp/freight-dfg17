@@ -25,6 +25,9 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
 
+import receiver.collaboration.Coalition;
+import receiver.collaboration.MutableCoalition;
+
 /**
  *
  * @author jwjoubert, wlbean
@@ -35,6 +38,7 @@ public class MutableFreightScenario implements FreightScenario {
 	private Carriers carriers;
 	private Receivers receivers;
 	private int replanInterval;
+	private MutableCoalition coalition;
 	
 	public MutableFreightScenario(Scenario sc, Carriers carriers) {
 		this.sc = sc;
@@ -81,6 +85,16 @@ public class MutableFreightScenario implements FreightScenario {
 	public void setCarriers(Carriers carriers) {
 		this.carriers = carriers;
 		
+	}
+
+
+	public void setCoalition(MutableCoalition coalition) {
+		this.coalition = coalition;
+		
+	}
+	
+	public Coalition getCoalition(){
+		return this.coalition;
 	}
 
 }

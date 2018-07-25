@@ -88,7 +88,7 @@ import receiver.scoring.ReceiverScoringFunctionFactory;
  */
 
 public class RunReceiverExample {
-	final private static long SEED_BASE = 20180709l;
+	final private static long SEED_BASE = 20180725l;
 
 	/**
 	 * @param args
@@ -103,7 +103,7 @@ public class RunReceiverExample {
 	
 	public static void run(int run) {
 
-		String outputfolder = String.format("./output/run_%03d/serdur/", run);
+		String outputfolder = String.format("./output/run_%03d/", run);
 		new File(outputfolder).mkdirs();
 		MutableFreightScenario mfs = ReceiverChessboardScenarioExample.createChessboardScenario(SEED_BASE*run, run, true);
 		
@@ -231,7 +231,7 @@ public class RunReceiverExample {
 				carrier.setSelectedPlan(newPlan);
 				
 				//write out the carrierPlan to an xml-file
-				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
+				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../input/carrierPlanned.xml");
 			
 				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter(mfs.getReceivers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
@@ -287,12 +287,41 @@ public class RunReceiverExample {
 		/*
 		 * Create a new instance of a receiver plan strategy manager factory.
 		 */
+		/*int selector = MatsimRandom.getLocalInstance().nextInt(2);
+			switch (selector) {
+			case 0: {
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler);
+				}
+			case 1: {
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler);
+				}
+			case 2: {
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler); 
+				}
+			default: { 
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler);
+				//throw new IllegalArgumentException("Cannot change receiver plan manager.");	
+				}				
+			}*/
+			
 		final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
-		
 		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 		controler.addOverridingModule(receiverControler);
 		
 		return fsc;
+		
+		//final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
+		//controler.addOverridingModule(receiverControler);
+		
+		
 	}
 
 

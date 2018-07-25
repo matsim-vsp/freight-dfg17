@@ -24,6 +24,8 @@ package receiver;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
 
+import receiver.collaboration.Coalition;
+
 /**
  *
  * @author jwjoubert, wlbean
@@ -38,5 +40,6 @@ public interface FreightScenario{
 	
 	public int getReplanInterval();
 	
+	public Coalition getCoalition();
 
 }

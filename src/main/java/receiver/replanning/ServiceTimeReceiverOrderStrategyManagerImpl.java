@@ -21,9 +21,9 @@ import receiver.replanning.ServiceTimeMutator;
  * @author wlbean
  *
  */
-public class DelFreqReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	
-	public DelFreqReceiverOrderStrategyManagerImpl(){		
+	public ServiceTimeReceiverOrderStrategyManagerImpl(){		
 	}
 
 	@Override
