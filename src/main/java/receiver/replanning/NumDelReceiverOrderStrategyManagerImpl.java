@@ -31,7 +31,7 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 1.0);
+			stratMan.addStrategy(strategy, null, 0.8);
 
 		}
 		
@@ -43,7 +43,7 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(true));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.5);		
+			stratMan.addStrategy(strategy, null, 0.1);		
 		}
 		
 		/*
@@ -54,7 +54,7 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(false));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.5);		
+			stratMan.addStrategy(strategy, null, 0.1);		
 		}
 		
 		

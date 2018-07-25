@@ -33,7 +33,7 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 1.0);
+			stratMan.addStrategy(strategy, null, 0.8);
 
 		}
 		
@@ -45,7 +45,7 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("02:00:00")));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 1.0);		
+			stratMan.addStrategy(strategy, null, 0.2);		
 		}
 		
 		
