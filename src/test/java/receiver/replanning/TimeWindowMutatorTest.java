@@ -116,8 +116,8 @@ public class TimeWindowMutatorTest {
 		Assert.assertEquals("Wrong number of time windows.", 1, plan.getTimeWindows().size());
 		TimeWindow tw = plan.getTimeWindows().get(0);
 		LOG.info("Test adapted plan: " + tw.toString());
-		Assert.assertEquals("Wrong time window start.", Time.parseTime("10:00:00"), tw.getStart(), 1.0);
-		Assert.assertEquals("Wrong time window end.", Time.parseTime("13:00:00"), tw.getEnd(), 1.0);
+		Assert.assertEquals("Wrong time window start.", Time.parseTime("11:00:00"), tw.getStart(), 1.0);
+		Assert.assertEquals("Wrong time window end.", Time.parseTime("14:00:00"), tw.getEnd(), 1.0);
 		//Assert.assertEquals("Wrong time window end.", Time.parseTime("13:49:31"), tw.getEnd(), 1.0);
 	}
 	

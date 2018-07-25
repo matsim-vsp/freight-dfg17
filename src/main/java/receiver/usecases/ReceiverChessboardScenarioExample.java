@@ -93,7 +93,7 @@ public class ReceiverChessboardScenarioExample {
 		Carriers carriers = createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
-		fs.setReplanInterval(10);
+		fs.setReplanInterval(20);
 		
 		createAndAddChessboardReceivers(fs);
 		createReceiverOrders(fs);
@@ -134,13 +134,18 @@ public class ReceiverChessboardScenarioExample {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(100);
+		config.controler().setLastIteration(4000);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(1);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
 		config.controler().setOutputDirectory(String.format("./output/run_%03d/", run));
-
+		
+		/* Multi-threaded setup. */
+		config.global().setNumberOfThreads(40);
+		config.parallelEventHandling().setNumberOfThreads(12);
+		config.qsim().setNumberOfThreads(12);
+		
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
 	}
@@ -233,7 +238,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverTwo.getProducts().add(receiverTwoProductOne);
 		receiverTwo.getProducts().add(receiverTwoProductTwo);
 		
-	/*	Receiver receiverThree = receivers.getReceivers().get(Id.create("3", Receiver.class));
+		Receiver receiverThree = receivers.getReceivers().get(Id.create("3", Receiver.class));
 		ReceiverProduct receiverThreeProductOne = createReceiverProduct(receiverThree, productTypeOne, 1000, 5000);
 		ReceiverProduct receiverThreeProductTwo = createReceiverProduct(receiverThree, productTypeTwo, 500, 2500);
 		receiverThree.getProducts().add(receiverThreeProductOne);
@@ -347,7 +352,7 @@ public class ReceiverChessboardScenarioExample {
 		}
 		
 		/* -----  Receiver 3. ----- */
-		/*Order r3order1 = createProductOrder(Id.create("Order31",  Order.class), receiverThree, 
+		Order r3order1 = createProductOrder(Id.create("Order31",  Order.class), receiverThree, 
 				receiverThreeProductOne, Time.parseTime("01:00:00"));
 			r3order1.setNumberOfWeeklyDeliveries(5);
 		Order r3order2 = createProductOrder(Id.create("Order32",  Order.class), receiverThree, 
@@ -358,7 +363,7 @@ public class ReceiverChessboardScenarioExample {
 		r3orders.add(r3order2);
 
 		/* Combine product orders into single receiver order for a specific carrier. */
-	/*	ReceiverOrder receiver3order = new ReceiverOrder(receiverThree.getId(), r3orders, carrierOne.getId());
+		ReceiverOrder receiver3order = new ReceiverOrder(receiverThree.getId(), r3orders, carrierOne.getId());
 		ReceiverPlan receiverThreePlan = ReceiverPlan.Builder.newInstance(receiverThree)
 				.addReceiverOrder(receiver3order)
 				.addTimeWindow(selectRandomTimeStart(6))
@@ -367,7 +372,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverThree.setSelectedPlan(receiverThreePlan);
 
 		/* Convert receiver orders to initial carrier services. */
-	/*	for(Order order : receiver3order.getReceiverOrders()){
+		for(Order order : receiver3order.getReceiverOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -382,7 +387,7 @@ public class ReceiverChessboardScenarioExample {
 		}	
 		
 		/* -----  Receiver 4. ----- */
-	/*	Order r4order1 = createProductOrder(Id.create("Order41",  Order.class), receiverFour, 
+		Order r4order1 = createProductOrder(Id.create("Order41",  Order.class), receiverFour, 
 				receiverFourProductOne, Time.parseTime("01:00:00"));
 			r4order1.setNumberOfWeeklyDeliveries(5);
 		Order r4order2 = createProductOrder(Id.create("Order42",  Order.class), receiverFour, 
@@ -393,7 +398,7 @@ public class ReceiverChessboardScenarioExample {
 		r4orders.add(r4order2);
 
 		/* Combine product orders into single receiver order for a specific carrier. */
-	/*	ReceiverOrder receiver4order = new ReceiverOrder(receiverFour.getId(), r4orders, carrierOne.getId());
+		ReceiverOrder receiver4order = new ReceiverOrder(receiverFour.getId(), r4orders, carrierOne.getId());
 		ReceiverPlan receiverFourPlan = ReceiverPlan.Builder.newInstance(receiverFour)
 				.addReceiverOrder(receiver4order)
 				.addTimeWindow(selectRandomTimeStart(6))
@@ -402,7 +407,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverFour.setSelectedPlan(receiverFourPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-/*		for(Order order : receiver4order.getReceiverOrders()){
+		for(Order order : receiver4order.getReceiverOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -417,7 +422,7 @@ public class ReceiverChessboardScenarioExample {
 		}
 		
 		/* -----  Receiver 5. ----- */
-/*		Order r5order1 = createProductOrder(Id.create("Order51",  Order.class), receiverFive, 
+		Order r5order1 = createProductOrder(Id.create("Order51",  Order.class), receiverFive, 
 				receiverFiveProductOne, Time.parseTime("01:00:00"));
 			r5order1.setNumberOfWeeklyDeliveries(5);
 		Order r5order2 = createProductOrder(Id.create("Order52",  Order.class), receiverFive, 
@@ -428,7 +433,7 @@ public class ReceiverChessboardScenarioExample {
 		r5orders.add(r5order2);
 
 		/* Combine product orders into single receiver order for a specific carrier. */
-/*		ReceiverOrder receiver5order = new ReceiverOrder(receiverFive.getId(), r5orders, carrierOne.getId());
+		ReceiverOrder receiver5order = new ReceiverOrder(receiverFive.getId(), r5orders, carrierOne.getId());
 		ReceiverPlan receiverFivePlan = ReceiverPlan.Builder.newInstance(receiverFive)
 				.addReceiverOrder(receiver5order)
 				.addTimeWindow(selectRandomTimeStart(6))
@@ -437,7 +442,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverFive.setSelectedPlan(receiverFivePlan);
 
 		/* Convert receiver orders to initial carrier services. */
-/*		for(Order order : receiver5order.getReceiverOrders()){
+		for(Order order : receiver5order.getReceiverOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -452,7 +457,7 @@ public class ReceiverChessboardScenarioExample {
 		}
 		
 		/* -----  Receiver 6. ----- */
-/*		Order r6order1 = createProductOrder(Id.create("Order61",  Order.class), receiverSix, 
+		Order r6order1 = createProductOrder(Id.create("Order61",  Order.class), receiverSix, 
 				receiverSixProductOne, Time.parseTime("01:00:00"));
 			r6order1.setNumberOfWeeklyDeliveries(5);
 		Order r6order2 = createProductOrder(Id.create("Order62",  Order.class), receiverSix, 
@@ -463,7 +468,7 @@ public class ReceiverChessboardScenarioExample {
 		r6orders.add(r6order2);
 
 		/* Combine product orders into single receiver order for a specific carrier. */
-/*		ReceiverOrder receiver6order = new ReceiverOrder(receiverSix.getId(), r6orders, carrierOne.getId());
+		ReceiverOrder receiver6order = new ReceiverOrder(receiverSix.getId(), r6orders, carrierOne.getId());
 		ReceiverPlan receiverSixPlan = ReceiverPlan.Builder.newInstance(receiverSix)
 				.addReceiverOrder(receiver6order)
 				.addTimeWindow(selectRandomTimeStart(6))
@@ -472,7 +477,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverSix.setSelectedPlan(receiverSixPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-/*		for(Order order : receiver6order.getReceiverOrders()){
+		for(Order order : receiver6order.getReceiverOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -488,7 +493,7 @@ public class ReceiverChessboardScenarioExample {
 
 
 		/* -----  Receiver 7. ----- */
-	/*	Order r7order1 = createProductOrder(Id.create("Order71",  Order.class), receiverSeven, 
+		Order r7order1 = createProductOrder(Id.create("Order71",  Order.class), receiverSeven, 
 				receiverSevenProductOne, Time.parseTime("01:00:00"));
 			r7order1.setNumberOfWeeklyDeliveries(5);
 		Order r7order2 = createProductOrder(Id.create("Order72",  Order.class), receiverSeven, 
@@ -500,7 +505,7 @@ public class ReceiverChessboardScenarioExample {
 
 		/* Combine product orders into single receiver order for a specific carrier. */
 	
-	/*	ReceiverOrder receiver7order = new ReceiverOrder(receiverSeven.getId(), r7orders, carrierOne.getId());
+		ReceiverOrder receiver7order = new ReceiverOrder(receiverSeven.getId(), r7orders, carrierOne.getId());
 		ReceiverPlan receiverSevenPlan = ReceiverPlan.Builder.newInstance(receiverSeven)
 				.addReceiverOrder(receiver7order)
 				.addTimeWindow(selectRandomTimeStart(6))
@@ -509,7 +514,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverSeven.setSelectedPlan(receiverSevenPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-/*		for(Order order : receiver7order.getReceiverOrders()){
+		for(Order order : receiver7order.getReceiverOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -525,7 +530,7 @@ public class ReceiverChessboardScenarioExample {
 		}
 		
 		/* -----  Receiver 8. ----- */
-/*		Order r8order1 = createProductOrder(Id.create("Order81",  Order.class), receiverEight, 
+		Order r8order1 = createProductOrder(Id.create("Order81",  Order.class), receiverEight, 
 				receiverEightProductOne, Time.parseTime("01:00:00"));
 			r8order1.setNumberOfWeeklyDeliveries(5);
 		Order r8order2 = createProductOrder(Id.create("Order82",  Order.class), receiverEight, 
@@ -536,7 +541,7 @@ public class ReceiverChessboardScenarioExample {
 		r8orders.add(r8order2);
 
 		/* Combine product orders into single receiver order for a specific carrier. */
-/*		ReceiverOrder receiver8order = new ReceiverOrder(receiverEight.getId(), r8orders, carrierOne.getId());
+		ReceiverOrder receiver8order = new ReceiverOrder(receiverEight.getId(), r8orders, carrierOne.getId());
 		ReceiverPlan receiverEightPlan = ReceiverPlan.Builder.newInstance(receiverEight)
 				.addReceiverOrder(receiver8order)
 				.addTimeWindow(selectRandomTimeStart(6))
@@ -545,7 +550,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverEight.setSelectedPlan(receiverEightPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-/*		for(Order order : receiver8order.getReceiverOrders()){
+		for(Order order : receiver8order.getReceiverOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -557,7 +562,7 @@ public class ReceiverChessboardScenarioExample {
 					setServiceDuration(order.getServiceDuration()).
 					build();
 			carriers.getCarriers().get(receiver8order.getCarrierId()).getServices().add(newService);		
-		}	*/
+		}
 		
 		
 	}
@@ -578,44 +583,45 @@ public class ReceiverChessboardScenarioExample {
 		Id<Link> receiverTwoLocation = selectRandomLink(network);
 		Receiver receiverTwo = ReceiverImpl.newInstance(Id.create("2", Receiver.class))
 				.setLinkId(receiverTwoLocation)
-				.setCollaborationStatus(false);
+				.setCollaborationStatus(true);
 //				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")));
 		
 		/* Create third receiver */
-/*		Id<Link> receiverThreeLocation = selectRandomLink(network);
+		Id<Link> receiverThreeLocation = selectRandomLink(network);
 		Receiver receiverThree = ReceiverImpl.newInstance(Id.create("3", Receiver.class))
 				.setLinkId(receiverThreeLocation)
 				.setCollaborationStatus(true);
 		
 		/* Create fourth receiver */
-	/*	Id<Link> receiverFourLocation = selectRandomLink(network);
+		Id<Link> receiverFourLocation = selectRandomLink(network);
 		Receiver receiverFour = ReceiverImpl.newInstance(Id.create("4", Receiver.class))
 				.setLinkId(receiverFourLocation)
 				.setCollaborationStatus(true);
 		
 		/* Create fifth receiver */
-	/*	Id<Link> receiverFiveLocation = selectRandomLink(network);
+		Id<Link> receiverFiveLocation = selectRandomLink(network);
 		Receiver receiverFive = ReceiverImpl.newInstance(Id.create("5", Receiver.class))
 				.setLinkId(receiverFiveLocation)
 				.setCollaborationStatus(false);
 		
 		/* Create sixth receiver */
-/*		Id<Link> receiverSixLocation = selectRandomLink(network);
+
+		Id<Link> receiverSixLocation = selectRandomLink(network);
 		Receiver receiverSix = ReceiverImpl.newInstance(Id.create("6", Receiver.class))
 				.setLinkId(receiverSixLocation)
 				.setCollaborationStatus(false);
 		
 		/* Create seventh receiver */
-/*		Id<Link> receiverSevenLocation = selectRandomLink(network);
+ 		Id<Link> receiverSevenLocation = selectRandomLink(network);
 		Receiver receiverSeven = ReceiverImpl.newInstance(Id.create("7", Receiver.class))
 				.setLinkId(receiverSevenLocation)
 				.setCollaborationStatus(false);
 		
 		/* Create eighth receiver */
-	/*	Id<Link> receiverEightLocation = selectRandomLink(network);
+		Id<Link> receiverEightLocation = selectRandomLink(network);
 		Receiver receiverEight = ReceiverImpl.newInstance(Id.create("8", Receiver.class))
 				.setLinkId(receiverEightLocation)
-				.setCollaborationStatus(false);*/
+				.setCollaborationStatus(false);
 
 		Receivers receivers = new Receivers();
 		
@@ -625,12 +631,12 @@ public class ReceiverChessboardScenarioExample {
 		
 		receivers.addReceiver(receiverOne);
 		receivers.addReceiver(receiverTwo);
-	/*	receivers.addReceiver(receiverThree);
+		receivers.addReceiver(receiverThree);
 		receivers.addReceiver(receiverFour);
 		receivers.addReceiver(receiverFive);
 		receivers.addReceiver(receiverSix);
 		receivers.addReceiver(receiverSeven);
-		receivers.addReceiver(receiverEight);*/
+		receivers.addReceiver(receiverEight);
 		fs.setReceivers(receivers);
 	}
 

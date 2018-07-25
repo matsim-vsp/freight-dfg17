@@ -291,7 +291,8 @@ public class RunReceiverExample {
 		/*
 		 * Create a new instance of a receiver plan strategy manager factory.
 		 */
-		int selector = MatsimRandom.getLocalInstance().nextInt(2);
+		int selector = MatsimRandom.getLocalInstance().nextInt(3);
+		selector = 1;
 			switch (selector) {
 			case 0: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
@@ -316,9 +317,9 @@ public class RunReceiverExample {
 				}				
 			}
 			
-		/*final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
-		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-		controler.addOverridingModule(receiverControler);*/
+//		final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
+//		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+//		controler.addOverridingModule(receiverControler);
 		
 		return fsc;
 		
