@@ -44,7 +44,6 @@ public class Order {
 	final private Logger log = Logger.getLogger(Order.class);
 
 	private Id<Order> orderId;
-	private String orderName;
 	private Receiver receiver;
 	private ReceiverProduct receiverProduct;	
 	private Double orderQuantity;
@@ -55,10 +54,9 @@ public class Order {
 	
 	
 	/* protected */ 
-	/*Order(Id<Order> orderId, String orderName, Receiver receiver, 
+	/*Order(Id<Order> orderId, Receiver receiver, 
 			ReceiverProduct receiverProduct, Double orderQuantity, Double serviceTime){
 		this.orderId = orderId;
-		this.orderName = orderName;
 		this.receiver = receiver;
 		this.receiverProduct = receiverProduct;
 		this.orderQuantity = orderQuantity;
@@ -67,7 +65,6 @@ public class Order {
 	
 	private Order(Builder builder){
 		this.orderId = builder.orderId;
-		this.orderName = builder.orderName;
 		this.orderQuantity = builder.orderQuantity;
 		this.receiver = builder.receiver;
 		this.receiverProduct = builder.receiverProduct;
@@ -118,9 +115,6 @@ public class Order {
 	 * @return
 	 */
 
-	public String getOrderName(){
-		return orderName;
-	}
 
 	/**
 	 * Returns the weekly order quantity in units.
@@ -188,15 +182,11 @@ public class Order {
 			return new Builder(orderId, receiver, receiverProduct);
 		}
 		
-		//public static Builder newInstance(){
-		//	return new Builder();
-		//}
 	
 		private Receiver receiver;
 		private Id<Order> orderId;
 		private ReceiverProduct receiverProduct;
 		private Double serviceTime = null;
-		private String orderName = "service";
 		private Double orderQuantity = null;
 		private Double dOrderQuantity = null;
 		private double numDel = 5;
@@ -207,9 +197,7 @@ public class Order {
 			this.receiver = receiver;
 			this.receiverProduct = receiverProduct;
 		}
-	
-		//private Builder(){
-		//}
+
 		
 		/**
 		 * Sets the delivery service time.

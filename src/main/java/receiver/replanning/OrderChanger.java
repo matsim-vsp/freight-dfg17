@@ -62,7 +62,7 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
 			int n = 0;
 					
-			for(Order order: ro.getReceiverOrders()){
+			for(Order order: ro.getReceiverProductOrders()){
 				List<CarrierService> services = new ArrayList<>();
 				List<CarrierService> servicesToRemove = new ArrayList<>();
 				n = n + 1;

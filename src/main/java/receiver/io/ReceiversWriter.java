@@ -115,7 +115,7 @@ public class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
 					
 					for(ReceiverOrder order : plan.getReceiverOrders()) {
 						handler.startOrder(order, writer);
-						for(Order item : order.getReceiverOrders()) {
+						for(Order item : order.getReceiverProductOrders()) {
 							handler.startItem(item, writer);
 							handler.endItem(writer);
 						}

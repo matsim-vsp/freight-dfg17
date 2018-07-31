@@ -74,9 +74,9 @@ public class ReceiverProduct {
 	/**
 	 * Returns the product type id.
 	 */
-	public Id<ProductType> getProductTypeId(){
-		return productType.getId();
-	}
+//	public Id<ProductType> getProductTypeId(){
+//		return productType.getId();
+//	}
 	
 	
 	public ReorderPolicy getReorderPolicy() {
@@ -96,9 +96,9 @@ public class ReceiverProduct {
 	 * Returns the description of the product type of this particular receiver product.
 	 */
 	
-	public String getDescription(){
-		return productType.getDescription();
-	}
+//	public String getDescription(){
+//		return productType.getDescription();
+//	}
 	
 	/**
 	 * Returns the required capacity of the product type of this particular receiver product.
@@ -171,7 +171,7 @@ public class ReceiverProduct {
 		 * @param onHand
 		 * @return
 		 */
-		public Builder setQuantityOnHand(double onHand) {
+		public Builder setStockOnHand(double onHand) {
 			this.onHand = onHand;
 			return this;
 		}

@@ -218,11 +218,11 @@ public class ReceiverChessboardScenarioExample {
 
 		/* Create generic product types with a description and required capacity (in kg per item)*/
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
-		productTypeOne.setProductDescription("Product 1");
+		productTypeOne.setDescription("Product 1");
 		productTypeOne.setRequiredCapacity(1);
 
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
-		productTypeTwo.setProductDescription("Product 2");
+		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
 
 		/* Create receiver-specific products */
@@ -299,7 +299,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverOne.setSelectedPlan(receiverOnePlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver1order.getReceiverOrders()){
+		for(Order order : receiver1order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -336,7 +336,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverTwo.setSelectedPlan(receiverTwoPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver2order.getReceiverOrders()){
+		for(Order order : receiver2order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -372,7 +372,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverThree.setSelectedPlan(receiverThreePlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver3order.getReceiverOrders()){
+		for(Order order : receiver3order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -407,7 +407,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverFour.setSelectedPlan(receiverFourPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver4order.getReceiverOrders()){
+		for(Order order : receiver4order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -442,7 +442,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverFive.setSelectedPlan(receiverFivePlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver5order.getReceiverOrders()){
+		for(Order order : receiver5order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -477,7 +477,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverSix.setSelectedPlan(receiverSixPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver6order.getReceiverOrders()){
+		for(Order order : receiver6order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -514,7 +514,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverSeven.setSelectedPlan(receiverSevenPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver7order.getReceiverOrders()){
+		for(Order order : receiver7order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -550,7 +550,7 @@ public class ReceiverChessboardScenarioExample {
 		receiverEight.setSelectedPlan(receiverEightPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver8order.getReceiverOrders()){
+		for(Order order : receiver8order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			

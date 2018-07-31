@@ -155,8 +155,8 @@ public class ReceiversWriterHandlerImpl_v1 implements ReceiversWriterHandler {
 	public void startItem(Order item, BufferedWriter out) throws IOException {
 		out.write("\t\t\t\t<item id=\"");
 		out.write(item.getId().toString());
-		out.write("\" name=\"");
-		out.write(item.getOrderName());
+		//out.write("\" name=\"");
+		//out.write(item.getOrderName());
 		out.write("\" productId=\"");
 		out.write(item.getProduct().getProductType().getId().toString());
 		/*TODO Add both weight and quantity on order */

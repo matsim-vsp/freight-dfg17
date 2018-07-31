@@ -173,7 +173,7 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 
 	private double getReceiverOrderTotal(ReceiverOrder ro) {
 		double total = 0.0;
-		for(Order order : ro.getReceiverOrders()) {
+		for(Order order : ro.getReceiverProductOrders()) {
 			total += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 		}
 		return total;

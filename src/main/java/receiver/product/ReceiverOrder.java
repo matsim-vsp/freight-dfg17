@@ -69,7 +69,7 @@ public class ReceiverOrder implements BasicPlan{
 	this.cost  = cost;
 	}
 	
-	public Collection<Order> getReceiverOrders(){
+	public Collection<Order> getReceiverProductOrders(){
 		return this.orders;
 	}
 	
@@ -97,11 +97,11 @@ public class ReceiverOrder implements BasicPlan{
 		return this.carrierId;
 	}
 	
-	public ReceiverOrder createCopy() {
-		ReceiverOrder newOrder = new ReceiverOrder(receiverId, orders, carrierId);
-		newOrder.setScore(cost == null ? null : Double.valueOf(cost));
-		return newOrder;
-	}
+//	public ReceiverOrder createCopy() {
+//		ReceiverOrder newOrder = new ReceiverOrder(receiverId, orders, carrierId);
+//		newOrder.setScore(cost == null ? null : Double.valueOf(cost));
+//		return newOrder;
+//	}
 	
 	public void setCarrier(final Carrier carrier) {
 		this.carrier = carrier;

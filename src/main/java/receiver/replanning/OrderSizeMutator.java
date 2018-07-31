@@ -63,7 +63,7 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 		for (ReceiverOrder ro : receiverPlan.getReceiverOrders()){
 		
 			/* Increase or decrease the number of deliveries per week with specified value until either 1 day (in case of decrease) or 5 days (in case of increase) is reached.*/
-			for(Order order: ro.getReceiverOrders()){
+			for(Order order: ro.getReceiverProductOrders()){
 				
 				double numDel = order.getNumberOfWeeklyDeliveries();
 				double sdemand;

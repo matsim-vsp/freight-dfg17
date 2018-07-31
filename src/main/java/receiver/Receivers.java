@@ -47,7 +47,7 @@ public class Receivers implements Attributable{
 	private Logger log = Logger.getLogger(Receivers.class);
 	private Attributes attributes = new Attributes();
 	private String desc = "";
-	double dquantity;
+
 	
 	/**
 	 * Create empty receiver collection.
@@ -56,22 +56,22 @@ public class Receivers implements Attributable{
 	private Map<Id<Receiver>, Receiver> receiverMap = new TreeMap<>();
 	private Map<Id<ProductType>, ProductType> productTypeMap = new TreeMap<>();
 	
-	public Receivers(Collection<Receiver> receivers){
-		makeMap(receivers);
-	}
-	
-	/**
-	 * Add receivers to the empty collection.
-	 * @param receivers
-	 */
-	
-	private void makeMap(Collection<Receiver> receivers){
-		for (Receiver r : receivers){
-			this.receiverMap.put(r.getId(), r);
-		}
-	}
-	
-	public Receivers(){
+//	public Receivers(Collection<Receiver> receivers){
+//		makeMap(receivers);
+//	}
+//	
+//	/**
+//	 * Add receivers to the empty collection.
+//	 * @param receivers
+//	 */
+//	
+//	private void makeMap(Collection<Receiver> receivers){
+//		for (Receiver r : receivers){
+//			this.receiverMap.put(r.getId(), r);
+//		}
+//	}
+//	
+    public Receivers(){
 		
 	}
 	

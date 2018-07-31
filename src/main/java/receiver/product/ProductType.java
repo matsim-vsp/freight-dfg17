@@ -31,7 +31,7 @@ import org.matsim.utils.objectattributes.attributable.Attributable;
  */
 public interface ProductType extends Identifiable<ProductType>, Attributable{	
 	
-	public void setProductDescription(String description);
+	public void setDescription(String description);
 
 	public void setRequiredCapacity(double reqCapacity);
 

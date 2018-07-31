@@ -407,7 +407,7 @@ public class RunReceiverExample {
 	    		for(int i = 1; i < numberOfReceivers+1; i++) {
 	 	    		Receiver receiver = fs.getReceivers().getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
 		        	for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
-		        		for (Order order : rorder.getReceiverOrders()){
+		        		for (Order order : rorder.getReceiverProductOrders()){
 		    				//if(event.getIteration()== 0){
 		    				//	order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 		    				//}

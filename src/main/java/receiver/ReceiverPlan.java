@@ -146,23 +146,23 @@ public class ReceiverPlan implements BasicPlan, Attributable {
 	 * @return true if the time is within at least one of the set time 
 	 * window(s), or <i>if no time windows are set</i>.
 	 */
-	public boolean isInTimeWindow(double time) {
-		if(this.timeWindows.isEmpty()) {
-			log.warn("No time windows are set! Assuming any time is suitable.");
-			return true;
-		}
-		
-		boolean inTimeWindow = false;
-		Iterator<TimeWindow> iterator = this.timeWindows.iterator();
-		
-		while(!inTimeWindow & iterator.hasNext()) {
-			TimeWindow tw = iterator.next();
-			if(time >= tw.getStart() && time <= tw.getEnd()) {
-				inTimeWindow = true;
-			}
-		}
-		return false;
-	}
+//	public boolean isInTimeWindow(double time) {
+//		if(this.timeWindows.isEmpty()) {
+//			log.warn("No time windows are set! Assuming any time is suitable.");
+//			return true;
+//		}
+//		
+//		boolean inTimeWindow = false;
+//		Iterator<TimeWindow> iterator = this.timeWindows.iterator();
+//		
+//		while(!inTimeWindow & iterator.hasNext()) {
+//			TimeWindow tw = iterator.next();
+//			if(time >= tw.getStart() && time <= tw.getEnd()) {
+//				inTimeWindow = true;
+//			}
+//		}
+//		return false;
+//	}
 
 	
 	public ReceiverPlan createCopy() {

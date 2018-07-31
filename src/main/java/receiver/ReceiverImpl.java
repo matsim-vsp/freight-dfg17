@@ -181,7 +181,7 @@ public class ReceiverImpl implements Receiver {
 		Iterator<ReceiverProduct> iterator = this.products.iterator();
 		while(product == null & iterator.hasNext()) {
 			ReceiverProduct thisProduct = iterator.next();
-			if(thisProduct.getProductTypeId().equals(productType)) {
+			if(thisProduct.getProductType().getId().equals(productType)) {
 				product = thisProduct;
 			}
 		}

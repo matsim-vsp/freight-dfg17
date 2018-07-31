@@ -67,7 +67,7 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
 			
 			/* Increase or decrease the service time with specified value until range min or range max is reached.*/
-			for(Order order: ro.getReceiverOrders()){
+			for(Order order: ro.getReceiverProductOrders()){
 				
 				double duration = order.getServiceDuration();
 				if (increase == true){

@@ -195,11 +195,11 @@ public class ReceiverChessboardScenario {
 
 		/* Create generic product types with a description and required capacity (in kg per item)*/
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
-		productTypeOne.setProductDescription("Product 1");
+		productTypeOne.setDescription("Product 1");
 		productTypeOne.setRequiredCapacity(3);
 
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
-		productTypeTwo.setProductDescription("Product 2");
+		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
 
 		/* Create receiver-specific products */
@@ -237,7 +237,7 @@ public class ReceiverChessboardScenario {
 		receiverOne.setSelectedPlan(receiverOnePlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver1order.getReceiverOrders()){
+		for(Order order : receiver1order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
@@ -272,7 +272,7 @@ public class ReceiverChessboardScenario {
 		receiverTwo.setSelectedPlan(receiverTwoPlan);
 
 		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver2order.getReceiverOrders()){
+		for(Order order : receiver2order.getReceiverProductOrders()){
 			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			

@@ -59,7 +59,7 @@ public class ProductTypeImpl implements ProductType{
 
 	
 	@Override
-	public void setProductDescription(String description){
+	public void setDescription(String description){
 		this.descr = description;
 	}
 	

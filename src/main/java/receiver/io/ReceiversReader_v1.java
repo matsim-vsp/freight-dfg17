@@ -205,7 +205,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 		String weight = atts.getValue(ATTR_PRODUCT_TYPE_WEIGHT);
 		
 		ProductType pt = receivers.createAndAddProductType(id);
-		pt.setProductDescription(desc);
+		pt.setDescription(desc);
 		pt.setRequiredCapacity(Double.parseDouble(weight));
 	}
 	
@@ -230,7 +230,7 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 		double onHand = Double.parseDouble(atts.getValue(ATTR_PRODUCT_ONHAND));
 		
 		this.currentProductBuilder = ReceiverProduct.Builder.newInstance();
-		currentProductBuilder.setProductType(receivers.getProductType(Id.create(id, ProductType.class))).setQuantityOnHand(onHand);
+		currentProductBuilder.setProductType(receivers.getProductType(Id.create(id, ProductType.class))).setStockOnHand(onHand);
 	}
 	
 	private void startReorderPolicy(Attributes atts) {

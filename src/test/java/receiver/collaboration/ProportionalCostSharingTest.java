@@ -44,13 +44,13 @@ public class ProportionalCostSharingTest {
 		
 		double total = 0.0;
 		for(Receiver receiver : fs.getReceivers().getReceivers().values()) {
-			for(Order order : receiver.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverOrders()) {
+			for(Order order : receiver.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverProductOrders()) {
 				total += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 			}
 		}
 		Receiver receiverOne = fs.getReceivers().getReceivers().get(Id.create("1", Receiver.class));
 		double receiverOneTotal = 0.0;
-		for(Order order : receiverOne.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverOrders()) {
+		for(Order order : receiverOne.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverProductOrders()) {
 			receiverOneTotal += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 		}
 		
