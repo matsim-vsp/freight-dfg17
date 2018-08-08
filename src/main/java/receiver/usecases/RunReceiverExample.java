@@ -428,11 +428,11 @@ public class RunReceiverExample {
 			final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
 
 			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-			if (controler.getIterationNumber() >= 200){
-				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-				strategy.addStrategyModule(new CollaborationStatusMutator());
-				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-			}
+//			if (controler.getIterationNumber() >= 200){
+//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//				strategy.addStrategyModule(new CollaborationStatusMutator());
+//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//			}
 
 			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 			controler.addOverridingModule(receiverControler);
@@ -441,11 +441,11 @@ public class RunReceiverExample {
 			final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
 
 			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-			if (controler.getIterationNumber() >= 200){
-				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-				strategy.addStrategyModule(new CollaborationStatusMutator());
-				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-			}
+//			if (controler.getIterationNumber() >= 200){
+//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//				strategy.addStrategyModule(new CollaborationStatusMutator());
+//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//			}
 
 			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 			controler.addOverridingModule(receiverControler);
@@ -454,11 +454,11 @@ public class RunReceiverExample {
 			final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
 
 			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-			if (controler.getIterationNumber() >= 200){
-				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-				strategy.addStrategyModule(new CollaborationStatusMutator());
-				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-			}
+//			if (controler.getIterationNumber() >= 200){
+//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//				strategy.addStrategyModule(new CollaborationStatusMutator());
+//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//			}
 
 			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 			controler.addOverridingModule(receiverControler); 
@@ -467,11 +467,11 @@ public class RunReceiverExample {
 			final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
 
 			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-			if (controler.getIterationNumber() >= 200){
-				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-				strategy.addStrategyModule(new CollaborationStatusMutator());
-				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-			}
+//			if (controler.getIterationNumber() >= 200){
+//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//				strategy.addStrategyModule(new CollaborationStatusMutator());
+//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//			}
 			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 			controler.addOverridingModule(receiverControler);
 
