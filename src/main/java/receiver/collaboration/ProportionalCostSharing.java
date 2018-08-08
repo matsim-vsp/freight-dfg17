@@ -40,7 +40,7 @@ import receiver.product.ReceiverOrder;
 /**
  * A proportional cost allocation between receivers and carriers.
  * 
- * Currently (Jun 2018) we only implement a version based on order quantity/volume. 
+ * Currently (Aug 2018) we only implement a version based on order quantity/volume. 
  * 
  * @author jwjoubert, wlbean
  */
@@ -70,11 +70,6 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 	public String getDescription() {
 		return this.descr;
 	}
-	
-	public void setDescription(String descr) {
-		this.descr = descr;
-	}
-
 
 	@Override
 	public FreightScenario allocateCoalitionCosts(FreightScenario scenario) {
@@ -84,15 +79,14 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 		/* Get all the the cross-referenced receiver-carriers. */
 		log.info("   Cross-referencing all carrier-receiver relationships...");
 		Map<Id<Carrier>, List<Id<Receiver>>> carrierCustomers = new HashMap<>();
-		
+				
 		for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {
-			
+		
 			ReceiverPlan plan = receiver.getSelectedPlan();
 			if (plan == null) {
 				log.warn("Receiver plan not yet selected.");
 				return scenario;
-			}
-			
+			}			
 			
 			for(ReceiverOrder ro : plan.getReceiverOrders()) {
 				Id<Carrier> carrierId = ro.getCarrierId();
@@ -103,141 +97,122 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 				carrierCustomers.get(carrierId).add(receiver.getId());
 			}
 		}
-		
+
 		/* Calculate the proportional volume. */
 		Map<Id<Carrier>, Map<Id<Receiver>, Double>> proportionalMap = new HashMap<>();
-		log.info("   Calculating receivers' proportional volume from each carrier's perspective...");
+		log.info("   Calculating receivers' proportional volume from each carrier's perspective....");
+		
+		double totalCoalitionVolume = 0.0;
+		double totalCoalitionCost = 0.0;
+		int nrOfCarriers = 0;
 		
 		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
-			//double allocatedCost = 0.0;
-			double totalCoalitionVolume = 0.0;
-			double totalVolume = 0.0;
+//			double carrierCoalitionVolume = 0.0;
+			nrOfCarriers += 1;
 			double fixedFeeVolume = 0.0;
 			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
-			
-			
+
 			/* Calculate this receiver's total volume with the carrier. */
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
 
-				if(scenario.getCoalition().getCarrierCoalitionMembers().contains(thisReceiver) ==  true){
-						ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
-						totalCoalitionVolume += getReceiverOrderTotal(ro);	
-					} else {		
-
+				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
+					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
+					totalCoalitionVolume += getReceiverOrderTotal(ro);
+				} else {
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);					
 					fixedFeeVolume += getReceiverOrderTotal(ro);
-					}				
-				
-				totalVolume += getReceiverOrderTotal(thisReceiver.getSelectedPlan().getReceiverOrder(carriedId));
+				}				
+//				carrierCoalitionVolume += getReceiverOrderTotal(thisReceiver.getSelectedPlan().getReceiverOrder(carriedId));
 			}
 			
+//			carrier.getAttributes().put("carrierCoalitionVolume", carrierCoalitionVolume);
 
-			
 			/* Now calculate each receiver's proportion of the total volume. */ 
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
-				
+
 				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) == true){
-		
+
 					double thisVolume = 0.0;
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
-					
+
 					thisVolume += getReceiverOrderTotal(ro);
 
 					if(!proportionalMap.containsKey(carriedId)) {
 						proportionalMap.put(carriedId, new HashMap<>());
 					}
-					
+
 					/* The essence of the proportional assignment.*/
-					proportionalMap.get(carriedId).put(receiverId, thisVolume / (totalCoalitionVolume + totalVolume));
-					}							
+					proportionalMap.get(carriedId).put(receiverId, thisVolume / (totalCoalitionVolume*2));
+				}							
 			}
-			
-			scenario.getCoalition().setCoalitionCost(carrier.getSelectedPlan().getScore());
-			
-				/* Scoring carrier */
-
-				double newscore = ((scenario.getCoalition().getCoalitionCost()+((fixedFeeVolume*fee)/1000))*totalVolume)/(totalCoalitionVolume + totalVolume);
-				if (newscore < 0){
-				carrier.getSelectedPlan().setScore(newscore);
-				}
-				else carrier.getSelectedPlan().setScore(0.0);
-			
-		
 		
 
-		
-		/* Score the individual receiver plans. */
-		log.info("  Scoring the individual receivers...");
-		
-		
-		for(Receiver thisReceiver : scenario.getReceivers().getReceivers().values()) {
-			
-			ReceiverPlan plan = thisReceiver.getSelectedPlan();
-				
+			/* Calculate the total coalition cost. */
+			totalCoalitionCost = totalCoalitionCost + carrier.getSelectedPlan().getScore() - ((fixedFeeVolume*fee*-1)/1000);
+		}
+		/* Allocate the total coalition cost. */
+		scenario.getCoalition().setCoalitionCost(totalCoalitionCost);
+
+		/* Scoring each carrier */
+		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
+			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
+			/* TODO This must be updated, because not all Carriers will deliver the same volume. This can be done by making
+			 * the carrier attributable, and introducing a carrierCoalitionVolume attribute that can be used to calculate
+			 * the carrier's proportion.
+			 */
+			//			double carrierCoalitionVolume = (double) carrier.getAttributes().get("carrierCoalitionVolume");
+			//			double newScore = scenario.getCoalition().getCoalitionCost()*((carrierCoalitionVolume*0.5)/totalCoalitionVolume);
+			double newScore = scenario.getCoalition().getCoalitionCost()*(((totalCoalitionVolume/nrOfCarriers)*0.5)/totalCoalitionVolume);
+			if (newScore < 0){
+				carrier.getSelectedPlan().setScore(newScore);
+			}
+			else carrier.getSelectedPlan().setScore(0.0);		
+		}
+
+			/* Score the individual receiver plans. */
+			log.info("  Scoring the individual receivers...");		
+
+			for(Receiver thisReceiver : scenario.getReceivers().getReceivers().values()) {
+				ReceiverPlan plan = thisReceiver.getSelectedPlan();
+
 				/* Score non-collaborating receivers and calculate the total cost allocated to them. */
-				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) == false){
-					
-					double total = 0.0;	
-			
+				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) == false){					
+					double total = 0.0;				
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
-
-					double thisVolume = 0.0;
-					thisVolume = getReceiverOrderTotal(ro);
-
-					/* TODO We need to change the scoring of a receiver if he is not collaborating. Currently, the carrier charges a fixed cost per tonne
-					 * regardless of its own cost. Where should this fixed rate per tonne be set? This is not the best place.
-					 * 
-					 */
-					double cost = (thisVolume/1000)*-1*fee;
-					ro.setScore(cost);
-					total += cost;	
-
+						double thisVolume = 0.0;
+						thisVolume = getReceiverOrderTotal(ro);		
+						double cost = (thisVolume/1000)*-1*fee;
+						ro.setScore(cost);
+						total += cost;	
 					}
-
-				plan.setScore(total);
-				
-			} else {	
-			
-			/* Score the collaborating receiver plans. */
-
-				double total = 0.0;			
+					plan.setScore(total);		
 					
-				for(ReceiverOrder ro : plan.getReceiverOrders()) {
-											
-					double cost = (scenario.getCoalition().getCoalitionCost()+(fixedFeeVolume*fee)/1000) * proportionalMap.get(ro.getCarrierId()).get(thisReceiver.getId());
-					ro.setScore(cost);
-					total += cost;
-				} 
+				} else {		
 
-				plan.setScore(total);
+					/* Score the collaborating receiver plans. */
+					double total = 0.0;								
+					for(ReceiverOrder ro : plan.getReceiverOrders()) {											
+						double cost = scenario.getCoalition().getCoalitionCost() * proportionalMap.get(ro.getCarrierId()).get(thisReceiver.getId());
+						ro.setScore(cost);
+						total += cost;
+					} 
+					plan.setScore(total);
+				}
 			}
-				
-		
-		}
-		
-		/* TODO We should think about changing carrier scores, based on cost allocations...
-		 * 
-		 */
-			
 
-		}
-		
 		log.info("Done with proportional cost calculation.");
 		return scenario;
 	}
 
-
+	/* Calculate the total volume of a receiver order */
 	private double getReceiverOrderTotal(ReceiverOrder ro) {
 		double total = 0.0;
 		for(Order order : ro.getReceiverProductOrders()) {
 			total += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 		}
 		return total;
-	}
-	
-	
-	
+	}		
 	
 }

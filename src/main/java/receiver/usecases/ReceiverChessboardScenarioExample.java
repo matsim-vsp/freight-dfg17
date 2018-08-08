@@ -113,12 +113,20 @@ public class ReceiverChessboardScenarioExample {
 		MutableCoalition coalition = new MutableCoalition();
 		
 		for (Carrier carrier : fs.getCarriers().getCarriers().values()){
-			coalition.addCarrierCoalitionMember(carrier);
+			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
+				coalition.addCarrierCoalitionMember(carrier);
+			}
 		}
 		
 		for (Receiver receiver : fs.getReceivers().getReceivers().values()){
 			if (receiver.getCollaborationStatus() == true){
-				coalition.addReceiverCoalitionMember(receiver);
+				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
+					coalition.addReceiverCoalitionMember(receiver);
+				}
+			} else {
+				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
+					coalition.removeReceiverCoalitionMember(receiver);
+				}
 			}
 		}
 		
@@ -134,17 +142,17 @@ public class ReceiverChessboardScenarioExample {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(4000);
+		config.controler().setLastIteration(500);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(1);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/", run));
+		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/serdur/", run));
 		
-		/* Multi-threaded setup. */
-		config.global().setNumberOfThreads(40);
-		config.parallelEventHandling().setNumberOfThreads(12);
-		config.qsim().setNumberOfThreads(12);
+//		/* Multi-threaded setup. */
+//		config.global().setNumberOfThreads(40);
+//		config.parallelEventHandling().setNumberOfThreads(12);
+//		config.qsim().setNumberOfThreads(12);
 		
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -575,6 +583,7 @@ public class ReceiverChessboardScenarioExample {
 		Receiver receiverOne = ReceiverImpl.newInstance(Id.create("1", Receiver.class))
 				.setLinkId(receiverOneLocation)
 				.setCollaborationStatus(true);
+		receiverOne.getAttributes().putAttribute("grandCoalitionMember", true);
 //				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")));
 		
 		/* FIXME Add a toString() method. */
@@ -585,43 +594,50 @@ public class ReceiverChessboardScenarioExample {
 				.setLinkId(receiverTwoLocation)
 				.setCollaborationStatus(true);
 //				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")));
+		receiverTwo.getAttributes().putAttribute("grandCoalitionMember", true);
 		
 		/* Create third receiver */
 		Id<Link> receiverThreeLocation = selectRandomLink(network);
 		Receiver receiverThree = ReceiverImpl.newInstance(Id.create("3", Receiver.class))
 				.setLinkId(receiverThreeLocation)
 				.setCollaborationStatus(true);
+		receiverThree.getAttributes().putAttribute("grandCoalitionMember", true);
 		
 		/* Create fourth receiver */
 		Id<Link> receiverFourLocation = selectRandomLink(network);
 		Receiver receiverFour = ReceiverImpl.newInstance(Id.create("4", Receiver.class))
 				.setLinkId(receiverFourLocation)
 				.setCollaborationStatus(true);
+		receiverFour.getAttributes().putAttribute("grandCoalitionMember", true);
 		
 		/* Create fifth receiver */
 		Id<Link> receiverFiveLocation = selectRandomLink(network);
 		Receiver receiverFive = ReceiverImpl.newInstance(Id.create("5", Receiver.class))
 				.setLinkId(receiverFiveLocation)
-				.setCollaborationStatus(false);
+				.setCollaborationStatus(true);
+		receiverFive.getAttributes().putAttribute("grandCoalitionMember", true);
 		
 		/* Create sixth receiver */
 
 		Id<Link> receiverSixLocation = selectRandomLink(network);
 		Receiver receiverSix = ReceiverImpl.newInstance(Id.create("6", Receiver.class))
 				.setLinkId(receiverSixLocation)
-				.setCollaborationStatus(false);
+				.setCollaborationStatus(true);
+		receiverSix.getAttributes().putAttribute("grandCoalitionMember", true);
 		
 		/* Create seventh receiver */
  		Id<Link> receiverSevenLocation = selectRandomLink(network);
 		Receiver receiverSeven = ReceiverImpl.newInstance(Id.create("7", Receiver.class))
 				.setLinkId(receiverSevenLocation)
-				.setCollaborationStatus(false);
+				.setCollaborationStatus(true);
+		receiverSeven.getAttributes().putAttribute("grandCoalitionMember", true);
 		
 		/* Create eighth receiver */
 		Id<Link> receiverEightLocation = selectRandomLink(network);
 		Receiver receiverEight = ReceiverImpl.newInstance(Id.create("8", Receiver.class))
 				.setLinkId(receiverEightLocation)
-				.setCollaborationStatus(false);
+				.setCollaborationStatus(true);
+		receiverEight.getAttributes().putAttribute("grandCoalitionMember", true);
 
 		Receivers receivers = new Receivers();
 		

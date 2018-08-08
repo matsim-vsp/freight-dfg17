@@ -31,9 +31,7 @@ public interface Coalition extends Attributable {
 	
 	public Collection<Receiver> getReceiverCoalitionMembers();
 
-	public void addAttribute(String coalitionDesc, double cost);
-
-	public double getAttributeValue(String string);
+	//public void addAttribute(String coalitionDesc, double cost);
 
 	void setCoalitionCost(double cost);
 

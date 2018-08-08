@@ -79,6 +79,11 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 
 		@Override
 		public void notifyIterationEnds(final IterationEndsEvent event) {
+			
+//			if (event.getIteration() < 180){
+//				return;
+//			}
+			
 			double sumScoreWorst = 0.0;
 			double sumScoreBest = 0.0;
 			double sumAvgScores = 0.0;

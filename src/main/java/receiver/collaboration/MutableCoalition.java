@@ -6,7 +6,6 @@ package receiver.collaboration;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
@@ -19,7 +18,7 @@ import receiver.Receiver;
  *
  */
 public class MutableCoalition implements Coalition {
-	private final Logger log = Logger.getLogger(MutableCoalition.class);
+	//private final Logger log = Logger.getLogger(MutableCoalition.class);
 	private double coalitionCost = 0.0;
 	private Attributes attributes = new Attributes();
 	private ArrayList<Receiver> receiverMembers = new ArrayList<Receiver>();
@@ -36,20 +35,15 @@ public class MutableCoalition implements Coalition {
 	}	
 	
 
-	@Override
-	public void addAttribute(String attr, double cost) {
-		Object o = attributes.getAttribute(attr);
-		if(o != null) {
-			log.warn("The attribute '" + attr + "' has already bee set. Overwriting.");
-		}
-		attributes.putAttribute(attr, cost);		
-	}
+//	@Override
+//	public void addAttribute(String attr, double cost) {
+//		Object o = attributes.getAttribute(attr);
+//		if(o != null) {
+//			log.warn("The attribute '" + attr + "' has already bee set. Overwriting.");
+//		}
+//		attributes.putAttribute(attr, cost);		
+//	}
 	
-	@Override
-	public double getAttributeValue(String attr) {
-		return (double) attributes.getAttribute(attr);
-	}
-
 
 	@Override
 	public double getCoalitionCost() {

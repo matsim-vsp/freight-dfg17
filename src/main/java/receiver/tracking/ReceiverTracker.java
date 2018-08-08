@@ -30,6 +30,7 @@ import org.matsim.core.scoring.ScoringFunction;
 
 import receiver.FreightScenario;
 import receiver.Receiver;
+import receiver.collaboration.MarginalCostSharing;
 import receiver.collaboration.ProportionalCostSharing;
 import receiver.mobsim.ReceiverAgent;
 import receiver.scoring.ReceiverScoringFunctionFactory;
@@ -56,7 +57,7 @@ public class ReceiverTracker implements EventHandler {
 	public void scoreSelectedPlans() {
 		
 		
-		//MarginalCostSharing mcs = new MarginalCostSharing();
+		//MarginalCostSharing mcs = new MarginalCostSharing(350);
 		//mcs.allocateCoalitionCosts(fsc);
 		
 		ProportionalCostSharing pcs = new ProportionalCostSharing(350);

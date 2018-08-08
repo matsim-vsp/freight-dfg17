@@ -21,8 +21,6 @@
  */
 package receiver.product;
 
-import org.matsim.api.core.v01.Id;
-
 import receiver.reorderPolicy.ReorderPolicy;
 import receiver.reorderPolicy.SSReorderPolicy;
 
@@ -35,30 +33,16 @@ import receiver.reorderPolicy.SSReorderPolicy;
  *
  */
 public class ReceiverProduct {
+	
+	private ReorderPolicy policy;
+	private double stockOnHand;
 
-	// static ReceiverProduct newInstance(){
-	//	return new ReceiverProduct();		
-	//}
-	
-	private ReorderPolicy policy; // = new SSReorderPolicy(100000.0, 500000.0);
-	private double stockOnHand;// = 0.0;
-	//private final Id<Link> locationId;
-	//private Id<ProductType> typeId;
 	private ProductType productType;
-	//private double reqCap;
-	//private String descr;
 	
-	//ReceiverProduct(){
-	//	super();
-	//}
-	
+
 	private ReceiverProduct(Builder builder){
-		//this.locationId = builder.locationId;
 		this.productType = builder.productType;
-		//this.typeId = builder.typeId;
 		this.policy = builder.policy;
-		//this.descr = builder.descr;
-		//this.reqCap = builder.reqCap;
 		this.stockOnHand = builder.onHand;
 	}
 	
@@ -71,13 +55,6 @@ public class ReceiverProduct {
 		return productType;
 	}
 	
-	/**
-	 * Returns the product type id.
-	 */
-//	public Id<ProductType> getProductTypeId(){
-//		return productType.getId();
-//	}
-	
 	
 	public ReorderPolicy getReorderPolicy() {
 		return this.policy;
@@ -87,26 +64,6 @@ public class ReceiverProduct {
 		return stockOnHand;
 	}
 	
-	//public void setStockOnHand(double stockOnHand) {
-	//	this.stockOnHand = stockOnHand;
-	//}
-	
-	
-	/**
-	 * Returns the description of the product type of this particular receiver product.
-	 */
-	
-//	public String getDescription(){
-//		return productType.getDescription();
-//	}
-	
-	/**
-	 * Returns the required capacity of the product type of this particular receiver product.
-	 */
-	
-	//public double getRequiredCapacity(){
-	//	return productType.getRequiredCapacity();
-	//}
 
 	/** 
 	 * A builder that is used to build the product instance for the receiver.
@@ -128,15 +85,8 @@ public class ReceiverProduct {
 		
 		private ReorderPolicy policy = new SSReorderPolicy(1000, 5000);
 		private double onHand = 0.0;
-		//private Id<Link> locationId;
 		private ProductType productType;
-		//private Id<ProductType> typeId = productType.getId();
-		//private double reqCap = productType.getRequiredCapacity();
-		//private String descr = productType.getDescription();
-		
-		//public Builder(Id<Link> locationId){
-		//	this.locationId = locationId;
-		//}
+
 		
 		/**
 		 * Set relevant receiver product types.
@@ -154,12 +104,7 @@ public class ReceiverProduct {
 		 * @param typeId
 		 * @return
 		 */
-		
-		//public Builder setProductTypeId(Id<ProductType> typeId){
-		//	this.typeId = typeId;
-		//	return this;
-		//}
-		
+
 		public Builder setReorderingPolicy(ReorderPolicy policy) {
 			this.policy = policy;
 			return this;

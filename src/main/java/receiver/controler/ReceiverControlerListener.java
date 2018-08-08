@@ -35,7 +35,6 @@ import org.matsim.core.controler.listener.BeforeMobsimListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
 import org.matsim.core.replanning.GenericStrategyManager;
-
 import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -52,27 +51,27 @@ import receiver.tracking.ReceiverTracker;
  */
 public class ReceiverControlerListener implements ScoringListener,
 ReplanningListener, BeforeMobsimListener {
-	
+
 	private Receivers receivers;
 	private ReceiverOrderStrategyManagerFactory stratManFac;
 	private ReceiverScoringFunctionFactory scorFuncFac;
 	private ReceiverTracker tracker;
 	private FreightScenario fsc;
 	@Inject EventsManager eMan;
-	
+
 	/**
 	 * This creates a new receiver controler listener for receivers with replanning abilities.
 	 * @param receivers
 	 * @param stratManFac
 	 */
-	
+
 	@Inject
 	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac, FreightScenario fsc){
 		this.receivers = receivers;
 		this.stratManFac = stratManFac;
 		this.scorFuncFac = scorFuncFac;
 		this.fsc = fsc;
-			}
+	}
 
 
 	@Override
@@ -81,45 +80,46 @@ ReplanningListener, BeforeMobsimListener {
 		if (stratManFac == null){
 			return;
 		}
-	
+
 		GenericStrategyManager<ReceiverPlan, Receiver> stratMan = stratManFac.createReceiverStrategyManager();
-		
+
 		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverCollection = new ArrayList<>();
-		
+
 		for(Receiver receiver : receivers.getReceivers().values()){
 
 			/*
-			 * Checks to see if a receiver is collaborating, if not, the receiver are not allowed to replan (for now).
-			 * If the receiver is collaborating, the receiver will be allowed to replan.
+			 * Checks to see if a receiver is part of the grand coalition, if not, the receiver are not allowed to replan (for now).
+			 * If the receiver is willing to collaborate, the receiver will be allowed to replan.
 			 */
-			
-			if (receiver.getCollaborationStatus() == true){	
-				
+
+			boolean status = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+
+			if(status == true){
+
 				if (event.getIteration() % fsc.getReplanInterval() == 0) {
 					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
 				}
-				
-			receiverCollection.add(receiver);
-			}			
 
+				receiverCollection.add(receiver);
+
+			}
 		}
-
-			
-			if (event.getIteration() % fsc.getReplanInterval() != 0) {
-				return;
-			} 
+		
+		if (event.getIteration() % fsc.getReplanInterval() != 0) {
+			return;
+		} 
 
 		stratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());		
 	}
 
-	
+
 	/*
 	 * Determines the order cost at the end of each iteration.
 	 */
-	
+
 	@Override
 	public void notifyScoring(ScoringEvent event) {
-	this.tracker.scoreSelectedPlans();
+		this.tracker.scoreSelectedPlans();
 	}
 
 	@Override

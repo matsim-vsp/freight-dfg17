@@ -21,8 +21,6 @@
  */
 package receiver.replanning;
 
-import java.util.Collection;
-
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
@@ -30,7 +28,6 @@ import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.ReceiverPlan;
-import receiver.product.ReceiverOrder;
 
 /**
  *
@@ -87,19 +84,19 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 		}
 	}
 	
-	public ReceiverOrder pickRandomReceiverOrder(ReceiverPlan plan) {
-		/* Randomly identify a (single) receiver order to adapt. */
-		Collection<ReceiverOrder> ro = plan.getReceiverOrders();
-		int item = MatsimRandom.getLocalInstance().nextInt(ro.size());
-		ReceiverOrder selectedRo = null;
-		Object o = ro.toArray()[item];
-		if(o instanceof ReceiverOrder) {
-			selectedRo = (ReceiverOrder) o;
-		} else {
-			throw new RuntimeException("Randomly selected 'ReceiverOrder' is of the wrong type: " + o.getClass().toString() );
-		}
-		return selectedRo;
-	}
+//	public ReceiverOrder pickRandomReceiverOrder(ReceiverPlan plan) {
+//		/* Randomly identify a (single) receiver order to adapt. */
+//		Collection<ReceiverOrder> ro = plan.getReceiverOrders();
+//		int item = MatsimRandom.getLocalInstance().nextInt(ro.size());
+//		ReceiverOrder selectedRo = null;
+//		Object o = ro.toArray()[item];
+//		if(o instanceof ReceiverOrder) {
+//			selectedRo = (ReceiverOrder) o;
+//		} else {
+//			throw new RuntimeException("Randomly selected 'ReceiverOrder' is of the wrong type: " + o.getClass().toString() );
+//		}
+//		return selectedRo;
+//	}
 	
 	/**
 	 * Decreases the {@link TimeWindow} start time by some random step size that

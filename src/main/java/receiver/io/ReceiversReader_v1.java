@@ -225,7 +225,6 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 	}
 
 	private void startProduct(Attributes atts) {
-//		this.currentProduct = ReceiverProduct.newInstance();
 		String id = atts.getValue(ATTR_PRODUCT_ID);
 		double onHand = Double.parseDouble(atts.getValue(ATTR_PRODUCT_ONHAND));
 		
@@ -305,12 +304,12 @@ public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader 
 			orderBuilder.setOrderQuantity(quantity);
 		}
 		
-		/*String dailyQuantityString = atts.getValue(ATTR_ITEM_DAILYQUANTITY);
-		double dailyQuantity = 0.0;
-		if(dailyQuantityString != null) {
-			dailyQuantity = Double.parseDouble(dailyQuantityString);
-			orderBuilder.setOrderQuantity(dailyQuantity);
-		}*/
+//		String dailyQuantityString = atts.getValue(ATTR_ITEM_DAILYQUANTITY);
+//		double dailyQuantity = 0.0;
+//		if(dailyQuantityString != null) {
+//			dailyQuantity = Double.parseDouble(dailyQuantityString);
+//			orderBuilder.setOrderQuantity(dailyQuantity);
+//		}
 		
 		String serviceTime = atts.getValue(ATTR_ITEM_SERVICETIME);
 		if(serviceTime != null) {
