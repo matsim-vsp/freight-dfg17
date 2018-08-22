@@ -18,6 +18,7 @@
   
 package receiver.replanning;
 
+import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
@@ -67,13 +68,13 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 				
 				double numDel = order.getNumberOfWeeklyDeliveries();
 				double sdemand;
-				double random = Math.random();
+				double random = MatsimRandom.getLocalInstance().nextDouble();
 				double newNumDel;
 				double weekdemand = order.getOrderQuantity();
 				double pdeliver = numDel/5;
 					
 			if (increase == true){
-					if (numDel < 5){
+					if (numDel + 1 <= 5){
 						newNumDel = numDel + 1;
 						pdeliver = newNumDel/5;
 					} else {
@@ -81,13 +82,13 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 						pdeliver = newNumDel/5;
 					}
 				
-					if (random < pdeliver){
+					if (random <= pdeliver){
 						sdemand = weekdemand/newNumDel;
 					} else sdemand = 0;
 			
 			} else {
 
-				if (numDel > 1){					
+				if (numDel - 1 >= 1){					
 					newNumDel = numDel - 1;
 					pdeliver = newNumDel/5;
 				} else {
@@ -96,7 +97,7 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 				}
 							
 					
-				if (random < pdeliver){
+				if (random <= pdeliver){
 					sdemand = weekdemand/newNumDel;
 				} else sdemand = 0;
 			}

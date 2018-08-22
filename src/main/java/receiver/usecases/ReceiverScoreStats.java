@@ -18,6 +18,7 @@ import org.matsim.core.utils.charts.XYLineChart;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.io.UncheckedIOException;
 
+import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
@@ -41,7 +42,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		private double[][] history = null;
 		private int minIteration = 0;
 		
-		private Receivers receivers;
+		private FreightScenario fsc;
 
 		private final static Logger log = Logger.getLogger(ReceiverScoreStats.class);
 
@@ -52,10 +53,10 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		 * @param createPNG true if in every iteration, the scorestats should be visualized in a graph and written to disk.
 		 * @throws UncheckedIOException
 		 */
-		public ReceiverScoreStats(Receivers receivers, final String filename, final boolean createPNG) throws UncheckedIOException {
-			this.receivers = receivers;
+		public ReceiverScoreStats(FreightScenario fsc, final String filename, final boolean createPNG) throws UncheckedIOException {
 			this.fileName = filename;
 			this.createPNG = createPNG;
+			this.fsc = fsc;
 		}
 
 		@Override
@@ -80,8 +81,10 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		@Override
 		public void notifyIterationEnds(final IterationEndsEvent event) {
 			
-//			if (event.getIteration() < 180){
-//				return;
+//			if (event.getIteration() != 0){
+//				if ((event.getIteration()+1) % fsc.getReplanInterval() != 0) {
+//					return;
+//				} 
 //			}
 			
 			double sumScoreWorst = 0.0;
@@ -92,11 +95,8 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 			int nofScoreBest = 0;
 			int nofAvgScores = 0;
 			int nofExecutedScores = 0;
-//			int nofExecutedIvPlans = 0;
-//			int nofExecutedOevPlans = 0;
 
-//			for (Person person : this.population.getPersons().values()) {
-			for (Receiver receiver : receivers.getReceivers().values()){
+			for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
 				ReceiverPlan worstPlan = null;
 				ReceiverPlan bestPlan = null;
 				double worstScore = Double.POSITIVE_INFINITY;
@@ -140,7 +140,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 					sumScores += score;
 					cntScores++;
 					
-					if (receiver.getSelectedPlan().equals(plan)) {
+					if (receiver.getSelectedPlan() == plan) {
 						sumExecutedScores += score;
 						nofExecutedScores++;
 					}
@@ -196,7 +196,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 					System.arraycopy(this.history[INDEX_EXECUTED], 0, values, 0, index + 1);
 					chart.addSeries("avg. executed score", iterations, values);
 					chart.addMatsimLogo();
-					chart.saveAsPng(this.fileName + ".png", 800, 600);
+					chart.saveAsPng(this.fileName + ".png", 1000, 600);
 				}
 				if (index == (this.history[0].length - 1)) {
 					// we cannot store more information, so disable the graph feature.

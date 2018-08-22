@@ -79,6 +79,7 @@ public class ReceiverAgent {
 		scorFunc.finish();
 		
 		receiver.getSelectedPlan().setScore(scorFunc.getScore());
+		receiver.getAttributes().putAttribute("score", scorFunc.getScore());
 		return;
 	}
 	

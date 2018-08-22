@@ -119,7 +119,18 @@ ReplanningListener, BeforeMobsimListener {
 
 	@Override
 	public void notifyScoring(ScoringEvent event) {
-		this.tracker.scoreSelectedPlans();
+		if (event.getIteration() == 0) {
+			this.tracker.scoreSelectedPlans();
+		} 
+
+		if ((event.getIteration()+1) % fsc.getReplanInterval() == 0) {
+			this.tracker.scoreSelectedPlans();
+		} else {		
+			for (Receiver receiver : receivers.getReceivers().values()){
+				double score = (double) receiver.getAttributes().getAttribute("score");
+				receiver.getSelectedPlan().setScore(score);
+			}
+		}
 	}
 
 	@Override

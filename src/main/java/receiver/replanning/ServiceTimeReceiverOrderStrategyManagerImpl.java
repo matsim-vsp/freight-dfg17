@@ -29,12 +29,12 @@ public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrde
 	@Override
 	public GenericStrategyManager<ReceiverPlan, Receiver> createReceiverStrategyManager() {
 		final GenericStrategyManager<ReceiverPlan, Receiver> stratMan = new GenericStrategyManager<>();
-		stratMan.setMaxPlansPerAgent(5);
+		stratMan.setMaxPlansPerAgent(4);
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.8);
+			stratMan.addStrategy(strategy, null, 1.0);
 
 		}
 		
@@ -43,9 +43,9 @@ public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrde
 		 */
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("00:30:00"), Time.parseTime("04:00:00"), true));
+			strategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("04:00:00"), true));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.1);
+			stratMan.addStrategy(strategy, null, 0.5);
 		}
 		
 		/* 
@@ -53,7 +53,7 @@ public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrde
 		 */
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("00:30:00"), Time.parseTime("0:30:00"), false));
+			strategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("01:00:00"), false));
 			strategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(strategy, null, 0.1);
 		}

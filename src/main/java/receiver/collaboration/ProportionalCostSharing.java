@@ -144,8 +144,8 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 					}
 
 					/* The essence of the proportional assignment.*/
-					proportionalMap.get(carriedId).put(receiverId, thisVolume / (totalCoalitionVolume*2));
-				}							
+					proportionalMap.get(carriedId).put(receiverId, thisVolume / (totalCoalitionVolume));
+					}							
 			}
 		
 
@@ -156,20 +156,20 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 		scenario.getCoalition().setCoalitionCost(totalCoalitionCost);
 
 		/* Scoring each carrier */
-		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
-			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
-			/* TODO This must be updated, because not all Carriers will deliver the same volume. This can be done by making
-			 * the carrier attributable, and introducing a carrierCoalitionVolume attribute that can be used to calculate
-			 * the carrier's proportion.
-			 */
-			//			double carrierCoalitionVolume = (double) carrier.getAttributes().get("carrierCoalitionVolume");
-			//			double newScore = scenario.getCoalition().getCoalitionCost()*((carrierCoalitionVolume*0.5)/totalCoalitionVolume);
-			double newScore = scenario.getCoalition().getCoalitionCost()*(((totalCoalitionVolume/nrOfCarriers)*0.5)/totalCoalitionVolume);
-			if (newScore < 0){
-				carrier.getSelectedPlan().setScore(newScore);
-			}
-			else carrier.getSelectedPlan().setScore(0.0);		
-		}
+//		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
+//			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
+//			/* TODO This must be updated, because not all Carriers will deliver the same volume. This can be done by making
+//			 * the carrier attributable, and introducing a carrierCoalitionVolume attribute that can be used to calculate
+//			 * the carrier's proportion.
+//			 */
+//			//			double carrierCoalitionVolume = (double) carrier.getAttributes().get("carrierCoalitionVolume");
+//			//			double newScore = scenario.getCoalition().getCoalitionCost()*((carrierCoalitionVolume*0.5)/totalCoalitionVolume);
+//			double newScore = scenario.getCoalition().getCoalitionCost()*(((totalCoalitionVolume/nrOfCarriers)*0.5)/totalCoalitionVolume);
+//			if (newScore < 0){
+//				carrier.getSelectedPlan().setScore(newScore);
+//			}
+//			else carrier.getSelectedPlan().setScore(0.0);		
+//		}
 
 			/* Score the individual receiver plans. */
 			log.info("  Scoring the individual receivers...");		

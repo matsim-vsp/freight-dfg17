@@ -18,6 +18,7 @@
   
 package receiver.replanning;
 
+import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import receiver.ReceiverPlan;
@@ -49,7 +50,7 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 	 */
 	
 	public ServiceTimeMutator(double mutationTime, double mutationRange, boolean increase){
-		this.time = mutationTime;
+		this.time = mutationTime*MatsimRandom.getLocalInstance().nextDouble();
 		this.range = mutationRange;
 		this.increase = increase;
 	}
@@ -65,26 +66,26 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 		
 		/* Create list of receiver orders. */
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
-			
+
 			/* Increase or decrease the service time with specified value until range min or range max is reached.*/
 			for(Order order: ro.getReceiverProductOrders()){
-				
-				double duration = order.getServiceDuration();
-				if (increase == true){
-						if ( duration < range){
-							duration = duration + time;		
-						}
-				}
-				else
-					if ( duration > range){
-					duration = duration - time;		
-				}
-				order.setServiceDuration(duration);
-				
-			}
 
+				double duration = order.getServiceDuration();
+				
+				if (increase == true){
+					if ( duration + time <= range){
+						duration = duration + time;		
+					} else duration = range;
+				}
+				else 
+					if (duration - time >= range){
+						duration = duration - time;		
+					} else duration = range;
+				
+				order.setServiceDuration(duration);
+			}
 		}
-					
+
 	}
 
 	@Override

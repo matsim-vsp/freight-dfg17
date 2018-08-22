@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
@@ -59,7 +60,6 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
-import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
@@ -97,7 +97,8 @@ import receiver.scoring.ReceiverScoringFunctionFactory;
 
 public class RunReceiverExample {
 	final private static Logger LOG = Logger.getLogger(RunReceiverExample.class);
-	final private static long SEED_BASE = 20180725l;
+	final private static long SEED_BASE = 20180816l;	
+//	private static int replanInt;
 
 	/**
 	 * @param args
@@ -112,10 +113,11 @@ public class RunReceiverExample {
 
 	public static void run(int run) {
 
-		String outputfolder = String.format("./output/run_%03d/concept/serdur/", run);
+		String outputfolder = String.format("./output/run_%03d/concept/tw/", run);
 		new File(outputfolder).mkdirs();
 		MutableFreightScenario mfs = ReceiverChessboardScenarioExample.createChessboardScenario(SEED_BASE*run, run, true);
-
+//		replanInt = mfs.getReplanInterval();
+		
 		/* Write headings */
 		BufferedWriter bw = IOUtils.getBufferedWriter(mfs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 		try {
@@ -166,6 +168,7 @@ public class RunReceiverExample {
 
 
 	private static MutableFreightScenario receiverAndCarrierReplan(MatsimServices controler, MutableFreightScenario mfs, String outputFolder) {
+		
 
 		MutableFreightScenario fs = mfs;
 		controler.addControlerListener(new IterationStartsListener() {
@@ -173,101 +176,30 @@ public class RunReceiverExample {
 			//@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
 
-				/* Calculating the various coalition scores. */
-				
-//				/* Sub-coalition - without receiver 1. */
-//				if(event.getIteration() == 20){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("1", Receiver.class)){
+//				/* Calculating the various coalition scores. */
+//				if(event.getIteration() >= 1 && event.getIteration() <= (mfs.getReceivers().getReceivers().size() + 1)){
+//					/* Sets the replan interval to 1 (temporarily) to calculate the various coalition scores */
+//					mfs.setReplanInterval(1);
+//					if(event.getIteration() <= (mfs.getReceivers().getReceivers().size())){						
+//						/* Form all the various sub-coalitions without each receiver */
+//						for (Receiver receiver : mfs.getReceivers().getReceivers().values()){							
+//							if (receiver.getId() != Id.create(Integer.toString(event.getIteration()), Receiver.class)){
+//								receiver.setCollaborationStatus(true);
+//							} else {
+//								receiver.setCollaborationStatus(false);
+//							}
+//						}
+//					} else if (event.getIteration() == (mfs.getReceivers().getReceivers().size() + 1) ){
+//						/* Back to default coalition - in this case grand coalition */
+//						for(Receiver receiver: mfs.getReceivers().getReceivers().values()){
 //							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
 //						}
 //					}
 //				}
-//
-//				/* Sub-coalition - without receiver 2. */
-//				if(event.getIteration() == 40){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("2", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Sub-coalition - without receiver 3. */
-//				if(event.getIteration() == 60){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("3", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Sub-coalition - without receiver 4. */
-//				if(event.getIteration() == 80){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("4", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Sub-coalition - without receiver 5. */
-//				if(event.getIteration() == 100){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("5", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Sub-coalition - without receiver 6. */
-//				if(event.getIteration() == 120){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("6", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Sub-coalition - without receiver 7. */
-//				if(event.getIteration() == 140){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("7", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Sub-coalition - without receiver 8. */
-//				if(event.getIteration() == 160){
-//					for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
-//						if (receiver.getId() != Id.create("8", Receiver.class)){
-//							receiver.setCollaborationStatus(true);
-//						} else {
-//							receiver.setCollaborationStatus(false);
-//						}
-//					}
-//				}
-//
-//				/* Back to grand coalition */
-//				if(event.getIteration() == 180){
-//					for(Receiver receiver: mfs.getReceivers().getReceivers().values()){
-//						receiver.setCollaborationStatus(true);
-//					}
+//				
+//				if(event.getIteration() == (mfs.getReceivers().getReceivers().size() + 2)){
+//					/* Change the replan interval back to default. */
+//					mfs.setReplanInterval(replanInt);
 //				}
 
 				if(event.getIteration() % mfs.getReplanInterval() != 0) {
@@ -285,9 +217,6 @@ public class RunReceiverExample {
 						}
 					}
 				}
-
-
-
 
 				/*
 				 * Carrier replan with receiver changes.
@@ -421,61 +350,51 @@ public class RunReceiverExample {
 		 * to join of leave a sub-coalition after 200 iterations (when all the sub-coalition scores were calculated 
 		 * for the eight receivers in this scenario).
 		 */
-		int selector = MatsimRandom.getLocalInstance().nextInt(3);
-		selector = 1;
+		//int selector = MatsimRandom.getLocalInstance().nextInt(3);
+		int selector = 0;
 		switch (selector) {
-		case 1: {
-			final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
-
-			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//			if (controler.getIterationNumber() >= 200){
-//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//				strategy.addStrategyModule(new CollaborationStatusMutator());
-//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//			}
-
-			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-			controler.addOverridingModule(receiverControler);
-		}
-		case 2: {
-			final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-
-			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//			if (controler.getIterationNumber() >= 200){
-//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//				strategy.addStrategyModule(new CollaborationStatusMutator());
-//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//			}
-
-			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-			controler.addOverridingModule(receiverControler);
-		}
-		case 3: {
-			final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
-
-			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//			if (controler.getIterationNumber() >= 200){
-//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//				strategy.addStrategyModule(new CollaborationStatusMutator());
-//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//			}
-
-			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-			controler.addOverridingModule(receiverControler); 
-		}
-		default: { 
-			final ReceiverOrderStrategyManagerFactory rStratManFac = new MyReceiverOrderStrategyManagerFactorImpl();
-
-			/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//			if (controler.getIterationNumber() >= 200){
-//				GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//				strategy.addStrategyModule(new CollaborationStatusMutator());
-//				rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//			}
-			ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-			controler.addOverridingModule(receiverControler);
-
-		}				
+			case 0: {
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
+	
+				/* change the receiver plan strategy manager after all coalition scores were calculated. */
+				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
+					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+					strategy.addStrategyModule(new CollaborationStatusMutator());
+					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+				}
+	
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler);
+			}
+			case 1: {
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
+	
+				/* change the receiver plan strategy manager after all coalition scores were calculated. */
+				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
+					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+					strategy.addStrategyModule(new CollaborationStatusMutator());
+					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+				}
+	
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler);
+			}
+			case 2: {
+				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
+	
+				/* change the receiver plan strategy manager after all coalition scores were calculated. */
+				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
+					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+					strategy.addStrategyModule(new CollaborationStatusMutator());
+					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+				}
+	
+				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+				controler.addOverridingModule(receiverControler); 
+			}
+			default: { 
+				Log.warn("No order strategy manager selected.");		
+			}
 		}
 		return fsc;
 	}
@@ -525,14 +444,14 @@ public class RunReceiverExample {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
-		final int statInterval = 1;
+		final int statInterval = fs.getReplanInterval();
 		//final LegHistogram freightOnly = new LegHistogram(20);
 
 		// freightOnly.setPopulation(controler.getScenario().getPopulation());
 		//freightOnly.setInclPop(false);
 
 		CarrierScoreStats scoreStats = new CarrierScoreStats(fs.getCarriers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(fs.getReceivers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
+		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(fs, fs.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
 
 		//controler.getEvents().addHandler(freightOnly);
 		controler.addControlerListener(scoreStats);
@@ -543,7 +462,7 @@ public class RunReceiverExample {
 			public void notifyIterationEnds(IterationEndsEvent event) {
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 
-				if(event.getIteration() % statInterval != 0) return;
+				if((event.getIteration() + 1) % statInterval != 0) return;
 
 				//write plans
 

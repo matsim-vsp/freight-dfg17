@@ -303,7 +303,7 @@ public class RunReceiver {
 		//freightOnly.setInclPop(false);
 
 		CarrierScoreStats scoreStats = new CarrierScoreStats(fs.getCarriers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(fs.getReceivers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
+		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(fs, fs.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
 
 		//controler.getEvents().addHandler(freightOnly);
 		controler.addControlerListener(scoreStats);
