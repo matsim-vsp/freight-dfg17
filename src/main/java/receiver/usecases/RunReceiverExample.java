@@ -105,7 +105,7 @@ public class RunReceiverExample {
 	 */
 	public static void main(String[] args) {
 		int numberOfRuns = Integer.parseInt(args[0]);
-		for(int i = 0; i < numberOfRuns; i++) {
+		for(int i = 2; i < numberOfRuns; i++) {
 			run(i);
 		}
 	}
@@ -356,12 +356,12 @@ public class RunReceiverExample {
 			case 0: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
 	
-				/* change the receiver plan strategy manager after all coalition scores were calculated. */
-				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
-					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-					strategy.addStrategyModule(new CollaborationStatusMutator());
-					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-				}
+//				/* change the receiver plan strategy manager after all coalition scores were calculated. */
+//				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
+//					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//					strategy.addStrategyModule(new CollaborationStatusMutator());
+//					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//				}
 	
 				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 				controler.addOverridingModule(receiverControler);
@@ -369,12 +369,12 @@ public class RunReceiverExample {
 			case 1: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
 	
-				/* change the receiver plan strategy manager after all coalition scores were calculated. */
-				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
-					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-					strategy.addStrategyModule(new CollaborationStatusMutator());
-					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-				}
+//				/* change the receiver plan strategy manager after all coalition scores were calculated. */
+//				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
+//					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//					strategy.addStrategyModule(new CollaborationStatusMutator());
+//					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//				}
 	
 				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 				controler.addOverridingModule(receiverControler);
@@ -382,12 +382,12 @@ public class RunReceiverExample {
 			case 2: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
 	
-				/* change the receiver plan strategy manager after all coalition scores were calculated. */
-				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
-					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-					strategy.addStrategyModule(new CollaborationStatusMutator());
-					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-				}
+//				/* change the receiver plan strategy manager after all coalition scores were calculated. */
+//				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
+//					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//					strategy.addStrategyModule(new CollaborationStatusMutator());
+//					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
+//				}
 	
 				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 				controler.addOverridingModule(receiverControler); 
