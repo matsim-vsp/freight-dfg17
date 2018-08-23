@@ -105,7 +105,7 @@ public class RunReceiverExample {
 	 */
 	public static void main(String[] args) {
 		int numberOfRuns = Integer.parseInt(args[0]);
-		for(int i = 2; i < numberOfRuns; i++) {
+		for(int i = 0; i < numberOfRuns; i++) {
 			run(i);
 		}
 	}
@@ -118,33 +118,33 @@ public class RunReceiverExample {
 		MutableFreightScenario mfs = ReceiverChessboardScenarioExample.createChessboardScenario(SEED_BASE*run, run, true);
 //		replanInt = mfs.getReplanInterval();
 		
-		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(mfs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
-					"iteration", 
-					"receiver_id", 
-					"score", 
-					"timewindow_start", 
-					"timewindow_end", 
-					"order_id", 
-					"volume", 	        				
-					"frequency", 
-					"serviceduration",
-					"collaborate",
-					"grandCoalitionMember"));
-			bw.newLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Cannot write initial headings");  
-		} finally{
-			try {
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new RuntimeException("Cannot close receiver stats file");
-			}
-		}
+//		/* Write headings */
+//		BufferedWriter bw = IOUtils.getBufferedWriter(mfs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+//		try {
+//			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
+//					"iteration", 
+//					"receiver_id", 
+//					"score", 
+//					"timewindow_start", 
+//					"timewindow_end", 
+//					"order_id", 
+//					"volume", 	        				
+//					"frequency", 
+//					"serviceduration",
+//					"collaborate",
+//					"grandCoalitionMember"));
+//			bw.newLine();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			throw new RuntimeException("Cannot write initial headings");  
+//		} finally{
+//			try {
+//				bw.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				throw new RuntimeException("Cannot close receiver stats file");
+//			}
+//		}
 
 		Scenario sc = mfs.getScenario();
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
@@ -487,34 +487,34 @@ public class RunReceiverExample {
 							boolean status = receiver.getCollaborationStatus();
 							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
 
-							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(fs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-							try {
-								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
-										event.getIteration(), 
-										receiver.getId(), 
-										score, 
-										start, 
-										end,
-										order.getId(), 
-										size,
-										freq,
-										dur,
-										status,
-										member));											 							
-								bw1.newLine();
-
-							} catch (IOException e) {
-								e.printStackTrace();
-								throw new RuntimeException("Cannot write receiver stats");    
-
-							} finally{
-								try {
-									bw1.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-									throw new RuntimeException("Cannot close receiver stats file");
-								}
-							}	
+//							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(fs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+//							try {
+//								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
+//										event.getIteration(), 
+//										receiver.getId(), 
+//										score, 
+//										start, 
+//										end,
+//										order.getId(), 
+//										size,
+//										freq,
+//										dur,
+//										status,
+//										member));											 							
+//								bw1.newLine();
+//
+//							} catch (IOException e) {
+//								e.printStackTrace();
+//								throw new RuntimeException("Cannot write receiver stats");    
+//
+//							} finally{
+//								try {
+//									bw1.close();
+//								} catch (IOException e) {
+//									e.printStackTrace();
+//									throw new RuntimeException("Cannot close receiver stats file");
+//								}
+//							}	
 						}	
 					}
 				}

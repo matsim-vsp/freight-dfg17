@@ -144,7 +144,7 @@ public class ReceiverChessboardScenarioExample {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(2000);
+		config.controler().setLastIteration(5000);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(50);
 		config.global().setRandomSeed(seed);
