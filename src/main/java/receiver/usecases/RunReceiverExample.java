@@ -118,33 +118,33 @@ public class RunReceiverExample {
 		MutableFreightScenario mfs = ReceiverChessboardScenarioExample.createChessboardScenario(SEED_BASE*run, run, true);
 //		replanInt = mfs.getReplanInterval();
 		
-//		/* Write headings */
-//		BufferedWriter bw = IOUtils.getBufferedWriter(mfs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-//		try {
-//			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
-//					"iteration", 
-//					"receiver_id", 
-//					"score", 
-//					"timewindow_start", 
-//					"timewindow_end", 
-//					"order_id", 
-//					"volume", 	        				
-//					"frequency", 
-//					"serviceduration",
-//					"collaborate",
-//					"grandCoalitionMember"));
-//			bw.newLine();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException("Cannot write initial headings");  
-//		} finally{
-//			try {
-//				bw.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//				throw new RuntimeException("Cannot close receiver stats file");
-//			}
-//		}
+		/* Write headings */
+		BufferedWriter bw = IOUtils.getBufferedWriter(mfs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+		try {
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
+					"iteration", 
+					"receiver_id", 
+					"score", 
+					"timewindow_start", 
+					"timewindow_end", 
+					"order_id", 
+					"volume", 	        				
+					"frequency", 
+					"serviceduration",
+					"collaborate",
+					"grandCoalitionMember"));
+			bw.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Cannot write initial headings");  
+		} finally{
+			try {
+				bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Cannot close receiver stats file");
+			}
+		}
 
 		Scenario sc = mfs.getScenario();
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
@@ -351,9 +351,9 @@ public class RunReceiverExample {
 		 * for the eight receivers in this scenario).
 		 */
 		//int selector = MatsimRandom.getLocalInstance().nextInt(3);
-		int selector = 0;
-		switch (selector) {
-			case 0: {
+//		int selector = 0;
+//		switch (selector) {
+//			case 0: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
 	
 //				/* change the receiver plan strategy manager after all coalition scores were calculated. */
@@ -362,40 +362,40 @@ public class RunReceiverExample {
 //					strategy.addStrategyModule(new CollaborationStatusMutator());
 //					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
 //				}
-	
+
 				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 				controler.addOverridingModule(receiverControler);
-			}
-			case 1: {
-				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-	
+//			}
+//			case 1: {
+//				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
+//	
 //				/* change the receiver plan strategy manager after all coalition scores were calculated. */
 //				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
 //					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 //					strategy.addStrategyModule(new CollaborationStatusMutator());
 //					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
 //				}
-	
-				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-				controler.addOverridingModule(receiverControler);
-			}
-			case 2: {
-				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
-	
+//	
+//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+//				controler.addOverridingModule(receiverControler);
+//			}
+//			case 2: {
+//				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
+//	
 //				/* change the receiver plan strategy manager after all coalition scores were calculated. */
 //				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
 //					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 //					strategy.addStrategyModule(new CollaborationStatusMutator());
 //					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//				}
-	
-				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-				controler.addOverridingModule(receiverControler); 
-			}
-			default: { 
-				Log.warn("No order strategy manager selected.");		
-			}
-		}
+////				}
+//	
+//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+//				controler.addOverridingModule(receiverControler); 
+//			}
+//			default: { 
+//				Log.warn("No order strategy manager selected.");		
+//			}
+//		}
 		return fsc;
 	}
 
@@ -462,15 +462,13 @@ public class RunReceiverExample {
 			public void notifyIterationEnds(IterationEndsEvent event) {
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 
-				if((event.getIteration() + 1) % statInterval != 0) return;
+				if((event.getIteration() + 1) % (statInterval) != 0) return;
 
 				//write plans
 
 				new CarrierPlanXmlWriterV2(fs.getCarriers()).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
 
 				new ReceiversWriter(fs.getReceivers()).write(dir + "/" + event.getIteration() + ".receivers.xml");
-
-
 
 				/* Record receiver stats */
 				int numberOfReceivers = fs.getReceivers().getReceivers().size();
@@ -487,34 +485,34 @@ public class RunReceiverExample {
 							boolean status = receiver.getCollaborationStatus();
 							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
 
-//							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(fs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-//							try {
-//								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
-//										event.getIteration(), 
-//										receiver.getId(), 
-//										score, 
-//										start, 
-//										end,
-//										order.getId(), 
-//										size,
-//										freq,
-//										dur,
-//										status,
-//										member));											 							
-//								bw1.newLine();
-//
-//							} catch (IOException e) {
-//								e.printStackTrace();
-//								throw new RuntimeException("Cannot write receiver stats");    
-//
-//							} finally{
-//								try {
-//									bw1.close();
-//								} catch (IOException e) {
-//									e.printStackTrace();
-//									throw new RuntimeException("Cannot close receiver stats file");
-//								}
-//							}	
+							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(fs.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+							try {
+								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
+										event.getIteration(), 
+										receiver.getId(), 
+										score, 
+										start, 
+										end,
+										order.getId(), 
+										size,
+										freq,
+										dur,
+										status,
+										member));											 							
+								bw1.newLine();
+
+							} catch (IOException e) {
+								e.printStackTrace();
+								throw new RuntimeException("Cannot write receiver stats");    
+
+							} finally{
+								try {
+									bw1.close();
+								} catch (IOException e) {
+									e.printStackTrace();
+									throw new RuntimeException("Cannot close receiver stats file");
+								}
+							}	
 						}	
 					}
 				}
