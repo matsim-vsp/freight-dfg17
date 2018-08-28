@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.marginalParallel;
+package receiver.usecases.marginal;
 
 import java.io.File;
 import java.util.Map;
@@ -32,10 +32,9 @@ import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 
-import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.io.ReceiversWriter;
-import receiver.usecases.ReceiverChessboardScenarioExample;
 
 /**
  * Executes the receiver run by starting off with calculating the grand
@@ -68,7 +67,7 @@ public class RunMarginal {
 	 * 
 	 * @param args
 	 */
-	public static void run(String[] args) {
+	public static MutableFreightScenario run(String[] args) {
 		String inputPath = args[0];
 		inputPath += inputPath.endsWith("/") ? "" : "/";
 		String outputPath = args[1];
@@ -84,9 +83,9 @@ public class RunMarginal {
 		
 		/* Calculate grand coalition cost. */
 		LOG.info("Building base freight scenario");
-		FreightScenario fs = ReceiverChessboardScenarioExample.createChessboardScenario(inputPath + "output", seed, 1, false);
+		MutableFreightScenario fs = MarginalScenarioBuilder.createChessboardScenario(inputPath + "output", seed, 1, false);
 		double grandCoalitionCost = Double.NEGATIVE_INFINITY;
-		CalculateMarginalCallable cmcGrand = new CalculateMarginalCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class), 0.0);
+		CalculateMarginalCallable cmcGrand = new CalculateMarginalCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class));
 		Future<Double> grandJob = executor.submit(cmcGrand);
 		executor.shutdown();
 		while(!executor.isTerminated()) {
@@ -97,6 +96,7 @@ public class RunMarginal {
 			e1.printStackTrace();
 			throw new RuntimeException("Cannot get the grand coalition cost.");
 		}
+		fs.getCoalition().getAttributes().putAttribute("C(N)", grandCoalitionCost);
 		
 		/* Calculate the marginal contribution for each receiver. */
 		LOG.info("Calculate the marginal contributions for each receiver...");
@@ -104,9 +104,14 @@ public class RunMarginal {
 		Map<Id<Receiver>, Future<Double>> jobs = new TreeMap<>();
 		
 		for(Receiver receiver : fs.getReceivers().getReceivers().values()) {
-			CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId(), grandCoalitionCost);
-			Future<Double> job = executor.submit(cmc);
-			jobs.put(receiver.getId(), job);
+			/* Only execute a marginal calculation run for those in the grand coalition. */
+			if((boolean) receiver.getAttributes().getAttribute("collaborationStatus")) {
+				CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId());
+				Future<Double> job = executor.submit(cmc);
+				jobs.put(receiver.getId(), job);
+			} else {
+				/*TODO Allocate a fixed cost... based on the grandCoalitionCost?! */
+			}
 		}
 		executor.shutdown();
 		while(!executor.isTerminated()) {
@@ -117,19 +122,21 @@ public class RunMarginal {
 		LOG.info("Consolidate marginals and write to file.");
 		for(Id<Receiver> rId : jobs.keySet()) {
 			try {
-				double marginal = jobs.get(rId).get();
-				fs.getReceivers().getReceivers().get(rId).getAttributes().putAttribute("marginal", marginal);
-				
+				double cost = jobs.get(rId).get();
+				String attr = String.format("C(N)|{%s}", rId.toString());
+				fs.getReceivers().getReceivers().get(rId).getAttributes().putAttribute(attr, cost);
+				fs.getCoalition().getAttributes().putAttribute(attr, cost);
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 				throw new RuntimeException("Could not get the marginal contribution for receiver " + rId.toString());
 			}
 		}
+		
+		/* TODO Check if we really need to write the receivers to file. */
 		String receiversFilename = outputPath + "receivers.xml.gz";
 		new ReceiversWriter(fs.getReceivers()).write(receiversFilename );
 		
-		/* If we can do it from here, start the rest of the run. */
-		
+		return fs;
 	}
 	
 	
