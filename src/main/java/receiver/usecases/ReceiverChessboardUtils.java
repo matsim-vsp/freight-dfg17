@@ -116,21 +116,24 @@ public class ReceiverChessboardUtils {
 		 */		
 		finalReceivers.linkReceiverOrdersToCarriers(fsc.getCarriers());
 		fsc.setReceivers(finalReceivers);
-
+		
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be
 		 * able to configure this in a more elegant way. */
 		Coalition coalition = fsc.getCoalition();
 //		if(coalition != null) {
-			for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
-				if (receiver.getCollaborationStatus() == true){
+		for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
+			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
+				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 						coalition.addReceiverCoalitionMember(receiver);
 					}
 				}
 			}
+		}
 			LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 			LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
+			LOG.info("Total number of receiver agents: " + Integer.toString(fsc.getReceivers().getReceivers().size()));
 //		}
 
 
@@ -140,49 +143,23 @@ public class ReceiverChessboardUtils {
 		final ReceiverScoringFunctionFactory rScorFuncFac = new ProportionalReceiverScoringFunctionFactoryImpl();
 
 		/*
-		 * Create a new instance of a receiver plan strategy manager factory that allows grand coalition members 
-		 * to join of leave a sub-coalition after 200 iterations (when all the sub-coalition scores were calculated 
-		 * for the eight receivers in this scenario).
+		 * Create a new instance of a receiver plan strategy manager factory..
 		 */
 		//int selector = MatsimRandom.getLocalInstance().nextInt(3);
 //		int selector = 0;
 //		switch (selector) {
 //			case 0: {
 				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
-	
-//				/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
-//					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//					strategy.addStrategyModule(new CollaborationStatusMutator());
-//					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//				}
-
 				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 				controler.addOverridingModule(receiverControler);
 //			}
 //			case 1: {
 //				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-//	
-//				/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
-//					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//					strategy.addStrategyModule(new CollaborationStatusMutator());
-//					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-//				}
-//	
 //				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 //				controler.addOverridingModule(receiverControler);
 //			}
 //			case 2: {
 //				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
-//	
-//				/* change the receiver plan strategy manager after all coalition scores were calculated. */
-//				if (controler.getIterationNumber() == (fsc.getReceivers().getReceivers().size() + 2)){
-//					GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//					strategy.addStrategyModule(new CollaborationStatusMutator());
-//					rStratManFac.createReceiverStrategyManager().addStrategy(strategy, null, 0.2);
-////				}
-//	
 //				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
 //				controler.addOverridingModule(receiverControler); 
 //			}
@@ -191,10 +168,6 @@ public class ReceiverChessboardUtils {
 //			}
 //		}
 	}
-	
-	
-	
-	
 	
 	private static class MyCarrierPlanStrategyManagerFactoryImpl implements CarrierPlanStrategyManagerFactory {
 

@@ -156,7 +156,6 @@ public class ReceiverChessboardScenarioExample {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-//					.setCollaborationStatus(false);
 			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
 			receiver.getAttributes().putAttribute("collaborationStatus", false);
 		
@@ -176,19 +175,8 @@ public class ReceiverChessboardScenarioExample {
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(50);
 		config.global().setRandomSeed(seed);
-<<<<<<< HEAD
-		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
-=======
 		config.network().setInputFile(inputNetwork);
 		config.controler().setOutputDirectory(outputDirectory);
-//		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
-		
-//		/* Multi-threaded setup. */
-//		config.global().setNumberOfThreads(40);
-//		config.parallelEventHandling().setNumberOfThreads(12);
-//		config.qsim().setNumberOfThreads(12);
->>>>>>> 6f74d6f77c830d2783534e05ecb4c98ffc797e01
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -277,42 +265,7 @@ public class ReceiverChessboardScenarioExample {
 			int tw = 6;
 			String serdur = "01:00:00";
 			int numDel = 5;
-			
-			/* Set the different time window durations for experiments. */
-			if (r <= 10){
-				tw = 2;
-			} else if (r <= 20){
-				tw = 4;
-			} else if (r <= 30){
-				tw = 6;
-			} else if (r <= 40){
-				tw = 8;
-			} else if (r <= 50){
-				tw = 10;
-			} else if (r<=60){
-				tw = 12;
-			}
-			
-//			/* Set the different service durations for experiments. */
-//			if (r <= 15){
-//				serdur = "01:00:00";
-//			} else if (r <= 30){
-//				serdur = "02:00:00";
-//			} else if (r <= 45){
-//				serdur = "03:00:00";
-//			} else serdur = "04:00:00";
-//			
-//			/* Set the different delivery frequencies for experiments. */
-//			if (r <= 12){
-//				numDel = 1;
-//			} else if (r <= 24){
-//				numDel = 2;
-//			} else if (r <= 36){
-//				numDel = 3;
-//			} else if (r <= 48){
-//				numDel = 4;
-//			} else numDel = 5;
-
+	
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
 			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);

@@ -77,7 +77,8 @@ public class MarginalReceiverClass {
 		fs.setReplanInterval(5);
 		
 		ReceiverChessboardScenarioExample.createAndAddChessboardReceivers(fs, numberOfReceivers);
-		ReceiverChessboardScenarioExample.createReceiverOrders(fs, numberOfReceivers);
+		ReceiverChessboardScenarioExample.createAndAddControlGroupReceivers(fs, numberOfReceivers);
+		ReceiverChessboardScenarioExample.createReceiverOrders(fs);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
 		if(receiverId != Id.create("0", Receiver.class)) {
 			fs.getReceivers().getReceivers().remove(receiverId);
@@ -100,7 +101,7 @@ public class MarginalReceiverClass {
 		}
 		
 		for (Receiver receiver : fs.getReceivers().getReceivers().values()){
-			if (receiver.getCollaborationStatus() == true){
+			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}

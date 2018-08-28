@@ -156,7 +156,6 @@ public class ReceiverChessboardScenario {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-//					.setCollaborationStatus(false);
 			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
 			receiver.getAttributes().putAttribute("collaborationStatus", false);
 		
