@@ -85,10 +85,7 @@ public class RunMarginal {
 		/* Calculate grand coalition cost. */
 		LOG.info("Building base freight scenario");
 		FreightScenario fs = ReceiverChessboardScenarioExample.createChessboardScenario(inputPath + "output", seed, 1, false);
-		//TODO Run the grand coalition.
-		double grandCoalitionCost = -200000;
-		
-		
+		double grandCoalitionCost = Double.NEGATIVE_INFINITY;
 		CalculateMarginalCallable cmcGrand = new CalculateMarginalCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class), 0.0);
 		Future<Double> grandJob = executor.submit(cmcGrand);
 		executor.shutdown();
@@ -100,7 +97,6 @@ public class RunMarginal {
 			e1.printStackTrace();
 			throw new RuntimeException("Cannot get the grand coalition cost.");
 		}
-		
 		
 		/* Calculate the marginal contribution for each receiver. */
 		LOG.info("Calculate the marginal contributions for each receiver...");

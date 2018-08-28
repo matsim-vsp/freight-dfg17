@@ -65,10 +65,7 @@ public class MarginalReceiverClass {
 		folder += folder.endsWith("/") ? "" : "/";
 		
 		String idString = args[2];
-		Id<Receiver> receiverId = null;
-		if(!idString.equalsIgnoreCase("null")) {
-			receiverId = Id.create(idString, Receiver.class);
-		}
+		Id<Receiver> receiverId = Id.create(idString, Receiver.class);
 	
 		/* Use the code (components) from ReceiverChessboardScenario */
 		int numberOfReceivers = 60;
@@ -82,7 +79,7 @@ public class MarginalReceiverClass {
 		ReceiverChessboardScenarioExample.createAndAddChessboardReceivers(fs, numberOfReceivers);
 		ReceiverChessboardScenarioExample.createReceiverOrders(fs, numberOfReceivers);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
-		if(receiverId != null) {
+		if(receiverId != Id.create("0", Receiver.class)) {
 			fs.getReceivers().getReceivers().remove(receiverId);
 		}
 

@@ -105,9 +105,7 @@ public class CalculateMarginalCallable implements Callable<Double> {
 				"receiver.marginalParallel.MarginalReceiverClass",
 				String.valueOf(seed),
 				foldername,
-				receiverId.toString(),
-				"> log.log",
-				"2>&1"
+				receiverId.toString()
 				);
 		runBuilder.directory(folder);
 		runBuilder.redirectErrorStream(true);
