@@ -51,7 +51,6 @@ import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
-import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverModule;
@@ -268,6 +267,23 @@ public class ReceiverChessboardUtils {
 	    }
 	}
 
+
+	/**
+	 * Cleans a given file. If the file is a directory, it first cleans all
+	 * its contained files (or folders).
+	 * @param folder
+	 */
+	public static void delete(File folder){
+		if(folder.isDirectory()){
+			File[] contents = folder.listFiles();
+			for(File file : contents){
+				delete(file);
+			}
+			folder.delete();
+		} else{
+			folder.delete();
+		}
+	}
 
 	
 }

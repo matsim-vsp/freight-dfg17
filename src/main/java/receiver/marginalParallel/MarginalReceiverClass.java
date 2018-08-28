@@ -21,19 +21,36 @@
  */
 package receiver.marginalParallel;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.Controler;
+import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
+import org.matsim.core.controler.events.IterationEndsEvent;
+import org.matsim.core.controler.events.ShutdownEvent;
+import org.matsim.core.controler.listener.IterationEndsListener;
+import org.matsim.core.controler.listener.ShutdownListener;
+import org.matsim.core.utils.io.IOUtils;
 
+import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.collaboration.MutableCoalition;
+import receiver.io.ReceiversWriter;
+import receiver.product.Order;
+import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverChessboardScenarioExample;
 import receiver.usecases.ReceiverChessboardUtils;
+import receiver.usecases.ReceiverScoreStats;
 
 /**
  *
@@ -60,7 +77,7 @@ public class MarginalReceiverClass {
 		Carriers carriers = ReceiverChessboardScenarioExample.createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
-		fs.setReplanInterval(50);
+		fs.setReplanInterval(5);
 		
 		ReceiverChessboardScenarioExample.createAndAddChessboardReceivers(fs, numberOfReceivers);
 		ReceiverChessboardScenarioExample.createReceiverOrders(fs, numberOfReceivers);
@@ -102,16 +119,59 @@ public class MarginalReceiverClass {
 		
 		/* Make config changes relevant to the current marginal run. */
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-		sc.getConfig().controler().setLastIteration(fs.getReplanInterval()-1);
+		sc.getConfig().controler().setLastIteration(fs.getReplanInterval());
 		
 		Controler controler = new Controler(sc);
 
 		ReceiverChessboardUtils.setupCarriers(controler, fs);
 
 		ReceiverChessboardUtils.setupReceivers(controler, fs);	
+		
+		prepareFreightOutputDataAndStats(controler, fs, 1);
 
 		controler.run();
 	}
+	
+	
+	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs, int run) {
+		/*
+		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
+		 */
+		final int statInterval = fs.getReplanInterval();
+		CarrierScoreStats scoreStats = new CarrierScoreStats(fs.getCarriers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+
+		controler.addControlerListener(scoreStats);
+
+		controler.addControlerListener(new IterationEndsListener() {
+			@Override
+			public void notifyIterationEnds(IterationEndsEvent event) {
+				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
+//				if((event.getIteration() + 1) % (statInterval) != 0) return;
+				//write plans
+				new CarrierPlanXmlWriterV2(fs.getCarriers()).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+			}
+		});
+		
+		controler.addControlerListener(new ShutdownListener() {
+			@Override
+			public void notifyShutdown(ShutdownEvent event) {
+				int lastIteration = fs.getScenario().getConfig().controler().getLastIteration();
+				String outputDir = controler.getConfig().controler().getOutputDirectory();
+				outputDir += outputDir.endsWith("/") ? "" : "/";
+				File f1 = new File(outputDir + "ITERS/it." + lastIteration + "/" + lastIteration + ".carrierPlans.xml.gz");
+				File f2 = new File(outputDir + "output_carrierPlans.xml.gz");
+				try {
+					ReceiverChessboardUtils.copyFile(f1, f2);
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException("Cannot copy output carrier plans.");
+				}
+			}
+		});
+		
+
+	}
+
 	
 	
 }

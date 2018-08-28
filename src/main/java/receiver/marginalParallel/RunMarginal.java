@@ -79,19 +79,36 @@ public class RunMarginal {
 		
 		checkInputPath(inputPath, release);
 		
+		/* Set up the parallel infrastructure. */
+		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 		
 		/* Calculate grand coalition cost. */
 		LOG.info("Building base freight scenario");
 		FreightScenario fs = ReceiverChessboardScenarioExample.createChessboardScenario(inputPath + "output", seed, 1, false);
 		//TODO Run the grand coalition.
+		double grandCoalitionCost = -200000;
+		
+		
+		CalculateMarginalCallable cmcGrand = new CalculateMarginalCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class), 0.0);
+		Future<Double> grandJob = executor.submit(cmcGrand);
+		executor.shutdown();
+		while(!executor.isTerminated()) {
+		}
+		try {
+			grandCoalitionCost = grandJob.get();
+		} catch (InterruptedException | ExecutionException e1) {
+			e1.printStackTrace();
+			throw new RuntimeException("Cannot get the grand coalition cost.");
+		}
+		
 		
 		/* Calculate the marginal contribution for each receiver. */
 		LOG.info("Calculate the marginal contributions for each receiver...");
-		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+		executor = Executors.newFixedThreadPool(numberOfThreads);
 		Map<Id<Receiver>, Future<Double>> jobs = new TreeMap<>();
 		
 		for(Receiver receiver : fs.getReceivers().getReceivers().values()) {
-			CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId());
+			CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId(), grandCoalitionCost);
 			Future<Double> job = executor.submit(cmc);
 			jobs.put(receiver.getId(), job);
 		}
@@ -112,7 +129,7 @@ public class RunMarginal {
 				throw new RuntimeException("Could not get the marginal contribution for receiver " + rId.toString());
 			}
 		}
-		String receiversFilename = inputPath + "receivers.xml.gz";
+		String receiversFilename = outputPath + "receivers.xml.gz";
 		new ReceiversWriter(fs.getReceivers()).write(receiversFilename );
 		
 		/* If we can do it from here, start the rest of the run. */
