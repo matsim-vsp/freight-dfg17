@@ -89,9 +89,9 @@ public class ReceiverChessboardScenarioExample {
 	/**
 	 * Build the entire chessboard example.
 	 */
-	public static MutableFreightScenario createChessboardScenario(long seed, int run, boolean write) {
+	public static MutableFreightScenario createChessboardScenario(String outputDirectory, long seed, int run, boolean write) {
 		int numberOfReceivers = 60;
-		Scenario sc = setupChessboardScenario(seed, run);
+		Scenario sc = setupChessboardScenario("./input/usecases/chessboard/network/grid9x9.xml", outputDirectory, seed, run);
 		Carriers carriers = createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
@@ -106,7 +106,7 @@ public class ReceiverChessboardScenarioExample {
 		createReceiverOrders(fs);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork());
+		generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork(), "./input/usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 		
 		
 		if(write) {
@@ -169,15 +169,26 @@ public class ReceiverChessboardScenarioExample {
 	 * FIXME Need to complete this. 
 	 * @return
 	 */
-	public static Scenario setupChessboardScenario(long seed, int run) {
+	public static Scenario setupChessboardScenario(String inputNetwork, String outputDirectory, long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(1000);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(50);
 		config.global().setRandomSeed(seed);
+<<<<<<< HEAD
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
 		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
+=======
+		config.network().setInputFile(inputNetwork);
+		config.controler().setOutputDirectory(outputDirectory);
+//		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
+		
+//		/* Multi-threaded setup. */
+//		config.global().setNumberOfThreads(40);
+//		config.parallelEventHandling().setNumberOfThreads(12);
+//		config.qsim().setNumberOfThreads(12);
+>>>>>>> 6f74d6f77c830d2783534e05ecb4c98ffc797e01
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -205,7 +216,7 @@ public class ReceiverChessboardScenarioExample {
 	 * @param carriers
 	 * @param network
 	 */
-	public static void generateCarrierPlan(Carriers carriers, Network network) {
+	public static void generateCarrierPlan(Carriers carriers, Network network, String algorithmFile) {
 		Carrier carrier = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class)); 
 
 		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, network);
@@ -214,7 +225,7 @@ public class ReceiverChessboardScenarioExample {
 		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
 		//read and create a pre-configured algorithms to solve the vrp
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./input/usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algorithmFile);
 
 		//solve the problem
 		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();

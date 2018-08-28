@@ -43,6 +43,12 @@ public class MutableFreightScenario implements FreightScenario {
 	public MutableFreightScenario(Scenario sc, Carriers carriers) {
 		this.sc = sc;
 		this.carriers = carriers;
+		
+		/* Set optional containers */
+		this.coalition = new MutableCoalition();
+		
+		/* FIXME There are still local variables that are not initialised, with 
+		 * no clear interpretable default values. */
 	}
 
 	
