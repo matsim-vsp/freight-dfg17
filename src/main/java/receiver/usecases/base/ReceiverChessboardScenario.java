@@ -21,12 +21,13 @@
 /**
  * 
  */
-package receiver.usecases;
+package receiver.usecases.base;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
@@ -68,6 +69,7 @@ import receiver.Receiver;
 import receiver.ReceiverImpl;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
+import receiver.collaboration.MutableCoalition;
 import receiver.io.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -82,22 +84,30 @@ import receiver.reorderPolicy.SSReorderPolicy;
  */
 public class ReceiverChessboardScenario {
 	private final static Logger LOG = Logger.getLogger(ReceiverChessboardScenario.class);
+	
 
 	/**
 	 * Build the entire chessboard example.
 	 */
 	public static MutableFreightScenario createChessboardScenario(long seed, int run, boolean write) {
+		int numberOfReceivers = 60;
 		Scenario sc = setupChessboardScenario(seed, run);
 		Carriers carriers = createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
-		fs.setReplanInterval(20);
+		fs.setReplanInterval(50);
 		
-		createAndAddChessboardReceivers(fs);
+		/* Create the grand coalition receiver members and allocate orders. */
+		createAndAddChessboardReceivers(fs, numberOfReceivers);		
+		
+		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
+//		createAndAddControlGroupReceivers(fs, numberOfReceivers);
+
 		createReceiverOrders(fs);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 		generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork());
+		
 		
 		if(write) {
 			writeFreightScenario(fs);
@@ -106,9 +116,55 @@ public class ReceiverChessboardScenario {
 		/* Link the carriers to the receivers. */
 		fs.getReceivers().linkReceiverOrdersToCarriers(fs.getCarriers());
 		
+		/* Add carrier and receivers to coalition */
+		MutableCoalition coalition = new MutableCoalition();
+		
+		for (Carrier carrier : fs.getCarriers().getCarriers().values()){
+			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
+				coalition.addCarrierCoalitionMember(carrier);
+			}
+		}
+		
+		for (Receiver receiver : fs.getReceivers().getReceivers().values()){
+			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
+					coalition.addReceiverCoalitionMember(receiver);
+				}
+			} else {
+				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
+					coalition.removeReceiverCoalitionMember(receiver);
+				}
+			}
+		}
+		
+ 		fs.setCoalition(coalition);
+		
 		return fs;
 	}
-	
+
+
+	/*
+	 * Creates and adds a control group of receivers for experiments. These receivers will be allowed to replan, 
+	 * but NOT be allowed to join the grand coalition. This group represents receivers that are unwilling to 
+	 * collaborate in any circumstances.
+	 */
+	public static void createAndAddControlGroupReceivers(MutableFreightScenario fs, int numberOfReceivers) {
+		Network network = fs.getScenario().getNetwork();
+		Receivers receivers = fs.getReceivers();
+		
+		for (int r = numberOfReceivers+1; r < (numberOfReceivers*2)+1 ; r++){
+			Id<Link> receiverLocation = selectRandomLink(network);
+			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
+					.setLinkId(receiverLocation);
+//					.setCollaborationStatus(false);
+			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
+			receiver.getAttributes().putAttribute("collaborationStatus", false);
+		
+			receivers.addReceiver(receiver);
+		}		
+		fs.setReceivers(receivers);		
+	}
+
 	/**
 	 * FIXME Need to complete this. 
 	 * @return
@@ -116,18 +172,18 @@ public class ReceiverChessboardScenario {
 	public static Scenario setupChessboardScenario(long seed, int run) {
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(400);
+		config.controler().setLastIteration(1500);
 		config.controler().setMobsim("qsim");
-		config.controler().setWriteSnapshotsInterval(1);
+		config.controler().setWriteSnapshotsInterval(50);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/", run));
+		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
 	}
 	
-	private static void writeFreightScenario(FreightScenario fs) {
+	public static void writeFreightScenario(FreightScenario fs) {
 		/* Write the necessary bits to file. */
 		String outputFolder = fs.getScenario().getConfig().controler().getOutputDirectory();
 		outputFolder += outputFolder.endsWith("/") ? "" : "/";
@@ -144,7 +200,7 @@ public class ReceiverChessboardScenario {
 	}
 
 	/**
-	 * Route the services that are allocated to the carrier.
+	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
 	 * 
 	 * @param carriers
 	 * @param network
@@ -186,139 +242,144 @@ public class ReceiverChessboardScenario {
 		//		new CarrierPlanXmlWriterV2(carriers).write(directory + "/input/carrierPlanned.xml");
 	}
 
-
+	/**
+	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
+	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
+	 * @param fs
+	 * @param receivers 
+	 */
 	public static void createReceiverOrders(FreightScenario fs) {
 		Carriers carriers = fs.getCarriers();
 		Receivers receivers = fs.getReceivers();
-		
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
-		/* Create generic product types with a description and required capacity (in kg per item)*/
+		/* Create generic product types with a description and required capacity (in kg per item). */
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
 		productTypeOne.setDescription("Product 1");
-		productTypeOne.setRequiredCapacity(3);
+		productTypeOne.setRequiredCapacity(1);
 
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
-
-		/* Create receiver-specific products */
-		Receiver receiverOne = receivers.getReceivers().get(Id.create("1", Receiver.class));
-		ReceiverProduct receiverOneProductOne = createReceiverProduct(receiverOne, productTypeOne, 200, 500);
-		ReceiverProduct receiverOneProductTwo = createReceiverProduct(receiverOne, productTypeTwo, 800, 1200);
-		receiverOne.getProducts().add(receiverOneProductOne);
-		receiverOne.getProducts().add(receiverOneProductTwo);
-
-		Receiver receiverTwo = receivers.getReceivers().get(Id.create("2", Receiver.class));
-		ReceiverProduct receiverTwoProductOne = createReceiverProduct(receiverTwo, productTypeOne, 200, 400);
-		ReceiverProduct receiverTwoProductTwo = createReceiverProduct(receiverTwo, productTypeTwo, 600, 1000);
-		receiverTwo.getProducts().add(receiverTwoProductOne);
-		receiverTwo.getProducts().add(receiverTwoProductTwo);
-
-		/* Generate and collate orders for the different receiver/order combination. */
-
-		/* -----  Receiver 1. ----- */
-		Order r1order1 = createProductOrder(Id.create("Order1",  Order.class), receiverOne, 
-				receiverOneProductOne, Time.parseTime("00:30:00"));
-			r1order1.setNumberOfWeeklyDeliveries(5);
-		Order r1order2 = createProductOrder(Id.create("Order2",  Order.class), receiverOne, 
-				receiverOneProductTwo, Time.parseTime("00:30:00"));
-			r1order2.setNumberOfWeeklyDeliveries(5);
-		Collection<Order> r1orders = new ArrayList<Order>();
-		r1orders.add(r1order1);
-		r1orders.add(r1order2);
-
-		/* Combine product orders into single receiver order for a specific carrier. */
-		ReceiverOrder receiver1order = new ReceiverOrder(receiverOne.getId(), r1orders, carrierOne.getId());
-		ReceiverPlan receiverOnePlan = ReceiverPlan.Builder.newInstance(receiverOne)
-				.addReceiverOrder(receiver1order)
-				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")))
-				.build();
-		receiverOne.setSelectedPlan(receiverOnePlan);
-
-		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver1order.getReceiverProductOrders()){
-			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
-					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
+		
+		for (int r = 1; r < fs.getReceivers().getReceivers().size()+1 ; r++){
+			int tw = 6;
+			String serdur = "01:00:00";
+			int numDel = 5;
 			
-			if(receiverOnePlan.getTimeWindows().size() > 1) {
-				LOG.warn("Multiple time windows set. Only the first is used");
+			/* Set the different time window durations for experiments. */
+			if (r <= 10){
+				tw = 2;
+			} else if (r <= 20){
+				tw = 4;
+			} else if (r <= 30){
+				tw = 6;
+			} else if (r <= 40){
+				tw = 8;
+			} else if (r <= 50){
+				tw = 10;
+			} else if (r<=60){
+				tw = 12;
 			}
-			CarrierService newService = serBuilder.setCapacityDemand((int) Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())).
-					setServiceStartTimeWindow(receiverOnePlan.getTimeWindows().get(0)).
-					setServiceDuration(order.getServiceDuration()).
-					build();
-			carriers.getCarriers().get(receiver1order.getCarrierId()).getServices().add(newService);		
-		}	
-
-
-		/* -----  Receiver 2. ----- */
-		Order r2order1 = createProductOrder(Id.create("Order3",  Order.class), receiverTwo, 
-				receiverTwoProductOne, Time.parseTime("01:00:00"));
-			r2order1.setNumberOfWeeklyDeliveries(5);
-		Order r2order2 = createProductOrder(Id.create("Order4",  Order.class), receiverTwo, 
-				receiverTwoProductTwo, Time.parseTime("01:00:00"));
-			r2order2.setNumberOfWeeklyDeliveries(5);
-		Collection<Order> r2orders = new ArrayList<Order>();
-		r2orders.add(r2order1);
-		r2orders.add(r2order2);
-
-		/* Combine product orders into single receiver order for a specific carrier. */
-		ReceiverOrder receiver2order = new ReceiverOrder(receiverTwo.getId(), r2orders, carrierOne.getId());
-		ReceiverPlan receiverTwoPlan = ReceiverPlan.Builder.newInstance(receiverTwo)
-				.addReceiverOrder(receiver2order)
-				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")))
-				.build();
-		receiverTwo.setSelectedPlan(receiverTwoPlan);
-
-		/* Convert receiver orders to initial carrier services. */
-		for(Order order : receiver2order.getReceiverProductOrders()){
-			org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
-					Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 			
-			if(receiverTwoPlan.getTimeWindows().size() > 1) {
-				LOG.warn("Multiple time windows set. Only the first is used");
+//			/* Set the different service durations for experiments. */
+//			if (r <= 15){
+//				serdur = "01:00:00";
+//			} else if (r <= 30){
+//				serdur = "02:00:00";
+//			} else if (r <= 45){
+//				serdur = "03:00:00";
+//			} else serdur = "04:00:00";
+//			
+//			/* Set the different delivery frequencies for experiments. */
+//			if (r <= 12){
+//				numDel = 1;
+//			} else if (r <= 24){
+//				numDel = 2;
+//			} else if (r <= 36){
+//				numDel = 3;
+//			} else if (r <= 48){
+//				numDel = 4;
+//			} else numDel = 5;
+
+			/* Create receiver-specific products */
+			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
+			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);
+			ReceiverProduct receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 2500);
+			receiver.getProducts().add(receiverProductOne);
+			receiver.getProducts().add(receiverProductTwo);
+
+			/* Generate and collate orders for the different receiver/order combination. */
+			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
+					receiverProductOne, Time.parseTime(serdur));
+			rOrder1.setNumberOfWeeklyDeliveries(numDel);
+			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
+					receiverProductTwo, Time.parseTime(serdur));
+			rOrder2.setNumberOfWeeklyDeliveries(numDel);
+			Collection<Order> rOrders = new ArrayList<Order>();
+			rOrders.add(rOrder1);
+			rOrders.add(rOrder2);
+
+			/* Combine product orders into single receiver order for a specific carrier. */
+			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+					.addReceiverOrder(receiverOrder)
+					.addTimeWindow(selectRandomTimeStart(tw))
+//					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
+					.build();
+			receiver.setSelectedPlan(receiverPlan);
+
+			/* Convert receiver orders to initial carrier services. */
+			for(Order order : receiverOrder.getReceiverProductOrders()){
+				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
+						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
+
+				if(receiverPlan.getTimeWindows().size() > 1) {
+					LOG.warn("Multiple time windows set. Only the first is used");
+				}
+				
+				CarrierService newService = serBuilder
+						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
+						setServiceDuration(order.getServiceDuration()).
+						build();
+				carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);	
 			}
-			CarrierService newService = serBuilder.
-					setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
-					setServiceStartTimeWindow(receiverTwoPlan.getTimeWindows().get(0)).
-					setServiceDuration(order.getServiceDuration()).
-					build();
-			carriers.getCarriers().get(receiver2order.getCarrierId()).getServices().add(newService);		
 		}
+
 	}
 
-
-
-
-
-	public static void createAndAddChessboardReceivers(MutableFreightScenario fs) {
+	/**
+	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
+	 * their orders as well as decided to join or leave the coalition.
+	 * @param fs
+	 * @param numberOfReceivers
+	 */
+	public static void createAndAddChessboardReceivers(MutableFreightScenario fs, int numberOfReceivers) {
 		Network network = fs.getScenario().getNetwork();
-
-		/* Create first receiver */
-		Id<Link> receiverOneLocation = selectRandomLink(network);
-		Receiver receiverOne = ReceiverImpl.newInstance(Id.create("1", Receiver.class))
-				.setLinkId(receiverOneLocation);
-//				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("10:00"), Time.parseTime("14:00")));
-		/* FIXME Add a toString() method. */
-		
-		/* Create second receiver */
-		Id<Link> receiverTwoLocation = selectRandomLink(network);
-		Receiver receiverTwo = ReceiverImpl.newInstance(Id.create("2", Receiver.class))
-				.setLinkId(receiverTwoLocation);
-//				.addTimeWindow(TimeWindow.newInstance(Time.parseTime("08:00"), Time.parseTime("12:00")));
 
 		Receivers receivers = new Receivers();
 		
 		receivers.setDescription("Chessboard");
-		/* Add a dummy example attribute */
-		receivers.getAttributes().putAttribute("date", "2018/04/20");
 		
-		receivers.addReceiver(receiverOne);
-		receivers.addReceiver(receiverTwo);
+		for (int r = 1; r < numberOfReceivers+1 ; r++){
+			Id<Link> receiverLocation = selectRandomLink(network);
+			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
+					.setLinkId(receiverLocation);
+			receiver.getAttributes().putAttribute("grandCoalitionMember", true);
+			receiver.getAttributes().putAttribute("collaborationStatus", true);			
+			receivers.addReceiver(receiver);
+		}
+		
 		fs.setReceivers(receivers);
 	}
 
+
+	/**
+	 * Creates the carrier agents for the simulation.
+	 * @param sc
+	 * @return
+	 */
 	public static Carriers createChessboardCarriers(Scenario sc) {
 		Id<Carrier> carrierId = Id.create("Carrier1", Carrier.class);
 		Carrier carrier = CarrierImpl.newInstance(carrierId);
@@ -336,14 +397,25 @@ public class ReceiverChessboardScenario {
 
 		/* Heavy vehicle. */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
-		CarrierVehicleType typeHeavy = typeBuilderHeavy.setCapacity(14000).setFixCost(2604).setCostPerDistanceUnit(7.34E-3).setCostPerTimeUnit(0.171).build();
+		CarrierVehicleType typeHeavy = typeBuilderHeavy
+				.setCapacity(14000)
+				.setFixCost(2604)
+				.setCostPerDistanceUnit(7.34E-3)
+				.setCostPerTimeUnit(0.171)
+				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
-		CarrierVehicle heavy = carrierHVehicleBuilder.setEarliestStart(Time.parseTime("06:00:00")).setLatestEnd(Time.parseTime("18:00:00")).setType(typeHeavy).setTypeId(typeHeavy.getId()).build();
+		CarrierVehicle heavy = carrierHVehicleBuilder
+				.setEarliestStart(Time.parseTime("06:00:00"))
+				.setLatestEnd(Time.parseTime("18:00:00"))
+				.setType(typeHeavy)
+				.setTypeId(typeHeavy.getId())
+				.build();
 
 		/* Light vehicle. */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderLight = CarrierVehicleType.Builder.newInstance(Id.create("light", VehicleType.class));
 		CarrierVehicleType typeLight = typeBuilderLight
-				.setCapacity(3000).setFixCost(1168)
+				.setCapacity(3000)
+				.setFixCost(1168)
 				.setCostPerDistanceUnit(4.22E-3)
 				.setCostPerTimeUnit(0.089)
 				.build();
@@ -382,7 +454,6 @@ public class ReceiverChessboardScenario {
 		Object[] linkIds = network.getLinks().keySet().toArray();
 		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
 		Object o = linkIds[sample];
-		//System.out.println("random link "+ o);
 		Id<Link> linkId = null;
 		if(o instanceof Id<?>){
 			linkId = (Id<Link>) o;
@@ -408,7 +479,10 @@ public class ReceiverChessboardScenario {
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();
-		ReceiverProduct rProd = builder.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel)).setProductType(productType).build();
+		ReceiverProduct rProd = builder
+				.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel))
+				.setProductType(productType)
+				.build();
 		return rProd;
 	}
 
@@ -426,12 +500,18 @@ public class ReceiverChessboardScenario {
 				.calculateOrderQuantity()
 				.setServiceTime(serviceTime)
 				.build();
-//		LOG.info("Created an order of type " + order.getOrderName() 
-//		+ " for receiver " + order.getReceiver().getId() + " with order quantity of " 
-//		+ order.getOrderQuantity() + " tonnes, to " + order.getReceiver().getLinkId().toString() 
-//		+ ", and service duaration of " + Time.writeTime(order.getServiceDuration()) + ".");
+
 		return order;
 	}
 
+	private static TimeWindow selectRandomTimeStart(int tw) {
+		int min = 06;
+		int max = 18;
+		Random randomTime = new Random();
+		int randomStart =  (min +
+				randomTime.nextInt(max - tw - min + 1));
+		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
+		return randomTimeWindow;
+	}
 
 }

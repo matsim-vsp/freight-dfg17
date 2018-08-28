@@ -104,11 +104,11 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 		
 		double totalCoalitionVolume = 0.0;
 		double totalCoalitionCost = 0.0;
-		int nrOfCarriers = 0;
+//		int nrOfCarriers = 0;
 		
 		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
 //			double carrierCoalitionVolume = 0.0;
-			nrOfCarriers += 1;
+//			nrOfCarriers += 1;
 			double fixedFeeVolume = 0.0;
 			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
 

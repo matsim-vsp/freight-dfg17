@@ -89,12 +89,12 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	 * Sets the receiver collaboration status
 	 * @return 
 	 */
-	public abstract Receiver setCollaborationStatus(boolean status);
+//	public abstract Receiver setCollaborationStatus(boolean status);
 	
 	/**
 	 * Gets the receiver collaboration status
 	 */
-	public abstract boolean getCollaborationStatus();
+//	public abstract boolean getCollaborationStatus();
 	
 	/**
 	 * Sets the receiver's initial cost (in order to calculate the coalition cost allocations)

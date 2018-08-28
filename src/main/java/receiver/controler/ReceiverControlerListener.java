@@ -34,11 +34,15 @@ import org.matsim.core.controler.events.ScoringEvent;
 import org.matsim.core.controler.listener.BeforeMobsimListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
+import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
+import org.matsim.core.replanning.selectors.KeepSelected;
+
 import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
+import receiver.replanning.CollaborationStatusMutator;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.scoring.ReceiverScoringFunctionFactory;
 import receiver.tracking.ReceiverTracker;
@@ -84,32 +88,41 @@ ReplanningListener, BeforeMobsimListener {
 		GenericStrategyManager<ReceiverPlan, Receiver> stratMan = stratManFac.createReceiverStrategyManager();
 
 		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverCollection = new ArrayList<>();
+		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverControlCollection = new ArrayList<>();
 
 		for(Receiver receiver : receivers.getReceivers().values()){
-
-			/*
-			 * Checks to see if a receiver is part of the grand coalition, if not, the receiver are not allowed to replan (for now).
-			 * If the receiver is willing to collaborate, the receiver will be allowed to replan.
-			 */
-
-			boolean status = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
-
-			if(status == true){
-
-				if (event.getIteration() % fsc.getReplanInterval() == 0) {
+			
+			if ((event.getIteration() - 1) % fsc.getReplanInterval() == 0) {
 					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
 				}
 
+			/*
+			 * Checks to see if a receiver is part of the grand coalition, if not, the receiver are not allowed to join 
+			 * a coalition at any time. If the receiver is willing to collaborate, the receiver will be allowed to leave
+			 * and join coalitions.
+			 */
+			boolean status = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+			if(status == true){	
 				receiverCollection.add(receiver);
-
-			}
+			} else receiverControlCollection.add(receiver);
 		}
+		
+		/* Replanning for grand coalition receivers.*/
+		GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
+		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+		strategy.addStrategyModule(new CollaborationStatusMutator());
+		collaborationStratMan.addStrategy(strategy, null, 0.2);
+		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);
 		
 		if (event.getIteration() % fsc.getReplanInterval() != 0) {
 			return;
 		} 
-
-		stratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());		
+		
+		/* Run replanning for non-collaborating receivers */
+		stratMan.run(receiverControlCollection, null, event.getIteration(), event.getReplanningContext());		
+		
+		/* Run replanning for grand coalition receivers.*/
+		collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());	
 	}
 
 

@@ -35,7 +35,7 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 //			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanSelector<ReceiverPlan, Receiver>(1.));
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan,Receiver>());
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.85);
+			stratMan.addStrategy(strategy, null, 0.80);
 
 		}
 		
@@ -44,10 +44,12 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		 */
 		
 		{
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("02:00:00")));
-			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.15);		
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+			timeStrategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("02:00:00")));
+			timeStrategy.addStrategyModule(new OrderChanger());
+			stratMan.addStrategy(timeStrategy, null, 0.20);	
+			/* TODO change hard coding of innovation iteration to be calculated based on end iteration. */
+			stratMan.addChangeRequest(1350, timeStrategy, null, 0.0);
 		}		
 		
 		return stratMan;

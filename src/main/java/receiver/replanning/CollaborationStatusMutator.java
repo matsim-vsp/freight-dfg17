@@ -29,7 +29,7 @@ public class CollaborationStatusMutator implements GenericPlanStrategyModule<Rec
 	@Override
 	public void handlePlan(ReceiverPlan receiverPlan) {
 		boolean newstatus;
-		boolean status = receiverPlan.getReceiver().getCollaborationStatus();
+		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("collaborationStatus");
 		
 		if (status == true){
 			 newstatus = false;
@@ -37,7 +37,7 @@ public class CollaborationStatusMutator implements GenericPlanStrategyModule<Rec
 			newstatus = true;
 		}
 		
-		receiverPlan.getReceiver().setCollaborationStatus(newstatus);
+		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", newstatus);
 
 	}
 

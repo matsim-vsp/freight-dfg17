@@ -196,21 +196,21 @@ public class ReceiverImpl implements Receiver {
 	 * Sets a receiver's collaboration status.
 	 */
 
-	@Override
-	public Receiver setCollaborationStatus(boolean status) {
-		this.status = status;
-		return this;
-		
-	}
+//	@Override
+//	public Receiver setCollaborationStatus(boolean status) {
+//		this.status = status;
+//		return this;
+//		
+//	}
 
 	/*
 	 * Returns a specific receiver's collaboration status. Default is false, meaning a receiver is not willing to collaborate.
 	 */
 
-	@Override
-	public boolean getCollaborationStatus() {
-		return this.status;
-	}
+//	@Override
+//	public boolean getCollaborationStatus() {
+//		return this.status;
+//	}
 
 
 	@Override

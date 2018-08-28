@@ -32,7 +32,7 @@ import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.usecases.ReceiverChessboardScenario;
+import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class TimeWindowMutatorTest {
 	final private static Logger LOG = Logger.getLogger(TimeWindowMutatorTest.class);

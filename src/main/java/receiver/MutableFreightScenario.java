@@ -96,5 +96,6 @@ public class MutableFreightScenario implements FreightScenario {
 	public Coalition getCoalition(){
 		return this.coalition;
 	}
+	
 
 }

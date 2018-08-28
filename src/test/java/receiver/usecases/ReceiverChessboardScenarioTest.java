@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import receiver.FreightScenario;
+import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class ReceiverChessboardScenarioTest {
 

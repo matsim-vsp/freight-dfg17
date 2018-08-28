@@ -28,7 +28,7 @@ import org.matsim.testcases.MatsimTestUtils;
 import receiver.FreightScenario;
 import receiver.Receiver;
 import receiver.product.Order;
-import receiver.usecases.ReceiverChessboardScenario;
+import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class ProportionalCostSharingTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();

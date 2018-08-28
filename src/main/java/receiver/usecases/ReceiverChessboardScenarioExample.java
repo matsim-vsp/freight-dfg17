@@ -97,8 +97,13 @@ public class ReceiverChessboardScenarioExample {
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
 		fs.setReplanInterval(50);
 		
-		createAndAddChessboardReceivers(fs, numberOfReceivers);
-		createReceiverOrders(fs, numberOfReceivers);
+		/* Create the grand coalition receiver members and allocate orders. */
+		createAndAddChessboardReceivers(fs, numberOfReceivers);		
+		
+		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
+		createAndAddControlGroupReceivers(fs, numberOfReceivers);
+
+		createReceiverOrders(fs);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 		generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork());
@@ -121,7 +126,7 @@ public class ReceiverChessboardScenarioExample {
 		}
 		
 		for (Receiver receiver : fs.getReceivers().getReceivers().values()){
-			if (receiver.getCollaborationStatus() == true){
+			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -136,7 +141,30 @@ public class ReceiverChessboardScenarioExample {
 		
 		return fs;
 	}
-	
+
+
+	/*
+	 * Creates and adds a control group of receivers for experiments. These receivers will be allowed to replan, 
+	 * but NOT be allowed to join the grand coalition. This group represents receivers that are unwilling to 
+	 * collaborate in any circumstances.
+	 */
+	public static void createAndAddControlGroupReceivers(MutableFreightScenario fs, int numberOfReceivers) {
+		Network network = fs.getScenario().getNetwork();
+		Receivers receivers = fs.getReceivers();
+		
+		for (int r = numberOfReceivers+1; r < (numberOfReceivers*2)+1 ; r++){
+			Id<Link> receiverLocation = selectRandomLink(network);
+			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
+					.setLinkId(receiverLocation);
+//					.setCollaborationStatus(false);
+			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
+			receiver.getAttributes().putAttribute("collaborationStatus", false);
+		
+			receivers.addReceiver(receiver);
+		}		
+		fs.setReceivers(receivers);		
+	}
+
 	/**
 	 * FIXME Need to complete this. 
 	 * @return
@@ -150,17 +178,12 @@ public class ReceiverChessboardScenarioExample {
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
 		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
-		
-//		/* Multi-threaded setup. */
-//		config.global().setNumberOfThreads(40);
-//		config.parallelEventHandling().setNumberOfThreads(12);
-//		config.qsim().setNumberOfThreads(12);
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
 	}
 	
-	private static void writeFreightScenario(FreightScenario fs) {
+	public static void writeFreightScenario(FreightScenario fs) {
 		/* Write the necessary bits to file. */
 		String outputFolder = fs.getScenario().getConfig().controler().getOutputDirectory();
 		outputFolder += outputFolder.endsWith("/") ? "" : "/";
@@ -177,7 +200,7 @@ public class ReceiverChessboardScenarioExample {
 	}
 
 	/**
-	 * Route the services that are allocated to the carrier.
+	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
 	 * 
 	 * @param carriers
 	 * @param network
@@ -219,8 +242,13 @@ public class ReceiverChessboardScenarioExample {
 		//		new CarrierPlanXmlWriterV2(carriers).write(directory + "/input/carrierPlanned.xml");
 	}
 
-
-	public static void createReceiverOrders(FreightScenario fs, int numberOfReceivers) {
+	/**
+	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
+	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
+	 * @param fs
+	 * @param receivers 
+	 */
+	public static void createReceiverOrders(FreightScenario fs) {
 		Carriers carriers = fs.getCarriers();
 		Receivers receivers = fs.getReceivers();
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
@@ -234,7 +262,7 @@ public class ReceiverChessboardScenarioExample {
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
 		
-		for (int r = 1; r < numberOfReceivers+1 ; r++){
+		for (int r = 1; r < fs.getReceivers().getReceivers().size()+1 ; r++){
 			int tw = 6;
 			String serdur = "01:00:00";
 			int numDel = 5;
@@ -250,7 +278,9 @@ public class ReceiverChessboardScenarioExample {
 				tw = 8;
 			} else if (r <= 50){
 				tw = 10;
-			} else tw = 12;
+			} else if (r<=60){
+				tw = 12;
+			}
 			
 //			/* Set the different service durations for experiments. */
 //			if (r <= 15){
@@ -319,6 +349,12 @@ public class ReceiverChessboardScenarioExample {
 
 	}
 
+	/**
+	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
+	 * their orders as well as decided to join or leave the coalition.
+	 * @param fs
+	 * @param numberOfReceivers
+	 */
 	public static void createAndAddChessboardReceivers(MutableFreightScenario fs, int numberOfReceivers) {
 		Network network = fs.getScenario().getNetwork();
 
@@ -329,10 +365,9 @@ public class ReceiverChessboardScenarioExample {
 		for (int r = 1; r < numberOfReceivers+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
-					.setLinkId(receiverLocation)
-					.setCollaborationStatus(true);
+					.setLinkId(receiverLocation);
 			receiver.getAttributes().putAttribute("grandCoalitionMember", true);
-			
+			receiver.getAttributes().putAttribute("collaborationStatus", true);			
 			receivers.addReceiver(receiver);
 		}
 		
@@ -340,7 +375,11 @@ public class ReceiverChessboardScenarioExample {
 	}
 
 
-
+	/**
+	 * Creates the carrier agents for the simulation.
+	 * @param sc
+	 * @return
+	 */
 	public static Carriers createChessboardCarriers(Scenario sc) {
 		Id<Carrier> carrierId = Id.create("Carrier1", Carrier.class);
 		Carrier carrier = CarrierImpl.newInstance(carrierId);
