@@ -21,7 +21,6 @@
  */
 package receiver.marginalParallel;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 
@@ -39,18 +38,12 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
-import org.matsim.core.utils.io.IOUtils;
-
 import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.collaboration.MutableCoalition;
-import receiver.io.ReceiversWriter;
-import receiver.product.Order;
-import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverChessboardScenarioExample;
 import receiver.usecases.ReceiverChessboardUtils;
-import receiver.usecases.ReceiverScoreStats;
 
 /**
  *
