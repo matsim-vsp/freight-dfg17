@@ -32,7 +32,7 @@ public class SupplyClearer implements IterationEndsListener{
 				for(LSPShipment shipment : lsp.getShipments()) {
 					shipment.getSchedule().clear();
 					shipment.getLog().clear();
-					lsp.getSelectedPlan().getAssigner().assignShipment(shipment);
+					lsp.getSelectedPlan().getAssigner().assignShipment(shipment); //Can also be left out, as the DefaultAssigner does nothing.
 				}
 			
 			}		

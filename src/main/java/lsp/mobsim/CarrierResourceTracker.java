@@ -39,6 +39,7 @@ import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.core.events.algorithms.Vehicle2DriverEventHandler;
 import lsp.controler.FreightControlerListener;
 import lsp.events.EventCreator;
+import lsp.events.FreightLinkEnterEvent;
 import lsp.mobsim.CarrierResourceAgent.CarrierDriverAgent;
 
 

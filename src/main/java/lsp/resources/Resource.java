@@ -20,6 +20,7 @@ public interface Resource {
 	
 	public Class<?> getClassOfResource();
 	// yyyyyy is it really necessary to use reflection in a code that we fully own?  kai, may'18
+	//One could also leave this method signature out tm, august'18
 	
 	public Id<Link> getEndLinkId();
 	
