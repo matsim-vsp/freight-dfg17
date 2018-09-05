@@ -23,9 +23,9 @@ public class LSPWithOffersReplanner implements LSPReplanner{
 	}
 	
 	public LSPWithOffersReplanner() {
-
+		
 	}
-	
+			
 	@Override
 	public void replan(ReplanningEvent event) {
 		if(strategyManager != null) {

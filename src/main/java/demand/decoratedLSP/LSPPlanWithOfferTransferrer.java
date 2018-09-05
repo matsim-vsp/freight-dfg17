@@ -53,7 +53,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	@Override
 	public void setAssigner(ShipmentAssigner assigner) {
-		
+		//Has to be empty, DefaultAssigner is already in place. 
 	}
 
 	@Override
