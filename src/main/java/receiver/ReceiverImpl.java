@@ -62,7 +62,7 @@ class ReceiverImpl implements Receiver {
 	private boolean status = false;
 	private double cost = 0.0;
 
-	private ReceiverImpl(final Id<Receiver> id){
+	ReceiverImpl(final Id<Receiver> id){
 		super();
 		this.id = id;
 		this.plans = new ArrayList<ReceiverPlan>();

@@ -60,47 +60,40 @@ public final class MutableFreightScenario implements FreightScenario {
 	
 	@Override
 	public Carriers getCarriers() {
-		return this.carriers;
+		return ReceiverUtils.getCarriers( sc );
 	}
 
 	public void setReceivers(Receivers receivers) {
-		this.receivers = receivers;
+		ReceiverUtils.setReceivers( receivers, sc );
 	}
 	
 	public void setReplanInterval(int interval){
-		this.replanInterval = interval;
+		ReceiverUtils.setReplanInterval( interval, sc );
 	}
 	
 	@Override
 	public Receivers getReceivers() {
-		if(this.receivers == null) {
-			log.error("No receivers were set. Returning new, empty receivers.");
-			return new Receivers();
-		}
-		
-		return this.receivers;
+		return ReceiverUtils.getReceivers( sc ) ;
 	}
 
 
 	@Override
 	public int getReplanInterval() {
-		return replanInterval;
+		return ReceiverUtils.getReplanInterval( sc ) ;
 	}
 
 
 	public void setCarriers(Carriers carriers) {
-		this.carriers = carriers;
-		
+		ReceiverUtils.setCarriers( carriers, sc );
 	}
 
 
 	public void setCoalition(MutableCoalition coalition) {
-		this.coalition = coalition;
-		
+		ReceiverUtils.setCoalition( coalition, sc );
 	}
 	
 	public Coalition getCoalition(){
-		return this.coalition;
+		return ReceiverUtils.getCoalition( sc ) ;
 	}
 	
 

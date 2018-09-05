@@ -23,12 +23,10 @@
  */
 package receiver.usecases;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Random;
-
+import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
+import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
+import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
+import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -57,25 +55,25 @@ import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.VehicleType;
-
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
-
 import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
-import receiver.ReceiverImpl;
 import receiver.ReceiverPlan;
+import receiver.ReceiverUtils;
 import receiver.Receivers;
-import receiver.collaboration.MutableCoalition;
 import receiver.ReceiversWriter;
+import receiver.SSReorderPolicy;
+import receiver.collaboration.MutableCoalition;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.SSReorderPolicy;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -154,7 +152,7 @@ public class ReceiverChessboardScenarioExample {
 		
 		for (int r = numberOfReceivers+1; r < (numberOfReceivers*2)+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
-			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
+			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
 			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
 			receiver.getAttributes().putAttribute("collaborationStatus", false);
@@ -245,7 +243,6 @@ public class ReceiverChessboardScenarioExample {
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
 	 * @param fs
-	 * @param receivers 
 	 */
 	public static void createReceiverOrders(FreightScenario fs) {
 		Carriers carriers = fs.getCarriers();
@@ -328,7 +325,7 @@ public class ReceiverChessboardScenarioExample {
 		
 		for (int r = 1; r < numberOfReceivers+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
-			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
+			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
 			receiver.getAttributes().putAttribute("grandCoalitionMember", true);
 			receiver.getAttributes().putAttribute("collaborationStatus", true);			
