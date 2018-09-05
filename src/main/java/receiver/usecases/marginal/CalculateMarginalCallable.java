@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.marginalParallel;
+package receiver.usecases.marginal;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,8 +31,6 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlReaderV2;
 import org.matsim.contrib.freight.carrier.Carriers;
-
-import com.google.common.io.Files;
 
 import receiver.Receiver;
 import receiver.usecases.ReceiverChessboardUtils;
@@ -51,15 +49,13 @@ public class CalculateMarginalCallable implements Callable<Double> {
 	final private String outputFolder;
 	final private String release;
 	final private long seed;
-	final private double grandCoaltionCost;
 	
-	public CalculateMarginalCallable(long seed, String sourceFolder, String outputFolder, String release, Id<Receiver> receiverId, double grandCoalitionCost) {
+	public CalculateMarginalCallable(long seed, String sourceFolder, String outputFolder, String release, Id<Receiver> receiverId) {
 		this.receiverId = receiverId;
 		this.sourceFolder = sourceFolder;
 		this.outputFolder = outputFolder;
 		this.release = release;
 		this.seed = seed;
-		this.grandCoaltionCost = grandCoalitionCost;
 	}
 
 	@Override
@@ -70,6 +66,7 @@ public class CalculateMarginalCallable implements Callable<Double> {
 		File folder = new File(foldername);
 		boolean createFolder = folder.mkdirs();
 		if(!createFolder) {
+			log.error("Check that the output folder does NOT exist. If so, delete and restart");
 			throw new RuntimeException("Could not create receiver pipe " + foldername);
 		}
 		new File(foldername + "input/").mkdirs();
@@ -102,7 +99,7 @@ public class CalculateMarginalCallable implements Callable<Double> {
 				"-Xmx512m",
 				"-cp",
 				"freight-dfg17-0.0.1-SNAPSHOT/freight-dfg17-0.0.1-SNAPSHOT.jar",
-				"receiver.marginalParallel.MarginalReceiverClass",
+				"receiver.usecases.marginal.MarginalReceiverClass",
 				String.valueOf(seed),
 				foldername,
 				receiverId.toString()
@@ -111,10 +108,12 @@ public class CalculateMarginalCallable implements Callable<Double> {
 		runBuilder.redirectErrorStream(true);
 		final Process equilProcess = runBuilder.start();
 		log.info("Process started for receiver '" + receiverId.toString() + "'...");
+		log.info(" in folder " + folder.getAbsolutePath());
 		BufferedReader br = new BufferedReader(new InputStreamReader(equilProcess.getInputStream()));
 		String line;
 		while((line = br.readLine()) != null) {
 			/* Do nothing. */
+//			log.info(line);
 		}
 		int equilExitCode = equilProcess.waitFor();
 		log.info("Process ended for receiver '" + receiverId.toString() + ". Exit status '" + equilExitCode + "'");
@@ -127,18 +126,11 @@ public class CalculateMarginalCallable implements Callable<Double> {
 		new CarrierPlanXmlReaderV2(outputCarriers).readFile(foldername + "output/output_carrierPlans.xml.gz");
 		
 		double coalitionCost = outputCarriers.getCarriers().get(Id.create("Carrier1", Carrier.class)).getSelectedPlan().getScore();
-		double marginal = 0.0;
-		
-		if(receiverId.equals(Id.create("0", Receiver.class))) {
-			marginal = coalitionCost;
-		} else {
-			marginal = grandCoaltionCost - coalitionCost;
-		}
 		
 		/* Clean up */
 		ReceiverChessboardUtils.delete(new File(foldername));
 		
-		return marginal;
+		return coalitionCost;
 	}
 
 }

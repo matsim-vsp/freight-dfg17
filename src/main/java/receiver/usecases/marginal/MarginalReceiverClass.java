@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.marginalParallel;
+package receiver.usecases.marginal;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,11 +38,11 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
+
 import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.collaboration.MutableCoalition;
-import receiver.usecases.ReceiverChessboardScenarioExample;
 import receiver.usecases.ReceiverChessboardUtils;
 
 /**
@@ -61,25 +61,24 @@ public class MarginalReceiverClass {
 		Id<Receiver> receiverId = Id.create(idString, Receiver.class);
 	
 		/* Use the code (components) from ReceiverChessboardScenario */
-		int numberOfReceivers = 60;
-		String inputNetwork = folder + "input/network.xml";
-		Scenario sc = ReceiverChessboardScenarioExample.setupChessboardScenario(inputNetwork, folder + "output/", seed, 1);
-		Carriers carriers = ReceiverChessboardScenarioExample.createChessboardCarriers(sc);
+		String inputNetwork = "input/network.xml";
+		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(inputNetwork, "./output/", seed, 1);
+		Carriers carriers = MarginalScenarioBuilder.createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
 		fs.setReplanInterval(5);
 		
-		ReceiverChessboardScenarioExample.createAndAddChessboardReceivers(fs, numberOfReceivers);
-		ReceiverChessboardScenarioExample.createAndAddControlGroupReceivers(fs, numberOfReceivers);
-		ReceiverChessboardScenarioExample.createReceiverOrders(fs);
+		MarginalScenarioBuilder.createAndAddChessboardReceivers(fs);
+		MarginalScenarioBuilder.createAndAddControlGroupReceivers(fs);
+		MarginalScenarioBuilder.createReceiverOrders(fs);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
 		if(receiverId != Id.create("0", Receiver.class)) {
 			fs.getReceivers().getReceivers().remove(receiverId);
 		}
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		ReceiverChessboardScenarioExample.generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork(), folder + "input/algorithm.xml");
-		ReceiverChessboardScenarioExample.writeFreightScenario(fs);
+		MarginalScenarioBuilder.generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork(),  "input/algorithm.xml");
+		MarginalScenarioBuilder.writeFreightScenario(fs);
 		
 		/* Link the carriers to the receivers. */
 		fs.getReceivers().linkReceiverOrdersToCarriers(fs.getCarriers());
