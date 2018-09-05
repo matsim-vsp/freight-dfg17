@@ -1,10 +1,8 @@
 /* *********************************************************************** *
  * project: org.matsim.*
- * ReorderPolicy.java
- *                                                                         *
  * *********************************************************************** *
  *                                                                         *
- * copyright       : (C) 2009 by the members listed in the COPYING,        *
+ * copyright       : (C) 2018 by the members listed in the COPYING,        *
  *                   LICENSE and WARRANTY file.                            *
  * email           : info at matsim dot org                                *
  *                                                                         *
@@ -21,23 +19,20 @@
 /**
  * 
  */
-package receiver.reorderPolicy;
+package receiver;
 
-import org.matsim.utils.objectattributes.attributable.Attributable;
+import org.matsim.core.scoring.ScoringFunction;
+
+import receiver.Receiver;
 
 /**
- * A general interface to use for different {@link Receiver} reordering policies.
+ * Scoring function factory interface for receiver agents;
  * 
- * @author jwjoubert
+ * @author wlbean
+ *
  */
-public interface ReorderPolicy extends Attributable {
-
-	public String getPolicyName();
+public interface ReceiverScoringFunctionFactory {
 	
-	/**
-	 * This method assumes that the stock on hand, and the reordering policy's
-	 * quantities are expressed in the same unit-of-measure. 
-	 */
-	public double calculateOrderQuantity(double onHand);
-
+	ScoringFunction createScoringFunction(Receiver receiver);
+	
 }

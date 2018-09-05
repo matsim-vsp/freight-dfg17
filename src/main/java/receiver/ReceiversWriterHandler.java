@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.io;
+package receiver;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.reorderPolicy.ReorderPolicy;
+import receiver.ReorderPolicy;
 
 /**
  *

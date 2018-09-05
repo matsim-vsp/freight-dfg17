@@ -20,9 +20,7 @@ package receiver;
 
 import org.matsim.core.controler.AbstractModule;
 
-import receiver.controler.ReceiverControlerListener;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.scoring.ReceiverScoringFunctionFactory;
 
 public class ReceiverModule extends AbstractModule {
 

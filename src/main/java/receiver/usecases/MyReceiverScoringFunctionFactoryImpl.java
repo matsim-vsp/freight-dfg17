@@ -23,7 +23,7 @@ import org.matsim.core.scoring.SumScoringFunction;
 import org.matsim.core.scoring.SumScoringFunction.MoneyScoring;
 
 import receiver.Receiver;
-import receiver.scoring.ReceiverScoringFunctionFactory;
+import receiver.ReceiverScoringFunctionFactory;
 
 public class MyReceiverScoringFunctionFactoryImpl implements ReceiverScoringFunctionFactory {
 	

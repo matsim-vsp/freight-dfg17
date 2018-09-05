@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.tracking;
+package receiver;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,10 +30,9 @@ import org.matsim.core.scoring.ScoringFunction;
 
 import receiver.FreightScenario;
 import receiver.Receiver;
-import receiver.collaboration.MarginalCostSharing;
 import receiver.collaboration.ProportionalCostSharing;
-import receiver.mobsim.ReceiverAgent;
-import receiver.scoring.ReceiverScoringFunctionFactory;
+import receiver.ReceiverAgent;
+import receiver.ReceiverScoringFunctionFactory;
 
 /**
  * This keeps track of all receiver agents during simulation.

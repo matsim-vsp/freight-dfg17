@@ -70,12 +70,12 @@ import receiver.ReceiverImpl;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
 import receiver.collaboration.MutableCoalition;
-import receiver.io.ReceiversWriter;
+import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.reorderPolicy.SSReorderPolicy;
+import receiver.SSReorderPolicy;
 
 /**
  * Various utilities for building receiver scenarios (for now).

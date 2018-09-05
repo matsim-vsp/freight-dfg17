@@ -32,12 +32,13 @@ import org.matsim.testcases.MatsimTestUtils;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
+import receiver.ReceiversReader;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.reorderPolicy.ReorderPolicy;
-import receiver.reorderPolicy.SSReorderPolicy;
+import receiver.ReorderPolicy;
+import receiver.SSReorderPolicy;
 
 public class ReceiversReaderTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();

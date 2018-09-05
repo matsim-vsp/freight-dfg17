@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.io;
+package receiver;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -30,15 +30,11 @@ import org.matsim.contrib.freight.carrier.TimeWindow;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.reorderPolicy.ReorderPolicy;
 
 import org.matsim.core.utils.misc.Time;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 import org.matsim.utils.objectattributes.attributable.AttributesXmlWriterDelegate;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
 import receiver.product.Order;
 
 /**

@@ -26,7 +26,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
-import receiver.reorderPolicy.ReorderPolicy;
+import receiver.ReorderPolicy;
 
 /**
  * A concrete assignment of a receiver product, order quantity, delivery 

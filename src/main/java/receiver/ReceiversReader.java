@@ -21,14 +21,12 @@
 /**
  * 
  */
-package receiver.io;
+package receiver;
 
 import java.util.Stack;
 
 import org.matsim.core.utils.io.MatsimXmlParser;
 import org.xml.sax.Attributes;
-
-import receiver.Receivers;
 
 /**
  * Reader for the freight receivers in MATSim XML format. This reader 

@@ -39,7 +39,7 @@ import receiver.product.ReceiverProduct;
  * @author wlbean, jwjoubert
  *
  */
-public class ReceiverImpl implements Receiver {
+class ReceiverImpl implements Receiver {
 	final private Logger log = Logger.getLogger(Receiver.class);
 	
 	private Attributes attributes = new Attributes();

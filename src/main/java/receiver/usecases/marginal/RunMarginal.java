@@ -34,7 +34,7 @@ import org.matsim.api.core.v01.Id;
 
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
-import receiver.io.ReceiversWriter;
+import receiver.ReceiversWriter;
 
 /**
  * Executes the receiver run by starting off with calculating the grand

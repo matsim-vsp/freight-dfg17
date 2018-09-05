@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.reorderPolicy;
+package receiver;
 
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
