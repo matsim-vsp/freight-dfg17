@@ -53,8 +53,11 @@ public abstract class OfferReplanningStrategyModule implements GenericPlanStrate
 			builder.addInfo(info);
 		}
 		LSPShipment lspShipment = builder.build();
-		plan.getLsp().assignShipmentToSolution(lspShipment, plan.getSolutionId());
-		plan.getShipment().setLSPShipment(lspShipment);
+		
+		if(plan.getLsp() != null) {
+			plan.getLsp().assignShipmentToSolution(lspShipment, plan.getSolutionId());
+			plan.getShipment().setLSPShipment(lspShipment);
+		}	
 	}
 
 	public void setLSPS(Collection<LSPDecorator> lsps) {
