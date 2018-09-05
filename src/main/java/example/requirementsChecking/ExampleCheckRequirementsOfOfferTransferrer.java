@@ -41,12 +41,6 @@ import lsp.shipment.Requirement;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
-import requirementsCheckerTests.BlueInfo;
-import requirementsCheckerTests.BlueRequirement;
-import requirementsCheckerTests.NonsenseOffer;
-import requirementsCheckerTests.RedInfo;
-import requirementsCheckerTests.RedRequirement;
-import requirementsCheckerTests.RequirementsTransferrer;
 
 public class ExampleCheckRequirementsOfOfferTransferrer {
 
@@ -95,12 +89,12 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		LogisticsSolutionDecorator redOfferSolution = redOfferSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		redOfferSolution.getInfos().add(new RedInfo());
+		redOfferSolution.getInfos().add(new example.requirementsChecking.RedInfo());
 		
 		//Add OfferFactory that gives some nonsense offer, as in this case only the work of the transferrer i.e. the solution from which the offer
 		//comes is relevant
 		OfferFactoryImpl redOfferFactory = new OfferFactoryImpl(redOfferSolution);
-		redOfferFactory.addOffer(new NonsenseOffer());
+		redOfferFactory.addOffer(new example.requirementsChecking.NonsenseOffer());
 		redOfferSolution.setOfferFactory(redOfferFactory);
 		
 
@@ -137,12 +131,12 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		LogisticsSolutionDecorator blueOfferSolution = blueOfferSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		blueOfferSolution.getInfos().add(new BlueInfo());
+		blueOfferSolution.getInfos().add(new example.requirementsChecking.BlueInfo());
 		
 		//Add OfferFactory that gives some nonsense offer, as in this case only the work of the transferrer i.e. the solution from which the offer
 		//comes is relevant
 		OfferFactoryImpl blueOfferFactory = new OfferFactoryImpl(blueOfferSolution);
-		blueOfferFactory.addOffer(new NonsenseOffer());
+		blueOfferFactory.addOffer(new example.requirementsChecking.NonsenseOffer());
 		blueOfferSolution.setOfferFactory(blueOfferFactory);
 		
 		//Create PlanDecorator (i.e. Plan that has an OfferTransferrer) and add solutions
@@ -151,7 +145,7 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		plan.addSolution(blueOfferSolution);
 		
 		//Create OfferTransferrer that only gives the offer of the suitable solution with the right color to the outside
-		OfferTransferrer transferrer = new RequirementsTransferrer();
+		OfferTransferrer transferrer = new example.requirementsChecking.RequirementsTransferrer();
 		plan.setOfferTransferrer(transferrer);
 		
 		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.getInstance();
@@ -182,10 +176,10 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
         	
         	boolean blue = rand.nextBoolean();
         	if (blue == true) {
-        		builder.addRequirement(new BlueRequirement());
+        		builder.addRequirement(new example.requirementsChecking.BlueRequirement());
         	}
         	else {
-        		builder.addRequirement(new RedRequirement());
+        		builder.addRequirement(new example.requirementsChecking.RedRequirement());
         	}
         	
         	DemandObject demandObject = builder.build();
@@ -211,10 +205,10 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		for(DemandObject demandObject : demandObjects) {
     		Offer offer = lsp.getOffer(demandObject, "nonsense", null);
     		for(Requirement requirement : demandObject.getRequirements()) {
-    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString() == "RedSolution")) {
+    			if((requirement instanceof example.requirementsChecking.RedRequirement) && (offer.getSolution().getId().toString() == "RedSolution")) {
     				System.out.println(demandObject.getId()  +" is red and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
-    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString() == "BlueSolution")){
+    			else if((requirement instanceof example.requirementsChecking.BlueRequirement) && (offer.getSolution().getId().toString() == "BlueSolution")){
     				System.out.println(demandObject.getId()  +" is blue and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
     			else {

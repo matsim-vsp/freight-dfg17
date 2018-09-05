@@ -1,27 +1,5 @@
 package example.requirementsChecking;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
-
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierCapabilities;
-import org.matsim.contrib.freight.carrier.CarrierImpl;
-import org.matsim.contrib.freight.carrier.CarrierVehicle;
-import org.matsim.contrib.freight.carrier.CarrierVehicleType;
-import org.matsim.contrib.freight.carrier.TimeWindow;
-import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
-import org.matsim.core.config.Config;
-import org.matsim.core.network.io.MatsimNetworkReader;
-import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.vehicles.Vehicle;
-import org.matsim.vehicles.VehicleType;
-
 import lsp.LSP;
 import lsp.LSPImpl;
 import lsp.LSPPlan;
@@ -38,11 +16,27 @@ import lsp.shipment.LSPShipmentImpl;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
-import requirementsCheckerTests.BlueInfo;
-import requirementsCheckerTests.BlueRequirement;
-import requirementsCheckerTests.RedInfo;
-import requirementsCheckerTests.RedRequirement;
-import requirementsCheckerTests.RequirementsAssigner;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.CarrierCapabilities;
+import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
+import org.matsim.contrib.freight.carrier.CarrierImpl;
+import org.matsim.contrib.freight.carrier.CarrierVehicle;
+import org.matsim.contrib.freight.carrier.CarrierVehicleType;
+import org.matsim.contrib.freight.carrier.TimeWindow;
+import org.matsim.core.config.Config;
+import org.matsim.core.network.io.MatsimNetworkReader;
+import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.vehicles.Vehicle;
+import org.matsim.vehicles.VehicleType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Random;
 
 public class ExampleCheckRequirementsOfAssigner {
 
@@ -91,7 +85,7 @@ public class ExampleCheckRequirementsOfAssigner {
 		LogisticsSolution redSolution = redSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		redSolution.getInfos().add(new RedInfo());
+		redSolution.getInfos().add(new example.requirementsChecking.RedInfo());
 		
 		
 		//Create blue LogisticsSolution which has the corresponding info
@@ -127,12 +121,12 @@ public class ExampleCheckRequirementsOfAssigner {
 		LogisticsSolution blueSolution = blueSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		blueSolution.getInfos().add(new BlueInfo());
+		blueSolution.getInfos().add(new example.requirementsChecking.BlueInfo());
 				
 		//Create the initial plan, add assigner that checks requirements of the shipments when assigning and add both solutions (red and blue) to the 
 		//plan.
 		LSPPlan plan = new LSPPlanImpl();
-		ShipmentAssigner assigner = new RequirementsAssigner();
+		ShipmentAssigner assigner = new example.requirementsChecking.RequirementsAssigner();
 		plan.setAssigner(assigner);
 		plan.addSolution(redSolution);
 		plan.addSolution(blueSolution);
@@ -185,10 +179,10 @@ public class ExampleCheckRequirementsOfAssigner {
         	builder.setServiceTime(capacityDemand * 60);
         	boolean blue = rand.nextBoolean();
         	if (blue == true) {
-        		builder.addRequirement(new BlueRequirement());
+        		builder.addRequirement(new example.requirementsChecking.BlueRequirement());
         	}
         	else {
-        		builder.addRequirement(new RedRequirement());
+        		builder.addRequirement(new example.requirementsChecking.RedRequirement());
         	}
         	
         	shipmentList.add(builder.build());
@@ -218,7 +212,7 @@ public class ExampleCheckRequirementsOfAssigner {
         for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
         	if(solution.getId().toString() == "RedSolution") {
         		for(LSPShipment shipment : solution.getShipments()) {
-        			if(!(shipment.getRequirements().iterator().next() instanceof RedRequirement)) {
+        			if(!(shipment.getRequirements().iterator().next() instanceof example.requirementsChecking.RedRequirement)) {
         				break;
         			}
         		}
@@ -226,7 +220,7 @@ public class ExampleCheckRequirementsOfAssigner {
         	}
         	if(solution.getId().toString() == "BlueSolution") {
         		for(LSPShipment shipment : solution.getShipments()) {
-        			if(!(shipment.getRequirements().iterator().next() instanceof BlueRequirement)) {
+        			if(!(shipment.getRequirements().iterator().next() instanceof example.requirementsChecking.BlueRequirement)) {
         				break;
         			}
         		}
