@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.controler;
+package receiver;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,18 +34,9 @@ import org.matsim.core.controler.events.ScoringEvent;
 import org.matsim.core.controler.listener.BeforeMobsimListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
-import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
-import org.matsim.core.replanning.selectors.KeepSelected;
 
-import receiver.FreightScenario;
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
-import receiver.replanning.CollaborationStatusMutator;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.scoring.ReceiverScoringFunctionFactory;
-import receiver.tracking.ReceiverTracker;
 
 /**
  * This controller ensures that each receiver receives a cost (score) per order at the end of each iteration and replans its orders based on the cost of the previous iteration and past iterations.
@@ -53,7 +44,7 @@ import receiver.tracking.ReceiverTracker;
  * @author wlbean
  *
  */
-public class ReceiverControlerListener implements ScoringListener,
+class ReceiverControlerListener implements ScoringListener,
 ReplanningListener, BeforeMobsimListener {
 
 	private Receivers receivers;

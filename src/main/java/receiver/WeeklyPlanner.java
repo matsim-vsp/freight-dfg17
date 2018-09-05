@@ -15,24 +15,17 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-
+  
 /**
  * 
  */
-package receiver.scoring;
-
-import org.matsim.core.scoring.ScoringFunction;
-
-import receiver.Receiver;
-
+package receiver;
+  
 /**
- * Scoring function factory interface for receiver agents;
+ * Class to see if we can get a weekly plan sorted.
  * 
- * @author wlbean
- *
+ * @author jwjoubert
  */
-public interface ReceiverScoringFunctionFactory {
-	
-	ScoringFunction createScoringFunction(Receiver receiver);
-	
+public class WeeklyPlanner {
+
 }

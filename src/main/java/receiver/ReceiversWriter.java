@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.io;
+package receiver;
 
 import java.io.IOException;
 
@@ -32,9 +32,6 @@ import org.matsim.core.utils.io.MatsimXmlWriter;
 import org.matsim.core.utils.io.UncheckedIOException;
 import org.matsim.core.utils.misc.Counter;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;

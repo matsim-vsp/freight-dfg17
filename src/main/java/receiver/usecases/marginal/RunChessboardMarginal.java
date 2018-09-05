@@ -57,7 +57,7 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
-import receiver.io.ReceiversWriter;
+import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverScoreStats;

@@ -56,12 +56,10 @@ import receiver.Receiver;
 import receiver.ReceiverModule;
 import receiver.Receivers;
 import receiver.collaboration.Coalition;
-import receiver.io.ReceiversReader;
-import receiver.replanning.NumDelReceiverOrderStrategyManagerImpl;
+import receiver.ReceiversReader;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.replanning.ServiceTimeReceiverOrderStrategyManagerImpl;
 import receiver.replanning.TimeWindowReceiverOrderStrategyManagerImpl;
-import receiver.scoring.ReceiverScoringFunctionFactory;
+import receiver.ReceiverScoringFunctionFactory;
 
 /**
  *

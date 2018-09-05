@@ -32,7 +32,7 @@ import receiver.collaboration.MutableCoalition;
  *
  * @author jwjoubert, wlbean
  */
-public class MutableFreightScenario implements FreightScenario {
+public final class MutableFreightScenario implements FreightScenario {
 	final private Logger log = Logger.getLogger(MutableFreightScenario.class);
 	private Scenario sc;
 	private Carriers carriers;

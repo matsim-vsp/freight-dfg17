@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.matsim.testcases.MatsimTestUtils;
 
 import receiver.FreightScenario;
+import receiver.ReceiversWriter;
 import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class ReceiversWriterTest {
