@@ -99,9 +99,6 @@ public class ReceiverChessboardScenario {
 		
 		/* Create the grand coalition receiver members and allocate orders. */
 		createAndAddChessboardReceivers(fs, numberOfReceivers);		
-		
-		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
-//		createAndAddControlGroupReceivers(fs, numberOfReceivers);
 
 		createReceiverOrders(fs);
 
@@ -143,27 +140,6 @@ public class ReceiverChessboardScenario {
 	}
 
 
-	/*
-	 * Creates and adds a control group of receivers for experiments. These receivers will be allowed to replan, 
-	 * but NOT be allowed to join the grand coalition. This group represents receivers that are unwilling to 
-	 * collaborate in any circumstances.
-	 */
-	public static void createAndAddControlGroupReceivers(MutableFreightScenario fs, int numberOfReceivers) {
-		Network network = fs.getScenario().getNetwork();
-		Receivers receivers = fs.getReceivers();
-		
-		for (int r = numberOfReceivers+1; r < (numberOfReceivers*2)+1 ; r++){
-			Id<Link> receiverLocation = selectRandomLink(network);
-			Receiver receiver = ReceiverImpl.newInstance(Id.create(Integer.toString(r), Receiver.class))
-					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
-			receiver.getAttributes().putAttribute("collaborationStatus", false);
-		
-			receivers.addReceiver(receiver);
-		}		
-		fs.setReceivers(receivers);		
-	}
-
 	/**
 	 * FIXME Need to complete this. 
 	 * @return
@@ -176,7 +152,7 @@ public class ReceiverChessboardScenario {
 		config.controler().setWriteSnapshotsInterval(50);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/run_%03d/concept/tw/", run));
+		config.controler().setOutputDirectory(String.format("./output/base/tw/run_%03d/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -263,7 +239,7 @@ public class ReceiverChessboardScenario {
 		
 		for (int r = 1; r < fs.getReceivers().getReceivers().size()+1 ; r++){
 			int tw = 6;
-			String serdur = "01:00:00";
+			String serdur = "02:00:00";
 			int numDel = 5;
 			
 			/* Set the different time window durations for experiments. */

@@ -3,10 +3,13 @@
  */
 package receiver.replanning;
 
+import javax.inject.Inject;
+
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.BestPlanSelector;
-import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
+import org.matsim.core.replanning.selectors.ExpBetaPlanSelector;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.utils.misc.Time;
 
@@ -22,6 +25,7 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  *
  */
 public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+	@Inject Scenario sc;
 	
 	public TimeWindowReceiverOrderStrategyManagerImpl(){		
 	}
@@ -29,13 +33,13 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 	@Override
 	public GenericStrategyManager<ReceiverPlan, Receiver> createReceiverStrategyManager() {
 		final GenericStrategyManager<ReceiverPlan, Receiver> stratMan = new GenericStrategyManager<>();
-		stratMan.setMaxPlansPerAgent(4);
+		stratMan.setMaxPlansPerAgent(5);
 		
 		{
-//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanSelector<ReceiverPlan, Receiver>(1.));
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan,Receiver>());
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanSelector<ReceiverPlan, Receiver>(1.0));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.80);
+			stratMan.addStrategy(strategy, null, 0.5);
+			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
 		}
 		
@@ -47,10 +51,16 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			timeStrategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("02:00:00")));
 			timeStrategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(timeStrategy, null, 0.20);	
-			/* TODO change hard coding of innovation iteration to be calculated based on end iteration. */
-			stratMan.addChangeRequest(1350, timeStrategy, null, 0.0);
+			stratMan.addStrategy(timeStrategy, null, 0.3);	
+			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), timeStrategy, null, 0.0);
 		}		
+		
+		{
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan,Receiver>());
+			strategy.addStrategyModule(new OrderChanger());
+			stratMan.addStrategy(strategy, null, 0.2);
+
+		}
 		
 		return stratMan;
 	}

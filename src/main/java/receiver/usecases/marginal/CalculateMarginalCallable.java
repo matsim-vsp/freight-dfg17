@@ -82,9 +82,11 @@ public class CalculateMarginalCallable implements Callable<Double> {
 				new File(foldername + "release.zip"));
 		
 		/* Unzip the release. */
+		File zipFile = new File(foldername + "release.zip");
+		log.info("Trying to unzip '" + foldername + "release.zip'. Exists: " + zipFile.exists());
 		ProcessBuilder zipBuilder = new ProcessBuilder(
 				"unzip", 
-				String.format("%s/release.zip", foldername), 
+				String.format("%srelease.zip", foldername), 
 				"-d", 
 				String.format("%s", foldername));
 		final Process zipProcess = zipBuilder.start();

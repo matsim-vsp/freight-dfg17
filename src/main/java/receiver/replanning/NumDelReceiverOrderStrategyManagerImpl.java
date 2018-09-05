@@ -3,8 +3,12 @@
  */
 package receiver.replanning;
 
+import javax.inject.Inject;
+
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
+import org.matsim.core.replanning.selectors.BestPlanSelector;
 import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import receiver.Receiver;
@@ -19,6 +23,7 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  *
  */
 public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+	@Inject Scenario sc;
 	
 	public NumDelReceiverOrderStrategyManagerImpl(){		
 	}
@@ -26,12 +31,13 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 	@Override
 	public GenericStrategyManager<ReceiverPlan, Receiver> createReceiverStrategyManager() {
 		final GenericStrategyManager<ReceiverPlan, Receiver> stratMan = new GenericStrategyManager<>();
-		stratMan.setMaxPlansPerAgent(4);
+		stratMan.setMaxPlansPerAgent(5);
 		
 		{
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.));
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.0));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 1.0);
+			stratMan.addStrategy(strategy, null, 0.5);
+			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
 		}
 		
@@ -43,7 +49,8 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(true));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.25);		
+			stratMan.addStrategy(strategy, null, 0.15);		
+			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 		}
 		
 		/*
@@ -54,9 +61,15 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(false));
 			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.25);		
+			stratMan.addStrategy(strategy, null, 0.15);	
+			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 		}
 		
+		{
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan,Receiver>());
+			strategy.addStrategyModule(new OrderChanger());
+			stratMan.addStrategy(strategy, null, 0.2);
+		}		
 		
 		return stratMan;
 	}

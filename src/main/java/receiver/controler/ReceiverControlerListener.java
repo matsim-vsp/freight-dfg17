@@ -109,10 +109,10 @@ ReplanningListener, BeforeMobsimListener {
 		
 		/* Replanning for grand coalition receivers.*/
 		GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
-		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-		strategy.addStrategyModule(new CollaborationStatusMutator());
-		collaborationStratMan.addStrategy(strategy, null, 0.2);
-		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);
+//		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//		strategy.addStrategyModule(new CollaborationStatusMutator());
+//		collaborationStratMan.addStrategy(strategy, null, 0.2);
+//		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
 		
 		if (event.getIteration() % fsc.getReplanInterval() != 0) {
 			return;
@@ -124,6 +124,7 @@ ReplanningListener, BeforeMobsimListener {
 		/* Run replanning for grand coalition receivers.*/
 		collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());	
 	}
+
 
 
 	/*
