@@ -12,7 +12,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
-import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.product.Order;
@@ -53,7 +53,7 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 	 * be changed when more than one carrier is involved.*/
 	
 	@Override
-	public FreightScenario allocateCoalitionCosts(FreightScenario scenario) {		
+	public MutableFreightScenario allocateCoalitionCosts( MutableFreightScenario scenario) {
 		
 		log.info("Performing proportional cost allocation based on volume.");
 

@@ -55,7 +55,6 @@ import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.VehicleType;
-import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -88,7 +87,7 @@ public class MarginalScenarioBuilder {
 	/**
 	 * Build the entire chessboard example.
 	 */
-	public static MutableFreightScenario createChessboardScenario(String outputDirectory, long seed, int run, boolean write) {
+	public static MutableFreightScenario createChessboardScenario( String outputDirectory, long seed, int run, boolean write) {
 		Scenario sc = setupChessboardScenario("./input/usecases/chessboard/network/grid9x9.xml", outputDirectory, seed, run);
 		Carriers carriers = createChessboardCarriers(sc);
 		
@@ -164,7 +163,7 @@ public class MarginalScenarioBuilder {
 	 * but NOT be allowed to join the grand coalition. This group represents receivers that are unwilling to 
 	 * collaborate in any circumstances.
 	 */
-	public static void createAndAddControlGroupReceivers(MutableFreightScenario fs) {
+	public static void createAndAddControlGroupReceivers( MutableFreightScenario fs) {
 		Network network = fs.getScenario().getNetwork();
 		Receivers receivers = fs.getReceivers();
 		
@@ -181,7 +180,7 @@ public class MarginalScenarioBuilder {
 	}
 
 
-	public static void writeFreightScenario(FreightScenario fs) {
+	public static void writeFreightScenario( MutableFreightScenario fs) {
 		/* Write the necessary bits to file. */
 		String outputFolder = fs.getScenario().getConfig().controler().getOutputDirectory();
 		outputFolder += outputFolder.endsWith("/") ? "" : "/";
@@ -245,7 +244,7 @@ public class MarginalScenarioBuilder {
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
 	 * @param fs
 	 */
-	public static void createReceiverOrders(FreightScenario fs) {
+	public static void createReceiverOrders( MutableFreightScenario fs) {
 		Carriers carriers = fs.getCarriers();
 		Receivers receivers = fs.getReceivers();
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
@@ -316,7 +315,7 @@ public class MarginalScenarioBuilder {
 	 * their orders as well as decided to join or leave the coalition.
 	 * @param fs
 	 */
-	public static void createAndAddChessboardReceivers(MutableFreightScenario fs) {
+	public static void createAndAddChessboardReceivers( MutableFreightScenario fs) {
 		Network network = fs.getScenario().getNetwork();
 
 		Receivers receivers = new Receivers();

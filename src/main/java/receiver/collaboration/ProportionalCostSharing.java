@@ -21,21 +21,20 @@
  */
 package receiver.collaboration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.utils.objectattributes.attributable.Attributes;
-
-import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A proportional cost allocation between receivers and carriers.
@@ -72,7 +71,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 	}
 
 	@Override
-	public FreightScenario allocateCoalitionCosts(FreightScenario scenario) {
+	public MutableFreightScenario allocateCoalitionCosts( MutableFreightScenario scenario) {
 		
 		log.info("Performing proportional cost allocation based on volume.");
 		

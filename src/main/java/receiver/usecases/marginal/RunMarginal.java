@@ -67,7 +67,7 @@ public class RunMarginal {
 	 * 
 	 * @param args
 	 */
-	public static MutableFreightScenario run(String[] args) {
+	public static MutableFreightScenario run( String[] args) {
 		String inputPath = args[0];
 		inputPath += inputPath.endsWith("/") ? "" : "/";
 		String outputPath = args[1];

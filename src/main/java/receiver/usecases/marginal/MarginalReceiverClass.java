@@ -39,7 +39,6 @@ import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 
-import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.collaboration.MutableCoalition;
@@ -123,7 +122,7 @@ public class MarginalReceiverClass {
 	}
 	
 	
-	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs, int run) {
+	private static void prepareFreightOutputDataAndStats( MatsimServices controler, final MutableFreightScenario fs, int run) {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */

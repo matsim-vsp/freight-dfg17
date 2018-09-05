@@ -53,7 +53,6 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
-import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiversWriter;
@@ -136,7 +135,7 @@ public class RunReceiver {
 	}
 
 
-	private static MutableFreightScenario receiverAndCarrierReplan(MatsimServices controler, MutableFreightScenario mfs, String outputFolder) {
+	private static MutableFreightScenario receiverAndCarrierReplan( MatsimServices controler, MutableFreightScenario mfs, String outputFolder) {
 		
 
 		MutableFreightScenario fs = mfs;
@@ -359,7 +358,7 @@ public class RunReceiver {
 //	}
 
 
-	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs, int run) {
+	private static void prepareFreightOutputDataAndStats( MatsimServices controler, final MutableFreightScenario fs, int run) {
 
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.

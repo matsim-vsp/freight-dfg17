@@ -32,15 +32,15 @@ import receiver.collaboration.MutableCoalition;
  *
  * @author jwjoubert, wlbean
  */
-public final class MutableFreightScenario implements FreightScenario {
-	final private Logger log = Logger.getLogger(MutableFreightScenario.class);
+public final class MutableFreightScenario {
+	final private Logger log = Logger.getLogger( MutableFreightScenario.class);
 	private Scenario sc;
 	private Carriers carriers;
 	private Receivers receivers;
 	private int replanInterval;
 	private MutableCoalition coalition;
 	
-	public MutableFreightScenario(Scenario sc, Carriers carriers) {
+	public MutableFreightScenario( Scenario sc, Carriers carriers) {
 		this.sc = sc;
 		this.carriers = carriers;
 		
@@ -52,13 +52,11 @@ public final class MutableFreightScenario implements FreightScenario {
 	}
 
 	
-	@Override
 	public Scenario getScenario() {
 		return this.sc;
 	}
 
 	
-	@Override
 	public Carriers getCarriers() {
 		return ReceiverUtils.getCarriers( sc );
 	}
@@ -71,13 +69,11 @@ public final class MutableFreightScenario implements FreightScenario {
 		ReceiverUtils.setReplanInterval( interval, sc );
 	}
 	
-	@Override
 	public Receivers getReceivers() {
 		return ReceiverUtils.getReceivers( sc ) ;
 	}
 
 
-	@Override
 	public int getReplanInterval() {
 		return ReceiverUtils.getReplanInterval( sc ) ;
 	}

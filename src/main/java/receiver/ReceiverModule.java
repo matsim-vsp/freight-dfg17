@@ -27,10 +27,10 @@ public class ReceiverModule extends AbstractModule {
 	private Receivers receivers;
 	ReceiverScoringFunctionFactory sFuncFac;
 	private ReceiverOrderStrategyManagerFactory stratManFac;
-	private FreightScenario fsc;
+	private MutableFreightScenario fsc;
 	
 	
-	public ReceiverModule(Receivers receivers, ReceiverScoringFunctionFactory sFuncFac, ReceiverOrderStrategyManagerFactory stratManFac, FreightScenario fsc){
+	public ReceiverModule(Receivers receivers, ReceiverScoringFunctionFactory sFuncFac, ReceiverOrderStrategyManagerFactory stratManFac, MutableFreightScenario fsc){
 		this.receivers = receivers;
 		this.sFuncFac = sFuncFac;
 		this.stratManFac = stratManFac;
@@ -54,7 +54,7 @@ public class ReceiverModule extends AbstractModule {
 		}
 		
 		if (fsc != null){
-		bind(FreightScenario.class).toInstance(fsc);
+		bind( MutableFreightScenario.class).toInstance(fsc);
 		}
 		
 		/*

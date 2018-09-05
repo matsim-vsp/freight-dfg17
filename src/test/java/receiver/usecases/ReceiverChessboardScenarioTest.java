@@ -21,7 +21,7 @@ package receiver.usecases;
 import org.junit.Assert;
 import org.junit.Test;
 
-import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class ReceiverChessboardScenarioTest {
@@ -29,7 +29,7 @@ public class ReceiverChessboardScenarioTest {
 	@Test
 	public void testCreateChessboardScenario() {
 		
-		FreightScenario fs = null;
+		MutableFreightScenario fs = null;
 		try {
 			fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
 		} catch (Exception e) {

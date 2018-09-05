@@ -28,11 +28,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
 
-import receiver.FreightScenario;
-import receiver.Receiver;
 import receiver.collaboration.ProportionalCostSharing;
-import receiver.ReceiverAgent;
-import receiver.ReceiverScoringFunctionFactory;
 
 /**
  * This keeps track of all receiver agents during simulation.
@@ -41,11 +37,11 @@ import receiver.ReceiverScoringFunctionFactory;
  *
  */
 public class ReceiverTracker implements EventHandler {
-	private final FreightScenario fsc;
+	private final MutableFreightScenario fsc;
 	//private final Receivers receivers;
 	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
 
-	public ReceiverTracker(FreightScenario fsc, ReceiverScoringFunctionFactory scorFuncFac){
+	public ReceiverTracker( MutableFreightScenario fsc, ReceiverScoringFunctionFactory scorFuncFac){
 		this.fsc = fsc;
 		createReceiverAgents(scorFuncFac);
 	}

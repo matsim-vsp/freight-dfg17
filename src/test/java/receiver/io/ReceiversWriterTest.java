@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.matsim.testcases.MatsimTestUtils;
 
-import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.ReceiversWriter;
 import receiver.usecases.base.ReceiverChessboardScenario;
 
@@ -35,7 +35,7 @@ public class ReceiversWriterTest {
 	
 	@Test
 	public void testV1() {
-		FreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		MutableFreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
 		
 		/* Now the receiver is 'complete', and we can write it to file. */
 		try {

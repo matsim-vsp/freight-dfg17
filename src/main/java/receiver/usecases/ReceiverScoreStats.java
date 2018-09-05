@@ -18,10 +18,9 @@ import org.matsim.core.utils.charts.XYLineChart;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.io.UncheckedIOException;
 
-import receiver.FreightScenario;
+import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.Receivers;
 
 /**
  * Generates score stats for receivers. This is adapted from "org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats" by mrieser.
@@ -42,7 +41,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		private double[][] history = null;
 		private int minIteration = 0;
 		
-		private FreightScenario fsc;
+		private MutableFreightScenario fsc;
 
 		private final static Logger log = Logger.getLogger(ReceiverScoreStats.class);
 
@@ -53,7 +52,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		 * @param createPNG true if in every iteration, the scorestats should be visualized in a graph and written to disk.
 		 * @throws UncheckedIOException
 		 */
-		public ReceiverScoreStats(FreightScenario fsc, final String filename, final boolean createPNG) throws UncheckedIOException {
+		public ReceiverScoreStats( MutableFreightScenario fsc, final String filename, final boolean createPNG) throws UncheckedIOException {
 			this.fileName = filename;
 			this.createPNG = createPNG;
 			this.fsc = fsc;

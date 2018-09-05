@@ -51,7 +51,7 @@ ReplanningListener, BeforeMobsimListener {
 	private ReceiverOrderStrategyManagerFactory stratManFac;
 	private ReceiverScoringFunctionFactory scorFuncFac;
 	private ReceiverTracker tracker;
-	private FreightScenario fsc;
+	private MutableFreightScenario fsc;
 	@Inject EventsManager eMan;
 
 	/**
@@ -61,7 +61,7 @@ ReplanningListener, BeforeMobsimListener {
 	 */
 
 	@Inject
-	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac, FreightScenario fsc){
+	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac, MutableFreightScenario fsc){
 		this.receivers = receivers;
 		this.stratManFac = stratManFac;
 		this.scorFuncFac = scorFuncFac;

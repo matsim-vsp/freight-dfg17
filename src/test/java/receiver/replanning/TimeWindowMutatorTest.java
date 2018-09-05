@@ -28,7 +28,6 @@ import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.testcases.MatsimTestUtils;
 
-import receiver.FreightScenario;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -108,7 +107,7 @@ public class TimeWindowMutatorTest {
 	
 	@Test
 	public void testHandlePlan() {
-		FreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		MutableFreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
 		ReceiverPlan plan = fs.getReceivers().getReceivers().get(Id.create("1", Receiver.class)).getSelectedPlan();
 		TimeWindowMutator twm = new TimeWindowMutator(Time.parseTime("01:00:00"));
 		twm.handlePlan(plan);
