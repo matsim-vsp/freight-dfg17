@@ -42,7 +42,7 @@ import receiver.product.Order;
  * 
  * @author jwjoubert
  */
-public class ReceiversWriterHandlerImpl_v1 implements ReceiversWriterHandler {
+ class ReceiversWriterHandlerImpl_v1 implements ReceiversWriterHandler {
 	private final AttributesXmlWriterDelegate attributesWriter = new AttributesXmlWriterDelegate();
 
 	@Override

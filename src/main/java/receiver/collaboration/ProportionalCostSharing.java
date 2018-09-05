@@ -28,6 +28,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
+import receiver.ReceiverUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 
@@ -78,8 +79,8 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 		/* Get all the the cross-referenced receiver-carriers. */
 		log.info("   Cross-referencing all carrier-receiver relationships...");
 		Map<Id<Carrier>, List<Id<Receiver>>> carrierCustomers = new HashMap<>();
-				
-		for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {
+		
+		for(Receiver receiver : ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().values()) {
 		
 			ReceiverPlan plan = receiver.getSelectedPlan();
 			if (plan == null) {
@@ -109,13 +110,13 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 //			double carrierCoalitionVolume = 0.0;
 //			nrOfCarriers += 1;
 			double fixedFeeVolume = 0.0;
-			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
+			Carrier carrier = ReceiverUtils.getCarriers( scenario.getScenario() ).getCarriers().get(carriedId);
 
 			/* Calculate this receiver's total volume with the carrier. */
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
-				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
-
-				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
+				Receiver thisReceiver = ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().get(receiverId);
+				
+				if( ReceiverUtils.getCoalition( scenario.getScenario() ).getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 					totalCoalitionVolume += getReceiverOrderTotal(ro);
 				} else {
@@ -129,9 +130,9 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 
 			/* Now calculate each receiver's proportion of the total volume. */ 
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
-				Receiver thisReceiver = scenario.getReceivers().getReceivers().get(receiverId);
-
-				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) == true){
+				Receiver thisReceiver = ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().get(receiverId);
+				
+				if( ReceiverUtils.getCoalition( scenario.getScenario() ).getReceiverCoalitionMembers().contains(thisReceiver) == true){
 
 					double thisVolume = 0.0;
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
@@ -152,7 +153,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 			totalCoalitionCost = totalCoalitionCost + carrier.getSelectedPlan().getScore() - ((fixedFeeVolume*fee*-1)/1000);
 		}
 		/* Allocate the total coalition cost. */
-		scenario.getCoalition().setCoalitionCost(totalCoalitionCost);
+		ReceiverUtils.getCoalition( scenario.getScenario() ).setCoalitionCost(totalCoalitionCost);
 
 		/* Scoring each carrier */
 //		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
@@ -171,13 +172,13 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 //		}
 
 			/* Score the individual receiver plans. */
-			log.info("  Scoring the individual receivers...");		
-
-			for(Receiver thisReceiver : scenario.getReceivers().getReceivers().values()) {
+			log.info("  Scoring the individual receivers...");
+		
+		for(Receiver thisReceiver : ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().values()) {
 				ReceiverPlan plan = thisReceiver.getSelectedPlan();
 
 				/* Score non-collaborating receivers and calculate the total cost allocated to them. */
-				if(scenario.getCoalition().getReceiverCoalitionMembers().contains(thisReceiver) == false){					
+			if( ReceiverUtils.getCoalition( scenario.getScenario() ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
 					double total = 0.0;				
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
 						double thisVolume = 0.0;
@@ -192,8 +193,8 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 
 					/* Score the collaborating receiver plans. */
 					double total = 0.0;								
-					for(ReceiverOrder ro : plan.getReceiverOrders()) {											
-						double cost = scenario.getCoalition().getCoalitionCost() * proportionalMap.get(ro.getCarrierId()).get(thisReceiver.getId());
+					for(ReceiverOrder ro : plan.getReceiverOrders()) {
+						double cost = ReceiverUtils.getCoalition( scenario.getScenario() ).getCoalitionCost() * proportionalMap.get(ro.getCarrierId()).get(thisReceiver.getId());
 						ro.setScore(cost);
 						total += cost;
 					} 

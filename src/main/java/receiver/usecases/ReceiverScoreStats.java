@@ -21,6 +21,7 @@ import org.matsim.core.utils.io.UncheckedIOException;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
+import receiver.ReceiverUtils;
 
 /**
  * Generates score stats for receivers. This is adapted from "org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats" by mrieser.
@@ -94,8 +95,8 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 			int nofScoreBest = 0;
 			int nofAvgScores = 0;
 			int nofExecutedScores = 0;
-
-			for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
+			
+			for (Receiver receiver : ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
 				ReceiverPlan worstPlan = null;
 				ReceiverPlan bestPlan = null;
 				double worstScore = Double.POSITIVE_INFINITY;

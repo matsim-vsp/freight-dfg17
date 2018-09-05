@@ -54,6 +54,7 @@ import org.matsim.core.router.util.TravelDisutility;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverModule;
+import receiver.ReceiverUtils;
 import receiver.Receivers;
 import receiver.collaboration.Coalition;
 import receiver.ReceiversReader;
@@ -79,9 +80,9 @@ public class ReceiverChessboardUtils {
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be
 		 * able to configure this in a more elegant way. */
-		Coalition coalition = fs.getCoalition();
+		Coalition coalition = ReceiverUtils.getCoalition( fs.getScenario() );
 		if(coalition != null) {
-			for (Carrier carrier : fs.getCarriers().getCarriers().values()){
+			for (Carrier carrier : ReceiverUtils.getCarriers( fs.getScenario() ).getCarriers().values()){
 				if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
 					coalition.addCarrierCoalitionMember(carrier);
 				}
@@ -98,7 +99,7 @@ public class ReceiverChessboardUtils {
 		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
 		controler.addOverridingModule(carrierControler);
 		
-		fs.setCarriers(carriers);
+		ReceiverUtils.setCarriers( carriers, fs.getScenario() );
 	}
 	
 	
@@ -109,20 +110,20 @@ public class ReceiverChessboardUtils {
 		outputfolder += outputfolder.endsWith("/") ? "" : "/";
 		Receivers finalReceivers = new Receivers();
 		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
-		finalReceivers = fsc.getReceivers();
+		finalReceivers = ReceiverUtils.getReceivers( fsc.getScenario() );
 
 		/* 
 		 * Adds receivers to freight scenario.
-		 */		
-		finalReceivers.linkReceiverOrdersToCarriers(fsc.getCarriers());
-		fsc.setReceivers(finalReceivers);
+		 */
+		finalReceivers.linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( fsc.getScenario() ) );
+		ReceiverUtils.setReceivers( finalReceivers, fsc.getScenario() );
 		
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be
 		 * able to configure this in a more elegant way. */
-		Coalition coalition = fsc.getCoalition();
+		Coalition coalition = ReceiverUtils.getCoalition( fsc.getScenario() );
 //		if(coalition != null) {
-		for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
 			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
 				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
@@ -133,7 +134,7 @@ public class ReceiverChessboardUtils {
 		}
 			LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 			LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
-			LOG.info("Total number of receiver agents: " + Integer.toString(fsc.getReceivers().getReceivers().size()));
+		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().size()));
 //		}
 
 

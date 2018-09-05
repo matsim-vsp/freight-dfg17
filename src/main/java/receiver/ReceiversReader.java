@@ -35,7 +35,7 @@ import org.xml.sax.Attributes;
  * 
  * @author jwjoubert
  */
-public class ReceiversReader extends MatsimXmlParser{
+public final class ReceiversReader extends MatsimXmlParser{
 	private final static String RECEIVERS_V1 = "freightReceivers_v1.dtd";
 	private MatsimXmlParser delegate = null;
 	private final Receivers receivers;

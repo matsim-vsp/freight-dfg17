@@ -41,7 +41,7 @@ import receiver.ReorderPolicy;
  *
  * @author jwjoubert
  */
-public interface ReceiversWriterHandler {
+ interface ReceiversWriterHandler {
 
 	/* <freightReceivers> ... </freightReceivers> */
 	public void startReceivers(final Receivers receivers, final BufferedWriter out) throws IOException;

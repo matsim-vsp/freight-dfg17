@@ -42,7 +42,7 @@ import receiver.product.ReceiverProduct;
  * 
  * @author jwjoubert
  */
-public class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
+public final class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
 	final private Logger log = Logger.getLogger(ReceiversWriter.class);
 	final private Receivers receivers;
 	final private Counter counter = new Counter("   receiver # ");

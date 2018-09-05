@@ -22,7 +22,7 @@ import org.matsim.core.controler.AbstractModule;
 
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
-public class ReceiverModule extends AbstractModule {
+public final class ReceiverModule extends AbstractModule {
 
 	private Receivers receivers;
 	ReceiverScoringFunctionFactory sFuncFac;

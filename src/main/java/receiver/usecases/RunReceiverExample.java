@@ -56,6 +56,7 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
+import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
@@ -144,21 +145,21 @@ public class RunReceiverExample {
 
 			//@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
-
-				if(event.getIteration() % mfs.getReplanInterval() != 0) {
+				
+				if(event.getIteration() % ReceiverUtils.getReplanInterval( mfs.getScenario() ) != 0) {
 					return;
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : mfs.getReceivers().getReceivers().values()){
+				for (Receiver receiver : ReceiverUtils.getReceivers( mfs.getScenario() ).getReceivers().values()){
 					if (receiver.getAttributes().getAttribute("collaborationStatus") != null){
 						if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
-							if (!mfs.getCoalition().getReceiverCoalitionMembers().contains(receiver)){
-								mfs.getCoalition().addReceiverCoalitionMember(receiver);
+							if (!ReceiverUtils.getCoalition( mfs.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
+								ReceiverUtils.getCoalition( mfs.getScenario() ).addReceiverCoalitionMember(receiver);
 							}
 						} else {
-							if (mfs.getCoalition().getReceiverCoalitionMembers().contains(receiver)){
-								mfs.getCoalition().removeReceiverCoalitionMember(receiver);
+							if ( ReceiverUtils.getCoalition( mfs.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
+								ReceiverUtils.getCoalition( mfs.getScenario() ).removeReceiverCoalitionMember(receiver);
 							}
 						}
 					}
@@ -167,8 +168,8 @@ public class RunReceiverExample {
 				/*
 				 * Carrier replan with receiver changes.
 				 */
-
-				Carrier carrier = mfs.getCarriers().getCarriers().get(Id.create("Carrier1", Carrier.class)); 
+				
+				Carrier carrier = ReceiverUtils.getCarriers( mfs.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
 				ArrayList<CarrierPlan> carrierPlans = new ArrayList<CarrierPlan>();
 
 				/* Remove all existing carrier plans. */
@@ -215,13 +216,13 @@ public class RunReceiverExample {
 				carrier.setSelectedPlan(newPlan);
 
 				//write out the carrierPlan to an xml-file
-				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../../../input/carrierPlanned.xml");
-
-				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
-				new ReceiversWriter(mfs.getReceivers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
-
-				fs.setCarriers(mfs.getCarriers());
-				fs.setReceivers(mfs.getReceivers());
+				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( mfs.getScenario() ) ).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../../../input/carrierPlanned.xml");
+				
+				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( mfs.getScenario() ) ).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
+				new ReceiversWriter( ReceiverUtils.getReceivers( mfs.getScenario() ) ).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
+				
+				ReceiverUtils.setCarriers( ReceiverUtils.getCarriers( mfs.getScenario() ), fs.getScenario() );
+				ReceiverUtils.setReceivers( ReceiverUtils.getReceivers( mfs.getScenario() ), fs.getScenario() );
 			}
 
 		});		
@@ -234,13 +235,13 @@ public class RunReceiverExample {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
-		final int statInterval = fs.getReplanInterval()*2;
+		final int statInterval = ReceiverUtils.getReplanInterval( fs.getScenario() ) *2;
 		//final LegHistogram freightOnly = new LegHistogram(20);
 
 		// freightOnly.setPopulation(controler.getScenario().getPopulation());
 		//freightOnly.setInclPop(false);
-
-		CarrierScoreStats scoreStats = new CarrierScoreStats(fs.getCarriers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+		
+		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( fs.getScenario() ), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(fs, fs.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
 
 		//controler.getEvents().addHandler(freightOnly);
@@ -255,15 +256,15 @@ public class RunReceiverExample {
 				if((event.getIteration() + 1) % (statInterval) != 0) return;
 
 				//write plans
-
-				new CarrierPlanXmlWriterV2(fs.getCarriers()).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
-
-				new ReceiversWriter(fs.getReceivers()).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
+				
+				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( fs.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+				
+				new ReceiversWriter( ReceiverUtils.getReceivers( fs.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
 
 				/* Record receiver stats */
-				int numberOfReceivers = fs.getReceivers().getReceivers().size();
+				int numberOfReceivers = ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().size();
 				for(int i = 1; i < numberOfReceivers+1; i++) {
-					Receiver receiver = fs.getReceivers().getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+					Receiver receiver = ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
 					for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
 						for (Order order : rorder.getReceiverProductOrders()){
 							String score = receiver.getSelectedPlan().getScore().toString();

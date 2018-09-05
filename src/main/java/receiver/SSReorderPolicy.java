@@ -32,7 +32,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
  * 
  * @author jwjoubert
  */
-public class SSReorderPolicy implements ReorderPolicy {
+public final class SSReorderPolicy implements ReorderPolicy {
 	final private Attributes attributes = new Attributes();
 	
 	/**
@@ -48,8 +48,7 @@ public class SSReorderPolicy implements ReorderPolicy {
 	
 	/**
 	 * This method should (ideally) only be used by the {@link ReceiversReader}.
-	 * 
-	 * @param attributes
+	 *
 	 */
 	public SSReorderPolicy() {
 	}

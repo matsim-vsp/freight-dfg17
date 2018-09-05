@@ -15,6 +15,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
+import receiver.ReceiverUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 
@@ -61,8 +62,8 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 		log.info("Creating a list of carriers.");
 		
 		List<Id<Carrier>> carriers = new ArrayList<>();
-		int counter = 0;		
-		for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {			
+		int counter = 0;
+		for(Receiver receiver : ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().values()) {
 			ReceiverPlan plan = receiver.getSelectedPlan();
 			if (plan == null) {
 				log.warn("Receiver plan not yet selected.");
@@ -89,12 +90,12 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 		while (iterator.hasNext()){
 
 			Id<Carrier> carrierId = iterator.next();
-			Carrier carrier = scenario.getCarriers().getCarriers().get(carrierId);			
+			Carrier carrier = ReceiverUtils.getCarriers( scenario.getScenario() ).getCarriers().get(carrierId);
 			double fixedFeeVolume = 0.0;
 			
 			/* Determine the total volume of non-coalition members. */
-			for(Receiver receiver : scenario.getReceivers().getReceivers().values()) {				
-				if(!scenario.getCoalition().getCarrierCoalitionMembers().contains(receiver)){
+			for(Receiver receiver : ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().values()) {
+				if(!ReceiverUtils.getCoalition( scenario.getScenario() ).getCarrierCoalitionMembers().contains(receiver)){
 					ReceiverOrder ro = receiver.getSelectedPlan().getReceiverOrder(carrierId);					
 					fixedFeeVolume += getReceiverOrderTotal(ro);
 				}								
@@ -103,57 +104,55 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 			/*Adding attributes containing coalition details and cost in order to calculate marginal contribution later on. */
 			double cost = carrier.getSelectedPlan().getScore() - (fixedFeeVolume*fee*-1)/1000;
 
-			/* Capture the grand coalition score */			
-			if (counter == scenario.getCoalition().getReceiverCoalitionMembers().size()){	
-				if (scenario.getCoalition().getAttributes().getAsMap().containsKey("C({N})")){
-					scenario.getCoalition().getAttributes().removeAttribute("C({N})");
+			/* Capture the grand coalition score */
+			if (counter == ReceiverUtils.getCoalition( scenario.getScenario() ).getReceiverCoalitionMembers().size()){
+				if ( ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().getAsMap().containsKey("C({N})")){
+					ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().removeAttribute("C({N})");
 				}
-				scenario.getCoalition().getAttributes().putAttribute("C({N})", cost);
+				ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().putAttribute("C({N})", cost);
 
 			} else {
 
 				/* Capture all the sub-coalition scores */
 				String coalitionDesc = "C({N}/{" ;
-
-				for (Receiver receiver : scenario.getReceivers().getReceivers().values()){
-					if (!scenario.getCoalition().getReceiverCoalitionMembers().contains(receiver)){					
+				
+				for (Receiver receiver : ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().values()){
+					if (!ReceiverUtils.getCoalition( scenario.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
 						coalitionDesc =  coalitionDesc + receiver.getId().toString() + ",";
 					}
 				}
 				coalitionDesc = coalitionDesc + "})";
 				
 				/* Remove old attribute of this sub-coalition before updating with new attribute.*/
-				if (scenario.getCoalition().getAttributes().getAsMap().containsKey(coalitionDesc)){
-					scenario.getCoalition().getAttributes().removeAttribute(coalitionDesc);
+				if ( ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().getAsMap().containsKey(coalitionDesc)){
+					ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().removeAttribute(coalitionDesc);
 				}
-				scenario.getCoalition().getAttributes().putAttribute(coalitionDesc, cost);
+				ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().putAttribute(coalitionDesc, cost);
 
 				/* Calculate carrier score */
-				double subScore = 0.0;	
-				double grandScore = (double) scenario.getCoalition().getAttributes().getAttribute("C({N})");
+				double subScore = 0.0;
+				double grandScore = (double) ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().getAttribute("C({N})");
 				carrier.getSelectedPlan().setScore(grandScore - subScore);	
 			}
 		}
 
 		/* Calculate individual receiver scores.*/
-		double grandScore = 0; 
-		if (scenario.getCoalition().getAttributes().getAsMap().containsKey("C({N})")){
-			grandScore = (double) scenario
-					.getCoalition()
+		double grandScore = 0;
+		if ( ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().getAsMap().containsKey("C({N})")){
+			grandScore = (double) ReceiverUtils.getCoalition( scenario.getScenario() )
 					.getAttributes()
 					.getAttribute("C({N})");					
 		}
 		
-		for (Receiver receiver : scenario.getReceivers().getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( scenario.getScenario() ).getReceivers().values()){
 			/* 
 			 * Checks to see if the receiver is part of the coalition, if so, allocate marginal cost, 
 			 * if not allocate fixed fee per tonne.					 
-			 */			
-			if (scenario.getCoalition().getReceiverCoalitionMembers().contains(receiver)){
+			 */
+			if ( ReceiverUtils.getCoalition( scenario.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
 				double subScore = 0;
-				if (scenario.getCoalition().getAttributes().getAsMap().containsKey("C({N}/{" + receiver.getId().toString() + ",})")){		
-					subScore = (double) scenario
-							.getCoalition()
+				if ( ReceiverUtils.getCoalition( scenario.getScenario() ).getAttributes().getAsMap().containsKey("C({N}/{" + receiver.getId().toString() + ",})")){
+					subScore = (double) ReceiverUtils.getCoalition( scenario.getScenario() )
 							.getAttributes()
 							.getAttribute("C({N}/{" + receiver.getId().toString() + ",})");
 				}

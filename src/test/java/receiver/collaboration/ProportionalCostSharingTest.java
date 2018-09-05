@@ -27,6 +27,7 @@ import org.matsim.testcases.MatsimTestUtils;
 
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
+import receiver.ReceiverUtils;
 import receiver.product.Order;
 import receiver.usecases.base.ReceiverChessboardScenario;
 
@@ -39,16 +40,16 @@ public class ProportionalCostSharingTest {
 	public void test() {
 		setup();
 		
-		Carrier carrier = fs.getCarriers().getCarriers().get(Id.create("Carrier1", Carrier.class));
+		Carrier carrier = ReceiverUtils.getCarriers( fs.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
 		double carrierCost = carrier.getSelectedPlan().getScore();
 		
 		double total = 0.0;
-		for(Receiver receiver : fs.getReceivers().getReceivers().values()) {
+		for(Receiver receiver : ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().values()) {
 			for(Order order : receiver.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverProductOrders()) {
 				total += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 			}
 		}
-		Receiver receiverOne = fs.getReceivers().getReceivers().get(Id.create("1", Receiver.class));
+		Receiver receiverOne = ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(Id.create("1", Receiver.class));
 		double receiverOneTotal = 0.0;
 		for(Order order : receiverOne.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverProductOrders()) {
 			receiverOneTotal += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
@@ -62,13 +63,13 @@ public class ProportionalCostSharingTest {
 		Id<Receiver> r1Id = Id.create("1", Receiver.class);
 		Assert.assertEquals("Wrong cost allocated to receiver 1",
 				pOne*carrierCost, 
-				fs.getReceivers().getReceivers().get(r1Id).getSelectedPlan().getScore(), 
+				ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(r1Id).getSelectedPlan().getScore(),
 				MatsimTestUtils.EPSILON);
 		
 		Id<Receiver> r2Id = Id.create("2", Receiver.class);
 		Assert.assertEquals("Wrong cost allocated to receiver 2",
 				pTwo*carrierCost, 
-				fs.getReceivers().getReceivers().get(r2Id).getSelectedPlan().getScore(), 
+				ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(r2Id).getSelectedPlan().getScore(),
 				MatsimTestUtils.EPSILON);
 	}
 	

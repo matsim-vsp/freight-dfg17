@@ -26,6 +26,6 @@ package receiver;
  * 
  * @author jwjoubert
  */
-public class WeeklyPlanner {
+ class WeeklyPlanner {
 
 }

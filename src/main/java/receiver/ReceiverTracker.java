@@ -36,7 +36,7 @@ import receiver.collaboration.ProportionalCostSharing;
  * @author wlbean
  *
  */
-public class ReceiverTracker implements EventHandler {
+public final class ReceiverTracker implements EventHandler {
 	private final MutableFreightScenario fsc;
 	//private final Receivers receivers;
 	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
@@ -57,7 +57,7 @@ public class ReceiverTracker implements EventHandler {
 		ProportionalCostSharing pcs = new ProportionalCostSharing(350);
 		pcs.allocateCoalitionCosts(fsc);
 		
-		for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
 			ReceiverAgent rAgent = findReceiver(receiver.getId());
 			rAgent.scoreSelectedPlan();
 		}		
@@ -68,7 +68,7 @@ public class ReceiverTracker implements EventHandler {
 	 * Creates the list of all receiver agents.
 	 */
 	private void createReceiverAgents(ReceiverScoringFunctionFactory scorFuncFac) {
-		for (Receiver receiver: fsc.getReceivers().getReceivers().values()){
+		for (Receiver receiver: ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
 			ScoringFunction receiverScorFunc = scorFuncFac.createScoringFunction(receiver);
 			ReceiverAgent rAgent = new ReceiverAgent(receiver, receiverScorFunc);
 			receiverAgents.add(rAgent);

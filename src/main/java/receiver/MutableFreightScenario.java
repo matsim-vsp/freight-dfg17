@@ -35,17 +35,13 @@ import receiver.collaboration.MutableCoalition;
 public final class MutableFreightScenario {
 	final private Logger log = Logger.getLogger( MutableFreightScenario.class);
 	private Scenario sc;
-	private Carriers carriers;
-	private Receivers receivers;
-	private int replanInterval;
-	private MutableCoalition coalition;
 	
 	public MutableFreightScenario( Scenario sc, Carriers carriers) {
 		this.sc = sc;
-		this.carriers = carriers;
+		ReceiverUtils.setCarriers(  carriers, sc ) ;
 		
 		/* Set optional containers */
-		this.coalition = new MutableCoalition();
+		ReceiverUtils.setCoalition( new MutableCoalition(), sc ) ;
 		
 		/* FIXME There are still local variables that are not initialised, with 
 		 * no clear interpretable default values. */
@@ -55,42 +51,6 @@ public final class MutableFreightScenario {
 	public Scenario getScenario() {
 		return this.sc;
 	}
-
 	
-	public Carriers getCarriers() {
-		return ReceiverUtils.getCarriers( sc );
-	}
-
-	public void setReceivers(Receivers receivers) {
-		ReceiverUtils.setReceivers( receivers, sc );
-	}
 	
-	public void setReplanInterval(int interval){
-		ReceiverUtils.setReplanInterval( interval, sc );
-	}
-	
-	public Receivers getReceivers() {
-		return ReceiverUtils.getReceivers( sc ) ;
-	}
-
-
-	public int getReplanInterval() {
-		return ReceiverUtils.getReplanInterval( sc ) ;
-	}
-
-
-	public void setCarriers(Carriers carriers) {
-		ReceiverUtils.setCarriers( carriers, sc );
-	}
-
-
-	public void setCoalition(MutableCoalition coalition) {
-		ReceiverUtils.setCoalition( coalition, sc );
-	}
-	
-	public Coalition getCoalition(){
-		return ReceiverUtils.getCoalition( sc ) ;
-	}
-	
-
 }

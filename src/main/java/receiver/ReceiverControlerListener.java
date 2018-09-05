@@ -83,7 +83,7 @@ ReplanningListener, BeforeMobsimListener {
 
 		for(Receiver receiver : receivers.getReceivers().values()){
 			
-			if ((event.getIteration() - 1) % fsc.getReplanInterval() == 0) {
+			if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval( fsc.getScenario() ) == 0) {
 					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
 				}
 
@@ -105,7 +105,7 @@ ReplanningListener, BeforeMobsimListener {
 //		collaborationStratMan.addStrategy(strategy, null, 0.2);
 //		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
 		
-		if (event.getIteration() % fsc.getReplanInterval() != 0) {
+		if (event.getIteration() % ReceiverUtils.getReplanInterval( fsc.getScenario() ) != 0) {
 			return;
 		} 
 		
@@ -126,9 +126,9 @@ ReplanningListener, BeforeMobsimListener {
 	public void notifyScoring(ScoringEvent event) {
 		if (event.getIteration() == 0) {
 			this.tracker.scoreSelectedPlans();
-		} 
-
-		if ((event.getIteration()+1) % fsc.getReplanInterval() == 0) {
+		}
+		
+		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( fsc.getScenario() ) == 0) {
 			this.tracker.scoreSelectedPlans();
 		} else {		
 			for (Receiver receiver : receivers.getReceivers().values()){

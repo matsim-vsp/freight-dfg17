@@ -34,6 +34,7 @@ import org.matsim.api.core.v01.Id;
 
 import receiver.MutableFreightScenario;
 import receiver.Receiver;
+import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 
 /**
@@ -96,14 +97,14 @@ public class RunMarginal {
 			e1.printStackTrace();
 			throw new RuntimeException("Cannot get the grand coalition cost.");
 		}
-		fs.getCoalition().getAttributes().putAttribute("C(N)", grandCoalitionCost);
+		ReceiverUtils.getCoalition( fs.getScenario() ).getAttributes().putAttribute("C(N)", grandCoalitionCost);
 		
 		/* Calculate the marginal contribution for each receiver. */
 		LOG.info("Calculate the marginal contributions for each receiver...");
 		executor = Executors.newFixedThreadPool(numberOfThreads);
 		Map<Id<Receiver>, Future<Double>> jobs = new TreeMap<>();
 		
-		for(Receiver receiver : fs.getReceivers().getReceivers().values()) {
+		for(Receiver receiver : ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().values()) {
 			/* Only execute a marginal calculation run for those in the grand coalition. */
 			if((boolean) receiver.getAttributes().getAttribute("collaborationStatus")) {
 				CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId());
@@ -124,8 +125,8 @@ public class RunMarginal {
 			try {
 				double cost = jobs.get(rId).get();
 				String attr = String.format("C(N)|{%s}", rId.toString());
-				fs.getReceivers().getReceivers().get(rId).getAttributes().putAttribute(attr, cost);
-				fs.getCoalition().getAttributes().putAttribute(attr, cost);
+				ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(rId).getAttributes().putAttribute(attr, cost);
+				ReceiverUtils.getCoalition( fs.getScenario() ).getAttributes().putAttribute(attr, cost);
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 				throw new RuntimeException("Could not get the marginal contribution for receiver " + rId.toString());
@@ -134,7 +135,7 @@ public class RunMarginal {
 		
 		/* TODO Check if we really need to write the receivers to file. */
 		String receiversFilename = outputPath + "receivers.xml.gz";
-		new ReceiversWriter(fs.getReceivers()).write(receiversFilename );
+		new ReceiversWriter( ReceiverUtils.getReceivers( fs.getScenario() ) ).write(receiversFilename );
 		
 		return fs;
 	}

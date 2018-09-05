@@ -92,7 +92,7 @@ public class ReceiverChessboardScenario {
 		Carriers carriers = createChessboardCarriers(sc);
 		
 		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
-		fs.setReplanInterval(50);
+		ReceiverUtils.setReplanInterval( 50, fs.getScenario() );
 		
 		/* Create the grand coalition receiver members and allocate orders. */
 		createAndAddChessboardReceivers(fs, numberOfReceivers);		
@@ -100,7 +100,7 @@ public class ReceiverChessboardScenario {
 		createReceiverOrders(fs);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork());
+		generateCarrierPlan( ReceiverUtils.getCarriers( fs.getScenario() ), fs.getScenario().getNetwork());
 		
 		
 		if(write) {
@@ -108,18 +108,18 @@ public class ReceiverChessboardScenario {
 		}
 		
 		/* Link the carriers to the receivers. */
-		fs.getReceivers().linkReceiverOrdersToCarriers(fs.getCarriers());
+		ReceiverUtils.getReceivers( fs.getScenario() ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( fs.getScenario() ) );
 		
 		/* Add carrier and receivers to coalition */
 		MutableCoalition coalition = new MutableCoalition();
 		
-		for (Carrier carrier : fs.getCarriers().getCarriers().values()){
+		for (Carrier carrier : ReceiverUtils.getCarriers( fs.getScenario() ).getCarriers().values()){
 			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
 		
-		for (Receiver receiver : fs.getReceivers().getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().values()){
 			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
@@ -131,7 +131,7 @@ public class ReceiverChessboardScenario {
 			}
 		}
 		
- 		fs.setCoalition(coalition);
+		ReceiverUtils.setCoalition( coalition, fs.getScenario() );
 		
 		return fs;
 	}
@@ -162,13 +162,13 @@ public class ReceiverChessboardScenario {
 		new File(outputFolder).mkdirs();
 		
 		new ConfigWriter(fs.getScenario().getConfig()).write(outputFolder + "config.xml");
-		new CarrierPlanXmlWriterV2(fs.getCarriers()).write(outputFolder + "carriers.xml");
-		new ReceiversWriter(fs.getReceivers()).write(outputFolder + "receivers.xml");
+		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( fs.getScenario() ) ).write(outputFolder + "carriers.xml");
+		new ReceiversWriter( ReceiverUtils.getReceivers( fs.getScenario() ) ).write(outputFolder + "receivers.xml");
 
 		/* Write the vehicle types. FIXME This will have to change so that vehicle
 		 * types lie at the Carriers level, and not per Carrier. In this scenario 
 		 * there luckily is only a single Carrier. */
-		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes(fs.getCarriers())).write(outputFolder + "carrierVehicleTypes.xml");
+		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( fs.getScenario() ) )).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
 	/**
@@ -220,8 +220,8 @@ public class ReceiverChessboardScenario {
 	 * @param fs
 	 */
 	public static void createReceiverOrders( MutableFreightScenario fs) {
-		Carriers carriers = fs.getCarriers();
-		Receivers receivers = fs.getReceivers();
+		Carriers carriers = ReceiverUtils.getCarriers( fs.getScenario() );
+		Receivers receivers = ReceiverUtils.getReceivers( fs.getScenario() );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
 		/* Create generic product types with a description and required capacity (in kg per item). */
@@ -233,7 +233,7 @@ public class ReceiverChessboardScenario {
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
 		
-		for (int r = 1; r < fs.getReceivers().getReceivers().size()+1 ; r++){
+		for ( int r = 1 ; r < ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().size()+1 ; r++){
 			int tw = 6;
 			String serdur = "02:00:00";
 			int numDel = 5;
@@ -342,7 +342,7 @@ public class ReceiverChessboardScenario {
 			receivers.addReceiver(receiver);
 		}
 		
-		fs.setReceivers(receivers);
+		ReceiverUtils.setReceivers( receivers, fs.getScenario() );
 	}
 
 

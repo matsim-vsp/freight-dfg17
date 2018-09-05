@@ -53,7 +53,7 @@ import receiver.SSReorderPolicy;
  * 
  * @author jwjoubert
  */
-public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader {
+ class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader {
 	private final static String RECEIVERS = "freightReceivers";
 	private final static String ATTRIBUTES = "attributes";
 	private final static String ATTRIBUTE = "attribute";
