@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE facilities SYSTEM "http://www.matsim.org/files/dtd/facilities_v1.dtd">
+<facilities>
+
+<!-- ====================================================================== -->
+
+	<facility id="1" x="4589374.715020954" y="5828218.90589699" desc="retailer=aldi;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="10" x="4566139.498363853" y="5825076.194056388" desc="retailer=netto;shopTypes=SM,VM,SBW;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="11" x="4521494.2053058455" y="5792563.234087063" desc="retailer=norma;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="12" x="4608281.614165615" y="5830340.920543575" desc="retailer=norma;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="13" x="4597156.150092969" y="5834470.033490208" desc="retailer=edeka;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="14" x="4615804.873801337" y="5825726.895906688" desc="retailer=real;shopTypes=SM,VM,SBW;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="15" x="4588548.147996067" y="5805143.942591192" desc="retailer=rewe;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="16" x="4583677.1005244255" y="5847150.409435167" desc="retailer=rewe;shopTypes=SM,VM,SBW;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="17" x="4634804.369673198" y="5748275.958215242" desc="retailer=kaufland;shopTypes=SM,VM,SBW;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="2" x="4612632.472578064" y="5832662.2268912215" desc="retailer=aldi;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="3" x="4606802.596423303" y="5792866.422976075" desc="retailer=aldi;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="4" x="4589844.581955284" y="5805617.040125906" desc="retailer=aldi;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="5" x="4622928.434593732" y="5807064.298834146" desc="retailer=edeka;shopTypes=SM,VM,SBW;comTypes=FR,TK">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="6" x="4607550.878856019" y="5792940.518201753" desc="retailer=edeka;shopTypes=SM,VM,SBW;comTypes=TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="7" x="4593193.566413931" y="5813049.221570575" desc="retailer=kaiser;shopTypes=SM,VM;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="8" x="4568029.302428235" y="5847084.176796907" desc="retailer=lidl;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="9" x="4587811.024800761" y="5803087.455622404" desc="retailer=lidl;shopTypes=D;comTypes=FR,TK,TR">
+	</facility>
+
+<!-- ====================================================================== -->
+
+</facilities>
