@@ -190,7 +190,7 @@ public class RunReceiver {
 				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
 				//read and create a pre-configured algorithms to solve the vrp
-				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./input/usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 
 				//solve the problem
 				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
@@ -215,7 +215,7 @@ public class RunReceiver {
 				carrier.setSelectedPlan(newPlan);
 
 				//write out the carrierPlan to an xml-file
-				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../../../input/carrierPlanned.xml");
+				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "../../../../scenarios/chessboard/carrierPlanned.xml");
 
 				new CarrierPlanXmlWriterV2(mfs.getCarriers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter(mfs.getReceivers()).write(mfs.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");

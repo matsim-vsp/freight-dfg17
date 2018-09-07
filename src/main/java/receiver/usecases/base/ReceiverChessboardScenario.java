@@ -151,7 +151,7 @@ public class ReceiverChessboardScenario {
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(50);
 		config.global().setRandomSeed(seed);
-		config.network().setInputFile("./input/usecases/chessboard/network/grid9x9.xml");
+		config.network().setInputFile("./scenarios/chessboard/network/grid9x9.xml");
 		config.controler().setOutputDirectory(String.format("./output/base/tw/run_%03d/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
@@ -189,7 +189,7 @@ public class ReceiverChessboardScenario {
 		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
 		//read and create a pre-configured algorithms to solve the vrp
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./input/usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 
 		//solve the problem
 		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
