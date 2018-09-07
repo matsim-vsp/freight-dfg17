@@ -15,7 +15,7 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-  
+
 /**
  * 
  */
@@ -51,7 +51,6 @@ import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
-import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
@@ -69,20 +68,21 @@ import receiver.ReceiverScoringFunctionFactory;
 public class ReceiverChessboardUtils {
 	final private static Logger LOG = Logger.getLogger(ReceiverChessboardUtils.class);
 
-	
-	public static void setupCarriers(Controler controler, MutableFreightScenario fs) {
-		final Carriers carriers = new Carriers();							
-		new CarrierPlanXmlReaderV2(carriers).readFile(fs.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");	
+
+	public static void setupCarriers(Controler controler) {
+//		final Carriers carriers = new Carriers();							
+		final Carriers carriers = ReceiverUtils.getCarriers( controler.getScenario() );							
+//		new CarrierPlanXmlReaderV2(carriers).readFile(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");	
 		CarrierVehicleTypes types = new CarrierVehicleTypes();
-		new CarrierVehicleTypeReader(types).readFile(fs.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
+		new CarrierVehicleTypeReader(types).readFile(controler.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
 		new CarrierVehicleTypeLoader(carriers).loadVehicleTypes(types);
 
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be
 		 * able to configure this in a more elegant way. */
-		Coalition coalition = ReceiverUtils.getCoalition( fs.getScenario() );
+		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
 		if(coalition != null) {
-			for (Carrier carrier : ReceiverUtils.getCarriers( fs.getScenario() ).getCarriers().values()){
+			for (Carrier carrier : ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers().values()){
 				if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
 					coalition.addCarrierCoalitionMember(carrier);
 				}
@@ -90,40 +90,41 @@ public class ReceiverChessboardUtils {
 		}
 
 		/* Create a new instance of a carrier scoring function factory. */
-		final CarrierScoringFunctionFactory cScorFuncFac = new MyCarrierScoringFunctionFactoryImpl(fs.getScenario().getNetwork());
+		final CarrierScoringFunctionFactory cScorFuncFac = new MyCarrierScoringFunctionFactoryImpl(controler.getScenario().getNetwork());
 
 		/* Create a new instance of a carrier plan strategy manager factory. */
-		final CarrierPlanStrategyManagerFactory cStratManFac = new MyCarrierPlanStrategyManagerFactoryImpl(types, fs.getScenario().getNetwork(), controler);
+		final CarrierPlanStrategyManagerFactory cStratManFac = new MyCarrierPlanStrategyManagerFactoryImpl(types, controler.getScenario().getNetwork(), controler);
 
 		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
 		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
 		controler.addOverridingModule(carrierControler);
-		
-		ReceiverUtils.setCarriers( carriers, fs.getScenario() );
-	}
-	
-	
-	
-	public static void setupReceivers(Controler controler, MutableFreightScenario fsc) {
 
-		String outputfolder = fsc.getScenario().getConfig().controler().getOutputDirectory();
+//		ReceiverUtils.setCarriers( carriers, controler.getScenario() );
+	}
+
+
+
+	public static void setupReceivers(Controler controler) {
+
+		String outputfolder = controler.getScenario().getConfig().controler().getOutputDirectory();
 		outputfolder += outputfolder.endsWith("/") ? "" : "/";
-		Receivers finalReceivers = new Receivers();
-		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
-		finalReceivers = ReceiverUtils.getReceivers( fsc.getScenario() );
+//		Receivers finalReceivers = new Receivers();
+		Receivers finalReceivers = ReceiverUtils.getReceivers( controler.getScenario() );
+//		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
+		finalReceivers = ReceiverUtils.getReceivers( controler.getScenario() );
 
 		/* 
 		 * Adds receivers to freight scenario.
 		 */
-		finalReceivers.linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( fsc.getScenario() ) );
-		ReceiverUtils.setReceivers( finalReceivers, fsc.getScenario() );
-		
+		finalReceivers.linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( controler.getScenario() ) );
+//		ReceiverUtils.setReceivers( finalReceivers, controler.getScenario() );
+
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be
 		 * able to configure this in a more elegant way. */
-		Coalition coalition = ReceiverUtils.getCoalition( fsc.getScenario() );
-//		if(coalition != null) {
-		for (Receiver receiver : ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
+		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
+		//		if(coalition != null) {
+		for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
 			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
 				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
@@ -132,10 +133,10 @@ public class ReceiverChessboardUtils {
 				}
 			}
 		}
-			LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
-			LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
-		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().size()));
-//		}
+		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
+		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
+		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()));
+		//		}
 
 
 		/*
@@ -147,29 +148,29 @@ public class ReceiverChessboardUtils {
 		 * Create a new instance of a receiver plan strategy manager factory..
 		 */
 		//int selector = MatsimRandom.getLocalInstance().nextInt(3);
-//		int selector = 0;
-//		switch (selector) {
-//			case 0: {
-				final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
-				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-				controler.addOverridingModule(receiverControler);
-//			}
-//			case 1: {
-//				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-//				controler.addOverridingModule(receiverControler);
-//			}
-//			case 2: {
-//				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
-//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-//				controler.addOverridingModule(receiverControler); 
-//			}
-//			default: { 
-//				Log.warn("No order strategy manager selected.");		
-//			}
-//		}
+		//		int selector = 0;
+		//		switch (selector) {
+		//			case 0: {
+		final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
+		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
+		controler.addOverridingModule(receiverControler);
+		//			}
+		//			case 1: {
+		//				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
+		//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+		//				controler.addOverridingModule(receiverControler);
+		//			}
+		//			case 2: {
+		//				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
+		//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
+		//				controler.addOverridingModule(receiverControler); 
+		//			}
+		//			default: { 
+		//				Log.warn("No order strategy manager selected.");		
+		//			}
+		//		}
 	}
-	
+
 	private static class MyCarrierPlanStrategyManagerFactoryImpl implements CarrierPlanStrategyManagerFactory {
 
 		/*
@@ -207,8 +208,8 @@ public class ReceiverChessboardUtils {
 			return strategyManager;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Copies a file from one location to another.
 	 * @param sourceFile
@@ -219,26 +220,26 @@ public class ReceiverChessboardUtils {
 	 * streams are not closed... but they are. */
 	@SuppressWarnings("resource")
 	public static void copyFile(File sourceFile, File destFile) throws IOException {
-	    if(!destFile.exists()) {
-	        destFile.createNewFile();
-	    }
+		if(!destFile.exists()) {
+			destFile.createNewFile();
+		}
 
-	    FileChannel source = null;
-	    FileChannel destination = null;
+		FileChannel source = null;
+		FileChannel destination = null;
 
-	    try {
-	        source = new FileInputStream(sourceFile).getChannel();
-	        destination = new FileOutputStream(destFile).getChannel();
-	        destination.transferFrom(source, 0, source.size());
-	    }
-	    finally {
-	        if(source != null) {
-	            source.close();
-	        }
-	        if(destination != null) {
-	            destination.close();
-	        }
-	    }
+		try {
+			source = new FileInputStream(sourceFile).getChannel();
+			destination = new FileOutputStream(destFile).getChannel();
+			destination.transferFrom(source, 0, source.size());
+		}
+		finally {
+			if(source != null) {
+				source.close();
+			}
+			if(destination != null) {
+				destination.close();
+			}
+		}
 	}
 
 
@@ -259,5 +260,5 @@ public class ReceiverChessboardUtils {
 		}
 	}
 
-	
+
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.events.StartupEvent;
@@ -18,7 +19,8 @@ import org.matsim.core.utils.charts.XYLineChart;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.io.UncheckedIOException;
 
-import receiver.MutableFreightScenario;
+import com.google.inject.Inject;
+
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
@@ -29,6 +31,7 @@ import receiver.ReceiverUtils;
  * @author wlbean
  */
 public class ReceiverScoreStats implements StartupListener, IterationEndsListener, ShutdownListener{
+	@Inject Scenario sc;
 
 		final private static int INDEX_WORST = 0;
 		final private static int INDEX_BEST = 1;
@@ -42,7 +45,6 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		private double[][] history = null;
 		private int minIteration = 0;
 		
-		private MutableFreightScenario fsc;
 
 		private final static Logger log = Logger.getLogger(ReceiverScoreStats.class);
 
@@ -53,10 +55,9 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		 * @param createPNG true if in every iteration, the scorestats should be visualized in a graph and written to disk.
 		 * @throws UncheckedIOException
 		 */
-		public ReceiverScoreStats( MutableFreightScenario fsc, final String filename, final boolean createPNG) throws UncheckedIOException {
+		public ReceiverScoreStats(final String filename, final boolean createPNG) throws UncheckedIOException {
 			this.fileName = filename;
 			this.createPNG = createPNG;
-			this.fsc = fsc;
 		}
 
 		@Override
@@ -96,7 +97,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 			int nofAvgScores = 0;
 			int nofExecutedScores = 0;
 			
-			for (Receiver receiver : ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
+			for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 				ReceiverPlan worstPlan = null;
 				ReceiverPlan bestPlan = null;
 				double worstScore = Double.POSITIVE_INFINITY;

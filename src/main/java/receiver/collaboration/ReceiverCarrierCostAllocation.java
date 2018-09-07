@@ -23,14 +23,14 @@ package receiver.collaboration;
 
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.utils.objectattributes.attributable.Attributable;
-import receiver.MutableFreightScenario;
+
+import receiver.Receivers;
 
 /**
  *
  * @author jwjoubert, wlbean
  */
 public interface ReceiverCarrierCostAllocation extends Attributable {
-	
 	
 	/**
 	 * This method is provided with a complete {@link MutableFreightScenario} with its
@@ -41,7 +41,7 @@ public interface ReceiverCarrierCostAllocation extends Attributable {
 	 * @param scenario
 	 * @return
 	 */
-	public MutableFreightScenario allocateCoalitionCosts( MutableFreightScenario scenario);
+	public void allocateCoalitionCosts();
 	
 	public String getDescription();
 	

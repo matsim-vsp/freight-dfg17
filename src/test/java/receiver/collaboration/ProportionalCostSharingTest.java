@@ -22,10 +22,10 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.testcases.MatsimTestUtils;
 
-import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
@@ -33,23 +33,23 @@ import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class ProportionalCostSharingTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
-	private MutableFreightScenario fs;
+	private Scenario sc;
 	
 
 	@Test
 	public void test() {
 		setup();
 		
-		Carrier carrier = ReceiverUtils.getCarriers( fs.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
+		Carrier carrier = ReceiverUtils.getCarriers( sc ).getCarriers().get(Id.create("Carrier1", Carrier.class));
 		double carrierCost = carrier.getSelectedPlan().getScore();
 		
 		double total = 0.0;
-		for(Receiver receiver : ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().values()) {
+		for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()) {
 			for(Order order : receiver.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverProductOrders()) {
 				total += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
 			}
 		}
-		Receiver receiverOne = ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(Id.create("1", Receiver.class));
+		Receiver receiverOne = ReceiverUtils.getReceivers( sc ).getReceivers().get(Id.create("1", Receiver.class));
 		double receiverOneTotal = 0.0;
 		for(Order order : receiverOne.getSelectedPlan().getReceiverOrder(Id.create("Carrier1", Carrier.class)).getReceiverProductOrders()) {
 			receiverOneTotal += order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
@@ -58,23 +58,23 @@ public class ProportionalCostSharingTest {
 		double pOne = receiverOneTotal / total;
 		double pTwo = 1-pOne;
 		
-		ProportionalCostSharing pcs = new ProportionalCostSharing(350);
-		pcs.allocateCoalitionCosts(fs);
+		ProportionalCostSharing pcs = new ProportionalCostSharing(350, sc);
+		pcs.allocateCoalitionCosts();
 		Id<Receiver> r1Id = Id.create("1", Receiver.class);
 		Assert.assertEquals("Wrong cost allocated to receiver 1",
 				pOne*carrierCost, 
-				ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(r1Id).getSelectedPlan().getScore(),
+				ReceiverUtils.getReceivers( sc ).getReceivers().get(r1Id).getSelectedPlan().getScore(),
 				MatsimTestUtils.EPSILON);
 		
 		Id<Receiver> r2Id = Id.create("2", Receiver.class);
 		Assert.assertEquals("Wrong cost allocated to receiver 2",
 				pTwo*carrierCost, 
-				ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(r2Id).getSelectedPlan().getScore(),
+				ReceiverUtils.getReceivers( sc ).getReceivers().get(r2Id).getSelectedPlan().getScore(),
 				MatsimTestUtils.EPSILON);
 	}
 	
 	private void setup() {
-		this.fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		this.sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
 	}
 
 }

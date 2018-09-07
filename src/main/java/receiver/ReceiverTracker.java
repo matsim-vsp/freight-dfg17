@@ -25,8 +25,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
+
+import com.google.inject.Inject;
 
 import receiver.collaboration.ProportionalCostSharing;
 
@@ -36,13 +39,17 @@ import receiver.collaboration.ProportionalCostSharing;
  * @author wlbean
  *
  */
+
+
 public final class ReceiverTracker implements EventHandler {
-	private final MutableFreightScenario fsc;
+//	@Inject Scenario sc;
+	private Scenario sc;
+	
 	//private final Receivers receivers;
 	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
 
-	public ReceiverTracker( MutableFreightScenario fsc, ReceiverScoringFunctionFactory scorFuncFac){
-		this.fsc = fsc;
+	public ReceiverTracker(ReceiverScoringFunctionFactory scorFuncFac, Scenario sc){
+		this.sc = sc;
 		createReceiverAgents(scorFuncFac);
 	}
 
@@ -54,10 +61,10 @@ public final class ReceiverTracker implements EventHandler {
 		//MarginalCostSharing mcs = new MarginalCostSharing(350);
 		//mcs.allocateCoalitionCosts(fsc);
 		
-		ProportionalCostSharing pcs = new ProportionalCostSharing(350);
-		pcs.allocateCoalitionCosts(fsc);
+		ProportionalCostSharing pcs = new ProportionalCostSharing(350, sc);
+		pcs.allocateCoalitionCosts();
 		
-		for (Receiver receiver : ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			ReceiverAgent rAgent = findReceiver(receiver.getId());
 			rAgent.scoreSelectedPlan();
 		}		
@@ -68,7 +75,7 @@ public final class ReceiverTracker implements EventHandler {
 	 * Creates the list of all receiver agents.
 	 */
 	private void createReceiverAgents(ReceiverScoringFunctionFactory scorFuncFac) {
-		for (Receiver receiver: ReceiverUtils.getReceivers( fsc.getScenario() ).getReceivers().values()){
+		for (Receiver receiver: ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			ScoringFunction receiverScorFunc = scorFuncFac.createScoringFunction(receiver);
 			ReceiverAgent rAgent = new ReceiverAgent(receiver, receiverScorFunc);
 			receiverAgents.add(rAgent);

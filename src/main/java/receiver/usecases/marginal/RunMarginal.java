@@ -31,8 +31,8 @@ import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 
-import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
@@ -68,11 +68,11 @@ public class RunMarginal {
 	 * 
 	 * @param args
 	 */
-	public static MutableFreightScenario run( String[] args) {
+	public static Scenario run( String[] args) {
 		String inputPath = args[0];
-		inputPath += inputPath.endsWith("/") ? "" : "/";
+		inputPath += inputPath.endsWith("/") ? "" : File.separator;
 		String outputPath = args[1];
-		outputPath += outputPath.endsWith("/") ? "" : "/";
+		outputPath += outputPath.endsWith("/") ? "" : File.separator;
 		String release = args[2];
 		int numberOfThreads = Integer.parseInt(args[3]);
 		long seed = Long.parseLong(args[4]);
@@ -84,7 +84,7 @@ public class RunMarginal {
 		
 		/* Calculate grand coalition cost. */
 		LOG.info("Building base freight scenario");
-		MutableFreightScenario fs = MarginalScenarioBuilder.createChessboardScenario(inputPath + "output", seed, 1, false);
+		Scenario sc = MarginalScenarioBuilder.createChessboardScenario(inputPath + "output", seed, 1, false);
 		double grandCoalitionCost = Double.NEGATIVE_INFINITY;
 		CalculateMarginalCallable cmcGrand = new CalculateMarginalCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class));
 		Future<Double> grandJob = executor.submit(cmcGrand);
@@ -97,14 +97,14 @@ public class RunMarginal {
 			e1.printStackTrace();
 			throw new RuntimeException("Cannot get the grand coalition cost.");
 		}
-		ReceiverUtils.getCoalition( fs.getScenario() ).getAttributes().putAttribute("C(N)", grandCoalitionCost);
+		ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute("C(N)", grandCoalitionCost);
 		
 		/* Calculate the marginal contribution for each receiver. */
 		LOG.info("Calculate the marginal contributions for each receiver...");
 		executor = Executors.newFixedThreadPool(numberOfThreads);
 		Map<Id<Receiver>, Future<Double>> jobs = new TreeMap<>();
 		
-		for(Receiver receiver : ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().values()) {
+		for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()) {
 			/* Only execute a marginal calculation run for those in the grand coalition. */
 			if((boolean) receiver.getAttributes().getAttribute("collaborationStatus")) {
 				CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId());
@@ -125,8 +125,8 @@ public class RunMarginal {
 			try {
 				double cost = jobs.get(rId).get();
 				String attr = String.format("C(N)|{%s}", rId.toString());
-				ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(rId).getAttributes().putAttribute(attr, cost);
-				ReceiverUtils.getCoalition( fs.getScenario() ).getAttributes().putAttribute(attr, cost);
+				ReceiverUtils.getReceivers( sc ).getReceivers().get(rId).getAttributes().putAttribute(attr, cost);
+				ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute(attr, cost);
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 				throw new RuntimeException("Could not get the marginal contribution for receiver " + rId.toString());
@@ -135,9 +135,9 @@ public class RunMarginal {
 		
 		/* TODO Check if we really need to write the receivers to file. */
 		String receiversFilename = outputPath + "receivers.xml.gz";
-		new ReceiversWriter( ReceiverUtils.getReceivers( fs.getScenario() ) ).write(receiversFilename );
+		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(receiversFilename );
 		
-		return fs;
+		return sc;
 	}
 	
 	
@@ -147,12 +147,12 @@ public class RunMarginal {
 	 * @param folder
 	 */
 	private static void checkInputPath(String folder, String release) {
-		File gridNetwork = new File(folder + "usecases/chessboard/network/grid9x9.xml");
+		File gridNetwork = new File(folder + "/chessboard/network/grid9x9.xml");
 		if(!gridNetwork.exists()) {
 			throw new RuntimeException("The given input path '" + folder + "' does not contain a grid9x9.xml network");
 		}
 
-		File algorithm = new File(folder + "usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+		File algorithm = new File(folder + "/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 		if(!algorithm.exists()) {
 			throw new RuntimeException("The given input path '" + folder + "' does not contain an initialPlanAlgorithm.xml file");
 		}

@@ -24,11 +24,11 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.testcases.MatsimTestUtils;
 
-import receiver.MutableFreightScenario;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
@@ -40,8 +40,8 @@ public class TimeWindowMutatorTest {
 	
 	@Test
 	public void testPickRandomTimeWindow() {
-		MutableFreightScenario mfs = ReceiverChessboardScenario.createChessboardScenario(1234, 1, false);
-		Receiver receiver = ReceiverUtils.getReceivers( mfs.getScenario() ).getReceivers().get(Id.create("1", Receiver.class));
+		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(1234, 1, false);
+		Receiver receiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(Id.create("1", Receiver.class));
 		ReceiverPlan plan = receiver.getSelectedPlan();
 		TimeWindowMutator twm = new TimeWindowMutator(3600.0);
 		TimeWindow tw = twm.pickRandomTimeWindow(plan);
@@ -108,8 +108,8 @@ public class TimeWindowMutatorTest {
 	
 	@Test
 	public void testHandlePlan() {
-		MutableFreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
-		ReceiverPlan plan = ReceiverUtils.getReceivers( fs.getScenario() ).getReceivers().get(Id.create("1", Receiver.class)).getSelectedPlan();
+		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		ReceiverPlan plan = ReceiverUtils.getReceivers( sc ).getReceivers().get(Id.create("1", Receiver.class)).getSelectedPlan();
 		TimeWindowMutator twm = new TimeWindowMutator(Time.parseTime("01:00:00"));
 		twm.handlePlan(plan);
 		

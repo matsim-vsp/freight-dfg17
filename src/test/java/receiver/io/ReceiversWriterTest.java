@@ -23,9 +23,9 @@ package receiver.io;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.testcases.MatsimTestUtils;
 
-import receiver.MutableFreightScenario;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.usecases.base.ReceiverChessboardScenario;
@@ -36,11 +36,11 @@ public class ReceiversWriterTest {
 	
 	@Test
 	public void testV1() {
-		MutableFreightScenario fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
 		
 		/* Now the receiver is 'complete', and we can write it to file. */
 		try {
-			new ReceiversWriter( ReceiverUtils.getReceivers( fs.getScenario() ) ).writeV1(utils.getOutputDirectory() + "receivers.xml");
+			new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).writeV1(utils.getOutputDirectory() + "receivers.xml");
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail("Should write without exception.");
