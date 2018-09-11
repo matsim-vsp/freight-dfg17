@@ -62,12 +62,9 @@ public class FreightQSimFactory implements Provider<Mobsim> {
 
 	@Override
 	public Mobsim get() {
-		QSimConfigGroup conf = scenario.getConfig().qsim();
-		if (conf == null) {
-			throw new NullPointerException(
-					"There is no configuration set for the QSim. Please add the module 'qsim' to your config file.");
-		}
-		final QSim sim = new QSimBuilder(scenario.getConfig()).useDefaultComponents().build(scenario, eventsManager);
+		final QSimBuilder qSimBuilder = new QSimBuilder( scenario.getConfig() );
+		qSimBuilder.useDefaults() ;
+		final QSim sim = qSimBuilder.build(scenario, eventsManager);
 		
 		Collection<MobSimVehicleRoute> vRoutes = carrierResourceTracker.createPlans();
 		FreightAgentSource agentSource = new FreightAgentSource(vRoutes, new DefaultAgentFactory(sim), sim);
