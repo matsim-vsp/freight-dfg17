@@ -212,8 +212,7 @@ public class MutualReplanningTest {
 		MutualReplanningModule mutReplanModule = new MutualReplanningModuleImpl( lsps, demandObjects);
 		
 		MutualModule.Builder moduleBuilder = MutualModule.Builder.newInstance();
-//		moduleBuilder.setDemandObjects(new DemandObjects(demandObjects));
-		moduleBuilder.setDemandObjects(new DemandObjects(demandObjects);
+		moduleBuilder.setDemandObjects(new DemandObjects(demandObjects));
 		moduleBuilder.setLsps(new LSPDecorators(lsps));
 		moduleBuilder.setMutualReplanningModule(mutReplanModule);
 		moduleBuilder.setMutualScoringModule(mutScoreModule);
