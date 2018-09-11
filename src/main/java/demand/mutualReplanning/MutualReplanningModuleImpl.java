@@ -16,9 +16,7 @@ public class MutualReplanningModuleImpl extends MutualReplanningModule{
 	@Override
 	void replanLSPs(ReplanningEvent event) {
 		for(LSPDecorator lsp : lsps) {
-			if(lsp.getReplanner()!= null) {
-				lsp.getReplanner().replan(event);
-			}
+			lsp.replan(event);
 			if(lsp.getOfferUpdater()!= null) {
 				lsp.getOfferUpdater().updateOffers();
 			}

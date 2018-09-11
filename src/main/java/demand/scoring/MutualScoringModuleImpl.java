@@ -37,9 +37,7 @@ public class MutualScoringModuleImpl implements MutualScoringModule{
 	@Override
 	public void scoreLSPs(ScoringEvent event) {
 		for(LSPDecorator lsp : lsps) {
-			if(lsp.getScorer() != null) {
-				lsp.scoreSelectedPlan();
-			}
+			lsp.scoreSelectedPlan();
 		}
 		
 	}

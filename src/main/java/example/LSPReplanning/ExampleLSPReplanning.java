@@ -117,17 +117,23 @@ public class ExampleLSPReplanning {
 				resourcesList.add(collectionAdapter);
 				SolutionScheduler simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
 				collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
-				
-				LSP lsp  = collectionLSPBuilder.build();
+		
+		LSP lsp  = collectionLSPBuilder.build();
 				
 				//Create StrategyManager, insert it in Replanner and add it to the lsp;
 				GenericStrategyManagerFactoryImpl factory = new GenericStrategyManagerFactoryImpl();
+				// yyyy this feels quite odd.  The matsim GenericStrategyManager is heavyweight infrastructure, which exists
+				// once in the system.  Does it really make sense to now have one per agent?  Maybe just program directly
+				// what you want and need.  ??
+				
 				GenericStrategyManager<LSPPlan, LSP> manager = factory.createStrategyManager(lsp);
 				LSPReplannerImpl replanner = new LSPReplannerImpl(lsp);
 				replanner.setStrategyManager(manager);
 				lsp.setReplanner(replanner);
-				
-				return lsp;
+//		collectionLSPBuilder.setReplanner( replanner ) ;
+		// yyyy set replanner in builder. kai, sep'18
+		
+		return lsp;
 	}
 	
 	public static Collection<LSPShipment> createInitialLSPShipments(Network network){

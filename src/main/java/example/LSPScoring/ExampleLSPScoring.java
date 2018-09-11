@@ -143,6 +143,9 @@ public class ExampleLSPScoring {
 		TipScorer scorer = new TipScorer(lsp, tracker);
 		lsp.setScorer(scorer);
 		
+		// yyyyyy there is almost surely something wrong with the design if you cannot set the
+		// scorer in the builder. kai, sep'18
+		
 		return lsp;
 	}
 	
