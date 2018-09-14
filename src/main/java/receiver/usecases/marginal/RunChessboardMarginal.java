@@ -76,9 +76,10 @@ public class RunChessboardMarginal {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int numberOfRuns = Integer.parseInt(args[0]);
-		int numberOfThreads = Integer.parseInt(args[1]);
-		for(int i = 0; i < numberOfRuns; i++) {
+		int startRun = Integer.parseInt(args[0]);
+		int endRun = Integer.parseInt(args[1]);
+		int numberOfThreads = Integer.parseInt(args[2]);
+		for(int i = startRun; i < endRun; i++) {
 			run(i, numberOfThreads);
 		}
 	}
@@ -204,7 +205,7 @@ public class RunChessboardMarginal {
 				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
 				//read and create a pre-configured algorithms to solve the vrp
-				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./input/usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 
 				//solve the problem
 				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
@@ -229,7 +230,7 @@ public class RunChessboardMarginal {
 				carrier.setSelectedPlan(newPlan);
 
 				//write out the carrierPlan to an xml-file
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
+//				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
 				
 				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");

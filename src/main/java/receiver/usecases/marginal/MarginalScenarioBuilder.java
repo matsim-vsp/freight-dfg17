@@ -92,6 +92,9 @@ public class MarginalScenarioBuilder {
 //		ReceiverUtils.setReplanInterval( 50, sc );
 		ReceiverUtils.setReplanInterval( 5, sc );
 		
+		/* Create and add the carrier agent(s). */
+		createChessboardCarriers(sc);
+		
 		/* Create the grand coalition receiver members and allocate orders. */
 		createAndAddChessboardReceivers(sc);		
 		
@@ -393,6 +396,7 @@ public class MarginalScenarioBuilder {
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 
+		/* FIXME we do nothing with this */
 		CarrierVehicleTypes types = new CarrierVehicleTypes();
 		types.getVehicleTypes().put(typeLight.getId(), typeLight);
 		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);

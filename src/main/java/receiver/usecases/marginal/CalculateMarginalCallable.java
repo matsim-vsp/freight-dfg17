@@ -72,10 +72,10 @@ public class CalculateMarginalCallable implements Callable<Double> {
 		new File(foldername + "input/").mkdirs();
 		new File(foldername + "output/").mkdirs();
 		ReceiverChessboardUtils.copyFile(
-				new File(sourceFolder + "usecases/chessboard/network/grid9x9.xml"),
+				new File(sourceFolder + "chessboard/network/grid9x9.xml"),
 				new File(foldername + "/input/network.xml"));
 		ReceiverChessboardUtils.copyFile(
-				new File(sourceFolder + "usecases/chessboard/vrpalgo/initialPlanAlgorithm.xml"),
+				new File(sourceFolder + "chessboard/vrpalgo/initialPlanAlgorithm.xml"),
 				new File(foldername + "input/algorithm.xml"));
 		ReceiverChessboardUtils.copyFile(
 				new File(release),
@@ -115,7 +115,7 @@ public class CalculateMarginalCallable implements Callable<Double> {
 		String line;
 		while((line = br.readLine()) != null) {
 			/* Do nothing. */
-//			log.info(line);
+			log.info(line);
 		}
 		int equilExitCode = equilProcess.waitFor();
 		log.info("Process ended for receiver '" + receiverId.toString() + ". Exit status '" + equilExitCode + "'");
