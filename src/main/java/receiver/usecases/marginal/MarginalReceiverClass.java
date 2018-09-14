@@ -69,6 +69,7 @@ public class MarginalReceiverClass {
 		
 		ReceiverUtils.setReplanInterval( 5, sc );
 		
+		MarginalScenarioBuilder.createChessboardCarriers(sc);
 		MarginalScenarioBuilder.createAndAddChessboardReceivers(sc);
 		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
 		MarginalScenarioBuilder.createReceiverOrders(sc);
@@ -128,7 +129,8 @@ public class MarginalReceiverClass {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
-		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
+//		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
+		final int statInterval = 1;
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 
 		controler.addControlerListener(scoreStats);

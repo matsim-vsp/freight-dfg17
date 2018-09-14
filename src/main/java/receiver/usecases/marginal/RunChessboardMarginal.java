@@ -248,7 +248,9 @@ public class RunChessboardMarginal {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
-		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() ) *2;
+//		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() ) *2;
+//		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
+		final int statInterval = 1;
 		//final LegHistogram freightOnly = new LegHistogram(20);
 
 		// freightOnly.setPopulation(controler.getScenario().getPopulation());
