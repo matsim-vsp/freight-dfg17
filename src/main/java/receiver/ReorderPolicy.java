@@ -1,8 +1,10 @@
 /* *********************************************************************** *
  * project: org.matsim.*
+ * ReorderPolicy.java
+ *                                                                         *
  * *********************************************************************** *
  *                                                                         *
- * copyright       : (C) 2018 by the members listed in the COPYING,        *
+ * copyright       : (C) 2009 by the members listed in the COPYING,        *
  *                   LICENSE and WARRANTY file.                            *
  * email           : info at matsim dot org                                *
  *                                                                         *
@@ -15,17 +17,27 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-  
+
 /**
  * 
  */
-package receiver.multiDay;
-  
+package receiver;
+
+import org.matsim.utils.objectattributes.attributable.Attributable;
+
 /**
- * Class to see if we can get a weekly plan sorted.
+ * A general interface to use for different {@link Receiver} reordering policies.
  * 
  * @author jwjoubert
  */
-public class WeeklyPlanner {
+public interface ReorderPolicy extends Attributable {
+
+	public String getPolicyName();
+	
+	/**
+	 * This method assumes that the stock on hand, and the reordering policy's
+	 * quantities are expressed in the same unit-of-measure. 
+	 */
+	public double calculateOrderQuantity(double onHand);
 
 }

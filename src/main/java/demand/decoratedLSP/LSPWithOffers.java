@@ -24,6 +24,7 @@ import lsp.replanning.LSPReplanner;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScorer;
 import lsp.shipment.LSPShipment;
+import org.matsim.core.controler.events.ReplanningEvent;
 
 public class LSPWithOffers implements LSPDecorator {
 
@@ -208,12 +209,18 @@ public class LSPWithOffers implements LSPDecorator {
 	public void assignShipmentToLSP(LSPShipment shipment) {
 		this.shipments.add(shipment);
 	}
-
-	@Override
-	public LSPScorer getScorer() {
-		return scorer;
+	
+	@Override public void replan( final ReplanningEvent arg0 ) {
+		if ( this.replanner!=null ) {
+			this.replanner.replan( arg0 );
+		}
 	}
 
+//	@Override
+//	public LSPScorer getScorer() {
+//		return scorer;
+//	}
+//
 	@Override
 	public void setScorer(LSPScorer scorer) {
 		this.scorer = scorer;
@@ -272,10 +279,10 @@ public class LSPWithOffers implements LSPDecorator {
 		}
 	}
 
-	@Override
-	public LSPReplanner getReplanner() {
-		return replanner;
-	}
+//	@Override
+//	public LSPReplanner getReplanner() {
+//		return replanner;
+//	}
 
 	@Override
 	public void setReplanner(LSPReplanner replanner) {
@@ -310,10 +317,9 @@ public class LSPWithOffers implements LSPDecorator {
 		return copiedPlan;
 	}
 
-	@Override
-	public SolutionScheduler getScheduler() {
-		return solutionScheduler;
-	}
-
+//	@Override
+//	public SolutionScheduler getScheduler() {
+//		return solutionScheduler;
+//	}
 
 }

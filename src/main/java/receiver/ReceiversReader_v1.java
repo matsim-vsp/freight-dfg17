@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.io;
+package receiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +45,15 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.reorderPolicy.ReorderPolicy;
-import receiver.reorderPolicy.SSReorderPolicy;
+import receiver.ReorderPolicy;
+import receiver.SSReorderPolicy;
 
 /**
  * Implementation to read version 1 {@link Receivers}.
  * 
  * @author jwjoubert
  */
-public class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader {
+ class ReceiversReader_v1 extends MatsimXmlParser implements MatsimReader {
 	private final static String RECEIVERS = "freightReceivers";
 	private final static String ATTRIBUTES = "attributes";
 	private final static String ATTRIBUTE = "attribute";

@@ -21,8 +21,8 @@
  */
 package receiver.product;
 
-import receiver.reorderPolicy.ReorderPolicy;
-import receiver.reorderPolicy.SSReorderPolicy;
+import receiver.ReorderPolicy;
+import receiver.SSReorderPolicy;
 
 /**
  * Returns a new instance of a receiver product with associated information, such as location, order policy parameters (min and max levels) and possibly demand rate (to be included later).

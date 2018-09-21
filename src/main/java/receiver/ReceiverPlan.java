@@ -49,7 +49,7 @@ import receiver.product.ReceiverOrder;
  *  
  * @author jwjoubert
  */
-public class ReceiverPlan implements BasicPlan, Attributable {
+public final class ReceiverPlan implements BasicPlan, Attributable {
 	private final Logger log = Logger.getLogger(ReceiverPlan.class);
 	private Attributes attributes;
 	private Receiver receiver = null;

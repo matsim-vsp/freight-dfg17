@@ -29,7 +29,6 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
-import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
@@ -39,9 +38,8 @@ import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 
-import receiver.FreightScenario;
-import receiver.MutableFreightScenario;
 import receiver.Receiver;
+import receiver.ReceiverUtils;
 import receiver.collaboration.MutableCoalition;
 import receiver.usecases.ReceiverChessboardUtils;
 
@@ -53,6 +51,11 @@ public class MarginalReceiverClass {
 	final private static Logger LOG = Logger.getLogger(MarginalReceiverClass.class);
 
 	public static void main(String[] args) {
+		LOG.info("Runninng with the following arguments: ");
+		for(String s : args) {
+			LOG.info(s);
+		}
+		
 		long seed = Long.parseLong(args[0]);
 		String folder = args[1];
 		folder += folder.endsWith("/") ? "" : "/";
@@ -63,36 +66,35 @@ public class MarginalReceiverClass {
 		/* Use the code (components) from ReceiverChessboardScenario */
 		String inputNetwork = "input/network.xml";
 		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(inputNetwork, "./output/", seed, 1);
-		Carriers carriers = MarginalScenarioBuilder.createChessboardCarriers(sc);
 		
-		MutableFreightScenario fs = new MutableFreightScenario(sc, carriers);
-		fs.setReplanInterval(5);
+		ReceiverUtils.setReplanInterval( 5, sc );
 		
-		MarginalScenarioBuilder.createAndAddChessboardReceivers(fs);
-		MarginalScenarioBuilder.createAndAddControlGroupReceivers(fs);
-		MarginalScenarioBuilder.createReceiverOrders(fs);
+		MarginalScenarioBuilder.createChessboardCarriers(sc);
+		MarginalScenarioBuilder.createAndAddChessboardReceivers(sc);
+		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
+		MarginalScenarioBuilder.createReceiverOrders(sc);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
 		if(receiverId != Id.create("0", Receiver.class)) {
-			fs.getReceivers().getReceivers().remove(receiverId);
+			ReceiverUtils.getReceivers( sc ).getReceivers().remove(receiverId);
 		}
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		MarginalScenarioBuilder.generateCarrierPlan(fs.getCarriers(), fs.getScenario().getNetwork(),  "input/algorithm.xml");
-		MarginalScenarioBuilder.writeFreightScenario(fs);
+		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  "input/algorithm.xml");
+		MarginalScenarioBuilder.writeFreightScenario(sc);
 		
 		/* Link the carriers to the receivers. */
-		fs.getReceivers().linkReceiverOrdersToCarriers(fs.getCarriers());
+		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
 		
 		/* Add carrier and receivers to coalition */
 		MutableCoalition coalition = new MutableCoalition();
 		
-		for (Carrier carrier : fs.getCarriers().getCarriers().values()){
+		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
 			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
 		
-		for (Receiver receiver : fs.getReceivers().getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
@@ -104,31 +106,32 @@ public class MarginalReceiverClass {
 			}
 		}
 		
- 		fs.setCoalition(coalition);
+		ReceiverUtils.setCoalition( coalition, sc );
 		
 		
 		/* Make config changes relevant to the current marginal run. */
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-		sc.getConfig().controler().setLastIteration(fs.getReplanInterval());
+		sc.getConfig().controler().setLastIteration( ReceiverUtils.getReplanInterval( sc ) );
 		
 		Controler controler = new Controler(sc);
 
-		ReceiverChessboardUtils.setupCarriers(controler, fs);
+		ReceiverChessboardUtils.setupCarriers(controler);
 
-		ReceiverChessboardUtils.setupReceivers(controler, fs);	
+		ReceiverChessboardUtils.setupReceivers(controler);	
 		
-		prepareFreightOutputDataAndStats(controler, fs, 1);
+		prepareFreightOutputDataAndStats(controler, 1);
 
 		controler.run();
 	}
 	
 	
-	private static void prepareFreightOutputDataAndStats(MatsimServices controler, final FreightScenario fs, int run) {
+	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
-		final int statInterval = fs.getReplanInterval();
-		CarrierScoreStats scoreStats = new CarrierScoreStats(fs.getCarriers(), fs.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+//		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
+		final int statInterval = 1;
+		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 
 		controler.addControlerListener(scoreStats);
 
@@ -136,16 +139,16 @@ public class MarginalReceiverClass {
 			@Override
 			public void notifyIterationEnds(IterationEndsEvent event) {
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-//				if((event.getIteration() + 1) % (statInterval) != 0) return;
+				if((event.getIteration() + 1) % (statInterval) != 0) return;
 				//write plans
-				new CarrierPlanXmlWriterV2(fs.getCarriers()).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
 			}
 		});
 		
 		controler.addControlerListener(new ShutdownListener() {
 			@Override
 			public void notifyShutdown(ShutdownEvent event) {
-				int lastIteration = fs.getScenario().getConfig().controler().getLastIteration();
+				int lastIteration = controler.getScenario().getConfig().controler().getLastIteration();
 				String outputDir = controler.getConfig().controler().getOutputDirectory();
 				outputDir += outputDir.endsWith("/") ? "" : "/";
 				File f1 = new File(outputDir + "ITERS/it." + lastIteration + "/" + lastIteration + ".carrierPlans.xml.gz");

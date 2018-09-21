@@ -69,7 +69,7 @@ public class FreightQSimFactory implements Provider<Mobsim> {
 					"There is no configuration set for the QSim. Please add the module 'qsim' to your config file.");
 		}
 		final QSim sim = QSimUtils.createDefaultQSim(scenario, eventsManager);
-		
+
 		Collection<MobSimVehicleRoute> vRoutes = carrierResourceTracker.createPlans();
 		FreightAgentSource agentSource = new FreightAgentSource(vRoutes, new DefaultAgentFactory(sim), sim);
 		sim.addAgentSource(agentSource);

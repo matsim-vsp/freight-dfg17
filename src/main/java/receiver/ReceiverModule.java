@@ -18,54 +18,56 @@
 
 package receiver;
 
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.AbstractModule;
 
-import receiver.controler.ReceiverControlerListener;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.scoring.ReceiverScoringFunctionFactory;
 
-public class ReceiverModule extends AbstractModule {
+public final class ReceiverModule extends AbstractModule {
 
 	private Receivers receivers;
 	ReceiverScoringFunctionFactory sFuncFac;
 	private ReceiverOrderStrategyManagerFactory stratManFac;
-	private FreightScenario fsc;
-	
-	
-	public ReceiverModule(Receivers receivers, ReceiverScoringFunctionFactory sFuncFac, ReceiverOrderStrategyManagerFactory stratManFac, FreightScenario fsc){
+	private Scenario sc;
+
+
+	public ReceiverModule(
+			Receivers receivers, 
+			ReceiverScoringFunctionFactory sFuncFac, 
+			ReceiverOrderStrategyManagerFactory stratManFac,
+			Scenario sc){
 		this.receivers = receivers;
 		this.sFuncFac = sFuncFac;
 		this.stratManFac = stratManFac;
-		this.fsc = fsc;
+		this.sc = sc;
 	};
-	
-	
-	
+
+
+
 	@Override
 	public void install() {
 
-		
 		bind(Receivers.class).toInstance(receivers);
-		
+
 		if (sFuncFac != null){
-		bind(ReceiverScoringFunctionFactory.class).toInstance(sFuncFac);
+			bind(ReceiverScoringFunctionFactory.class).toInstance(sFuncFac);
 		}
-		
+
 		if (stratManFac != null){
-		bind(ReceiverOrderStrategyManagerFactory.class).toInstance(stratManFac);
+			bind(ReceiverOrderStrategyManagerFactory.class).toInstance(stratManFac);
 		}
-		
-		if (fsc != null){
-		bind(FreightScenario.class).toInstance(fsc);
+
+		if(sc != null) {
+			bind(Scenario.class).toInstance(sc);
 		}
-		
+
 		/*
 		 * Need a controler listener. Keeping it simple for now.
 		 */
 
 		addControlerListenerBinding().to(ReceiverControlerListener.class);
-		
-    }
-       
-		
+
+	}
+
+
 }

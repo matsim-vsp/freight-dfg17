@@ -24,6 +24,8 @@ package receiver.reorderPolicy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.matsim.testcases.MatsimTestUtils;
+import receiver.ReorderPolicy;
+import receiver.SSReorderPolicy;
 
 public class SSReorderPolicyTest {
 

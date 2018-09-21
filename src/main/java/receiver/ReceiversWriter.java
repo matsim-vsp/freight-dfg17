@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.io;
+package receiver;
 
 import java.io.IOException;
 
@@ -32,9 +32,6 @@ import org.matsim.core.utils.io.MatsimXmlWriter;
 import org.matsim.core.utils.io.UncheckedIOException;
 import org.matsim.core.utils.misc.Counter;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
@@ -45,7 +42,7 @@ import receiver.product.ReceiverProduct;
  * 
  * @author jwjoubert
  */
-public class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
+public final class ReceiversWriter extends MatsimXmlWriter implements MatsimWriter{
 	final private Logger log = Logger.getLogger(ReceiversWriter.class);
 	final private Receivers receivers;
 	final private Counter counter = new Counter("   receiver # ");

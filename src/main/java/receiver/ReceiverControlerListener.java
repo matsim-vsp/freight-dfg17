@@ -19,13 +19,12 @@
 /**
  * 
  */
-package receiver.controler;
+package receiver;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.HasPlansAndId;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
@@ -34,18 +33,11 @@ import org.matsim.core.controler.events.ScoringEvent;
 import org.matsim.core.controler.listener.BeforeMobsimListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
-import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
-import org.matsim.core.replanning.selectors.KeepSelected;
 
-import receiver.FreightScenario;
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
-import receiver.replanning.CollaborationStatusMutator;
+import com.google.inject.Inject;
+
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.scoring.ReceiverScoringFunctionFactory;
-import receiver.tracking.ReceiverTracker;
 
 /**
  * This controller ensures that each receiver receives a cost (score) per order at the end of each iteration and replans its orders based on the cost of the previous iteration and past iterations.
@@ -53,15 +45,15 @@ import receiver.tracking.ReceiverTracker;
  * @author wlbean
  *
  */
-public class ReceiverControlerListener implements ScoringListener,
+class ReceiverControlerListener implements ScoringListener,
 ReplanningListener, BeforeMobsimListener {
 
 	private Receivers receivers;
 	private ReceiverOrderStrategyManagerFactory stratManFac;
 	private ReceiverScoringFunctionFactory scorFuncFac;
 	private ReceiverTracker tracker;
-	private FreightScenario fsc;
 	@Inject EventsManager eMan;
+	@Inject Scenario sc;
 
 	/**
 	 * This creates a new receiver controler listener for receivers with replanning abilities.
@@ -70,11 +62,10 @@ ReplanningListener, BeforeMobsimListener {
 	 */
 
 	@Inject
-	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac, FreightScenario fsc){
+	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
 		this.receivers = receivers;
 		this.stratManFac = stratManFac;
 		this.scorFuncFac = scorFuncFac;
-		this.fsc = fsc;
 	}
 
 
@@ -92,7 +83,7 @@ ReplanningListener, BeforeMobsimListener {
 
 		for(Receiver receiver : receivers.getReceivers().values()){
 			
-			if ((event.getIteration() - 1) % fsc.getReplanInterval() == 0) {
+			if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
 					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
 				}
 
@@ -114,7 +105,7 @@ ReplanningListener, BeforeMobsimListener {
 //		collaborationStratMan.addStrategy(strategy, null, 0.2);
 //		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
 		
-		if (event.getIteration() % fsc.getReplanInterval() != 0) {
+		if (event.getIteration() % ReceiverUtils.getReplanInterval( sc ) != 0) {
 			return;
 		} 
 		
@@ -135,9 +126,9 @@ ReplanningListener, BeforeMobsimListener {
 	public void notifyScoring(ScoringEvent event) {
 		if (event.getIteration() == 0) {
 			this.tracker.scoreSelectedPlans();
-		} 
-
-		if ((event.getIteration()+1) % fsc.getReplanInterval() == 0) {
+		}
+		
+		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
 			this.tracker.scoreSelectedPlans();
 		} else {		
 			for (Receiver receiver : receivers.getReceivers().values()){
@@ -149,7 +140,7 @@ ReplanningListener, BeforeMobsimListener {
 
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
-		tracker = new ReceiverTracker(fsc, scorFuncFac);
+		tracker = new ReceiverTracker(scorFuncFac, sc);
 		eMan.addHandler(tracker);		
 	}
 

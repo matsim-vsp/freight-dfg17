@@ -19,14 +19,11 @@
 /**
  * 
  */
-package receiver.mobsim;
+package receiver;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.scoring.ScoringFunction;
-
-import receiver.Receiver;
-import receiver.ReceiverPlan;
 
 /**
  * This keeps track of a single receiver during simulation.
@@ -34,7 +31,7 @@ import receiver.ReceiverPlan;
  * @author wlbean
  */
 
-public class ReceiverAgent {
+class ReceiverAgent {
 
 	private final Receiver receiver;
 	private final ScoringFunction scorFunc;

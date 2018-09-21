@@ -42,7 +42,7 @@ import receiver.product.ReceiverOrder;
  * @author wlbean
  *
  */
-public class Receivers implements Attributable{
+public final class Receivers implements Attributable{
 	
 	private Logger log = Logger.getLogger(Receivers.class);
 	private Attributes attributes = new Attributes();

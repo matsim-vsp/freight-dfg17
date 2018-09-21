@@ -1,10 +1,8 @@
 /* *********************************************************************** *
  * project: org.matsim.*
- * ReorderPolicy.java
- *                                                                         *
  * *********************************************************************** *
  *                                                                         *
- * copyright       : (C) 2009 by the members listed in the COPYING,        *
+ * copyright       : (C) 2018 by the members listed in the COPYING,        *
  *                   LICENSE and WARRANTY file.                            *
  * email           : info at matsim dot org                                *
  *                                                                         *
@@ -17,27 +15,18 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-
+  
 /**
  * 
  */
-package receiver.reorderPolicy;
-
-import org.matsim.utils.objectattributes.attributable.Attributable;
-
+package receiver.usecases.marginal;
+  
 /**
- * A general interface to use for different {@link Receiver} reordering policies.
+ * Class to just help with setting experimental parameters, which are called 
+ * from multiple places, in ONE location.
  * 
  * @author jwjoubert
  */
-public interface ReorderPolicy extends Attributable {
-
-	public String getPolicyName();
-	
-	/**
-	 * This method assumes that the stock on hand, and the reordering policy's
-	 * quantities are expressed in the same unit-of-measure. 
-	 */
-	public double calculateOrderQuantity(double onHand);
-
+public class MarginalExperimentParameters {
+	public static int STAT_INTERVAL = 5;
 }

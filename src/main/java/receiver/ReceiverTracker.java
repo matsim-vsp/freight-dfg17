@@ -19,21 +19,19 @@
 /**
  * 
  */
-package receiver.tracking;
+package receiver;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
 
-import receiver.FreightScenario;
-import receiver.Receiver;
-import receiver.collaboration.MarginalCostSharing;
+import com.google.inject.Inject;
+
 import receiver.collaboration.ProportionalCostSharing;
-import receiver.mobsim.ReceiverAgent;
-import receiver.scoring.ReceiverScoringFunctionFactory;
 
 /**
  * This keeps track of all receiver agents during simulation.
@@ -41,13 +39,17 @@ import receiver.scoring.ReceiverScoringFunctionFactory;
  * @author wlbean
  *
  */
-public class ReceiverTracker implements EventHandler {
-	private final FreightScenario fsc;
+
+
+public final class ReceiverTracker implements EventHandler {
+//	@Inject Scenario sc;
+	private Scenario sc;
+	
 	//private final Receivers receivers;
 	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
 
-	public ReceiverTracker(FreightScenario fsc, ReceiverScoringFunctionFactory scorFuncFac){
-		this.fsc = fsc;
+	public ReceiverTracker(ReceiverScoringFunctionFactory scorFuncFac, Scenario sc){
+		this.sc = sc;
 		createReceiverAgents(scorFuncFac);
 	}
 
@@ -59,10 +61,10 @@ public class ReceiverTracker implements EventHandler {
 		//MarginalCostSharing mcs = new MarginalCostSharing(350);
 		//mcs.allocateCoalitionCosts(fsc);
 		
-		ProportionalCostSharing pcs = new ProportionalCostSharing(350);
-		pcs.allocateCoalitionCosts(fsc);
+		ProportionalCostSharing pcs = new ProportionalCostSharing(350, sc);
+		pcs.allocateCoalitionCosts();
 		
-		for (Receiver receiver : fsc.getReceivers().getReceivers().values()){
+		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			ReceiverAgent rAgent = findReceiver(receiver.getId());
 			rAgent.scoreSelectedPlan();
 		}		
@@ -73,7 +75,7 @@ public class ReceiverTracker implements EventHandler {
 	 * Creates the list of all receiver agents.
 	 */
 	private void createReceiverAgents(ReceiverScoringFunctionFactory scorFuncFac) {
-		for (Receiver receiver: fsc.getReceivers().getReceivers().values()){
+		for (Receiver receiver: ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			ScoringFunction receiverScorFunc = scorFuncFac.createScoringFunction(receiver);
 			ReceiverAgent rAgent = new ReceiverAgent(receiver, receiverScorFunc);
 			receiverAgents.add(rAgent);

@@ -15,31 +15,24 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-  
+
 /**
  * 
  */
 package receiver;
 
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.core.scoring.ScoringFunction;
 
-import receiver.collaboration.Coalition;
+import receiver.Receiver;
 
 /**
+ * Scoring function factory interface for receiver agents;
+ * 
+ * @author wlbean
  *
- * @author jwjoubert, wlbean
  */
-public interface FreightScenario{
+public interface ReceiverScoringFunctionFactory {
 	
-	public Scenario getScenario();
-
-	public Carriers getCarriers();
+	ScoringFunction createScoringFunction(Receiver receiver);
 	
-	public Receivers getReceivers();
-	
-	public int getReplanInterval();
-	
-	public Coalition getCoalition();
-
 }
