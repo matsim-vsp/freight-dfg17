@@ -51,7 +51,7 @@ public class MarginalReceiverClass {
 	final private static Logger LOG = Logger.getLogger(MarginalReceiverClass.class);
 
 	public static void main(String[] args) {
-		LOG.info("Runninng with the following arguments: ");
+		LOG.info("Running with the following arguments: ");
 		for(String s : args) {
 			LOG.info(s);
 		}
@@ -66,8 +66,9 @@ public class MarginalReceiverClass {
 		/* Use the code (components) from ReceiverChessboardScenario */
 		String inputNetwork = "input/network.xml";
 		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(inputNetwork, "./output/", seed, 1);
+		sc.getConfig().controler().setLastIteration(50);
 		
-		ReceiverUtils.setReplanInterval( 5, sc );
+		ReceiverUtils.setReplanInterval(50, sc );
 		
 		MarginalScenarioBuilder.createChessboardCarriers(sc);
 		MarginalScenarioBuilder.createAndAddChessboardReceivers(sc);

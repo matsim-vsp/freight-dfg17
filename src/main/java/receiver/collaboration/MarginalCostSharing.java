@@ -27,20 +27,23 @@ import receiver.product.ReceiverOrder;
  *
  */
 public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
-	@Inject Scenario sc;
 	
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
 	private Attributes attributes = new Attributes();
 	private String descr = "Marginal sharing of costs between carrier(s) and receiver(s)";
 	private double fee;
+	private Scenario sc;
 
 	/**
 	 * Create a new marginal cost sharing instance where a fixed fee per tonne (as specified) is 
 	 * charged by the carrier for non-collaborating receivers.
 	 * @param fee
+	 * @param sc 
 	 */
 
-	public MarginalCostSharing(double fee){
+	public MarginalCostSharing(double fee, Scenario sc){
+		this.sc = sc;
+		this.fee = fee;
 	}
 
 
@@ -109,19 +112,19 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 
 			/* Capture the grand coalition score */
 			if (counter == ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().size()){
-				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C({N})")){
-					ReceiverUtils.getCoalition( sc ).getAttributes().removeAttribute("C({N})");
+				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N)")){
+					ReceiverUtils.getCoalition( sc ).getAttributes().removeAttribute("C(N)");
 				}
-				ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute("C({N})", cost);
+				ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute("C(N)", cost);
 
 			} else {
 
 				/* Capture all the sub-coalition scores */
-				String coalitionDesc = "C({N}/{" ;
+				String coalitionDesc = "C(N|{" ;
 				
 				for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-					if (!ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
-						coalitionDesc =  coalitionDesc + receiver.getId().toString() + ",";
+					if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+						coalitionDesc =  coalitionDesc + receiver.getId().toString();
 					}
 				}
 				coalitionDesc = coalitionDesc + "})";
@@ -134,17 +137,17 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 
 				/* Calculate carrier score */
 				double subScore = 0.0;
-				double grandScore = (double) ReceiverUtils.getCoalition( sc ).getAttributes().getAttribute("C({N})");
+				double grandScore = (double) ReceiverUtils.getCoalition( sc ).getAttributes().getAttribute("C(N)");
 				carrier.getSelectedPlan().setScore(grandScore - subScore);	
 			}
 		}
 
 		/* Calculate individual receiver scores.*/
 		double grandScore = 0;
-		if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C({N})")){
+		if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N)")){
 			grandScore = (double) ReceiverUtils.getCoalition( sc )
 					.getAttributes()
-					.getAttribute("C({N})");					
+					.getAttribute("C(N)");					
 		}
 		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
@@ -154,10 +157,10 @@ public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 			 */
 			if ( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
 				double subScore = 0;
-				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C({N}/{" + receiver.getId().toString() + ",})")){
+				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N|{" + receiver.getId().toString() + "})")){
 					subScore = (double) ReceiverUtils.getCoalition( sc )
 							.getAttributes()
-							.getAttribute("C({N}/{" + receiver.getId().toString() + ",})");
+							.getAttribute("C(N|{" + receiver.getId().toString() + "})");
 				}
 				if (grandScore - subScore < 0){
 					receiver.getSelectedPlan().setScore(grandScore - subScore);

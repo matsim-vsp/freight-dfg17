@@ -124,7 +124,7 @@ public class RunMarginal {
 		for(Id<Receiver> rId : jobs.keySet()) {
 			try {
 				double cost = jobs.get(rId).get();
-				String attr = String.format("C(N)|{%s}", rId.toString());
+				String attr = String.format("C(N|{%s})", rId.toString());
 				ReceiverUtils.getReceivers( sc ).getReceivers().get(rId).getAttributes().putAttribute(attr, cost);
 				ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute(attr, cost);
 			} catch (InterruptedException | ExecutionException e) {

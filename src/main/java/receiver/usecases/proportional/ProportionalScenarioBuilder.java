@@ -21,12 +21,14 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.proportional;
 
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Random;
+
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -55,11 +57,16 @@ import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.VehicleType;
+
+import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
+import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
+import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
+import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
+
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
-import receiver.ReceiversWriter;
 import receiver.SSReorderPolicy;
 import receiver.collaboration.MutableCoalition;
 import receiver.product.Order;
@@ -67,32 +74,25 @@ import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Random;
-
 /**
  * Various utilities for building receiver scenarios (for now).
  * 
  * @author jwjoubert, wlbean
  */
-public class MarginalScenarioBuilder {
-	private final static Logger LOG = Logger.getLogger(MarginalScenarioBuilder.class);
+public class ProportionalScenarioBuilder {
+	private final static Logger LOG = Logger.getLogger(ProportionalScenarioBuilder.class);
 	private final static int NUMBER_OF_RECEIVERS = 60;
 	
 
 	/**
 	 * Build the entire chessboard example.
 	 */
-	public static Scenario createChessboardScenario( String outputDirectory, long seed, int run, boolean write) {
+	public static Scenario createChessboardScenario(String outputDirectory, long seed, int run, boolean write) {
 		Scenario sc = setupChessboardScenario("./scenarios/chessboard/network/grid9x9.xml", outputDirectory, seed, run);
 		
-//		ReceiverUtils.setReplanInterval( 50, sc );
-		ReceiverUtils.setReplanInterval( 50, sc );
+		ReceiverUtils.setReplanInterval(50, sc );
 		
-		/* Create and add the carrier agent(s). */
+		/* Create and add chessboard carriers. */
 		createChessboardCarriers(sc);
 		
 		/* Create the grand coalition receiver members and allocate orders. */
@@ -104,7 +104,7 @@ public class MarginalScenarioBuilder {
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+		generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 		
 		
 		if(write) {
@@ -140,32 +140,13 @@ public class MarginalScenarioBuilder {
 	}
 
 
-	/**
-	 * FIXME Need to complete this. 
-	 * @return
-	 */
-	public static Scenario setupChessboardScenario(String inputNetwork, String outputDirectory, long seed, int run) {
-		Config config = ConfigUtils.createConfig();
-		config.controler().setFirstIteration(0);
-//		config.controler().setLastIteration(1000);
-		config.controler().setLastIteration(1500);
-		config.controler().setMobsim("qsim");
-//		config.controler().setWriteSnapshotsInterval(50);
-		config.controler().setWriteSnapshotsInterval(50);
-		config.global().setRandomSeed(seed);
-		config.network().setInputFile(inputNetwork);
-		config.controler().setOutputDirectory(outputDirectory);
 
-		Scenario sc = ScenarioUtils.loadScenario(config);
-		return sc;
-	}
-	
 	/*
 	 * Creates and adds a control group of receivers for experiments. These receivers will be allowed to replan, 
 	 * but NOT be allowed to join the grand coalition. This group represents receivers that are unwilling to 
 	 * collaborate in any circumstances.
 	 */
-	public static void createAndAddControlGroupReceivers( Scenario sc) {
+	public static void createAndAddControlGroupReceivers(Scenario sc) {
 		Network network = sc.getNetwork();
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		
@@ -177,12 +158,31 @@ public class MarginalScenarioBuilder {
 			receiver.getAttributes().putAttribute("collaborationStatus", false);
 		
 			receivers.addReceiver(receiver);
-		}
-//		ReceiverUtils.setReceivers( receivers, sc );
+		}		
+//		ReceiverUtils.setReceivers( receivers, sc );	
 	}
 
+	/**
+	 * FIXME Need to complete this. 
+	 * @param outputDirectory 
+	 * @param string 
+	 * @return
+	 */
+	public static Scenario setupChessboardScenario(String inputNetwork, String outputDirectory, long seed, int run) {
+		Config config = ConfigUtils.createConfig();
+		config.controler().setFirstIteration(0);
+		config.controler().setLastIteration(1500);
+		config.controler().setMobsim("qsim");
+		config.controler().setWriteSnapshotsInterval(50);
+		config.global().setRandomSeed(seed);
+		config.network().setInputFile(inputNetwork);
+		config.controler().setOutputDirectory(outputDirectory);
 
-	public static void writeFreightScenario( Scenario sc) {
+		Scenario sc = ScenarioUtils.loadScenario(config);
+		return sc;
+	}
+	
+	public static void writeFreightScenario(Scenario sc) {
 		/* Write the necessary bits to file. */
 		String outputFolder = sc.getConfig().controler().getOutputDirectory();
 		outputFolder += outputFolder.endsWith("/") ? "" : "/";
@@ -190,7 +190,7 @@ public class MarginalScenarioBuilder {
 		
 		new ConfigWriter(sc.getConfig()).write(outputFolder + "config.xml");
 		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(outputFolder + "carriers.xml");
-		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
+//		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
 
 		/* Write the vehicle types. FIXME This will have to change so that vehicle
 		 * types lie at the Carriers level, and not per Carrier. In this scenario 
@@ -203,6 +203,7 @@ public class MarginalScenarioBuilder {
 	 * 
 	 * @param carriers
 	 * @param network
+	 * @param string 
 	 */
 	public static void generateCarrierPlan(Carriers carriers, Network network, String algorithmFile) {
 		Carrier carrier = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class)); 
@@ -245,6 +246,7 @@ public class MarginalScenarioBuilder {
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
 	 * @param fs
+	 * @param receivers 
 	 */
 	public static void createReceiverOrders( Scenario sc) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
@@ -290,7 +292,7 @@ public class MarginalScenarioBuilder {
 //				tw = 10;
 //			} else tw = 12;
 			
-//			/* Set the different service durations for experiments. */
+			/* Set the different service durations for experiments. */
 //			if (r <= 15){
 //				serdur = "01:00:00";
 //			} else if (r <= 30){
@@ -307,7 +309,8 @@ public class MarginalScenarioBuilder {
 //				serdur = "03:00:00";
 //			} else serdur = "04:00:00";
 			
-			/* Set the different delivery frequencies for experiments. */
+//			
+//			/* Set the different delivery frequencies for experiments. */
 			if (r <= 12){
 				numDel = 1;
 			} else if (r <= 24){
@@ -327,7 +330,7 @@ public class MarginalScenarioBuilder {
 			} else if (r <= 108){
 				numDel = 4;
 			} else numDel = 5;
-	
+
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
 			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);

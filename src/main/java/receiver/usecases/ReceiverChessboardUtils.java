@@ -57,7 +57,9 @@ import receiver.ReceiverUtils;
 import receiver.Receivers;
 import receiver.collaboration.Coalition;
 import receiver.ReceiversReader;
+import receiver.replanning.NumDelReceiverOrderStrategyManagerImpl;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
+import receiver.replanning.ServiceTimeReceiverOrderStrategyManagerImpl;
 import receiver.replanning.TimeWindowReceiverOrderStrategyManagerImpl;
 import receiver.ReceiverScoringFunctionFactory;
 
@@ -151,19 +153,19 @@ public class ReceiverChessboardUtils {
 		//		int selector = 0;
 		//		switch (selector) {
 		//			case 0: {
-		final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
-		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
-		controler.addOverridingModule(receiverControler);
+//		final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
+//		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
+//		controler.addOverridingModule(receiverControler);
 		//			}
 		//			case 1: {
-		//				final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-		//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-		//				controler.addOverridingModule(receiverControler);
+//						final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
+//						ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
+//						controler.addOverridingModule(receiverControler);
 		//			}
 		//			case 2: {
-		//				final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
-		//				ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, fsc);
-		//				controler.addOverridingModule(receiverControler); 
+						final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
+						ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
+						controler.addOverridingModule(receiverControler); 
 		//			}
 		//			default: { 
 		//				Log.warn("No order strategy manager selected.");		

@@ -123,7 +123,8 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(receiverId);
 				
-				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
+//				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
+				if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == true){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 					totalCoalitionVolume += getReceiverOrderTotal(ro);
 				} else {
@@ -139,8 +140,8 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 			for(Id<Receiver> receiverId : carrierCustomers.get(carriedId)) {
 				Receiver thisReceiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(receiverId);
 				
-				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == true){
-
+//				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == true){
+				if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == true){
 					double thisVolume = 0.0;
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 
@@ -185,7 +186,8 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 				ReceiverPlan plan = thisReceiver.getSelectedPlan();
 
 				/* Score non-collaborating receivers and calculate the total cost allocated to them. */
-			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
+//			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
+			if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == false){
 					double total = 0.0;				
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
 						double thisVolume = 0.0;

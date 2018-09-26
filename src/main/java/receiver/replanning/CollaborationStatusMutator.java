@@ -17,7 +17,7 @@ public class CollaborationStatusMutator implements GenericPlanStrategyModule<Rec
 	 * A class that changes a receiver's collaboration status.
 	 */
 	
-	public CollaborationStatusMutator(){
+public CollaborationStatusMutator(){
 		
 	}
 
@@ -29,14 +29,18 @@ public class CollaborationStatusMutator implements GenericPlanStrategyModule<Rec
 	@Override
 	public void handlePlan(ReceiverPlan receiverPlan) {
 		boolean newstatus;
+		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("grandCoalitionMember");
 		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("collaborationStatus");
 		
-		if (status == true){
-			 newstatus = false;
-		} else {
-			newstatus = true;
-		}
-		
+
+		if (grandMember == true){
+			if (status == true){
+				newstatus = false;
+			} else {
+				newstatus = true;
+			}
+		} else newstatus = status;
+
 		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", newstatus);
 
 	}
