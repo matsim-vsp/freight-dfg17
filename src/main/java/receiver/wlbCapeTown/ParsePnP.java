@@ -67,6 +67,7 @@ public class ParsePnP {
 		pr.setSink(sink);
 		pr.run();
 		Map<Long, Coord> map = sink.getCoordMap();
+		Map<Long, String> names = sink.getNameMap();
 		
 		/* Create and write facilities */
 		Scenario sc = ScenarioUtils.createScenario(ConfigUtils.createConfig());
@@ -77,13 +78,38 @@ public class ParsePnP {
 			Coord c = ct.transform(map.get(l));
 			ActivityFacility facility = facilities.getFactory().createActivityFacility(Id.create(l, ActivityFacility.class), c);
 			facilities.addActivityFacility(facility);
+			
+			/* Add the name as attribute. */
+			if(names.containsKey(l)) {
+				String cleanName = cleanName(names.get(l));
+				facility.getAttributes().putAttribute("name", cleanName);
+			}
 		}
 		new FacilitiesWriter(facilities).write(facilitiesFile);
 		
+		reportStoreTypes(facilities);
+		
 		LOG.info("Done parsing PnP.");
+	}
+	
+	
+	private static String cleanName(String name) {
+		
+		return name;
 	}
 
 	
+	private static void reportStoreTypes(ActivityFacilities facilities) {
+		/* First just list all the facility names. */
+		LOG.info("Names:");
+		for(ActivityFacility facility : facilities.getFacilities().values()) {
+			Object nameO = facility.getAttributes().getAttribute("name");
+			if(nameO != null) {
+				LOG.info("  --> " + nameO.toString());
+			}
+		}
+		
+	}
 	
 	
 	
