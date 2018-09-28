@@ -85,7 +85,7 @@ public class RunCapeTownReceiver {
 		LOG.info("Starting run " + run);
 		String outputfolder = String.format("./output/capetown/run_%03d/", run);
 		new File(outputfolder).mkdirs();
-		Scenario sc = CapeTownScenarioBuilder.createChessboardScenario(SEED_BASE*run, run, true);
+		Scenario sc = CapeTownScenarioBuilder.createCapeTownScenario(SEED_BASE*run, run, true);
 		
 		/* Write headings */
 		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");

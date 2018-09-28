@@ -22,6 +22,5 @@ public class CapeTownExperimentParameters {
 	
 	public static int NUM_DELIVERIES = 5;
 	
-	
-
+	public static double PROPORTION_CORPORATE = 0.4;
 }
