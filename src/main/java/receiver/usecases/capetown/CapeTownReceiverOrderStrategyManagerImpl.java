@@ -1,7 +1,7 @@
 /**
  * 
  */
-package receiver.replanning;
+package receiver.usecases.capetown;
 
 import javax.inject.Inject;
 
@@ -15,6 +15,7 @@ import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
+import receiver.replanning.CollaborationStatusMutator;
 import receiver.replanning.OrderChanger;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
@@ -24,10 +25,10 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  * @author wlbean
  *
  */
-public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+public class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	@Inject Scenario sc;
 	
-	public TimeWindowReceiverOrderStrategyManagerImpl(){		
+	public CapeTownReceiverOrderStrategyManagerImpl(){		
 	}
 
 	@Override
@@ -49,17 +50,19 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			timeStrategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("01:00:00")));
+			timeStrategy.addStrategyModule(new CapeTownTimeWindowMutator(Time.parseTime("01:00:00")));
 			timeStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(timeStrategy, null, 0.3);	
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), timeStrategy, null, 0.0);
 		}		
 		
+		
 		/* Replanning for grand coalition receivers.*/
 		
 		{			
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new CollaborationStatusMutator());
+			strategy.addStrategyModule(new CapeTownCollaborationStatusMutator());
+			strategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(strategy, null, 0.2);
 			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);			
 		}

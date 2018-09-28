@@ -87,7 +87,7 @@ public class ReceiverChessboardScenario {
 	 */
 	public static Scenario createChessboardScenario( long seed, int run, boolean write) {
 		MatsimRandom.reset(seed);
-		int numberOfReceivers = 60;
+		int numberOfReceivers = 5;
 		Scenario sc = setupChessboardScenario(seed, run);
 		createChessboardCarriersAndAddToScenario(sc);
 		

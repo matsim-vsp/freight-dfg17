@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.capetown;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -42,13 +42,12 @@ import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
-import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
+import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.utils.io.IOUtils;
-
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
@@ -59,7 +58,6 @@ import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
-import receiver.usecases.ReceiverChessboardUtils;
 import receiver.usecases.ReceiverScoreStats;
 
 /**
@@ -67,10 +65,9 @@ import receiver.usecases.ReceiverScoreStats;
  * @author jwjoubert, wlbean
  */
 
-public class RunChessboardMarginal {
-	final private static Logger LOG = Logger.getLogger(RunChessboardMarginal.class);
+public class RunCapeTownReceiver {
+	final private static Logger LOG = Logger.getLogger(RunCapeTownReceiver.class);
 	final private static long SEED_BASE = 20180816l;	
-//	private static int replanInt;
 
 	/**
 	 * @param args
@@ -78,37 +75,22 @@ public class RunChessboardMarginal {
 	public static void main(String[] args) {
 		int startRun = Integer.parseInt(args[0]);
 		int endRun = Integer.parseInt(args[1]);
-		int numberOfThreads = Integer.parseInt(args[2]);
 		for(int i = startRun; i < endRun; i++) {
-			run(i, numberOfThreads);
+			run(i);
 		}
 	}
 
 
-	public static void run(int run, int numberOfThreads) {
-
-		String outputfolder = String.format("./output/marginal/run_%03d/", run);
+	public static void run(int run) {
+		LOG.info("Starting run " + run);
+		String outputfolder = String.format("./output/capetown/run_%03d/", run);
 		new File(outputfolder).mkdirs();
-		
-		/* Before the main run starts, we need to calculate the marginal 
-		 * contribution for each receiver. This is done, for now, by running
-		 * a separate class. */
-		LOG.info("Calculating the initial marginal cost for each receiver.");
-		String[] marginalArgs = {
-				"./scenarios/",
-				outputfolder,
-				"./target/freight-dfg17-0.0.1-SNAPSHOT-release.zip",
-				String.valueOf(numberOfThreads),
-				String.valueOf(SEED_BASE),
-		};
-		Scenario sc = RunMarginal.run(marginalArgs);
-		
-		Scenario newSc = MarginalScenarioBuilder.createChessboardScenario(outputfolder, SEED_BASE*run, run, true);
+		Scenario sc = CapeTownScenarioBuilder.createChessboardScenario(SEED_BASE*run, run, true);
 		
 		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
+		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
 					"iteration", 
 					"receiver_id", 
 					"score", 
@@ -118,7 +100,8 @@ public class RunChessboardMarginal {
 					"volume", 	        				
 					"frequency", 
 					"serviceduration",
-					"collaborate",
+					"collaborate_p",
+					"collaborate_r",
 					"grandCoalitionMember"));
 			bw.newLine();
 		} catch (IOException e) {
@@ -133,19 +116,16 @@ public class RunChessboardMarginal {
 			}
 		}
 
-		sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
+		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
 
 		Controler controler = new Controler(sc);
 
-		/* Set up freight portion.To be repeated every iteration*/
-		//FIXME
-		sc.getConfig().controler().setOutputDirectory(outputfolder);
-		setupReceiverAndCarrierReplanning(controler);
+		/* Set up freight portion. To be repeated every iteration*/
+		setupReceiverAndCarrierReplanning(controler, outputfolder);
+		
+		CapeTownReceiverUtils.setupCarriers(controler);
+		CapeTownReceiverUtils.setupReceivers(controler);
 
-		ReceiverChessboardUtils.setupCarriers(controler);
-		ReceiverChessboardUtils.setupReceivers(controler);	
-//
-//
 		/* TODO This stats must be set up automatically. */
 		prepareFreightOutputDataAndStats(controler, run);
 
@@ -153,14 +133,13 @@ public class RunChessboardMarginal {
 	}
 
 
-	private static void setupReceiverAndCarrierReplanning( MatsimServices controler) {
-
+	private static void setupReceiverAndCarrierReplanning( MatsimServices controler, String outputFolder) {
 		controler.addControlerListener(new IterationStartsListener() {
 
 			//@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
 				
-				if(event.getIteration() % MarginalExperimentParameters.REPLAN_INTERVAL != 0) {
+				if(event.getIteration() % ReceiverUtils.getReplanInterval( controler.getScenario() ) != 0) {
 					return;
 				}
 
@@ -228,16 +207,10 @@ public class RunChessboardMarginal {
 
 				//assign this plan now to the carrier and make it the selected carrier plan
 				carrier.setSelectedPlan(newPlan);
-
-				//write out the carrierPlan to an xml-file
-//				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
-				
+	
 				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
-				
-				//FIXME As in base case, this need not be required anymore.
-//				ReceiverUtils.setCarriers( ReceiverUtils.getCarriers( mfs.getScenario() ), fs.getScenario() );
-//				ReceiverUtils.setReceivers( ReceiverUtils.getReceivers( mfs.getScenario() ), fs.getScenario() );
+
 			}
 
 		});		
@@ -248,16 +221,11 @@ public class RunChessboardMarginal {
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
-		final int statInterval = MarginalExperimentParameters.STAT_INTERVAL;
-		//final LegHistogram freightOnly = new LegHistogram(20);
-
-		// freightOnly.setPopulation(controler.getScenario().getPopulation());
-		//freightOnly.setInclPop(false);
+		final int statInterval = CapeTownExperimentParameters.STAT_INTERVAL;
 		
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(controler.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
 
-		//controler.getEvents().addHandler(freightOnly);
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(rScoreStats);
 		controler.addControlerListener(new IterationEndsListener() {
@@ -270,9 +238,9 @@ public class RunChessboardMarginal {
 
 				//write plans
 				
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
 				
-				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
+				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml");
 
 				/* Record receiver stats */
 				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
@@ -286,12 +254,13 @@ public class RunChessboardMarginal {
 							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
 							float freq = (float) order.getNumberOfWeeklyDeliveries();
 							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");
+							boolean status = (boolean) receiver.getSelectedPlan().getAttributes().getAttribute("collaborationStatus");
+							boolean status2 = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");							
 							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
 
 							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 							try {
-								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
+								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b,%b", 
 										event.getIteration(), 
 										receiver.getId(), 
 										score, 
@@ -302,6 +271,7 @@ public class RunChessboardMarginal {
 										freq,
 										dur,
 										status,
+										status2,
 										member));											 							
 								bw1.newLine();
 
@@ -326,4 +296,3 @@ public class RunChessboardMarginal {
 
 	}
 }
-
