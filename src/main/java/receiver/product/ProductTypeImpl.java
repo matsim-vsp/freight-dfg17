@@ -38,7 +38,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
  * @author wlbean
  *
  */
-public class ProductTypeImpl implements ProductType{
+class ProductTypeImpl implements ProductType{
 	
 	
 //	private static ProductType newInstance(Id<ProductType> typeId) {
@@ -53,7 +53,7 @@ public class ProductTypeImpl implements ProductType{
 	private double reqCapacity = 1;
 	private Id<ProductType> typeId;
 	
-	public ProductTypeImpl(final Id<ProductType> typeId){
+	ProductTypeImpl( final Id<ProductType> typeId ){
 		this.typeId = typeId;
 	}
 
@@ -88,6 +88,6 @@ public class ProductTypeImpl implements ProductType{
 	public Attributes getAttributes() {
 		return this.attributes;
 	}
-
-
+	
+	
 }

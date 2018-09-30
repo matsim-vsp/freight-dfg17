@@ -26,7 +26,7 @@ import receiver.product.ReceiverOrder;
  * @author wlbean
  *
  */
-public class MarginalCostSharing implements ReceiverCarrierCostAllocation {
+public final class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 	
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
 	private Attributes attributes = new Attributes();

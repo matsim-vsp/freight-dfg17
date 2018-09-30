@@ -22,10 +22,10 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  * @author wlbean
  *
  */
-public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	@Inject Scenario sc;
 	
-	public NumDelReceiverOrderStrategyManagerImpl(){		
+	NumDelReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override

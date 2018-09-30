@@ -11,7 +11,7 @@ import receiver.ReceiverPlan;
  *
  */
 
-public class CollaborationStatusMutator implements GenericPlanStrategyModule<ReceiverPlan> {
+public final class CollaborationStatusMutator implements GenericPlanStrategyModule<ReceiverPlan> {
 	
 	/*
 	 * A class that changes a receiver's collaboration status.

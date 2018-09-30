@@ -31,7 +31,7 @@ import receiver.product.ReceiverOrder;
  * @author wlbean
  */
 
-public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
+public final class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
 	private double time;
 	private double range;
 	boolean increase;

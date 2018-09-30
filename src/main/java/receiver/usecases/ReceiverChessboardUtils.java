@@ -31,7 +31,6 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierPlanXmlReaderV2;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypeLoader;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypeReader;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
@@ -56,11 +55,8 @@ import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
 import receiver.collaboration.Coalition;
-import receiver.ReceiversReader;
-import receiver.replanning.NumDelReceiverOrderStrategyManagerImpl;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.replanning.ServiceTimeReceiverOrderStrategyManagerImpl;
-import receiver.replanning.TimeWindowReceiverOrderStrategyManagerImpl;
+import receiver.replanning.ReplanningUtils;
 import receiver.ReceiverScoringFunctionFactory;
 
 /**
@@ -163,7 +159,7 @@ public class ReceiverChessboardUtils {
 //						controler.addOverridingModule(receiverControler);
 		//			}
 		//			case 2: {
-						final ReceiverOrderStrategyManagerFactory rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
+						final ReceiverOrderStrategyManagerFactory rStratManFac = ReplanningUtils.createNumDelReceiverOrderStrategyManagerImpl();
 						ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
 						controler.addOverridingModule(receiverControler); 
 		//			}

@@ -42,7 +42,7 @@ import receiver.collaboration.ProportionalCostSharing;
  */
 
 
-public final class ReceiverTracker implements EventHandler {
+ final class ReceiverTracker implements EventHandler {
 //	@Inject Scenario sc;
 	private Scenario sc;
 	

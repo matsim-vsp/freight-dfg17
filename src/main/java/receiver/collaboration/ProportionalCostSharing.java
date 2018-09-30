@@ -47,7 +47,7 @@ import receiver.product.ReceiverOrder;
  * 
  * @author jwjoubert, wlbean
  */
-public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
+public final class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 //	@Inject Scenario sc;
 	private Scenario sc;
 

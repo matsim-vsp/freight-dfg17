@@ -39,7 +39,7 @@ import receiver.product.ReceiverOrder;
  *
  */
 
-public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
+public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 
 	/**
 	 * This class rewrites a carrier's services after a receiver changed its plan.

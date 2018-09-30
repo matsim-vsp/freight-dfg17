@@ -37,16 +37,10 @@ import org.matsim.core.utils.misc.Time;
 import org.matsim.utils.objectattributes.attributable.AttributesXmlReaderDelegate;
 import org.xml.sax.Attributes;
 
-import receiver.Receiver;
-import receiver.ReceiverImpl;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.ReorderPolicy;
-import receiver.SSReorderPolicy;
 
 /**
  * Implementation to read version 1 {@link Receivers}.
@@ -211,7 +205,7 @@ import receiver.SSReorderPolicy;
 	
 	private void startReceiver(final Attributes atts) {
 		Id<Receiver> id = Id.create(atts.getValue(ATTR_RECEIVER_ID), Receiver.class);
-		this.currentReceiver = ReceiverImpl.newInstance(id);
+		this.currentReceiver = ReceiverUtils.newInstance( id );
 		String linkId = atts.getValue(ATTR_RECEIVER_LINKID);
 		if(linkId != null) {
 			currentReceiver.setLinkId(Id.createLinkId(linkId));

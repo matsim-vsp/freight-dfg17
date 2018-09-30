@@ -40,7 +40,7 @@ import receiver.ReorderPolicy;
  * FIXME Receiver is both at Order and ReceiverOrder level. Necessary?
  */
 
-public class Order {
+public final class Order {
 	final private Logger log = Logger.getLogger(Order.class);
 
 	private Id<Order> orderId;

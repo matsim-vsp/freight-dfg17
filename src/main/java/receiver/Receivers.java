@@ -33,7 +33,7 @@ import org.matsim.utils.objectattributes.attributable.Attributable;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
 import receiver.product.ProductType;
-import receiver.product.ProductTypeImpl;
+import receiver.product.ProductUtils;
 import receiver.product.ReceiverOrder;
 
 /**
@@ -100,7 +100,7 @@ public final class Receivers implements Attributable{
 		if(this.productTypeMap.containsKey(id)) {
 			throw new IllegalArgumentException("ProductType with id \"" + id + "\" already exists.");
 		}
-		ProductType pt = new ProductTypeImpl(id);
+		ProductType pt = ProductUtils.createProductType(id);
 		this.productTypeMap.put(id, pt);
 		return pt;
 	}

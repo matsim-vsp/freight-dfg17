@@ -25,7 +25,7 @@ import receiver.replanning.ServiceTimeMutator;
  * @author wlbean
  *
  */
-public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+public final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	@Inject Scenario sc;
 	
 	public ServiceTimeReceiverOrderStrategyManagerImpl(){		

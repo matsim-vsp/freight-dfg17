@@ -47,14 +47,6 @@ class ReceiverImpl implements Receiver {
 	//private List<TimeWindow> timeWindows = new ArrayList<>();
 	
 	
-	
-	/*
-	 * Create a new instance of a receiver.
-	 */
-	public static ReceiverImpl newInstance(Id<Receiver> id){
-		return new ReceiverImpl(id);
-	}
-	
 	private final Id<Receiver> id;
 	private final List<ReceiverPlan> plans;
 	private final List<ReceiverProduct> products;
