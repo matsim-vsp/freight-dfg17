@@ -29,17 +29,12 @@
 package lsp.mobsim;
 
 import com.google.inject.Provider;
-
-
-
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.CarrierConfig;
 import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.mobsim.qsim.QSim;
-import org.matsim.core.mobsim.qsim.QSimProvider;
-import org.matsim.core.mobsim.qsim.QSimUtils;
+import org.matsim.core.mobsim.qsim.QSimBuilder;
 import org.matsim.core.mobsim.qsim.agents.DefaultAgentFactory;
 
 import javax.inject.Inject;
