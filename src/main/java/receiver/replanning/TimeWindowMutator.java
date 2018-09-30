@@ -40,7 +40,8 @@ public class TimeWindowMutator implements GenericPlanStrategyModule<ReceiverPlan
 	
 	
 	public TimeWindowMutator(double stepSize) {
-		this.stepSize = stepSize*MatsimRandom.getLocalInstance().nextDouble();
+//		this.stepSize = stepSize*MatsimRandom.getLocalInstance().nextDouble();
+		this.stepSize = stepSize;
 	}
 
 	@Override

@@ -117,17 +117,23 @@ public class ExampleLSPReplanning {
 				resourcesList.add(collectionAdapter);
 				SolutionScheduler simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
 				collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
-				
-				LSP lsp  = collectionLSPBuilder.build();
+		
+		LSP lsp  = collectionLSPBuilder.build();
 				
 				//Create StrategyManager, insert it in Replanner and add it to the lsp;
 				GenericStrategyManagerFactoryImpl factory = new GenericStrategyManagerFactoryImpl();
+				// yyyy this feels quite odd.  The matsim GenericStrategyManager is heavyweight infrastructure, which exists
+				// once in the system.  Does it really make sense to now have one per agent?  Maybe just program directly
+				// what you want and need.  ??
+				
 				GenericStrategyManager<LSPPlan, LSP> manager = factory.createStrategyManager(lsp);
 				LSPReplannerImpl replanner = new LSPReplannerImpl(lsp);
 				replanner.setStrategyManager(manager);
 				lsp.setReplanner(replanner);
-				
-				return lsp;
+//		collectionLSPBuilder.setReplanner( replanner ) ;
+		// yyyy set replanner in builder. kai, sep'18
+		
+		return lsp;
 	}
 	
 	public static Collection<LSPShipment> createInitialLSPShipments(Network network){
@@ -173,7 +179,7 @@ public class ExampleLSPReplanning {
 		Config config = new Config();
 		config.addCoreModules();
 		Scenario scenario = ScenarioUtils.createScenario(config);
-		new MatsimNetworkReader(scenario.getNetwork()).readFile("input/lsp/network/2regions.xml");
+		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
 		Network network = scenario.getNetwork();
 			
 		//Create LSP and shipments
@@ -198,7 +204,7 @@ public class ExampleLSPReplanning {
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(4);
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
-		config.network().setInputFile("input/lsp/network/2regions.xml");
+		config.network().setInputFile("scenarios/2regions/2regions-network.xml");
 		controler.run();
 		
 		System.out.println("Shipments delivered today:");

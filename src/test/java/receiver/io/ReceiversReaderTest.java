@@ -32,12 +32,13 @@ import org.matsim.testcases.MatsimTestUtils;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.Receivers;
+import receiver.ReceiversReader;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.reorderPolicy.ReorderPolicy;
-import receiver.reorderPolicy.SSReorderPolicy;
+import receiver.ReorderPolicy;
+import receiver.SSReorderPolicy;
 
 public class ReceiversReaderTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
@@ -108,7 +109,7 @@ public class ReceiversReaderTest {
 		Order o = ro.getReceiverProductOrders().iterator().next();
 		Assert.assertTrue("Wrong order id.", o.getId().equals(Id.create("Order1", Order.class)));
 		//Assert.assertTrue("Wrong order name.", o.getOrderName().equalsIgnoreCase("service"));
-		Assert.assertEquals("Wrong order quantity.", 500, o.getOrderQuantity());
+		Assert.assertEquals("Wrong order quantity.", 500, o.getOrderQuantity(), MatsimTestUtils.EPSILON);
 		Assert.assertTrue("Wrong product type.", o.getProduct().getProductType().getId().equals(Id.create("P1", ProductType.class)));
 		Assert.assertTrue("Wrong receiver.", o.getReceiver().getId().equals(Id.create("1", Receiver.class)));
 		Assert.assertEquals("Wrong service duration.", Time.parseTime("00:30:00"), o.getServiceDuration(), MatsimTestUtils.EPSILON);

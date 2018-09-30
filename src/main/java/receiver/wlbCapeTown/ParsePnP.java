@@ -94,7 +94,7 @@ public class ParsePnP {
 	
 	
 	private static String cleanName(String name) {
-		
+		name = name.replaceAll("&", "n");
 		return name;
 	}
 

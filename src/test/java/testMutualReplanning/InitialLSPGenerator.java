@@ -54,7 +54,7 @@ public class InitialLSPGenerator {
 		Config config = new Config();
 		config.addCoreModules();
 		Scenario scenario = ScenarioUtils.createScenario(config);
-		new MatsimNetworkReader(scenario.getNetwork()).readFile("input/lsp/network/2regions.xml");
+		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
 		Network network = scenario.getNetwork();
 		
 		CollectionCarrierScheduler collectionScheduler = new CollectionCarrierScheduler();

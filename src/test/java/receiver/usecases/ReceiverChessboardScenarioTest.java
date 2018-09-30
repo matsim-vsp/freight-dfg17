@@ -20,8 +20,8 @@ package receiver.usecases;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.matsim.api.core.v01.Scenario;
 
-import receiver.FreightScenario;
 import receiver.usecases.base.ReceiverChessboardScenario;
 
 public class ReceiverChessboardScenarioTest {
@@ -29,9 +29,9 @@ public class ReceiverChessboardScenarioTest {
 	@Test
 	public void testCreateChessboardScenario() {
 		
-		FreightScenario fs = null;
+		Scenario sc = null;
 		try {
-			fs = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+			sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
 		} catch (Exception e) {
 			Assert.fail("Should create the scenario without exceptions.");
 		}
