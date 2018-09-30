@@ -17,19 +17,19 @@ import lsp.shipment.Requirement;
 
 public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	
-	/**
-	 * @return
-	 *
-	 * ok (but never used)
-	 */
-	public DemandAgent getShipper();
-	
-	/**
-	 * @return
-	 *
-	 * ok (but never used)
-	 */
-	public DemandAgent getRecipient();
+//	/**
+//	 * @return
+//	 *
+//	 * ok (but never used)
+//	 */
+//	public DemandAgent getShipper();
+//
+//	/**
+//	 * @return
+//	 *
+//	 * ok (but never used)
+//	 */
+//	public DemandAgent getRecipient();
 	
 	/**
 	 * @return
@@ -66,12 +66,12 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 */
 	public Id<Link> getToLinkId();
 	
-	/**
-	 * @return
-	 *
-	 * yyyy is it necessary to expose this to the outside?  it is also never used
-	 */
-	public Collection<UtilityFunction> getUtilityFunctions();
+//	/**
+//	 * @return
+//	 *
+//	 * yyyy is it necessary to expose this to the outside?  it is also never used
+//	 */
+//	public Collection<UtilityFunction> getUtilityFunctions();
 	
 	/**
 	 * probably ok (behavioral method, but it is not so clear how the DemandObject should have behavior)
@@ -114,21 +114,21 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 */
 	public DemandReplanner getReplanner();
 	
-	/**
-	 * @param replanner
-	 *
-	 * yyyy not ok for a behavioral object (can the replanner be changed from the outside during iterations?)
-	 *
-	 * also never used
-	 */
-	public void setReplanner(DemandReplanner replanner);
+//	/**
+//	 * @param replanner
+//	 *
+//	 * yyyy not ok for a behavioral object (can the replanner be changed from the outside during iterations?)
+//	 *
+//	 * also never used
+//	 */
+//	public void setReplanner(DemandReplanner replanner);
 	
-	/**
-	 * @param requester
-	 *
-	 * yyyy not ok for a behavioral object (can the requester be changed from the outside during iterations?)
-	 */
-	public void	setOfferRequester(OfferRequester requester);
+//	/**
+//	 * @param requester
+//	 *
+//	 * yyyy not ok for a behavioral object (can the requester be changed from the outside during iterations?)
+//	 */
+//	public void	setOfferRequester(OfferRequester requester);
 	
 	/**
 	 * @return
@@ -137,14 +137,14 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 */
 	public OfferRequester getOfferRequester();
 	
-	/**
-	 * @param generator
-	 *
-	 * yyyy not ok for a behavioral object (can the generator be changed from the outside during iterations?)
-	 *
-	 * also never used
-	 */
-	public void	setDemandPlanGenerator(DemandPlanGenerator generator);
+//	/**
+//	 * @param generator
+//	 *
+//	 * yyyy not ok for a behavioral object (can the generator be changed from the outside during iterations?)
+//	 *
+//	 * also never used
+//	 */
+//	public void	setDemandPlanGenerator(DemandPlanGenerator generator);
 	
 	/**
 	 * @return

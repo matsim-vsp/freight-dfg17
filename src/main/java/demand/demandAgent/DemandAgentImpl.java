@@ -12,7 +12,7 @@ public class DemandAgentImpl implements DemandAgent {
 
 	private Id<DemandAgent> id;
 	private ArrayList<DemandObject> demandObjects;
-	private ArrayList <UtilityFunction> utilityFunctions;
+//	private ArrayList <UtilityFunction> utilityFunctions;
 	
 	public static class Builder{
 		private Id<DemandAgent> id;
@@ -31,10 +31,10 @@ public class DemandAgentImpl implements DemandAgent {
 			return this;
 		}
 	
-		public Builder addUtilityFunction(UtilityFunction utilityFunction) {
-			this.utilityFunctions.add(utilityFunction);
-			return this;
-		}
+//		public Builder addUtilityFunction(UtilityFunction utilityFunction) {
+//			this.utilityFunctions.add(utilityFunction);
+//			return this;
+//		}
 	
 		public DemandAgentImpl build() {
 			return new DemandAgentImpl(this);
@@ -43,8 +43,8 @@ public class DemandAgentImpl implements DemandAgent {
 	
 	private DemandAgentImpl(Builder builder) {
 		this.demandObjects = new ArrayList<DemandObject>();
-		this.utilityFunctions = new ArrayList<UtilityFunction>();
-		this.utilityFunctions = builder.utilityFunctions;
+//		this.utilityFunctions = new ArrayList<UtilityFunction>();
+//		this.utilityFunctions = builder.utilityFunctions;
 		this.id = builder.id;
 	}
 	
@@ -59,9 +59,9 @@ public class DemandAgentImpl implements DemandAgent {
 		return demandObjects;
 	}
 
-	@Override
-	public Collection<UtilityFunction> getUtilityFunctions() {
-		return utilityFunctions;
-	}
+//	@Override
+//	public Collection<UtilityFunction> getUtilityFunctions() {
+//		return utilityFunctions;
+//	}
 
 }

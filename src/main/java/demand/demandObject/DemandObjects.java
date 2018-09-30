@@ -14,9 +14,9 @@ public class DemandObjects {
 		makeMap(demandObjects);
 	}
 	
-	public DemandObjects() {
-		
-	}
+//	public DemandObjects() {
+//
+//	}
 
 	public Map<Id<DemandObject>, DemandObject> getDemandObjects(){
 		return demandObjects;
@@ -28,10 +28,10 @@ public class DemandObjects {
 		}
 	}
 
-	public void addDemandObject(DemandObject demandObject) {
-		if(!demandObjects.containsKey(demandObject.getId())) {
-			demandObjects.put(demandObject.getId(), demandObject);
-		}
-	}
+//	public void addDemandObject(DemandObject demandObject) {
+//		if(!demandObjects.containsKey(demandObject.getId())) {
+//			demandObjects.put(demandObject.getId(), demandObject);
+//		}
+//	}
 
 }
