@@ -30,7 +30,8 @@ public CollaborationStatusMutator(){
 	public void handlePlan(ReceiverPlan receiverPlan) {
 		boolean newstatus;
 		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("grandCoalitionMember");
-		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("collaborationStatus");
+		boolean status = receiverPlan.getCollaborationStatus();
+//		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("collaborationStatus");
 		
 
 		if (grandMember == true){
@@ -41,7 +42,9 @@ public CollaborationStatusMutator(){
 			}
 		} else newstatus = status;
 
+		receiverPlan.setCollaborationStatus(newstatus);
 		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", newstatus);
+		
 
 	}
 

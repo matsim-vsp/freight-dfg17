@@ -39,6 +39,7 @@ public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrde
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan,Receiver>());
 			strategy.addStrategyModule(new OrderChanger());
+			strategy.addStrategyModule(new CollaborationStatusChanger());
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
@@ -49,7 +50,7 @@ public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrde
 		 */
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			increaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("04:00:00"), true));
+			increaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("00:30:00"), Time.parseTime("04:00:00"), true));
 			increaseStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(increaseStrategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), increaseStrategy, null, 0.0);
@@ -60,7 +61,7 @@ public class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrde
 		 */
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> decreaseStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			decreaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("01:00:00"), false));
+			decreaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("00:30:00"), Time.parseTime("01:00:00"), false));
 			decreaseStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(decreaseStrategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), decreaseStrategy, null, 0.0);

@@ -259,7 +259,7 @@ public class MarginalScenarioBuilder {
 			String serdur = MarginalExperimentParameters.SERVICE_TIME;
 			int numDel = MarginalExperimentParameters.NUM_DELIVERIES;
 			
-			/* Set the different time window durations for experiments. */
+//			/* Set the different time window durations for experiments. */
 //			if (r <= 10){
 //				tw = 2;
 //			} else if (r <= 20){
@@ -347,6 +347,7 @@ public class MarginalScenarioBuilder {
 					.addTimeWindow(selectRandomTimeStart(tw))
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
+			receiverPlan.setCollaborationStatus((boolean) receiver.getAttributes().getAttribute("collaborationStatus"));
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
@@ -359,7 +360,7 @@ public class MarginalScenarioBuilder {
 				}
 				
 				CarrierService newService = serBuilder
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						.setCapacityDemand((int) (Math.round((order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())/order.getNumberOfWeeklyDeliveries()))).
 						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 						setServiceDuration(order.getServiceDuration()).
 						build();

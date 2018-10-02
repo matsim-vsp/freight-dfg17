@@ -93,7 +93,7 @@ public class RunChessboardProportional {
 		/* Write headings */
 		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
 		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
 					"iteration", 
 					"receiver_id", 
 					"score", 
@@ -104,7 +104,8 @@ public class RunChessboardProportional {
 					"frequency", 
 					"serviceduration",
 					"collaborate",
-					"grandCoalitionMember"));
+					"grandCoalitionMember",
+					"orderCollaborationStatus"));
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -270,10 +271,11 @@ new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() )
 							float dur =  (float) order.getServiceDuration();
 							boolean status = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");
 							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+							boolean orderstatus = (boolean) receiver.getSelectedPlan().getCollaborationStatus();
 
 							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 							try {
-								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
+								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b,%b", 
 										event.getIteration(), 
 										receiver.getId(), 
 										score, 
@@ -284,7 +286,8 @@ new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() )
 										freq,
 										dur,
 										status,
-										member));											 							
+										member,
+										orderstatus));											 							
 								bw1.newLine();
 
 							} catch (IOException e) {

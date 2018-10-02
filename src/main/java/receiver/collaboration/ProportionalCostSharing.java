@@ -188,6 +188,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 				/* Score non-collaborating receivers and calculate the total cost allocated to them. */
 //			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
 			if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == false){
+//				if (plan.getCollaborationStatus() == false){
 					double total = 0.0;				
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
 						double thisVolume = 0.0;

@@ -57,7 +57,7 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 
 	@Override
 	public void handlePlan(ReceiverPlan receiverPlan) {
-//		boolean status = (boolean) receiverPlan.getAttributes().getAttribute("collaborationStatus");
+//		boolean status = (boolean) receiverPlan.getCollaborationStatus();
 //		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", status);
 
 		/* Create list of receiver orders. */

@@ -15,6 +15,7 @@ import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
+import receiver.replanning.CollaborationStatusChanger;
 import receiver.replanning.CollaborationStatusMutator;
 import receiver.replanning.OrderChanger;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
@@ -39,6 +40,7 @@ public class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderSt
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderChanger());
+			strategy.addStrategyModule(new CollaborationStatusChanger());
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 

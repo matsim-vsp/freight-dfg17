@@ -271,8 +271,9 @@ public class CapeTownScenarioBuilder {
 						.addReceiverOrder(receiverOrder)
 						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
 						.build();
+				receiverPlan.setCollaborationStatus(true); 
 				receiver.setSelectedPlan(receiverPlan);
-				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", true);
+//				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", true);
 				
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
@@ -298,8 +299,9 @@ public class CapeTownScenarioBuilder {
 						.addReceiverOrder(receiverOrder)
 						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
+				receiverPlan.setCollaborationStatus(false);
 				receiver.setSelectedPlan(receiverPlan);
-				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", false);
+//				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", false);
 				
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
@@ -511,48 +513,26 @@ public class CapeTownScenarioBuilder {
 		return order;
 	}
 
-	private static TimeWindow selectRandomDayTimeStart(int tw) {
-		int min = 8;
-		int max = 16;
-		Random randomTime = new Random();
+	public static TimeWindow selectRandomDayTimeStart(int tw) {
+		int min = 6;
+		int max = 18;
+//		Random randomTime = new Random();
 		int randomStart =  (min +
-				randomTime.nextInt(max - tw - min + 1));
+				MatsimRandom.getRandom().nextInt(max - tw - min + 1));
 		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 		return randomTimeWindow;
 	}
 	
-	private static TimeWindow selectRandomNightTimeStart(int tw, Receiver receiver) {
-		int min = 16;
-		int max = 24;
-		Random randomTime = new Random();
-		TimeWindow randomTimeWindow;
-		int time = randomTime.nextInt(max - tw - min + 1);
-		if (time >= 0){
-			int randomStart =  (min + time);
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		} else {
-			int randomStart = min;
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		}
-		receiver.getAttributes().putAttribute("EarlyDeliveries", false);
+	public static TimeWindow selectRandomNightTimeStart(int tw, Receiver receiver) {
+		int min = 18;
+		int max = 30;
+//		Random randomTime = new Random();
+		int randomStart =  (min +
+				MatsimRandom.getRandom().nextInt(max - tw - min + 1));
+		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 		return randomTimeWindow;
 	}
 	
-	private static TimeWindow selectRandomMorningTimeStart(int tw, Receiver receiver) {
-		int min = 0;
-		int max = 8;
-		Random randomTime = new Random();
-		TimeWindow randomTimeWindow;
-		int time = randomTime.nextInt(max - tw - min + 1);
-		if (time >= 0){
-			int randomStart =  (min + time);
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		} else {
-			int randomStart = min;
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		}
-		receiver.getAttributes().putAttribute("EarlyDeliveries", true);
-		return randomTimeWindow;
-	}
+
 
 }

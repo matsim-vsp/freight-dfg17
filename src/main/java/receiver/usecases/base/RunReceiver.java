@@ -85,7 +85,7 @@ public class RunReceiver {
 
 	public static void run(int run) {
 		LOG.info("Starting run " + run);
-		String outputfolder = String.format("./output/base/tw/run_%03d/", run);
+		String outputfolder = String.format("./output/base/run_%03d/", run);
 		new File(outputfolder).mkdirs();
 		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
 //		replanInt = mfs.getReplanInterval();

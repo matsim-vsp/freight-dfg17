@@ -33,7 +33,7 @@ public class MarginalExperimentParameters {
 	
 	public static int STAT_INTERVAL = 50;
 	
-	public static int REPLAN_INTERVAL = 100;
+	public static int REPLAN_INTERVAL = 50;
 	
 	public static int NUMBER_OF_RECEIVERS = 60;
 	

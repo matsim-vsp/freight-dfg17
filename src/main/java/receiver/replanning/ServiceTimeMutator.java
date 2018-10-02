@@ -50,7 +50,8 @@ public class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPla
 	 */
 	
 	public ServiceTimeMutator(double mutationTime, double mutationRange, boolean increase){
-		this.time = mutationTime*MatsimRandom.getLocalInstance().nextDouble();
+//		this.time = mutationTime*MatsimRandom.getLocalInstance().nextDouble();
+		this.time = mutationTime;
 		this.range = mutationRange;
 		this.increase = increase;
 	}

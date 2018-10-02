@@ -293,43 +293,43 @@ public class ProportionalScenarioBuilder {
 //			} else tw = 12;
 			
 			/* Set the different service durations for experiments. */
-//			if (r <= 15){
-//				serdur = "01:00:00";
-//			} else if (r <= 30){
-//				serdur = "02:00:00";
-//			} else if (r <= 45){
-//				serdur = "03:00:00";
-//			} else if (r <=60) {
-//				serdur = "04:00:00";
-//			} else if (r <= 75){
-//				serdur = "01:00:00";
-//			} else if (r <= 90){
-//				serdur = "02:00:00";
-//			} else if (r <= 105){
-//				serdur = "03:00:00";
-//			} else serdur = "04:00:00";
+			if (r <= 15){
+				serdur = "01:00:00";
+			} else if (r <= 30){
+				serdur = "02:00:00";
+			} else if (r <= 45){
+				serdur = "03:00:00";
+			} else if (r <=60) {
+				serdur = "04:00:00";
+			} else if (r <= 75){
+				serdur = "01:00:00";
+			} else if (r <= 90){
+				serdur = "02:00:00";
+			} else if (r <= 105){
+				serdur = "03:00:00";
+			} else serdur = "04:00:00";
 			
 //			
 //			/* Set the different delivery frequencies for experiments. */
-			if (r <= 12){
-				numDel = 1;
-			} else if (r <= 24){
-				numDel = 2;
-			} else if (r <= 36){
-				numDel = 3;
-			} else if (r <= 48){
-				numDel = 4;
-			} else if (r <= 60){
-				numDel = 5;
-			} else if (r <= 72){
-				numDel = 1;
-			} else if (r <= 84){
-				numDel = 2;
-			} else if (r <= 96){
-				numDel = 3;
-			} else if (r <= 108){
-				numDel = 4;
-			} else numDel = 5;
+//			if (r <= 12){
+//				numDel = 1;
+//			} else if (r <= 24){
+//				numDel = 2;
+//			} else if (r <= 36){
+//				numDel = 3;
+//			} else if (r <= 48){
+//				numDel = 4;
+//			} else if (r <= 60){
+//				numDel = 5;
+//			} else if (r <= 72){
+//				numDel = 1;
+//			} else if (r <= 84){
+//				numDel = 2;
+//			} else if (r <= 96){
+//				numDel = 3;
+//			} else if (r <= 108){
+//				numDel = 4;
+//			} else numDel = 5;
 
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
@@ -356,7 +356,10 @@ public class ProportionalScenarioBuilder {
 					.addTimeWindow(selectRandomTimeStart(tw))
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
+//			receiverPlan.getAttributes().putAttribute("collaborationStatus", (boolean) receiver.getAttributes().getAttribute("collaborationStatus"));
+			receiverPlan.setCollaborationStatus((boolean) receiver.getAttributes().getAttribute("collaborationStatus"));
 			receiver.setSelectedPlan(receiverPlan);
+		
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
@@ -368,7 +371,7 @@ public class ProportionalScenarioBuilder {
 				}
 				
 				CarrierService newService = serBuilder
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						.setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()/order.getNumberOfWeeklyDeliveries()))).
 						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 						setServiceDuration(order.getServiceDuration()).
 						build();

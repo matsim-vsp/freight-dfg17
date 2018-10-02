@@ -57,6 +57,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	private Map<Id<Carrier>, ReceiverOrder> orderMap;
 	private List<TimeWindow> timeWindows;
 	private boolean selected = false;
+	private boolean collaborationStatus;
 	
 	
 	private ReceiverPlan() {
@@ -93,6 +94,14 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+	
+	public void setCollaborationStatus(boolean status){
+		this.collaborationStatus = status;
+	}
+	
+	public boolean getCollaborationStatus(){
+		return this.collaborationStatus;
 	}
 	
 	/**

@@ -36,6 +36,7 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.0));
 			strategy.addStrategyModule(new OrderChanger());
+			strategy.addStrategyModule(new CollaborationStatusChanger());
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
@@ -64,15 +65,15 @@ public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStra
 			stratMan.addStrategy(strategy, null, 0.15);	
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 		}
-		
-		/* Replanning for grand coalition receivers.*/
-		
-		{			
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new CollaborationStatusMutator());
-			stratMan.addStrategy(strategy, null, 0.2);
-			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);			
-		}
+//		
+//		/* Replanning for grand coalition receivers.*/
+//		
+//		{			
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//			strategy.addStrategyModule(new CollaborationStatusMutator());
+//			stratMan.addStrategy(strategy, null, 0.2);
+//			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);			
+//		}
 		
 		return stratMan;
 	}
