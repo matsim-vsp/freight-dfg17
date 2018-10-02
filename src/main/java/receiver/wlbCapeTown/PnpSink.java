@@ -54,7 +54,6 @@ public class PnpSink implements Sink {
 	private Map<Long, WayContainer> wayMap = new TreeMap<>();
 	private Map<Long, RelationContainer> relationMap = new TreeMap<>();
 	private Map<Long, Coord> pnpMap = new TreeMap<>();
-	private Map<Long, String> nameMap = new TreeMap<>();
 	private int pnpCounter = 0;
 
 
@@ -82,19 +81,6 @@ public class PnpSink implements Sink {
 				Node n = (Node) node;
 				Coord c = CoordUtils.createCoord(n.getLongitude(), n.getLatitude());
 				pnpMap.put(node.getId(), c);
-				
-				/* Check if there is a name tag. */
-				tagIterator = node.getTags().iterator();
-				String name = null;
-				if(name == null && tagIterator.hasNext()) {
-					Tag tag = tagIterator.next();
-					if(tag.getKey().equalsIgnoreCase("name")) {
-						name = tag.getValue();
-					}
-				}
-				if(name != null) {
-					nameMap.put(node.getId(), name);
-				}
 			}
 		}
 		log.info("PnP found after evaluating Nodes: " + pnpCounter);
@@ -120,23 +106,9 @@ public class PnpSink implements Sink {
 				}
 				Coord c = CoordUtils.createCoord(sumX/((double)list.size()) , sumY/((double)list.size()));
 				pnpMap.put(way.getId(), c);
-				
-				/* Check if there is a name tag. */
-				tagIterator = way.getTags().iterator();
-				String name = null;
-				if(name == null && tagIterator.hasNext()) {
-					Tag tag = tagIterator.next();
-					if(tag.getKey().equalsIgnoreCase("name")) {
-						name = tag.getValue();
-					}
-				}
-				if(name != null) {
-					nameMap.put(way.getId(), name);
-				}
 			}
 		}
 		log.info("PnP found after evaluating Nodes/Ways: " + pnpCounter);
-		log.info("PnP names found after evaluating Nodes/Ways: " + nameMap.size());
 	}
 
 	@Override
@@ -184,10 +156,6 @@ public class PnpSink implements Sink {
 	
 	public Map<Long, Coord> getCoordMap(){
 		return this.pnpMap;
-	}
-	
-	public Map<Long, String> getNameMap(){
-		return this.nameMap;
 	}
 
 }

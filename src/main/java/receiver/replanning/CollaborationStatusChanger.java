@@ -3,6 +3,7 @@ package receiver.replanning;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 
 public class CollaborationStatusChanger implements GenericPlanStrategyModule<ReceiverPlan> {
@@ -16,7 +17,7 @@ public class CollaborationStatusChanger implements GenericPlanStrategyModule<Rec
 	@Override
 	public void handlePlan(ReceiverPlan plan) {
 		boolean status = (boolean) plan.getCollaborationStatus();
-		plan.getReceiver().getAttributes().putAttribute("collaborationStatus", status);		
+		plan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), status);		
 	}
 
 	@Override

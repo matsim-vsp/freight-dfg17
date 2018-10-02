@@ -6,6 +6,7 @@ import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 
 /**
@@ -32,7 +33,7 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 	@Override
 	public void handlePlan(ReceiverPlan receiverPlan) {
 		boolean newstatus;
-		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("grandCoalitionMember");
+		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.toString());
 		boolean status = (boolean) receiverPlan.getCollaborationStatus();
 
 
@@ -64,12 +65,12 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 				/* Remove old and add new time windows */
 				receiverPlan.getTimeWindows().remove(oldWindow);
 				receiverPlan.getTimeWindows().add(newWindow);
-				receiverPlan.getReceiver().getAttributes().putAttribute("EarlyDeliveries", false);
+//				receiverPlan.getReceiver().getAttributes().putAttribute("EarlyDeliveries", false);
 			}
 		} else {
 			newstatus = status;
 		}
-		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", newstatus);
+		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), newstatus);
 		receiverPlan.setCollaborationStatus(newstatus);
 
 	}
