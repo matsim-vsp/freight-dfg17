@@ -306,6 +306,7 @@ public class ReceiverChessboardScenario {
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
+				order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -314,8 +315,8 @@ public class ReceiverChessboardScenario {
 				}
 				
 				CarrierService newService = serBuilder
-//						.setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()/order.getNumberOfWeeklyDeliveries()))).
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						.setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()/order.getNumberOfWeeklyDeliveries()))).
+//						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
 						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 						setServiceDuration(order.getServiceDuration()).
 						build();

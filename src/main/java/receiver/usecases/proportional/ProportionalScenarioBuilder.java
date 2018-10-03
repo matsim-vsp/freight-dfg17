@@ -292,44 +292,44 @@ public class ProportionalScenarioBuilder {
 //				tw = 10;
 //			} else tw = 12;
 			
-			/* Set the different service durations for experiments. */
-			if (r <= 15){
-				serdur = "01:00:00";
-			} else if (r <= 30){
-				serdur = "02:00:00";
-			} else if (r <= 45){
-				serdur = "03:00:00";
-			} else if (r <=60) {
-				serdur = "04:00:00";
-			} else if (r <= 75){
-				serdur = "01:00:00";
-			} else if (r <= 90){
-				serdur = "02:00:00";
-			} else if (r <= 105){
-				serdur = "03:00:00";
-			} else serdur = "04:00:00";
+//			/* Set the different service durations for experiments. */
+//			if (r <= 15){
+//				serdur = "01:00:00";
+//			} else if (r <= 30){
+//				serdur = "02:00:00";
+//			} else if (r <= 45){
+//				serdur = "03:00:00";
+//			} else if (r <=60) {
+//				serdur = "04:00:00";
+//			} else if (r <= 75){
+//				serdur = "01:00:00";
+//			} else if (r <= 90){
+//				serdur = "02:00:00";
+//			} else if (r <= 105){
+//				serdur = "03:00:00";
+//			} else serdur = "04:00:00";
 			
 //			
-//			/* Set the different delivery frequencies for experiments. */
-//			if (r <= 12){
-//				numDel = 1;
-//			} else if (r <= 24){
-//				numDel = 2;
-//			} else if (r <= 36){
-//				numDel = 3;
-//			} else if (r <= 48){
-//				numDel = 4;
-//			} else if (r <= 60){
-//				numDel = 5;
-//			} else if (r <= 72){
-//				numDel = 1;
-//			} else if (r <= 84){
-//				numDel = 2;
-//			} else if (r <= 96){
-//				numDel = 3;
-//			} else if (r <= 108){
-//				numDel = 4;
-//			} else numDel = 5;
+			/* Set the different delivery frequencies for experiments. */
+			if (r <= 12){
+				numDel = 1;
+			} else if (r <= 24){
+				numDel = 2;
+			} else if (r <= 36){
+				numDel = 3;
+			} else if (r <= 48){
+				numDel = 4;
+			} else if (r <= 60){
+				numDel = 5;
+			} else if (r <= 72){
+				numDel = 1;
+			} else if (r <= 84){
+				numDel = 2;
+			} else if (r <= 96){
+				numDel = 3;
+			} else if (r <= 108){
+				numDel = 4;
+			} else numDel = 5;
 
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
@@ -363,6 +363,7 @@ public class ProportionalScenarioBuilder {
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
+				order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 

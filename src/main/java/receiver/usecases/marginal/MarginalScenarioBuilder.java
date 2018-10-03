@@ -259,7 +259,7 @@ public class MarginalScenarioBuilder {
 			String serdur = MarginalExperimentParameters.SERVICE_TIME;
 			int numDel = MarginalExperimentParameters.NUM_DELIVERIES;
 			
-//			/* Set the different time window durations for experiments. */
+			/* Set the different time window durations for experiments. */
 //			if (r <= 10){
 //				tw = 2;
 //			} else if (r <= 20){
@@ -352,6 +352,7 @@ public class MarginalScenarioBuilder {
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
+				order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 

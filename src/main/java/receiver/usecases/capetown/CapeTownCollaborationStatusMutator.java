@@ -1,7 +1,5 @@
 package receiver.usecases.capetown;
 
-import java.util.Random;
-
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
@@ -34,7 +32,7 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 	public void handlePlan(ReceiverPlan receiverPlan) {
 		boolean newstatus;
 		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.toString());
-		boolean status = (boolean) receiverPlan.getCollaborationStatus();
+		boolean status = receiverPlan.getCollaborationStatus();
 
 
 		if (grandMember == true){
@@ -70,6 +68,7 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 		} else {
 			newstatus = status;
 		}
+		
 		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), newstatus);
 		receiverPlan.setCollaborationStatus(newstatus);
 

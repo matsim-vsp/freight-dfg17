@@ -14,7 +14,7 @@ public class CapeTownExperimentParameters {
 	
 	public static int REPLAN_INTERVAL = 50;
 	
-	public static int NUMBER_OF_RECEIVERS = 5;
+//	public static int NUMBER_OF_RECEIVERS = 5;
 	
 	public static int TIME_WINDOW_DURATION = 4;
 	

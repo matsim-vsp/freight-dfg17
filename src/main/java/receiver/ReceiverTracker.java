@@ -59,7 +59,7 @@ public final class ReceiverTracker implements EventHandler {
 	 */
 	public void scoreSelectedPlans() {
 		
-//		MarginalCostSharing mcs = new MarginalCostSharing(750, sc);
+//		MarginalCostSharing mcs = new MarginalCostSharing(700, sc);
 //		mcs.allocateCoalitionCosts();
 		
 		ProportionalCostSharing pcs = new ProportionalCostSharing(700, sc);

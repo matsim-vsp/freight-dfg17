@@ -44,6 +44,7 @@ import org.matsim.contrib.freight.carrier.CarrierVehicleType;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypeWriter;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.carrier.ForwardingVehicleType;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
@@ -249,6 +250,10 @@ public class CapeTownScenarioBuilder {
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
+		
+		ProductType productTypeThree = receivers.createAndAddProductType(Id.create("P3", ProductType.class));
+		productTypeThree.setDescription("Product 3");
+		productTypeThree.setRequiredCapacity(3);
 
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			int tw = CapeTownExperimentParameters.TIME_WINDOW_DURATION;
@@ -257,10 +262,26 @@ public class CapeTownScenarioBuilder {
 
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
-			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);
-			ReceiverProduct receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 2500);
-			receiver.getProducts().add(receiverProductOne);
-			receiver.getProducts().add(receiverProductTwo);
+			
+			ReceiverProduct receiverProductOne;
+			ReceiverProduct receiverProductTwo;
+			ReceiverProduct receiverProductThree;
+			
+			if((boolean) receiver.getAttributes().getAttribute("corporate") == true){
+				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 9000);
+				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 750, 4500);
+				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 1000, 6000);
+				receiver.getProducts().add(receiverProductOne);
+				receiver.getProducts().add(receiverProductTwo);
+				receiver.getProducts().add(receiverProductThree);						
+			} else {
+				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 6000);
+				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 3000);
+				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 7500, 4000);
+				receiver.getProducts().add(receiverProductOne);
+				receiver.getProducts().add(receiverProductTwo);
+				receiver.getProducts().add(receiverProductThree);
+			}
 
 			/* Generate and collate orders for the different receiver/order combination. */
 			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
@@ -269,9 +290,13 @@ public class CapeTownScenarioBuilder {
 			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
 					receiverProductTwo, Time.parseTime(serdur));
 			rOrder2.setNumberOfWeeklyDeliveries(numDel);
+			Order rOrder3 = createProductOrder(Id.create("Order"+Integer.toString(r)+"3",  Order.class), receiver, 
+					receiverProductThree, Time.parseTime(serdur));
+			rOrder3.setNumberOfWeeklyDeliveries(numDel);
 			Collection<Order> rOrders = new ArrayList<Order>();
 			rOrders.add(rOrder1);
 			rOrders.add(rOrder2);
+			rOrders.add(rOrder3);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
@@ -286,6 +311,7 @@ public class CapeTownScenarioBuilder {
 
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
+					order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -314,6 +340,7 @@ public class CapeTownScenarioBuilder {
 
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
+					order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -321,8 +348,8 @@ public class CapeTownScenarioBuilder {
 						LOG.warn("Multiple time windows set. Only the first is used");
 					}
 
-					CarrierService newService = serBuilder
-							.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+					CarrierService newService = serBuilder.
+							setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
 							setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 							setServiceDuration(order.getServiceDuration()).
 							build();
@@ -355,7 +382,8 @@ public class CapeTownScenarioBuilder {
 					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
 							.setLinkId(receiverLink.getId());
 					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);			
+					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
+					receiver.getAttributes().putAttribute("corporate", true);
 					receivers.addReceiver(receiver);
 				} else {
 					/* Franchises */
@@ -363,7 +391,8 @@ public class CapeTownScenarioBuilder {
 					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
 							.setLinkId(receiverLink.getId());
 					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);			
+					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
+					receiver.getAttributes().putAttribute("corporate", false);
 					receivers.addReceiver(receiver);
 				}
 			}
@@ -395,14 +424,14 @@ public class CapeTownScenarioBuilder {
 		 * TODO This might, potentially, be read from XML file. 
 		 */
 
-		/* Heavy vehicle. */
+		/* Heavy vehicle (28 tonnes). */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
 		CarrierVehicleType typeHeavy = typeBuilderHeavy
-				.setCapacity(14000)
-				.setFixCost(2604)
-				.setCostPerDistanceUnit(7.34E-3)
+				.setCapacity(28000)
+				.setFixCost(3945)
+				.setCostPerDistanceUnit(8.96E-3)
 				.setCostPerTimeUnit(0.171)
-				.build();
+				.build();		
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
 		CarrierVehicle heavy = carrierHVehicleBuilder
 				.setEarliestStart(Time.parseTime("06:00:00"))
@@ -410,13 +439,30 @@ public class CapeTownScenarioBuilder {
 				.setType(typeHeavy)
 				.setTypeId(typeHeavy.getId())
 				.build();
+		
+		/* Medium vehicle (14 tonnes). */		
+		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderMedium = CarrierVehicleType.Builder.newInstance(Id.create("medium", VehicleType.class));
+		CarrierVehicleType typeMedium = typeBuilderMedium
+				.setCapacity(14000)
+				.setFixCost(2604)
+				.setCostPerDistanceUnit(7.34E-3)
+				.setCostPerTimeUnit(0.171)
+				.build();
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierMVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("medium"), carrierLocation);
+		CarrierVehicle medium = carrierMVehicleBuilder
+				.setEarliestStart(Time.parseTime("06:00:00"))
+				.setLatestEnd(Time.parseTime("18:00:00"))
+				.setType(typeMedium)
+				.setTypeId(typeMedium.getId())
+				.build();
 
-		/* Light vehicle. */
+
+		/* Light vehicle (8 tonnes). */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderLight = CarrierVehicleType.Builder.newInstance(Id.create("light", VehicleType.class));
 		CarrierVehicleType typeLight = typeBuilderLight
-				.setCapacity(3000)
-				.setFixCost(1168)
-				.setCostPerDistanceUnit(4.22E-3)
+				.setCapacity(8000)
+				.setFixCost(1667)
+				.setCostPerDistanceUnit(5.51E-3)
 				.setCostPerTimeUnit(0.089)
 				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
@@ -430,12 +476,15 @@ public class CapeTownScenarioBuilder {
 		/* Assign vehicles to carrier. */
 		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
+		carrier.getCarrierCapabilities().getCarrierVehicles().add(medium);
+		carrier.getCarrierCapabilities().getVehicleTypes().add(typeMedium);		
 		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);	
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 
 		CarrierVehicleTypes types = new CarrierVehicleTypes();
 		types.getVehicleTypes().put(typeLight.getId(), typeLight);
+		types.getVehicleTypes().put(typeMedium.getId(), typeMedium);
 		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);
 
 		Carriers carriers = new Carriers();
@@ -444,24 +493,24 @@ public class CapeTownScenarioBuilder {
 	}
 
 
-	/**
-	 * Selects a random link in the network.
-	 * @param network
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private static Id<Link> selectRandomLink(Network network){
-		Object[] linkIds = network.getLinks().keySet().toArray();
-		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
-		Object o = linkIds[sample];
-		Id<Link> linkId = null;
-		if(o instanceof Id<?>){
-			linkId = (Id<Link>) o;
-			return linkId;
-		} else{
-			throw new RuntimeException("Oops, cannot find a correct link Id.");
-		}
-	}
+//	/**
+//	 * Selects a random link in the network.
+//	 * @param network
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//	private static Id<Link> selectRandomLink(Network network){
+//		Object[] linkIds = network.getLinks().keySet().toArray();
+//		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
+//		Object o = linkIds[sample];
+//		Id<Link> linkId = null;
+//		if(o instanceof Id<?>){
+//			linkId = (Id<Link>) o;
+//			return linkId;
+//		} else{
+//			throw new RuntimeException("Oops, cannot find a correct link Id.");
+//		}
+//	}
 
 	/**
 	 * Selects a random link in the network.
