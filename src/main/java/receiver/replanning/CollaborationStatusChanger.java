@@ -17,7 +17,10 @@ public class CollaborationStatusChanger implements GenericPlanStrategyModule<Rec
 	@Override
 	public void handlePlan(ReceiverPlan plan) {
 		boolean status = plan.getCollaborationStatus();
+//		boolean status = (boolean) plan.getReceiver().getSelectedPlan().getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString());
 		plan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), status);		
+//		boolean status = (boolean) plan.getReceiver().getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString());	
+//		plan.setCollaborationStatus(status);
 	}
 
 	@Override

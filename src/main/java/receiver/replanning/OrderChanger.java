@@ -25,9 +25,11 @@ import java.util.List;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.CarrierService;
 import org.matsim.contrib.freight.carrier.CarrierService.Builder;
+import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
@@ -59,6 +61,9 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 	public void handlePlan(ReceiverPlan receiverPlan) {
 //		boolean status = (boolean) receiverPlan.getCollaborationStatus();
 //		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", status);
+//		boolean status = (boolean) receiverPlan.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString());
+//		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), status);
+//		receiverPlan.setCollaborationStatus(status);
 
 		/* Create list of receiver orders. */
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
@@ -93,7 +98,18 @@ public class OrderChanger implements GenericPlanStrategyModule<ReceiverPlan> {
 						/* Check to see if this unique order exists as a carrier service, if so check to see if this particular 
 						 * carrier service is indeed this receiver's order. Before updating. */
 						
-					
+						double numDel = order.getNumberOfWeeklyDeliveries();
+						double sdemand;
+						double random = MatsimRandom.getLocalInstance().nextDouble();
+						double weekdemand = order.getOrderQuantity();
+						double pdeliver = numDel/5;
+													
+							if (random <= pdeliver){
+								sdemand = weekdemand/numDel;
+							} else sdemand = 0;
+							order.setDailyOrderQuantity(sdemand);
+						
+						
 						if (service.getId().toString() == order.getId().toString()){		
 							Builder builder = CarrierService.Builder.newInstance(Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierService.class), receiverPlan.getReceiver().getLinkId());
 							newService = builder

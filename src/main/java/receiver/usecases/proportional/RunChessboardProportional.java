@@ -55,11 +55,14 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
+import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverChessboardUtils;
 import receiver.usecases.ReceiverScoreStats;
+import receiver.usecases.marginal.MarginalExperimentParameters;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -105,7 +108,7 @@ public class RunChessboardProportional {
 					"serviceduration",
 					"collaborate",
 					"grandCoalitionMember",
-					"orderCollaborationStatus"));
+					"orderStatus"));
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -249,7 +252,30 @@ public class RunChessboardProportional {
 			public void notifyIterationEnds(IterationEndsEvent event) {
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 
+//				if(event.getIteration() == 0){
+//					for(int i = 1; i < (ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()+1); i++) {
+//						Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+//						receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
+//						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));					}
+//				}
+				
+				
 				if((event.getIteration() + 1) % (statInterval) != 0) return;
+				
+				for(int i = 1; i < (ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()+1); i++) {
+					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+//					receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
+					receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));					}
+
+				
+//				for(int i = 1; i < (ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()+1); i++) {
+//					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+//					receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
+////					for(ReceiverPlan plan : receiver.getPlans()){
+//						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));					
+////					}
+//				}
+			
 
 				//write plans
 

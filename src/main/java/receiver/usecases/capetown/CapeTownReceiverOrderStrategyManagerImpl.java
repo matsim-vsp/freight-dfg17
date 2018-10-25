@@ -39,8 +39,8 @@ public class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderSt
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new OrderChanger());
 			strategy.addStrategyModule(new CollaborationStatusChanger());
+			strategy.addStrategyModule(new OrderChanger());			
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 

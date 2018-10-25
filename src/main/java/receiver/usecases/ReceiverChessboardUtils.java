@@ -76,9 +76,11 @@ public class ReceiverChessboardUtils {
 //		final Carriers carriers = new Carriers();							
 		final Carriers carriers = ReceiverUtils.getCarriers( controler.getScenario() );							
 //		new CarrierPlanXmlReaderV2(carriers).readFile(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");	
-		CarrierVehicleTypes types = new CarrierVehicleTypes();
-		new CarrierVehicleTypeReader(types).readFile(controler.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
+		CarrierVehicleTypes types = CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( controler.getScenario()  ) );
+//		new CarrierVehicleTypes();
+//		new CarrierVehicleTypeReader(types).readFile(controler.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
 		new CarrierVehicleTypeLoader(carriers).loadVehicleTypes(types);
+		
 
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be

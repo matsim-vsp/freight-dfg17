@@ -35,6 +35,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 import com.google.inject.Inject;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
@@ -124,7 +125,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 				Receiver thisReceiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(receiverId);
 				
 //				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
-				if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == true){
+				if ((boolean) thisReceiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 					totalCoalitionVolume += getReceiverOrderTotal(ro);
 				} else {
@@ -141,7 +142,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 				Receiver thisReceiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(receiverId);
 				
 //				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == true){
-				if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == true){
+				if ((boolean) thisReceiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 					double thisVolume = 0.0;
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 
@@ -165,14 +166,14 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 
 		/* Scoring each carrier */
 //		for(Id<Carrier> carriedId : carrierCustomers.keySet()) {
-//			Carrier carrier = scenario.getCarriers().getCarriers().get(carriedId);
-//			/* TODO This must be updated, because not all Carriers will deliver the same volume. This can be done by making
-//			 * the carrier attributable, and introducing a carrierCoalitionVolume attribute that can be used to calculate
-//			 * the carrier's proportion.
-//			 */
-//			//			double carrierCoalitionVolume = (double) carrier.getAttributes().get("carrierCoalitionVolume");
-//			//			double newScore = scenario.getCoalition().getCoalitionCost()*((carrierCoalitionVolume*0.5)/totalCoalitionVolume);
-//			double newScore = scenario.getCoalition().getCoalitionCost()*(((totalCoalitionVolume/nrOfCarriers)*0.5)/totalCoalitionVolume);
+//			Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(carriedId);
+////			/* TODO This must be updated, because not all Carriers will deliver the same volume. This can be done by making
+////			 * the carrier attributable, and introducing a carrierCoalitionVolume attribute that can be used to calculate
+////			 * the carrier's proportion.
+////			 */
+////			//			double carrierCoalitionVolume = (double) carrier.getAttributes().get("carrierCoalitionVolume");
+////			//			double newScore = scenario.getCoalition().getCoalitionCost()*((carrierCoalitionVolume*0.5)/totalCoalitionVolume);
+//			double newScore = ReceiverUtils.getCoalition(sc).getCoalitionCost()*(((totalCoalitionVolume)*0.5)/totalCoalitionVolume);
 //			if (newScore < 0){
 //				carrier.getSelectedPlan().setScore(newScore);
 //			}
@@ -187,7 +188,7 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 
 				/* Score non-collaborating receivers and calculate the total cost allocated to them. */
 //			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
-			if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == false){
+			if ((boolean) thisReceiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == false){
 //				if (plan.getCollaborationStatus() == false){
 					double total = 0.0;				
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
@@ -206,9 +207,13 @@ public class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
 						double cost = ReceiverUtils.getCoalition( sc ).getCoalitionCost() * proportionalMap.get(ro.getCarrierId()).get(thisReceiver.getId());
 						ro.setScore(cost);
-						total += cost;
+						total += cost;						
 					} 
-					plan.setScore(total);
+					if (total <= 0){
+						plan.setScore(total);
+					} else {
+						plan.setScore(0.0);
+					}					
 				}
 			}
 

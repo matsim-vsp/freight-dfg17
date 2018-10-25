@@ -122,7 +122,7 @@ public class TimeWindowMutatorTest {
 	
 	private ReceiverPlan getPlanWithTimeWindow() {
 		Receiver receiver = ReceiverUtils.newInstance(Id.create("test", Receiver.class));
-		return ReceiverPlan.Builder.newInstance(receiver).addTimeWindow(getTimeWindow()).build();
+		return ReceiverPlan.Builder.newInstance(receiver,true).addTimeWindow(getTimeWindow()).build();
 	}
 	
 }

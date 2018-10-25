@@ -255,25 +255,25 @@ public class ReceiverChessboardScenario {
 //				tw = 12;
 //			}
 //			
-//			/* Set the different service durations for experiments. */
-//			if (r <= 15){
-//				serdur = "01:00:00";
-//			} else if (r <= 30){
-//				serdur = "02:00:00";
-//			} else if (r <= 45){
-//				serdur = "03:00:00";
-//			} else serdur = "04:00:00";
+			/* Set the different service durations for experiments. */
+			if (r <= 15){
+				serdur = "01:00:00";
+			} else if (r <= 30){
+				serdur = "02:00:00";
+			} else if (r <= 45){
+				serdur = "03:00:00";
+			} else serdur = "04:00:00";
 //			
 			/* Set the different delivery frequencies for experiments. */
-			if (r <= 12){
-				numDel = 1;
-			} else if (r <= 24){
-				numDel = 2;
-			} else if (r <= 36){
-				numDel = 3;
-			} else if (r <= 48){
-				numDel = 4;
-			} else numDel = 5;
+//			if (r <= 12){
+//				numDel = 1;
+//			} else if (r <= 24){
+//				numDel = 2;
+//			} else if (r <= 36){
+//				numDel = 3;
+//			} else if (r <= 48){
+//				numDel = 4;
+//			} else numDel = 5;
 
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
@@ -295,7 +295,7 @@ public class ReceiverChessboardScenario {
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 					.addReceiverOrder(receiverOrder)
 					.addTimeWindow(selectRandomTimeStart(tw))
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))

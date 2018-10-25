@@ -60,6 +60,7 @@ import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverScoreStats;
+import receiver.usecases.marginal.MarginalExperimentParameters;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -229,6 +230,7 @@ public class RunCapeTownReceiver {
 
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(rScoreStats);
+		controler.addControlerListener(new VehicleTypeListener(controler.getScenario(), run));
 		controler.addControlerListener(new IterationEndsListener() {
 
 			@Override
@@ -236,6 +238,14 @@ public class RunCapeTownReceiver {
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 
 				if((event.getIteration() + 1) % (statInterval) != 0) return;
+				
+				
+				
+				for(int i = 1; i < (ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()+1); i++) {
+					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+//					receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
+					receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));					}
+
 
 				//write plans
 				
@@ -247,6 +257,9 @@ public class RunCapeTownReceiver {
 				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
 				for(int i = 1; i < numberOfReceivers+1; i++) {
 					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+//					if(event.getIteration() == (CapeTownExperimentParameters.REPLAN_INTERVAL-1)){
+//						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())); 
+//					}
 					for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
 						for (Order order : rorder.getReceiverProductOrders()){
 							String score = receiver.getSelectedPlan().getScore().toString();
@@ -258,7 +271,9 @@ public class RunCapeTownReceiver {
 							boolean status = (boolean) receiver.getSelectedPlan().getCollaborationStatus();
 							boolean status2 = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString());							
 							boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.toString());
-
+							
+							
+							
 							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 							try {
 								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b,%b", 
@@ -291,6 +306,7 @@ public class RunCapeTownReceiver {
 						}	
 					}
 				}
+				
 
 			}
 		});	
