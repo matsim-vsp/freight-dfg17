@@ -1,0 +1,5 @@
+- DHL_facilities_Wilmersdorf contains all private and commercial clients in Wilmersdorf, and can be read with the MATSim-FacilityReader
+- vehicleTypes contains typical vehicles and cargo bicycles, and can be read with VehicleTypeReader/Loader in contrib/freight
+- network - network of the Berlin
+- DHL_carriers_Wilmersdorf contains the modelled services of the cep carriers only with typical vehicles (read in with CarrierPlanReader)
+- DHL_carriers_Wilmersdorf contains the modelled services of the cep carriers with typical vehicles and cargo bicycles (read in with CarrierPlanReader)
