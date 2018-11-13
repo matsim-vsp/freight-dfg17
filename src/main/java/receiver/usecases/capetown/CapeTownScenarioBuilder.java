@@ -60,6 +60,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.FacilitiesUtils;
+import org.matsim.utils.objectattributes.ObjectAttributesXmlReader;
 import org.matsim.vehicles.VehicleType;
 import receiver.Receiver;
 import receiver.ReceiverAttributes;
@@ -226,7 +227,7 @@ public class CapeTownScenarioBuilder {
 
 	private static Scenario setupCapeTownScenarioWithPassengers(long seed, int run) {
 //		Config config = ConfigUtils.createConfig();
-		String configFile = "scenarios/capeTown/config.xml.gz";
+		String configFile = "scenarios/capeTown/config.xml";
         Config config = ConfigUtils.loadConfig(configFile);
 //        Scenario scenario = ScenarioUtils.loadScenario(config);
 
@@ -241,8 +242,9 @@ public class CapeTownScenarioBuilder {
 	
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		PopulationReader reader = new PopulationReader(sc);
-		reader.readFile("scenarios/capeTown/population.xml.gz");	
-		reader.readFile("scenarios/capeTown/populationAttributes.xml.gz");
+		reader.readFile("scenarios/capeTown/population_020.xml.gz");
+//		ObjectAttributesXmlReader reader2 = new ObjectAttributesXmlReader(sc.getPopulation().getPersonAttributes());
+//		reader2.readFile("scenarios/capeTown/populationAttributes.xml.gz");
 
 		return sc;
 	}
