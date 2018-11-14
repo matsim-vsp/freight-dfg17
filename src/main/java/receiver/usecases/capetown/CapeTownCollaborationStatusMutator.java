@@ -39,20 +39,20 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 		if (grandMember == true){
 			if (status == true){
 				newstatus = false;
-//				/* Select a random day time window for non-collaborating receivers */
-//				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomDayTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION);
-//				TimeWindow oldWindow = receiverPlan.getTimeWindows().get(0);
-//				/* Remove old and add new time windows */
-//				receiverPlan.getTimeWindows().remove(oldWindow);
-//				receiverPlan.getTimeWindows().add(newWindow);
+				/* Select a random day time window for non-collaborating receivers */
+				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomDayTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION);
+				TimeWindow oldWindow = receiverPlan.getTimeWindows().get(0);
+				/* Remove old and add new time windows */
+				receiverPlan.getTimeWindows().remove(oldWindow);
+				receiverPlan.getTimeWindows().add(newWindow);
 			} else {
 				newstatus = true;
-////				/* Select a random night time window for collaborating receivers */
-//				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomNightTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION, receiverPlan.getReceiver());
-//				TimeWindow oldWindow = receiverPlan.getTimeWindows().get(0);
-//				/* Remove old and add new time windows */
-//				receiverPlan.getTimeWindows().remove(oldWindow);
-//				receiverPlan.getTimeWindows().add(newWindow);
+//				/* Select a random night time window for collaborating receivers */
+				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomNightTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION, receiverPlan.getReceiver());
+				TimeWindow oldWindow = receiverPlan.getTimeWindows().get(0);
+				/* Remove old and add new time windows */
+				receiverPlan.getTimeWindows().remove(oldWindow);
+				receiverPlan.getTimeWindows().add(newWindow);
 			}
 		} else {
 			newstatus = status;

@@ -32,6 +32,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities;
@@ -79,6 +80,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -104,6 +106,8 @@ public class CapeTownScenarioBuilder {
 		/* To split up our "real" facilities into a study and control group, we
 		 * have to do that PRIOR to creating the receivers. */
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
+//			if((boolean) facility.getAttributes().getAttribute("PnP") == true){
+				if(facility.getAttributes().getAttribute("PnP") != null){
 			if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
 				/* Ignore the depot where the carrier resides. */
 			} else{
@@ -113,6 +117,7 @@ public class CapeTownScenarioBuilder {
 				} else {
 					facility.getAttributes().putAttribute("corporate", false);
 				}
+			}
 			}
 		}
 
@@ -154,7 +159,7 @@ public class CapeTownScenarioBuilder {
 		}
 
 		ReceiverUtils.setCoalition( coalition, sc );
-
+		
 		return sc;
 	}
 	
@@ -169,7 +174,9 @@ public class CapeTownScenarioBuilder {
 
 		/* To split up our "real" facilities into a study and control group, we
 		 * have to do that PRIOR to creating the receivers. */
+		
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
+			if(facility.getAttributes().getAttribute("PnP") != null){
 			if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
 				/* Ignore the depot where the carrier resides. */
 			} else{
@@ -180,14 +187,17 @@ public class CapeTownScenarioBuilder {
 					facility.getAttributes().putAttribute("corporate", false);
 				}
 			}
+			}
 		}
 
 		/* Create the grand coalition receiver members and allocate orders. */
 		createAndAddReceivers(sc);
-
+		
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
+		
+		sc.getConfig().facilities().setInputFile("./facilities_used.xml.gz");
 		generateCarrierPlan( sc );
 
 
@@ -220,6 +230,8 @@ public class CapeTownScenarioBuilder {
 		}
 
 		ReceiverUtils.setCoalition( coalition, sc );
+		
+		
 
 		return sc;
 	}
@@ -238,11 +250,35 @@ public class CapeTownScenarioBuilder {
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./network.xml.gz");
 		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
-		config.facilities().setInputFile("./facilities.xml.gz");
-	
+		
+		
+//		config.facilities().setInputFile("./facilities.xml");
+		config.facilities().setInputFile("./facilities_used.xml.gz");
+		
 		Scenario sc = ScenarioUtils.loadScenario(config);
+		
+		/* Create a list of the receiver locations. */
+//		List<Id<ActivityFacility>> rIds = new ArrayList<>();
+		List<ActivityFacility> rFac = new ArrayList<>();
+		for(ActivityFacility fac : sc.getActivityFacilities().getFacilities().values()){
+			if(fac.getAttributes().toString().contains("Pick")){
+				rFac.add(fac);
+			}
+		}
+//		for(Id<ActivityFacility> facId : sc.getActivityFacilities().getFacilities().keySet()){
+//			if(facId.toString().startsWith("Pick")){
+//				rIds.add(facId);
+//			}
+//		}
+		for(ActivityFacility fac : rFac){
+			fac.getAttributes().putAttribute("PnP", true);
+		}
+//		sc.getConfig().facilities().setInputFile("scenarios/capeTown/facilities_used.xml.gz");
+		
 		PopulationReader reader = new PopulationReader(sc);
 		reader.readFile("scenarios/capeTown/population_020.xml.gz");
+		
+		
 //		ObjectAttributesXmlReader reader2 = new ObjectAttributesXmlReader(sc.getPopulation().getPersonAttributes());
 //		reader2.readFile("scenarios/capeTown/populationAttributes.xml.gz");
 
@@ -263,8 +299,11 @@ public class CapeTownScenarioBuilder {
 		config.network().setInputFile("./scenarios/capeTown/network.xml.gz");
 		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
 		config.facilities().setInputFile("./scenarios/capeTown/facilities.xml.gz");
-
+		
 		Scenario sc = ScenarioUtils.loadScenario(config);
+		for (Id<ActivityFacility> facility : sc.getActivityFacilities().getFacilities().keySet()){
+			sc.getActivityFacilities().getFacilityAttributes().putAttribute(facility.toString(), "PnP", true);
+		}
 
 		return sc;
 	}
@@ -399,8 +438,8 @@ public class CapeTownScenarioBuilder {
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
-//						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
-						.addTimeWindow(selectRandomDayTimeStart(tw))
+						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
+//						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
 //				receiverPlan.setCollaborationStatus(true); 
 				receiver.setSelectedPlan(receiverPlan);
@@ -470,33 +509,37 @@ public class CapeTownScenarioBuilder {
 		receivers.setDescription("Corporate");
 		int receiverIndex = 1;
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
-			if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
-				/* Ignore the depot where carrier resides. */
-			} else {
-				if((boolean) facility.getAttributes().getAttribute("corporate")) {
-					/* Corporates */
-					Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
-					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
-							.setLinkId(receiverLink.getId());
-					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
-					double rnd2 = MatsimRandom.getLocalInstance().nextDouble();
-					if(rnd2 <= 0.75) {
-						receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
-					} else {
-						receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
-					}
-//					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
-					receiver.getAttributes().putAttribute("corporate", true);
-					receivers.addReceiver(receiver);
+			/* Only use PnP facility locations for receivers. */
+			if(facility.getAttributes().getAttribute("PnP") != null){
+//			if((boolean) facility.getAttributes().getAttribute("PnP") == true){
+				if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
+					/* Ignore the depot where carrier resides. */
 				} else {
-					/* Franchises */
-					Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
-					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
-							.setLinkId(receiverLink.getId());
-					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
-					receiver.getAttributes().putAttribute("corporate", false);
-					receivers.addReceiver(receiver);
+					if((boolean) facility.getAttributes().getAttribute("corporate")) {
+						/* Corporates */
+						Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
+						Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
+								.setLinkId(receiverLink.getId());
+						receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
+						double rnd2 = MatsimRandom.getLocalInstance().nextDouble();
+						if(rnd2 <= 0.75) {
+							receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
+						} else {
+							receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
+						}
+						//					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
+						receiver.getAttributes().putAttribute("corporate", true);
+						receivers.addReceiver(receiver);
+					} else {
+						/* Franchises */
+						Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
+						Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
+								.setLinkId(receiverLink.getId());
+						receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
+						receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
+						receiver.getAttributes().putAttribute("corporate", false);
+						receivers.addReceiver(receiver);
+					}
 				}
 			}
 		}
