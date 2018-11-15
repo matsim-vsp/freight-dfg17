@@ -34,7 +34,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
@@ -51,11 +50,9 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
-import org.matsim.core.router.DefaultRoutingModules;
 import org.matsim.core.router.NetworkRoutingProvider;
 import org.matsim.core.utils.io.IOUtils;
 
-import com.google.inject.Binder;
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
@@ -68,7 +65,6 @@ import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverScoreStats;
-import receiver.usecases.marginal.MarginalExperimentParameters;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
