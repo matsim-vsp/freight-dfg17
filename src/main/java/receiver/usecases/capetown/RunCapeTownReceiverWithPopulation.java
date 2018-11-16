@@ -42,6 +42,9 @@ import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.config.groups.StrategyConfigGroup.StrategySettings;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
@@ -50,8 +53,10 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
+import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
 import org.matsim.core.router.NetworkRoutingProvider;
 import org.matsim.core.utils.io.IOUtils;
+import org.matsim.core.utils.misc.Time;
 
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
@@ -137,6 +142,48 @@ public class RunCapeTownReceiverWithPopulation {
 				this.addRoutingModuleBinding("commercial").toProvider(new NetworkRoutingProvider("commercial", "car"));
 			}
 		});
+		/* Setup generic subpopulation replanning. */
+		/* Generic strategy */
+		Config config = controler.getConfig();
+		StrategySettings changeExpBetaStrategySettings = new StrategySettings(ConfigUtils.createAvailableStrategyId(config));
+		changeExpBetaStrategySettings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		changeExpBetaStrategySettings.setWeight(0.8);
+		config.strategy().addStrategySettings(changeExpBetaStrategySettings);
+		/* People subpopulation strategy. */
+		StrategySettings peopleChangeExpBeta = new StrategySettings(ConfigUtils.createAvailableStrategyId(config));
+		peopleChangeExpBeta.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		peopleChangeExpBeta.setWeight(0.70);
+		peopleChangeExpBeta.setSubpopulation("private");
+		config.strategy().addStrategySettings(peopleChangeExpBeta);
+		/* People subpopulation ReRoute. Switch off after a time. */
+		StrategySettings peopleReRoute = new StrategySettings(ConfigUtils.createAvailableStrategyId(config));
+		peopleReRoute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute.toString());
+		peopleReRoute.setWeight(0.10);
+		peopleReRoute.setSubpopulation("private");
+		peopleReRoute.setDisableAfter(85);
+		config.strategy().addStrategySettings(peopleReRoute);
+		/* People subpopulation Time allocation mutator AND ReRoute. Switch off after a time. */
+		StrategySettings peopleTimeAndReroute = new StrategySettings(ConfigUtils.createAvailableStrategyId(config));
+		peopleTimeAndReroute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.TimeAllocationMutator_ReRoute.toString());
+		peopleTimeAndReroute.setWeight(0.20);
+		peopleTimeAndReroute.setSubpopulation("private");
+		peopleTimeAndReroute.setDisableAfter(85);
+		config.strategy().addStrategySettings(peopleTimeAndReroute);
+		/* Commercial subpopulation strategy. */
+		StrategySettings commercialStrategy = new StrategySettings(ConfigUtils.createAvailableStrategyId(config));
+		commercialStrategy.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		commercialStrategy.setWeight(0.85);
+		commercialStrategy.setSubpopulation("commercial");
+		config.strategy().addStrategySettings(commercialStrategy);
+		/* Commercial subpopulation ReRoute. Switch off after a time. */
+		StrategySettings commercialReRoute = new StrategySettings(ConfigUtils.createAvailableStrategyId(config));
+		commercialReRoute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute.toString());
+		commercialReRoute.setWeight(0.15);
+		commercialReRoute.setSubpopulation("commercial");
+		commercialReRoute.setDisableAfter(85);
+		config.strategy().addStrategySettings(commercialReRoute);
+		
+		config.qsim().setEndTime(Time.parseTime("48:00:00"));
 		
 		/* Take out all commercial vehicles. FIXME This must be sorted. */
 		List<Id<Person>> ids = new ArrayList<>();
