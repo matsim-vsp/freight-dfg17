@@ -23,30 +23,28 @@
  */
 package receiver.usecases.capetown;
 
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.population.Person;
-import org.matsim.api.core.v01.population.Population;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.contrib.freight.carrier.CarrierImpl;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
-import org.matsim.contrib.freight.carrier.CarrierService;
+import org.matsim.contrib.freight.carrier.CarrierShipment;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.contrib.freight.carrier.CarrierVehicleType;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypeWriter;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.contrib.freight.carrier.ForwardingVehicleType;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
@@ -56,13 +54,17 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.population.io.PopulationReader;
-import org.matsim.core.scenario.MutableScenario;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.FacilitiesUtils;
-import org.matsim.utils.objectattributes.ObjectAttributesXmlReader;
 import org.matsim.vehicles.VehicleType;
+
+import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
+import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
+import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
+import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
+
 import receiver.Receiver;
 import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
@@ -75,12 +77,6 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -302,7 +298,7 @@ public class CapeTownScenarioBuilder {
 		
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		for (Id<ActivityFacility> facility : sc.getActivityFacilities().getFacilities().keySet()){
-			sc.getActivityFacilities().getFacilityAttributes().putAttribute(facility.toString(), "PnP", true);
+			sc.getActivityFacilities().getFacilities().get(facility).getAttributes().putAttribute("PnP", true);
 		}
 
 		return sc;
@@ -376,6 +372,8 @@ public class CapeTownScenarioBuilder {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
+		/* This we added to facilitate the shipments */
+		Link carrierLink = FacilitiesUtils.decideOnLink(sc.getActivityFacilities().getFacilities().get(Id.create("0", ActivityFacility.class)), sc.getNetwork());
 
 		/* Create generic product types with a description and required capacity (in kg per item). */
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
@@ -448,19 +446,31 @@ public class CapeTownScenarioBuilder {
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
 					order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
-					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
-							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
-
+//					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
+//							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
+					
+					CarrierShipment.Builder shipmentBuilder = CarrierShipment.Builder.newInstance(
+							Id.create(order.getId(),CarrierShipment.class), 
+							carrierLink.getId(), 
+							order.getReceiver().getLinkId(), 
+							(int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())));
+					
 					if(receiverPlan.getTimeWindows().size() > 1) {
 						LOG.warn("Multiple time windows set. Only the first is used");
 					}
 
-					CarrierService newService = serBuilder
-							.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
-							setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
-							setServiceDuration(order.getServiceDuration()).
-							build();
-					carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);	
+//					CarrierService newService = serBuilder
+//							.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+//							setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
+//							setServiceDuration(order.getServiceDuration()).
+//							build();
+//					carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);	
+					
+					CarrierShipment shipment = shipmentBuilder
+							.setDeliveryServiceTime(order.getServiceDuration())
+							.setDeliveryTimeWindow(receiverPlan.getTimeWindows().get(0))
+							.build();
+					carriers.getCarriers().get(receiverOrder.getCarrierId()).getShipments().add(shipment);
 				}
 
 			} else {
@@ -477,19 +487,31 @@ public class CapeTownScenarioBuilder {
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
 					order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
-					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
-							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
+//					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
+//							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
+
+					CarrierShipment.Builder shipmentBuilder = CarrierShipment.Builder.newInstance(
+							Id.create(order.getId(),CarrierShipment.class), 
+							carrierLink.getId(), 
+							order.getReceiver().getLinkId(), 
+							(int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())));
 
 					if(receiverPlan.getTimeWindows().size() > 1) {
 						LOG.warn("Multiple time windows set. Only the first is used");
 					}
 
-					CarrierService newService = serBuilder.
-							setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
-							setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
-							setServiceDuration(order.getServiceDuration()).
-							build();
-					carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);	
+//					CarrierService newService = serBuilder.
+//							setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+//							setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
+//							setServiceDuration(order.getServiceDuration()).
+//							build();
+//					carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);
+					
+					CarrierShipment shipment = shipmentBuilder
+							.setDeliveryServiceTime(order.getServiceDuration())
+							.setDeliveryTimeWindow(receiverPlan.getTimeWindows().get(0))
+							.build();
+					carriers.getCarriers().get(receiverOrder.getCarrierId()).getShipments().add(shipment);
 				}
 			}
 

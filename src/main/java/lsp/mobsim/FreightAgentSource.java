@@ -79,7 +79,7 @@ class FreightAgentSource implements AgentSource {
 				log.warn("vehicleType for agent "+vRoute.getPlan().getPerson().getId() + " is missing. set default vehicleType where maxVelocity is solely defined by link.speed.");
 			}
 			else vehicle = vRoute.getVehicle();
-			qsim.createAndParkVehicleOnLink(vehicle, agent.getCurrentLinkId());
+//			qsim.createAndParkVehicleOnLink(vehicle, agent.getCurrentLinkId());
 			qsim.insertAgentIntoMobsim(agent);
 			mobSimAgents.add(agent);
 		}

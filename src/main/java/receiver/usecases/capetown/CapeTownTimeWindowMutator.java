@@ -21,8 +21,6 @@
  */
 package receiver.usecases.capetown;
 
-import java.util.Random;
-
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;

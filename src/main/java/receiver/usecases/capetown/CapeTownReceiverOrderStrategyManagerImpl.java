@@ -9,14 +9,12 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.BestPlanSelector;
-import org.matsim.core.replanning.selectors.ExpBetaPlanSelector;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.replanning.CollaborationStatusChanger;
-import receiver.replanning.CollaborationStatusMutator;
 import receiver.replanning.OrderChanger;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
