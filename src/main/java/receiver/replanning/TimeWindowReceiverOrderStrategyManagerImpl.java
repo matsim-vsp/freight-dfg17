@@ -37,7 +37,8 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new OrderChanger());
+			strategy.addStrategyModule(new OrderChanger());		
+			strategy.addStrategyModule(new CollaborationStatusChanger());				
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 

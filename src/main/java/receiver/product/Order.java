@@ -245,7 +245,7 @@ public final class Order {
 			//			int maxLevel = receiverProduct.getMaxLevel();
 			//			double orderQuantity = (maxLevel - minLevel)*receiverProduct.getRequiredCapacity();
 			this.orderQuantity = orderQuantity;
-			this.dOrderQuantity = orderQuantity/this.numDel;
+//			this.dOrderQuantity = orderQuantity/this.numDel;
 			return this;
 		}
 	

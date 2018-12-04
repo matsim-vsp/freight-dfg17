@@ -32,6 +32,8 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Population;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
@@ -44,6 +46,7 @@ import org.matsim.contrib.freight.carrier.CarrierVehicleType;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypeWriter;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.carrier.ForwardingVehicleType;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
@@ -52,10 +55,13 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
+import org.matsim.core.population.io.PopulationReader;
+import org.matsim.core.scenario.MutableScenario;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.FacilitiesUtils;
+import org.matsim.utils.objectattributes.ObjectAttributesXmlReader;
 import org.matsim.vehicles.VehicleType;
 import receiver.Receiver;
 import receiver.ReceiverAttributes;
@@ -74,7 +80,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
+import java.util.List;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -100,6 +106,8 @@ public class CapeTownScenarioBuilder {
 		/* To split up our "real" facilities into a study and control group, we
 		 * have to do that PRIOR to creating the receivers. */
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
+//			if((boolean) facility.getAttributes().getAttribute("PnP") == true){
+				if(facility.getAttributes().getAttribute("PnP") != null){
 			if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
 				/* Ignore the depot where the carrier resides. */
 			} else{
@@ -109,6 +117,7 @@ public class CapeTownScenarioBuilder {
 				} else {
 					facility.getAttributes().putAttribute("corporate", false);
 				}
+			}
 			}
 		}
 
@@ -138,7 +147,7 @@ public class CapeTownScenarioBuilder {
 		}
 
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -150,10 +159,131 @@ public class CapeTownScenarioBuilder {
 		}
 
 		ReceiverUtils.setCoalition( coalition, sc );
+		
+		return sc;
+	}
+	
+	public static Scenario createCapeTownScenarioWithPassengers( long seed, int run, boolean write) {
+		MatsimRandom.reset(seed);
+		//		int numberOfReceivers = CapeTownExperimentParameters.NUMBER_OF_RECEIVERS;
+		Scenario sc = setupCapeTownScenarioWithPassengers(seed, run);
+		createCapeTownCarriersAndAddToScenario(sc);
+
+		ReceiverUtils.setReplanInterval(CapeTownExperimentParameters.REPLAN_INTERVAL, sc );
+
+
+		/* To split up our "real" facilities into a study and control group, we
+		 * have to do that PRIOR to creating the receivers. */
+		
+		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
+			if(facility.getAttributes().getAttribute("PnP") != null){
+			if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
+				/* Ignore the depot where the carrier resides. */
+			} else{
+				double rnd = MatsimRandom.getLocalInstance().nextDouble();
+				if(rnd <= CapeTownExperimentParameters.PROPORTION_CORPORATE) {
+					facility.getAttributes().putAttribute("corporate", true);
+				} else {
+					facility.getAttributes().putAttribute("corporate", false);
+				}
+			}
+			}
+		}
+
+		/* Create the grand coalition receiver members and allocate orders. */
+		createAndAddReceivers(sc);
+		
+		createReceiverOrders(sc);
+
+		/* Let jsprit do its magic and route the given receiver orders. */
+		
+		sc.getConfig().facilities().setInputFile("./facilities_used.xml.gz");
+		generateCarrierPlan( sc );
+
+
+		if(write) {
+			writeFreightScenario(sc);
+		}
+
+		/* Link the carriers to the receivers. */
+		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
+
+		/* Add carrier and receivers to coalition */
+		MutableCoalition coalition = new MutableCoalition();
+
+		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
+			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
+				coalition.addCarrierCoalitionMember(carrier);
+			}
+		}
+
+		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
+				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
+					coalition.addReceiverCoalitionMember(receiver);
+				}
+			} else {
+				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
+					coalition.removeReceiverCoalitionMember(receiver);
+				}
+			}
+		}
+
+		ReceiverUtils.setCoalition( coalition, sc );
+		
+		
 
 		return sc;
 	}
 
+
+	private static Scenario setupCapeTownScenarioWithPassengers(long seed, int run) {
+//		Config config = ConfigUtils.createConfig();
+		String configFile = "scenarios/capeTown/config.xml";
+        Config config = ConfigUtils.loadConfig(configFile);
+//        Scenario scenario = ScenarioUtils.loadScenario(config);
+
+		config.controler().setFirstIteration(0);
+		config.controler().setLastIteration(CapeTownExperimentParameters.NUM_ITERATIONS);
+		config.controler().setMobsim("qsim");
+		config.controler().setWriteSnapshotsInterval(CapeTownExperimentParameters.STAT_INTERVAL);
+		config.global().setRandomSeed(seed);
+		config.network().setInputFile("./network.xml.gz");
+		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
+		
+		
+//		config.facilities().setInputFile("./facilities.xml");
+		config.facilities().setInputFile("./facilities_used.xml.gz");
+		
+		Scenario sc = ScenarioUtils.loadScenario(config);
+		
+		/* Create a list of the receiver locations. */
+//		List<Id<ActivityFacility>> rIds = new ArrayList<>();
+		List<ActivityFacility> rFac = new ArrayList<>();
+		for(ActivityFacility fac : sc.getActivityFacilities().getFacilities().values()){
+			if(fac.getAttributes().toString().contains("Pick")){
+				rFac.add(fac);
+			}
+		}
+//		for(Id<ActivityFacility> facId : sc.getActivityFacilities().getFacilities().keySet()){
+//			if(facId.toString().startsWith("Pick")){
+//				rIds.add(facId);
+//			}
+//		}
+		for(ActivityFacility fac : rFac){
+			fac.getAttributes().putAttribute("PnP", true);
+		}
+//		sc.getConfig().facilities().setInputFile("scenarios/capeTown/facilities_used.xml.gz");
+		
+		PopulationReader reader = new PopulationReader(sc);
+		reader.readFile("scenarios/capeTown/population_020.xml.gz");
+		
+		
+//		ObjectAttributesXmlReader reader2 = new ObjectAttributesXmlReader(sc.getPopulation().getPersonAttributes());
+//		reader2.readFile("scenarios/capeTown/populationAttributes.xml.gz");
+
+		return sc;
+	}
 
 	/**
 	 * FIXME Need to complete this. 
@@ -169,11 +299,16 @@ public class CapeTownScenarioBuilder {
 		config.network().setInputFile("./scenarios/capeTown/network.xml.gz");
 		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
 		config.facilities().setInputFile("./scenarios/capeTown/facilities.xml.gz");
-
+		
 		Scenario sc = ScenarioUtils.loadScenario(config);
+		for (Id<ActivityFacility> facility : sc.getActivityFacilities().getFacilities().keySet()){
+			sc.getActivityFacilities().getFacilityAttributes().putAttribute(facility.toString(), "PnP", true);
+		}
 
 		return sc;
 	}
+
+	
 
 	public static void writeFreightScenario( Scenario sc ) {
 		/* Write the necessary bits to file. */
@@ -250,6 +385,10 @@ public class CapeTownScenarioBuilder {
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
+		
+		ProductType productTypeThree = receivers.createAndAddProductType(Id.create("P3", ProductType.class));
+		productTypeThree.setDescription("Product 3");
+		productTypeThree.setRequiredCapacity(3);
 
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			int tw = CapeTownExperimentParameters.TIME_WINDOW_DURATION;
@@ -258,10 +397,26 @@ public class CapeTownScenarioBuilder {
 
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
-			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);
-			ReceiverProduct receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 2500);
-			receiver.getProducts().add(receiverProductOne);
-			receiver.getProducts().add(receiverProductTwo);
+			
+			ReceiverProduct receiverProductOne;
+			ReceiverProduct receiverProductTwo;
+			ReceiverProduct receiverProductThree;
+			
+			if((boolean) receiver.getAttributes().getAttribute("corporate") == true){
+				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 9000);
+				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 750, 4500);
+				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 1000, 6000);
+				receiver.getProducts().add(receiverProductOne);
+				receiver.getProducts().add(receiverProductTwo);
+				receiver.getProducts().add(receiverProductThree);						
+			} else {
+				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 750, 6000);
+				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 3000);
+				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 750, 4000);
+				receiver.getProducts().add(receiverProductOne);
+				receiver.getProducts().add(receiverProductTwo);
+				receiver.getProducts().add(receiverProductThree);
+			}
 
 			/* Generate and collate orders for the different receiver/order combination. */
 			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
@@ -270,22 +425,29 @@ public class CapeTownScenarioBuilder {
 			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
 					receiverProductTwo, Time.parseTime(serdur));
 			rOrder2.setNumberOfWeeklyDeliveries(numDel);
+			Order rOrder3 = createProductOrder(Id.create("Order"+Integer.toString(r)+"3",  Order.class), receiver, 
+					receiverProductThree, Time.parseTime(serdur));
+			rOrder3.setNumberOfWeeklyDeliveries(numDel);
 			Collection<Order> rOrders = new ArrayList<Order>();
 			rOrders.add(rOrder1);
 			rOrders.add(rOrder2);
+			rOrders.add(rOrder3);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
 						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
+//						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
+//				receiverPlan.setCollaborationStatus(true); 
 				receiver.setSelectedPlan(receiverPlan);
-				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", true);
+				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);
 
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
+					order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -304,15 +466,17 @@ public class CapeTownScenarioBuilder {
 			} else {
 
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver,false)
 						.addReceiverOrder(receiverOrder)
 						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
+//				receiverPlan.setCollaborationStatus();
 				receiver.setSelectedPlan(receiverPlan);
-				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", false);
+				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
 
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
+					order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 					org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 							Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -320,8 +484,8 @@ public class CapeTownScenarioBuilder {
 						LOG.warn("Multiple time windows set. Only the first is used");
 					}
 
-					CarrierService newService = serBuilder
-							.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+					CarrierService newService = serBuilder.
+							setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
 							setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 							setServiceDuration(order.getServiceDuration()).
 							build();
@@ -345,25 +509,37 @@ public class CapeTownScenarioBuilder {
 		receivers.setDescription("Corporate");
 		int receiverIndex = 1;
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
-			if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
-				/* Ignore the depot where carrier resides. */
-			} else {
-				if((boolean) facility.getAttributes().getAttribute("corporate")) {
-					/* Corporates */
-					Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
-					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
-							.setLinkId(receiverLink.getId());
-					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);			
-					receivers.addReceiver(receiver);
+			/* Only use PnP facility locations for receivers. */
+			if(facility.getAttributes().getAttribute("PnP") != null){
+//			if((boolean) facility.getAttributes().getAttribute("PnP") == true){
+				if(facility.getId().equals(Id.create("0", ActivityFacility.class))) {
+					/* Ignore the depot where carrier resides. */
 				} else {
-					/* Franchises */
-					Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
-					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
-							.setLinkId(receiverLink.getId());
-					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);			
-					receivers.addReceiver(receiver);
+					if((boolean) facility.getAttributes().getAttribute("corporate")) {
+						/* Corporates */
+						Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
+						Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
+								.setLinkId(receiverLink.getId());
+						receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
+						double rnd2 = MatsimRandom.getLocalInstance().nextDouble();
+						if(rnd2 <= 0.75) {
+							receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
+						} else {
+							receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
+						}
+						//					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
+						receiver.getAttributes().putAttribute("corporate", true);
+						receivers.addReceiver(receiver);
+					} else {
+						/* Franchises */
+						Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
+						Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
+								.setLinkId(receiverLink.getId());
+						receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
+						receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
+						receiver.getAttributes().putAttribute("corporate", false);
+						receivers.addReceiver(receiver);
+					}
 				}
 			}
 		}
@@ -394,34 +570,51 @@ public class CapeTownScenarioBuilder {
 		 * TODO This might, potentially, be read from XML file. 
 		 */
 
-		/* Heavy vehicle. */
+		/* Heavy vehicle (28 tonnes). */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
 		CarrierVehicleType typeHeavy = typeBuilderHeavy
-				.setCapacity(14000)
-				.setFixCost(2604)
-				.setCostPerDistanceUnit(7.34E-3)
-				.setCostPerTimeUnit(0.171)
-				.build();
+				.setCapacity(26000)
+				.setFixCost(3097)
+				.setCostPerDistanceUnit(8.99E-3)
+				.setCostPerTimeUnit(0.2072)
+				.build();		
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
 		CarrierVehicle heavy = carrierHVehicleBuilder
 				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("18:00:00"))
+				.setLatestEnd(Time.parseTime("30:00:00"))
 				.setType(typeHeavy)
 				.setTypeId(typeHeavy.getId())
 				.build();
+		
+		/* Medium vehicle (14 tonnes). */		
+		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderMedium = CarrierVehicleType.Builder.newInstance(Id.create("medium", VehicleType.class));
+		CarrierVehicleType typeMedium = typeBuilderMedium
+				.setCapacity(14000)
+				.setFixCost(2893)
+				.setCostPerDistanceUnit(8.32E-3)
+				.setCostPerTimeUnit(0.2072)
+				.build();
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierMVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("medium"), carrierLocation);
+		CarrierVehicle medium = carrierMVehicleBuilder
+				.setEarliestStart(Time.parseTime("06:00:00"))
+				.setLatestEnd(Time.parseTime("30:00:00"))
+				.setType(typeMedium)
+				.setTypeId(typeMedium.getId())
+				.build();
 
-		/* Light vehicle. */
+
+		/* Light vehicle (8 tonnes). */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderLight = CarrierVehicleType.Builder.newInstance(Id.create("light", VehicleType.class));
 		CarrierVehicleType typeLight = typeBuilderLight
-				.setCapacity(3000)
-				.setFixCost(1168)
-				.setCostPerDistanceUnit(4.22E-3)
-				.setCostPerTimeUnit(0.089)
+				.setCapacity(8000)
+				.setFixCost(1887)
+				.setCostPerDistanceUnit(6.21E-3)
+				.setCostPerTimeUnit(0.1083)
 				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
 		CarrierVehicle light = carrierLVehicleBuilder
 				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("18:00:00"))
+				.setLatestEnd(Time.parseTime("30:00:00"))
 				.setType(typeLight)
 				.setTypeId(typeLight.getId())
 				.build();
@@ -429,12 +622,15 @@ public class CapeTownScenarioBuilder {
 		/* Assign vehicles to carrier. */
 		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
+		carrier.getCarrierCapabilities().getCarrierVehicles().add(medium);
+		carrier.getCarrierCapabilities().getVehicleTypes().add(typeMedium);		
 		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);	
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 
 		CarrierVehicleTypes types = new CarrierVehicleTypes();
 		types.getVehicleTypes().put(typeLight.getId(), typeLight);
+		types.getVehicleTypes().put(typeMedium.getId(), typeMedium);
 		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);
 
 		Carriers carriers = new Carriers();
@@ -443,24 +639,24 @@ public class CapeTownScenarioBuilder {
 	}
 
 
-	/**
-	 * Selects a random link in the network.
-	 * @param network
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private static Id<Link> selectRandomLink(Network network){
-		Object[] linkIds = network.getLinks().keySet().toArray();
-		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
-		Object o = linkIds[sample];
-		Id<Link> linkId = null;
-		if(o instanceof Id<?>){
-			linkId = (Id<Link>) o;
-			return linkId;
-		} else{
-			throw new RuntimeException("Oops, cannot find a correct link Id.");
-		}
-	}
+//	/**
+//	 * Selects a random link in the network.
+//	 * @param network
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//	private static Id<Link> selectRandomLink(Network network){
+//		Object[] linkIds = network.getLinks().keySet().toArray();
+//		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
+//		Object o = linkIds[sample];
+//		Id<Link> linkId = null;
+//		if(o instanceof Id<?>){
+//			linkId = (Id<Link>) o;
+//			return linkId;
+//		} else{
+//			throw new RuntimeException("Oops, cannot find a correct link Id.");
+//		}
+//	}
 
 	/**
 	 * Selects a random link in the network.
@@ -517,48 +713,29 @@ public class CapeTownScenarioBuilder {
 		return order;
 	}
 
-	private static TimeWindow selectRandomDayTimeStart(int tw) {
-		int min = 8;
-		int max = 16;
-		Random randomTime = new Random();
+	public static TimeWindow selectRandomDayTimeStart(int tw) {
+		int min = 6;
+		int max = 18;
+//		Random randomTime = new Random();
 		int randomStart =  (min +
-				randomTime.nextInt(max - tw - min + 1));
+				MatsimRandom.getRandom().nextInt(max - tw - min + 1));
 		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 		return randomTimeWindow;
 	}
 
-	private static TimeWindow selectRandomNightTimeStart(int tw, Receiver receiver) {
-		int min = 16;
-		int max = 24;
-		Random randomTime = new Random();
-		TimeWindow randomTimeWindow;
-		int time = randomTime.nextInt(max - tw - min + 1);
-		if (time >= 0){
-			int randomStart =  (min + time);
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		} else {
-			int randomStart = min;
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		}
-		receiver.getAttributes().putAttribute("EarlyDeliveries", false);
+	public static TimeWindow selectRandomNightTimeStart(int tw, Receiver receiver) {
+		int min = 18;
+		int max = 30;
+//		Random randomTime = new Random();
+		int randomStart =  (min +
+				MatsimRandom.getRandom().nextInt(max - tw - min + 1));
+		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 		return randomTimeWindow;
 	}
 
-	private static TimeWindow selectRandomMorningTimeStart(int tw, Receiver receiver) {
-		int min = 0;
-		int max = 8;
-		Random randomTime = new Random();
-		TimeWindow randomTimeWindow;
-		int time = randomTime.nextInt(max - tw - min + 1);
-		if (time >= 0){
-			int randomStart =  (min + time);
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		} else {
-			int randomStart = min;
-			randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		}
-		receiver.getAttributes().putAttribute("EarlyDeliveries", true);
-		return randomTimeWindow;
-	}
+
+	
+
+
 
 }

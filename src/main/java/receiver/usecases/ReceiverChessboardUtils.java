@@ -51,6 +51,7 @@ import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
@@ -71,9 +72,11 @@ public class ReceiverChessboardUtils {
 //		final Carriers carriers = new Carriers();							
 		final Carriers carriers = ReceiverUtils.getCarriers( controler.getScenario() );							
 //		new CarrierPlanXmlReaderV2(carriers).readFile(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");	
-		CarrierVehicleTypes types = new CarrierVehicleTypes();
-		new CarrierVehicleTypeReader(types).readFile(controler.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
+		CarrierVehicleTypes types = CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( controler.getScenario()  ) );
+//		new CarrierVehicleTypes();
+//		new CarrierVehicleTypeReader(types).readFile(controler.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
 		new CarrierVehicleTypeLoader(carriers).loadVehicleTypes(types);
+		
 
 		/* FIXME We added this null check because, essentially, the use of 
 		 * coalitions should be optional. We must eventually find a way to be
@@ -123,8 +126,8 @@ public class ReceiverChessboardUtils {
 		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
 		//		if(coalition != null) {
 		for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
-				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if(receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())!=null){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 						coalition.addReceiverCoalitionMember(receiver);
 					}

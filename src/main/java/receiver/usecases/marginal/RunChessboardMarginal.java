@@ -55,6 +55,7 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
@@ -102,6 +103,7 @@ public class RunChessboardMarginal {
 				String.valueOf(SEED_BASE),
 		};
 		Scenario sc = RunMarginal.run(marginalArgs);
+//		sc.getConfig().controler().setLastIteration(MarginalExperimentParameters.NUM_ITERATIONS);
 		
 		Scenario newSc = MarginalScenarioBuilder.createChessboardScenario(outputfolder, SEED_BASE*run, run, true);
 		
@@ -134,12 +136,13 @@ public class RunChessboardMarginal {
 		}
 
 		sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
-
+		sc.getConfig().controler().setLastIteration(MarginalExperimentParameters.NUM_ITERATIONS);
 		Controler controler = new Controler(sc);
 
 		/* Set up freight portion.To be repeated every iteration*/
 		//FIXME
 		sc.getConfig().controler().setOutputDirectory(outputfolder);
+		
 		setupReceiverAndCarrierReplanning(controler);
 
 		ReceiverChessboardUtils.setupCarriers(controler);
@@ -166,8 +169,8 @@ public class RunChessboardMarginal {
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
 				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute("collaborationStatus") != null){
-						if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+					if (receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) != null){
+						if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
 								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
 							}
@@ -230,7 +233,7 @@ public class RunChessboardMarginal {
 				carrier.setSelectedPlan(newPlan);
 
 				//write out the carrierPlan to an xml-file
-//				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
+				//new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../../input/carrierPlanned.xml");
 				
 				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
@@ -265,9 +268,12 @@ public class RunChessboardMarginal {
 			@Override
 			public void notifyIterationEnds(IterationEndsEvent event) {
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-
+				
 				if((event.getIteration() + 1) % (statInterval) != 0) return;
-
+				for(int i = 1; i < (ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()+1); i++) {
+						Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
+						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())); 
+					}
 				//write plans
 				
 				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
@@ -286,8 +292,8 @@ public class RunChessboardMarginal {
 							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
 							float freq = (float) order.getNumberOfWeeklyDeliveries();
 							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");
-							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+							boolean status = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString());
+							boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.toString());
 
 							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 							try {

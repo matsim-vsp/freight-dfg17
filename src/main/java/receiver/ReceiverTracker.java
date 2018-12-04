@@ -59,12 +59,13 @@ import receiver.collaboration.ProportionalCostSharing;
 	 */
 	public void scoreSelectedPlans() {
 		
-//		MarginalCostSharing mcs = new MarginalCostSharing(750, sc);
+//		MarginalCostSharing mcs = new MarginalCostSharing(700, sc);
 //		mcs.allocateCoalitionCosts();
 		
-		ProportionalCostSharing pcs = new ProportionalCostSharing(750, sc);
+		ProportionalCostSharing pcs = new ProportionalCostSharing(350, sc);
+//		ProportionalCostSharing pcs = new ProportionalCostSharing(700, sc);
 		pcs.allocateCoalitionCosts();
-		
+//		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			ReceiverAgent rAgent = findReceiver(receiver.getId());
 			rAgent.scoreSelectedPlan();

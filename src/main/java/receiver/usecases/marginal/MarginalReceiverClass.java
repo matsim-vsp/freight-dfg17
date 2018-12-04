@@ -66,12 +66,12 @@ public class MarginalReceiverClass {
 		/* Use the code (components) from ReceiverChessboardScenario */
 		String inputNetwork = "input/network.xml";
 		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(inputNetwork, "./output/", seed, 1);
-		sc.getConfig().controler().setLastIteration(MarginalExperimentParameters.REPLAN_INTERVAL);
+		sc.getConfig().controler().setLastIteration(MarginalExperimentParameters.REPLAN_INTERVAL-1);
 		
 		ReceiverUtils.setReplanInterval(MarginalExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		MarginalScenarioBuilder.createChessboardCarriers(sc);
-		MarginalScenarioBuilder.createAndAddChessboardReceivers(sc);
+		MarginalScenarioBuilder.createAndAddChessboardReceiversPipe(sc);
 		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
 		MarginalScenarioBuilder.createReceiverOrders(sc);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
@@ -112,7 +112,7 @@ public class MarginalReceiverClass {
 		
 		/* Make config changes relevant to the current marginal run. */
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-		sc.getConfig().controler().setLastIteration( MarginalExperimentParameters.REPLAN_INTERVAL );
+		sc.getConfig().controler().setLastIteration( MarginalExperimentParameters.REPLAN_INTERVAL-1 );
 		
 		Controler controler = new Controler(sc);
 
@@ -131,7 +131,7 @@ public class MarginalReceiverClass {
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
 //		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
-		final int statInterval = MarginalExperimentParameters.STAT_INTERVAL;
+		final int statInterval = 1;
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 
 		controler.addControlerListener(scoreStats);

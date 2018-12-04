@@ -56,6 +56,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.vehicles.VehicleType;
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
@@ -122,7 +123,7 @@ public class MarginalScenarioBuilder {
 		}
 		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -137,6 +138,7 @@ public class MarginalScenarioBuilder {
 		return sc;
 	}
 
+	
 
 	/**
 	 * FIXME Need to complete this. 
@@ -169,11 +171,13 @@ public class MarginalScenarioBuilder {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
-			receiver.getAttributes().putAttribute("collaborationStatus", false);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
 		
 			receivers.addReceiver(receiver);
+			
 		}
+		LOG.info("Created and added the control group of receivers for the scenario.");
 //		ReceiverUtils.setReceivers( receivers, sc );
 	}
 
@@ -229,6 +233,9 @@ public class MarginalScenarioBuilder {
 		//route plan 
 		NetworkRouter.routePlan(plan, netBasedCosts);
 
+//		//write out the carrierPlan to an xml-file
+//		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../../input/carrierPlanned.xml");
+		
 
 		//assign this plan now to the carrier and make it the selected carrier plan
 		carrier.setSelectedPlan(plan);
@@ -284,7 +291,7 @@ public class MarginalScenarioBuilder {
 //				tw = 10;
 //			} else tw = 12;
 			
-//			/* Set the different service durations for experiments. */
+			/* Set the different service durations for experiments. */
 //			if (r <= 15){
 //				serdur = "01:00:00";
 //			} else if (r <= 30){
@@ -342,15 +349,17 @@ public class MarginalScenarioBuilder {
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()))
 					.addReceiverOrder(receiverOrder)
 					.addTimeWindow(selectRandomTimeStart(tw))
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
+//			receiverPlan.setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
+				order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -359,13 +368,15 @@ public class MarginalScenarioBuilder {
 				}
 				
 				CarrierService newService = serBuilder
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						.setCapacityDemand((int) (Math.round((order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())/order.getNumberOfWeeklyDeliveries()))).
 						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 						setServiceDuration(order.getServiceDuration()).
 						build();
 				carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);	
 			}
 		}
+		
+		LOG.info("Created receiver orders.");
 
 	}
 
@@ -385,12 +396,38 @@ public class MarginalScenarioBuilder {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", true);
-			receiver.getAttributes().putAttribute("collaborationStatus", true);			
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
+			double rnd = MatsimRandom.getLocalInstance().nextDouble();
+			if(rnd <= 0.75) {
+				receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
+			} else {
+				receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
+			}
 			receivers.addReceiver(receiver);
 		}
 		
 		ReceiverUtils.setReceivers( receivers, sc );
+		LOG.info("Created and added the experimental group of receivers for the scenario.");	
+	}
+	
+	public static void createAndAddChessboardReceiversPipe( Scenario sc) {
+		Network network = sc.getNetwork();
+
+		Receivers receivers = new Receivers();
+		
+		receivers.setDescription("Chessboard");
+		
+		for (int r = 1; r < MarginalExperimentParameters.NUMBER_OF_RECEIVERS+1 ; r++){
+			Id<Link> receiverLocation = selectRandomLink(network);
+			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
+					.setLinkId(receiverLocation);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
+			receivers.addReceiver(receiver);
+		}
+		
+		ReceiverUtils.setReceivers( receivers, sc );
+		LOG.info("Created and added the experimental group of receivers for the scenario.");	
 	}
 
 
@@ -534,5 +571,7 @@ public class MarginalScenarioBuilder {
 		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 		return randomTimeWindow;
 	}
+
+
 
 }

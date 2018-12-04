@@ -87,7 +87,7 @@ public class ReceiverChessboardScenario {
 	 */
 	public static Scenario createChessboardScenario( long seed, int run, boolean write) {
 		MatsimRandom.reset(seed);
-		int numberOfReceivers = 5;
+		int numberOfReceivers = 60;
 		Scenario sc = setupChessboardScenario(seed, run);
 		createChessboardCarriersAndAddToScenario(sc);
 		
@@ -151,7 +151,7 @@ public class ReceiverChessboardScenario {
 //		config.controler().setWriteSnapshotsInterval(5);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./scenarios/chessboard/network/grid9x9.xml");
-		config.controler().setOutputDirectory(String.format("./output/base/tw/run_%03d/", run));
+		config.controler().setOutputDirectory(String.format("./output/base/run_%03d/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -240,31 +240,31 @@ public class ReceiverChessboardScenario {
 			String serdur = "02:00:00";
 			int numDel = 5;
 			
-			/* Set the different time window durations for experiments. */
-			if (r <= 10){
-				tw = 2;
-			} else if (r <= 20){
-				tw = 4;
-			} else if (r <= 30){
-				tw = 6;
-			} else if (r <= 40){
-				tw = 8;
-			} else if (r <= 50){
-				tw = 10;
-			} else if (r<=60){
-				tw = 12;
-			}
-			
-//			/* Set the different service durations for experiments. */
-//			if (r <= 15){
-//				serdur = "01:00:00";
+//			/* Set the different time window durations for experiments. */
+//			if (r <= 10){
+//				tw = 2;
+//			} else if (r <= 20){
+//				tw = 4;
 //			} else if (r <= 30){
-//				serdur = "02:00:00";
-//			} else if (r <= 45){
-//				serdur = "03:00:00";
-//			} else serdur = "04:00:00";
+//				tw = 6;
+//			} else if (r <= 40){
+//				tw = 8;
+//			} else if (r <= 50){
+//				tw = 10;
+//			} else if (r<=60){
+//				tw = 12;
+//			}
 //			
-//			/* Set the different delivery frequencies for experiments. */
+			/* Set the different service durations for experiments. */
+			if (r <= 15){
+				serdur = "01:00:00";
+			} else if (r <= 30){
+				serdur = "02:00:00";
+			} else if (r <= 45){
+				serdur = "03:00:00";
+			} else serdur = "04:00:00";
+//			
+			/* Set the different delivery frequencies for experiments. */
 //			if (r <= 12){
 //				numDel = 1;
 //			} else if (r <= 24){
@@ -295,15 +295,18 @@ public class ReceiverChessboardScenario {
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 					.addReceiverOrder(receiverOrder)
 					.addTimeWindow(selectRandomTimeStart(tw))
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
+			
+			receiverPlan.setCollaborationStatus(true); 			
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
+				order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -312,7 +315,8 @@ public class ReceiverChessboardScenario {
 				}
 				
 				CarrierService newService = serBuilder
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						.setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()/order.getNumberOfWeeklyDeliveries()))).
+//						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
 						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 						setServiceDuration(order.getServiceDuration()).
 						build();

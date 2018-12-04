@@ -34,8 +34,9 @@ class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyMan
 		stratMan.setMaxPlansPerAgent(5);
 		
 		{
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.0));
-			strategy.addStrategyModule(new OrderChanger());
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
+			strategy.addStrategyModule(new CollaborationStatusChanger());
+			strategy.addStrategyModule(new OrderChanger());	
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 

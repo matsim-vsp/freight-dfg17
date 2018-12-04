@@ -51,6 +51,7 @@ import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
@@ -124,8 +125,8 @@ public class CapeTownReceiverUtils {
 		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
 		//		if(coalition != null) {
 		for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
-				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if(receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())!=null){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 						coalition.addReceiverCoalitionMember(receiver);
 					}

@@ -239,7 +239,7 @@ import receiver.product.ReceiverProduct;
 	
 	private void startPlan(Attributes atts) {
 		this.currentOrders = new ArrayList<Order>();
-		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver);
+		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver,false);
 		
 		String score = atts.getValue(ATTR_PLAN_SCORE);
 		if(score != null) {

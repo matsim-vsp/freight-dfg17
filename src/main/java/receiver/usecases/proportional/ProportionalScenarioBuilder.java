@@ -64,6 +64,7 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
@@ -73,6 +74,7 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
+import receiver.usecases.capetown.CapeTownExperimentParameters;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -124,7 +126,7 @@ public class ProportionalScenarioBuilder {
 		}
 		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -154,8 +156,8 @@ public class ProportionalScenarioBuilder {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
-			receiver.getAttributes().putAttribute("collaborationStatus", false);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);
 		
 			receivers.addReceiver(receiver);
 		}		
@@ -292,7 +294,7 @@ public class ProportionalScenarioBuilder {
 //				tw = 10;
 //			} else tw = 12;
 			
-			/* Set the different service durations for experiments. */
+//			/* Set the different service durations for experiments. */
 //			if (r <= 15){
 //				serdur = "01:00:00";
 //			} else if (r <= 30){
@@ -308,9 +310,9 @@ public class ProportionalScenarioBuilder {
 //			} else if (r <= 105){
 //				serdur = "03:00:00";
 //			} else serdur = "04:00:00";
-			
 //			
-//			/* Set the different delivery frequencies for experiments. */
+//			
+			/* Set the different delivery frequencies for experiments. */
 			if (r <= 12){
 				numDel = 1;
 			} else if (r <= 24){
@@ -351,15 +353,19 @@ public class ProportionalScenarioBuilder {
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()))
 					.addReceiverOrder(receiverOrder)
 					.addTimeWindow(selectRandomTimeStart(tw))
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
+			receiverPlan.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
+//			receiverPlan.setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
 			receiver.setSelectedPlan(receiverPlan);
+					
 
 			/* Convert receiver orders to initial carrier services. */
 			for(Order order : receiverOrder.getReceiverProductOrders()){
+				order.setDailyOrderQuantity(order.getOrderQuantity()/order.getNumberOfWeeklyDeliveries());
 				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
 						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
 
@@ -368,7 +374,7 @@ public class ProportionalScenarioBuilder {
 				}
 				
 				CarrierService newService = serBuilder
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
+						.setCapacityDemand((int) (Math.round(order.getOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()/order.getNumberOfWeeklyDeliveries()))).
 						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 						setServiceDuration(order.getServiceDuration()).
 						build();
@@ -394,8 +400,14 @@ public class ProportionalScenarioBuilder {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", true);
-			receiver.getAttributes().putAttribute("collaborationStatus", true);			
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
+			double rnd = MatsimRandom.getLocalInstance().nextDouble();
+			if(rnd <= 0.75) {
+				receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);	
+			} else {
+				receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);	
+			}
+//			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);			
 			receivers.addReceiver(receiver);
 		}
 		

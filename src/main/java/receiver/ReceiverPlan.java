@@ -50,21 +50,37 @@ import receiver.product.ReceiverOrder;
  * @author jwjoubert
  */
 public final class ReceiverPlan implements BasicPlan, Attributable {
+//	private final Logger log = Logger.getLogger(ReceiverPlan.class);
+//	private Attributes attributes;
+//	private Receiver receiver = null;
+//	private Double score;
+//	private Map<Id<Carrier>, ReceiverOrder> orderMap;
+//	private List<TimeWindow> timeWindows;
+//	private boolean selected = false;
+//	private boolean collaborationStatus;
+//	
+//	
+//	private ReceiverPlan() {
+//		this.attributes = new Attributes();
+//		this.timeWindows = new ArrayList<>();
+//		this.orderMap = new TreeMap<>();
+//	}
 	private final Logger log = Logger.getLogger(ReceiverPlan.class);
-	private Attributes attributes;
+	private Attributes attributes = new Attributes();
 	private Receiver receiver = null;
 	private Double score;
-	private Map<Id<Carrier>, ReceiverOrder> orderMap;
-	private List<TimeWindow> timeWindows;
+	private Map<Id<Carrier>, ReceiverOrder> orderMap = new TreeMap<>();
+	private List<TimeWindow> timeWindows = new ArrayList<>();
 	private boolean selected = false;
+	private boolean collaborationStatus;
 	
-	
-	private ReceiverPlan() {
-		this.attributes = new Attributes();
-		this.timeWindows = new ArrayList<>();
-		this.orderMap = new TreeMap<>();
+//	private ReceiverPlan() {
+	ReceiverPlan() {
+//		this.attributes;
+//		this.timeWindows;
+//		this.orderMap;
 	}
-	
+		
 	
 //	public void addReceiverOrder(final ReceiverOrder ro) {
 //		if(orderMap.containsKey(ro.getCarrierId())) {
@@ -93,6 +109,14 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+	
+	public void setCollaborationStatus(boolean status){
+		this.collaborationStatus = status;
+	}
+	
+	public boolean getCollaborationStatus(){
+		return this.collaborationStatus;
 	}
 	
 	/**
@@ -165,7 +189,8 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 
 	
 	public ReceiverPlan createCopy() {
-		Builder builder = Builder.newInstance(receiver);
+		Builder builder = Builder.newInstance(receiver, collaborationStatus);
+
 		for(ReceiverOrder ro : this.orderMap.values()) {
 			builder = builder.addReceiverOrder(ro);
 		}
@@ -188,20 +213,23 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 		private boolean selected = false;
 		private Double score = null;
 		private List<TimeWindow> timeWindows = new ArrayList<>();
+		private boolean status;
 		
-		private Builder(Receiver receiver) {
+		private Builder(Receiver receiver, boolean status) {
 			this.receiver = receiver;
+			this.status  = status;
 		}
-		
-		public static Builder newInstance(Receiver receiver) {
-			return new Builder(receiver);
+			
+		public static Builder newInstance(Receiver receiver, boolean status) {
+			return new Builder(receiver, status);
 		};
-		
+
 
 		public Builder addReceiverOrder(ReceiverOrder ro) {
 			this.map.put(ro.getCarrierId(), ro);
 			return this;
 		}
+
 		
 		public Builder addTimeWindow(TimeWindow tw) {
 			this.timeWindows.add(tw);
@@ -222,6 +250,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			ReceiverPlan plan = new ReceiverPlan();
 			plan.receiver = this.receiver;
 			plan.selected = this.selected;
+			plan.collaborationStatus = this.status;
 			if(this.map.size() > 0) {
 				plan.orderMap.putAll(this.map);			
 			} else {
