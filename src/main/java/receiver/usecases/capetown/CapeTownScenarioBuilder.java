@@ -373,20 +373,24 @@ public class CapeTownScenarioBuilder {
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 		/* This we added to facilitate the shipments */
-		Link carrierLink = FacilitiesUtils.decideOnLink(sc.getActivityFacilities().getFacilities().get(Id.create("0", ActivityFacility.class)), sc.getNetwork());
+		Link carrierLink = FacilitiesUtils.decideOnLink(sc.getActivityFacilities().getFacilities().get(CapeTownExperimentParameters.DEPOT_ID), sc.getNetwork());
 
 		/* Create generic product types with a description and required capacity (in kg per item). */
 		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
 		productTypeOne.setDescription("Product 1");
 		productTypeOne.setRequiredCapacity(1);
+		productTypeOne.setOriginLinkId(carrierLink.getId());
+		
 
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
+		productTypeTwo.setOriginLinkId(carrierLink.getId());
 		
 		ProductType productTypeThree = receivers.createAndAddProductType(Id.create("P3", ProductType.class));
 		productTypeThree.setDescription("Product 3");
 		productTypeThree.setRequiredCapacity(3);
+		productTypeThree.setOriginLinkId(carrierLink.getId());
 
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			int tw = CapeTownExperimentParameters.TIME_WINDOW_DURATION;

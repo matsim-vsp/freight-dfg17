@@ -24,20 +24,17 @@ import java.util.List;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.network.Link;
 import org.matsim.contrib.freight.carrier.CarrierShipment;
 import org.matsim.contrib.freight.carrier.CarrierShipment.Builder;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
-import org.matsim.facilities.FacilitiesUtils;
 
 import com.google.inject.Inject;
 
 import receiver.ReceiverPlan;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
-import receiver.usecases.capetown.CapeTownExperimentParameters;
 
 /**
  * Rewrites a carrier's services after a receiver changed its plan.
@@ -78,7 +75,6 @@ public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPla
 		 * Id of the distribution centre. The implication is that we most 
 		 * probably have to introduce the origin of each product to either
 		 * ProductType or ReceiverProduct, likely the latter. */
-		Link carrierLink = FacilitiesUtils.decideOnLink(sc.getActivityFacilities().getFacilities().get(CapeTownExperimentParameters.DEPOT_ID), sc.getNetwork());
 
 		/* Create list of receiver orders. */
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
@@ -184,7 +180,7 @@ public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPla
 
 					Builder builder = CarrierShipment.Builder.newInstance(
 							Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierShipment.class),
-							carrierLink.getId(),
+							order.getProduct().getProductType().getOriginLinkId(),
 							order.getReceiver().getLinkId(), 
 							(int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())));
 					newShipment2 = builder
