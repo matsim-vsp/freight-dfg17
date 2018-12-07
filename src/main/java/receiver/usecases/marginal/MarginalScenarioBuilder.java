@@ -53,7 +53,9 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
+import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -68,6 +70,7 @@ import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -86,7 +89,7 @@ public class MarginalScenarioBuilder {
 	 * Build the entire chessboard example.
 	 */
 	public static Scenario createChessboardScenario( String outputDirectory, long seed, int run, boolean write) {
-		Scenario sc = setupChessboardScenario("./scenarios/chessboard/network/grid9x9.xml", outputDirectory, seed, run);
+		Scenario sc = setupChessboardScenario("grid9x9.xml", outputDirectory, seed, run);
 		
 		ReceiverUtils.setReplanInterval(MarginalExperimentParameters.REPLAN_INTERVAL, sc );
 		
@@ -101,8 +104,9 @@ public class MarginalScenarioBuilder {
 
 		createReceiverOrders(sc);
 
-		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+		/* Let jsprit do its magic and route the given receiver orders. */		
+		String algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
+		generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		
 		if(write) {
@@ -143,12 +147,14 @@ public class MarginalScenarioBuilder {
 	 * @return
 	 */
 	public static Scenario setupChessboardScenario(String inputNetwork, String outputDirectory, long seed, int run) {
+		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(MarginalExperimentParameters.NUM_ITERATIONS);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(MarginalExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
+		config.setContext( context );
 		config.network().setInputFile(inputNetwork);
 		config.controler().setOutputDirectory(outputDirectory);
 

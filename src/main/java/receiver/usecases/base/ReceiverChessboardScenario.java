@@ -145,7 +145,7 @@ public class ReceiverChessboardScenario {
 	 * @return
 	 */
 	public static Scenario setupChessboardScenario(long seed, int run) {
-		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );;
+		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
 
 		Config config = ConfigUtils.createConfig();
 

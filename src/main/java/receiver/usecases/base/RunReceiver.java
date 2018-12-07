@@ -186,7 +186,8 @@ public class RunReceiver {
 				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
 				//read and create a pre-configured algorithms to solve the vrp
-				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+				String algoConfigFileName = IOUtils.newUrl( controler.getScenario().getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
+				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName);
 
 				//solve the problem
 				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
