@@ -53,7 +53,9 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
+import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -68,6 +70,7 @@ import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -142,7 +145,12 @@ public class ReceiverChessboardScenario {
 	 * @return
 	 */
 	public static Scenario setupChessboardScenario(long seed, int run) {
+		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );;
+
 		Config config = ConfigUtils.createConfig();
+
+		config.setContext( context );
+
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(1500);
 //		config.controler().setLastIteration(20);
@@ -150,7 +158,8 @@ public class ReceiverChessboardScenario {
 		config.controler().setWriteSnapshotsInterval(50);
 //		config.controler().setWriteSnapshotsInterval(5);
 		config.global().setRandomSeed(seed);
-		config.network().setInputFile("./scenarios/chessboard/network/grid9x9.xml");
+//		config.network().setInputFile("./scenarios/chessboard/network/grid9x9.xml");
+		config.network().setInputFile( "grid9x9.xml" );
 		config.controler().setOutputDirectory(String.format("./output/base/tw/run_%03d/", run));
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
@@ -187,8 +196,11 @@ public class ReceiverChessboardScenario {
 		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(sc.getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
 		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
+
 		//read and create a pre-configured algorithms to solve the vrp
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+//		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+		String algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
+		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
 
 		//solve the problem
 		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
