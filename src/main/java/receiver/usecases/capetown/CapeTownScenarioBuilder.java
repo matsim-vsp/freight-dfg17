@@ -245,7 +245,7 @@ public class CapeTownScenarioBuilder {
 		config.controler().setWriteSnapshotsInterval(CapeTownExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./network.xml.gz");
-		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
+		config.controler().setOutputDirectory(String.format("./output/capetown/case/run_%03d/", run));		
 		
 		
 //		config.facilities().setInputFile("./facilities.xml");
@@ -293,7 +293,7 @@ public class CapeTownScenarioBuilder {
 		config.controler().setWriteSnapshotsInterval(CapeTownExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./scenarios/capeTown/network.xml.gz");
-		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
+		config.controler().setOutputDirectory(String.format("./output/capetown/base/run_%03d/", run));		
 		config.facilities().setInputFile("./scenarios/capeTown/facilities.xml.gz");
 		
 		Scenario sc = ScenarioUtils.loadScenario(config);
@@ -440,8 +440,8 @@ public class CapeTownScenarioBuilder {
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
-						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
-//						.addTimeWindow(selectRandomDayTimeStart(tw))
+//						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
+						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
 //				receiverPlan.setCollaborationStatus(true); 
 				receiver.setSelectedPlan(receiverPlan);
@@ -600,7 +600,7 @@ public class CapeTownScenarioBuilder {
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
 		CarrierVehicleType typeHeavy = typeBuilderHeavy
 				.setCapacity(26000)
-				.setFixCost(3097)
+				.setFixCost(3500)
 				.setCostPerDistanceUnit(8.99E-3)
 				.setCostPerTimeUnit(0.2072)
 				.build();		
