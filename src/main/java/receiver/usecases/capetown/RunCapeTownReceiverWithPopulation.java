@@ -57,6 +57,7 @@ import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
 import org.matsim.core.router.NetworkRoutingProvider;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
+import org.matsim.testcases.MatsimTestUtils;
 
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
@@ -207,6 +208,10 @@ public class RunCapeTownReceiverWithPopulation {
 		prepareFreightOutputDataAndStats(controler, run);
 
 		controler.run();
+		
+		/* Clean up iterations folder */
+		File itersFolder = new File(outputfolder + "ITERS/");
+		IOUtils.deleteDirectoryRecursively(itersFolder.toPath());
 	}
 
 
