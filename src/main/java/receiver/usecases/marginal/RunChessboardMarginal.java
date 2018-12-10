@@ -26,6 +26,7 @@ package receiver.usecases.marginal;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -206,7 +207,7 @@ public class RunChessboardMarginal {
 
 				//read and create a pre-configured algorithms to solve the vrp
 //				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-				String algoConfigFileName = IOUtils.newUrl( controler.getScenario().getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
+				URL algoConfigFileName = IOUtils.newUrl( controler.getScenario().getConfig().getContext(), "initialPlanAlgorithm.xml" );
 				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
 				
 				

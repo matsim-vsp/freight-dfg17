@@ -108,7 +108,7 @@ public class ProportionalScenarioBuilder {
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 //		generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-		String algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
+		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
 		generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		if(write) {
@@ -209,9 +209,9 @@ public class ProportionalScenarioBuilder {
 	 * 
 	 * @param carriers
 	 * @param network
-	 * @param string 
+	 * @param url 
 	 */
-	public static void generateCarrierPlan(Carriers carriers, Network network, String algorithmFile) {
+	public static void generateCarrierPlan(Carriers carriers, Network network, URL algorithmFile) {
 		Carrier carrier = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class)); 
 
 		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, network);

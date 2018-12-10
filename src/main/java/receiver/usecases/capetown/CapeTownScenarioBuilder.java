@@ -72,6 +72,7 @@ import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -207,7 +208,7 @@ public class CapeTownScenarioBuilder {
 		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
 		//read and create a pre-configured algorithms to solve the vrp
-		String algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
+		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
 		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
 		
 		//solve the problem

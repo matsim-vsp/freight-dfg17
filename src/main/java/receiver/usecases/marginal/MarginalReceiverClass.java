@@ -23,6 +23,7 @@ package receiver.usecases.marginal;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
@@ -37,6 +38,10 @@ import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
+import org.matsim.core.utils.io.IOUtils;
+
+import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
+import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
 import receiver.ReceiverUtils;
@@ -80,7 +85,10 @@ public class MarginalReceiverClass {
 		}
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  "input/algorithm.xml");
+//		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  "input/algorithm.xml");
+		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
+		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
+		
 		MarginalScenarioBuilder.writeFreightScenario(sc);
 		
 		/* Link the carriers to the receivers. */
