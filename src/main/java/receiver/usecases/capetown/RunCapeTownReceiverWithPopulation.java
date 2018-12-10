@@ -305,6 +305,7 @@ public class RunCapeTownReceiverWithPopulation {
 
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(rScoreStats);
+		controler.addControlerListener(new VehicleTypeListener(controler.getScenario(), run));
 		controler.addControlerListener(new IterationEndsListener() {
 
 			@Override
@@ -329,9 +330,9 @@ public class RunCapeTownReceiverWithPopulation {
 				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
 				for(int i = 1; i < numberOfReceivers+1; i++) {
 					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
-					if(event.getIteration() == (CapeTownExperimentParameters.REPLAN_INTERVAL-1)){
-						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())); 
-					}
+//					if(event.getIteration() == (CapeTownExperimentParameters.REPLAN_INTERVAL-1)){
+//						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())); 
+//					}
 					for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
 						for (Order order : rorder.getReceiverProductOrders()){
 							String score = receiver.getSelectedPlan().getScore().toString();

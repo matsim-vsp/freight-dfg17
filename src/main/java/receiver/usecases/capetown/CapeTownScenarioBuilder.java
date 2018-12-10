@@ -193,7 +193,7 @@ public class CapeTownScenarioBuilder {
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 		
-		sc.getConfig().facilities().setInputFile("./facilities_used.xml.gz");
+//		sc.getConfig().facilities().setInputFile("./facilities_used.xml.gz");
 		generateCarrierPlan( sc );
 
 
