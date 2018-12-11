@@ -29,8 +29,7 @@ public class InitialDemandAssigner implements StartupListener{
 
 	private DemandObjects demandObjects;
 	private LSPDecorators lsps;
-		int day;
-		int evening;
+	
 	public InitialDemandAssigner(DemandObjects demandObjects, LSPDecorators lsps) {
 		this.demandObjects = demandObjects;
 		this.lsps = lsps;
@@ -38,44 +37,16 @@ public class InitialDemandAssigner implements StartupListener{
 
 	@Override
 	public void notifyStartup(StartupEvent event) {
-		day = 0;
-		evening = 0;
 		for(DemandObject demandObject : demandObjects.getDemandObjects().values()) {
 			if(demandObject.getSelectedPlan() == null) {
 				createInitialPlan(demandObject);
 			}
-				assignShipmentToLSP(demandObject);			
-			}
-		
-		
-		/*for(LSPDecorator lsp : lsps.getLSPs().values()) {
-			for(LogisticsSolutionDecorator solution : lsp.getSelectedPlan().getSolutionDecorators()) {
-				System.out.println( solution.getId() + " : " + solution.getShipments().size());
-			}
-		}*/
-		
+				assignShipmentToLSP(demandObject);
+		}
+
 		for(LSPDecorator lsp : lsps.getLSPs().values()) {
 			lsp.scheduleSoultions();
 		}
-		/*double distance = 0;
-		for(LSPDecorator lsp : lsps.getLSPs().values()) {
-			for(Resource resource : lsp.getResources()) {
-				if(resource instanceof CarrierResource) {
-					CarrierResource carrierResource = (CarrierResource) resource;
-					for(ScheduledTour scheduledTour : carrierResource.getCarrier().getSelectedPlan().getScheduledTours()) {
-						for(TourElement element : scheduledTour.getTour().getTourElements()) {
-							if(element instanceof Leg) {
-								Leg leg = (Leg) element;
-								distance = distance + leg.getRoute().getDistance();
-								System.out.println(distance);
-							}
-						}
-					}
-				}
-			}
-		}
-		System.out.println(distance);
-		//System.exit(1);*/
 	}
 
 	private void createInitialPlan(DemandObject demandObject) {
@@ -97,16 +68,8 @@ public class InitialDemandAssigner implements StartupListener{
 			builder.addInfo(info);
 		}
 		LSPShipment lspShipment = builder.build();
-		if(demandObject.getSelectedPlan().getLsp() != null) {
-			demandObject.getSelectedPlan().getLsp().assignShipmentToSolution(lspShipment, demandObject.getSelectedPlan().getSolutionId());
-			if(demandObject.getSelectedPlan().getSolutionId().toString() == "Evening Solution") {
-				evening++;
-			}
-			else {
-				day++;
-			}
-			demandObject.getSelectedPlan().getShipment().setLSPShipment(lspShipment);
-		}
+		demandObject.getSelectedPlan().getLsp().assignShipmentToSolution(lspShipment, demandObject.getSelectedPlan().getSolutionId());
+		demandObject.getSelectedPlan().getShipment().setLSPShipment(lspShipment);
 	}
 	
 	
