@@ -111,7 +111,7 @@ public class MutualControlerListener implements FreightControlerListener, Before
 	@Override
 	public void notifyIterationEnds(IterationEndsEvent event) {
 		SupplyClearer supplyClearer = new SupplyClearer(lsps);
-		//supplyClearer.notifyIterationEnds(event);
+		supplyClearer.notifyIterationEnds(event);
 	}
 
 	@Override

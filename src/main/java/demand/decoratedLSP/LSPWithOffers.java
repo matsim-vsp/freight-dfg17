@@ -201,8 +201,10 @@ public class LSPWithOffers implements LSPDecorator {
 
 	@Override
 	public void scoreSelectedPlan() {
-		double score = scorer.scoreCurrentPlan(this);
-		this.selectedPlan.setScore(score);
+		if(this.scorer != null) {
+			double score = scorer.scoreCurrentPlan(this);
+			this.selectedPlan.setScore(score);
+		}
 	}
 
 	@Override
