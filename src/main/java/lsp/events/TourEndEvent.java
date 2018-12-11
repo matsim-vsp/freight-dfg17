@@ -10,6 +10,9 @@ import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.contrib.freight.carrier.Tour;
 import org.matsim.contrib.freight.carrier.Tour.End;
 
+import lsp.resources.CarrierResource;
+import lsp.resources.Resource;
+
 public class TourEndEvent extends Event{
 
 	public static final String EVENT_TYPE = "freight tour ended";
@@ -18,19 +21,19 @@ public class TourEndEvent extends Event{
 	public static final String ATTRIBUTE_CARRIER = "carrier";
 	public static final String ATTRIBUTE_DRIVER = "driver";
 	public static final String ATTRIBUTE_TOUR = "tour";	
+	public static final String ATTRIBUTE_RESOURCE = "resource";	
 	
-	
-	private Id<Carrier> carrierId;
 	private Id<Person> driverId;
 	private Tour tour;
 	private CarrierVehicle vehicle;
+	private CarrierResource carrierResource;
 	
-	public TourEndEvent(Id<Carrier>  carrierId, Id<Person> driverId, Tour tour, double time, CarrierVehicle vehicle) {
+	public TourEndEvent(CarrierResource carrierResource, Id<Person> driverId, Tour tour, double time, CarrierVehicle vehicle) {
 		super(time);
-		this.carrierId = carrierId;
 		this.driverId = driverId;
 		this.tour = tour;
 		this.vehicle = vehicle;
+		this.carrierResource = carrierResource;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class TourEndEvent extends Event{
 	}
 
 	public Id<Carrier> getCarrierId() {
-		return carrierId;
+		return carrierResource.getCarrier().getId();
 	}
 
 	public Id<Person> getDriverId() {
@@ -53,15 +56,20 @@ public class TourEndEvent extends Event{
 	public CarrierVehicle getVehicle() {
 		return vehicle;
 	}
+	
+	public CarrierResource getResource(){
+		return carrierResource;
+	}
 
 	@Override
 	public Map<String, String> getAttributes() {
 		Map<String, String> attr = super.getAttributes();
 		attr.put(ATTRIBUTE_VEHICLE, this.vehicle.getVehicleId().toString());
 		attr.put(ATTRIBUTE_LINK, this.tour.getStartLinkId().toString());
-		attr.put(ATTRIBUTE_CARRIER, this.carrierId.toString());
+		attr.put(ATTRIBUTE_CARRIER, this.carrierResource.getCarrier().getId().toString());
 		attr.put(ATTRIBUTE_DRIVER, this.driverId.toString());
 		attr.put(ATTRIBUTE_TOUR, this.tour.toString());
+		attr.put(ATTRIBUTE_RESOURCE, this.carrierResource.getId().toString());
 		return attr;
 	}
 }

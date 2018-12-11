@@ -11,5 +11,5 @@ public interface DemandAgent {
  
 	public Id<DemandAgent> getId();
 	public Collection<DemandObject> getDemandObjects();
-	public Collection<UtilityFunction> getUtilityFunctions();
+//	public Collection<UtilityFunction> getUtilityFunctions();
 }

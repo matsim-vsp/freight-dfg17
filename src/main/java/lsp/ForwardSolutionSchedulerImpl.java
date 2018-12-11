@@ -72,13 +72,16 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 	
 	private void sortResources() {
 		sortedResourceList.clear();
+		ArrayList<ResourceNeighbours> deleteList = new ArrayList<>();
 		while(!neighbourList.isEmpty()) {
 			for(ResourceNeighbours neighbours : neighbourList) {
 				if(allPredecessorsAlreadyScheduled(neighbours) && noSuccessorAlreadyScheduled(neighbours)) {
 					sortedResourceList.add(neighbours.resource);
-					neighbourList.remove(neighbours);
+					deleteList.add(neighbours);
 				}
 			}
+			neighbourList.removeAll(deleteList);
+			deleteList.clear();
 		}
 	}
 
@@ -89,10 +92,10 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 			
 		for(Resource predecessor : neighbours.predecessors) {
 			if(!sortedResourceList.contains(predecessor)) {
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	private boolean noSuccessorAlreadyScheduled(ResourceNeighbours neighbours) {
@@ -102,10 +105,10 @@ public class ForwardSolutionSchedulerImpl implements SolutionScheduler {
 		
 		for(Resource successor : neighbours.successors) {
 			if(! sortedResourceList.contains(successor)) {
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private void insertShipmentsAtBeginning() {

@@ -11,9 +11,9 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.vehicles.Vehicle;
 
+import lsp.resources.CarrierResource;
+import lsp.resources.Resource;
 
-//Achtung: Das darf nicht von LinkEnterEvent erben, weil sonst im CarrierResourceTracker immer wenn ein ein solches event hergestellt wird, der CarrierResourceAgent +
-//denkt ein neues LinkEnterEvent waere geworfen worden -> Endlosschleife
 
 public class FreightLinkEnterEvent extends Event{
 
@@ -22,17 +22,18 @@ public class FreightLinkEnterEvent extends Event{
 	public static final String ATTRIBUTE_LINK = "link";
 	public static final String ATTRIBUTE_CARRIER = "carrier";
 	public static final String ATTRIBUTE_DRIVER = "driver";
+	public static final String ATTRIBUTE_RESOURCE = "resource";
 	
 	private CarrierVehicle carrierVehicle;
-	private Id<Carrier> carrierId;
 	private Id<Person> driverId;
 	private Id<Vehicle> vehicleId; 
 	private Id<Link>linkId; 
+	private CarrierResource resource;
 	
-	public FreightLinkEnterEvent(Id<Carrier>carrierId, Id<Vehicle> vehicleId, Id<Person>driverId, Id<Link>linkId, double time, CarrierVehicle vehicle) {
+	public FreightLinkEnterEvent(CarrierResource resource, Id<Vehicle> vehicleId, Id<Person>driverId, Id<Link>linkId, double time, CarrierVehicle vehicle) {
 		super(time);
 		this.carrierVehicle = vehicle ;
-		this.carrierId = carrierId;
+		this.resource = resource;
 		this.driverId = driverId;
 		this.vehicleId = vehicleId; 
 		this.linkId = linkId; 
@@ -41,11 +42,7 @@ public class FreightLinkEnterEvent extends Event{
 	public CarrierVehicle getCarrierVehicle() {
 		return carrierVehicle;
 	}
-
-	public Id<Carrier> getCarrierId() {
-		return carrierId;
-	}
-
+	
 	public Id<Person> getDriverId() {
 		return driverId;	
 	}
@@ -58,6 +55,11 @@ public class FreightLinkEnterEvent extends Event{
 		return linkId;
 	}
 
+	public CarrierResource getResource() {
+		return resource;
+	}
+	
+	
 	@Override
 	public String getEventType() {
 		return EVENT_TYPE;
@@ -68,7 +70,7 @@ public class FreightLinkEnterEvent extends Event{
 		Map<String, String> attr = super.getAttributes();
 		attr.put(ATTRIBUTE_VEHICLE, this.vehicleId.toString());
 		attr.put(ATTRIBUTE_LINK, this.linkId.toString());
-		attr.put(ATTRIBUTE_CARRIER, this.carrierId.toString());
+		attr.put(ATTRIBUTE_CARRIER, this.resource.getCarrier().getId().toString());
 		attr.put(ATTRIBUTE_DRIVER, this.driverId.toString());
 		return attr;
 	}

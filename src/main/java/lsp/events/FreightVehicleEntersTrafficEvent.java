@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;
+import org.matsim.api.core.v01.events.VehicleEntersTrafficEvent;
 import org.matsim.api.core.v01.events.VehicleLeavesTrafficEvent;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.Person;
@@ -13,9 +14,9 @@ import org.matsim.vehicles.Vehicle;
 
 import lsp.resources.CarrierResource;
 
-public class FreightVehicleLeavesTrafficEvent extends Event{
+public class FreightVehicleEntersTrafficEvent extends Event{
 
-	public static final String EVENT_TYPE = "freight vehicle leaves traffic";
+	public static final String EVENT_TYPE = "freight vehicle enters traffic";
 	public static final String ATTRIBUTE_VEHICLE = "vehicle";
 
 	public static final String ATTRIBUTE_LINK = "link";
@@ -24,15 +25,16 @@ public class FreightVehicleLeavesTrafficEvent extends Event{
 	public static final String ATTRIBUTE_POSITION = "relativePosition";
 	public static final String ATTRIBUTE_CARRIER = "carrier";
 	public static final String ATTRIBUTE_RESOURCE = "resource";
-
+	
 	private Id<Person> driverId; 
 	private Id<Link> linkId; 
 	private Id<Vehicle> vehicleId;
 	private CarrierVehicle carrierVehicle;
-	private VehicleLeavesTrafficEvent event;
+	private VehicleEntersTrafficEvent event;
 	private CarrierResource carrierResource; 
 	
-	public FreightVehicleLeavesTrafficEvent(VehicleLeavesTrafficEvent event, CarrierResource carrierResource, double time, Id<Person> driverId, Id<Link> linkId, Id<Vehicle> vehicleId, CarrierVehicle carrierVehicle) {
+	
+	public FreightVehicleEntersTrafficEvent(VehicleEntersTrafficEvent event, CarrierResource carrierResource, double time, Id<Person> driverId, Id<Link> linkId, Id<Vehicle> vehicleId, CarrierVehicle carrierVehicle) {
 		super(time);
 		this.driverId = driverId;
 		this.linkId = linkId;
@@ -83,4 +85,5 @@ public class FreightVehicleLeavesTrafficEvent extends Event{
 		attr.put(ATTRIBUTE_RESOURCE, this.carrierResource.getId().toString());
 		return attr;
 	}
+
 }

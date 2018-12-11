@@ -31,8 +31,6 @@ import lsp.usecase.CollectionCarrierScheduler;
 
 public class CollectionAdapterTest {
 
-	//die Trackers sind ja erst ein Bestandteil des Scheduling bzw. Replanning und kommen hier noch nicht rein.
-	//Man kann sie deshalb ja extra au�erhalb des Builders einsetzen.
 	
 	private Network network;
 	private CollectionCarrierScheduler scheduler;
@@ -116,7 +114,7 @@ public class CollectionAdapterTest {
 					assertTrue(types.get(0) == collectionType);
 					assertTrue(collectionType.getCarrierVehicleCapacity() == 10);
 					assertTrue(collectionType.getVehicleCostInformation().perDistanceUnit == 0.0004);
-					assertTrue(collectionType.getVehicleCostInformation().perTimeUnit == 0.38);
+					//assertTrue(collectionType.getVehicleCostInformation().perTimeUnit == 0.38);
 					assertTrue(collectionType.getVehicleCostInformation().fix == 49);
 					assertTrue(collectionType.getMaximumVelocity() == (50/3.6));
 					

@@ -32,9 +32,6 @@ import lsp.usecase.DistributionCarrierScheduler;
 
 public class DistributionAdapterTest {
 		
-		//die Trackers sind ja erst ein Bestandteil des Scheduling bzw. Replanning und kommen hier noch nicht rein.
-		//Man kann sie deshalb ja extra au�erhalb des Builders einsetzen.
-		
 		private Network network;
 		private DistributionCarrierScheduler scheduler;
 		private CarrierVehicleType distributionType;
@@ -117,7 +114,7 @@ public class DistributionAdapterTest {
 						assertTrue(types.get(0) == distributionType);
 						assertTrue(distributionType.getCarrierVehicleCapacity() == 10);
 						assertTrue(distributionType.getVehicleCostInformation().perDistanceUnit == 0.0004);
-						assertTrue(distributionType.getVehicleCostInformation().perTimeUnit == 0.38);
+						//assertTrue(distributionType.getVehicleCostInformation().perTimeUnit == 0.38);
 						assertTrue(distributionType.getVehicleCostInformation().fix == 49);
 						assertTrue(distributionType.getMaximumVelocity() == (50/3.6));
 						

@@ -10,6 +10,7 @@ public class EventUtils {
 		creators.add(new FreightLinkEnterEventCreator());
 		creators.add(new FreightLinkLeaveEventCreator());
 		creators.add(new FreightVehicleLeavesTrafficEventCreator());
+		creators.add(new FreightVehicleEntersTrafficEventCreator());
 		creators.add(new ServiceEndEventCreator());
 		creators.add(new ServiceStartEventCreator());
 		creators.add(new ShipmentDeliveredEventCreator());

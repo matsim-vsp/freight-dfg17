@@ -41,7 +41,6 @@ import org.matsim.contrib.freight.carrier.CarrierShipment;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.contrib.freight.carrier.FreightConstants;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
-import org.matsim.contrib.freight.carrier.Tour;
 import org.matsim.contrib.freight.carrier.Tour.TourActivity;
 import org.matsim.contrib.freight.carrier.Tour.TourElement;
 import org.matsim.contrib.freight.scoring.FreightActivity;
@@ -52,10 +51,12 @@ import org.matsim.core.population.routes.RouteUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleUtils;
 
-class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler, PersonArrivalEventHandler,  LinkEnterEventHandler, LinkLeaveEventHandler, 
-							VehicleLeavesTrafficEventHandler, PersonEntersVehicleEventHandler, VehicleEntersTrafficEventHandler, PersonLeavesVehicleEventHandler {
+import lsp.resources.CarrierResource;
 
-	
+class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler,
+		PersonArrivalEventHandler, LinkEnterEventHandler, LinkLeaveEventHandler, VehicleLeavesTrafficEventHandler,
+		PersonEntersVehicleEventHandler, VehicleEntersTrafficEventHandler, PersonLeavesVehicleEventHandler {
+
 	class CarrierDriverAgent {
 
 		private Leg currentLeg;
@@ -81,8 +82,9 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 		 * @param event
 		 */
 		public void handleEvent(PersonArrivalEvent event) {
-			currentLeg.setTravelTime( event.getTime() - currentLeg.getDepartureTime() );
-			double travelTime = currentLeg.getDepartureTime() + currentLeg.getTravelTime() - currentLeg.getDepartureTime();
+			currentLeg.setTravelTime(event.getTime() - currentLeg.getDepartureTime());
+			double travelTime = currentLeg.getDepartureTime() + currentLeg.getTravelTime()
+					- currentLeg.getDepartureTime();
 			currentLeg.setTravelTime(travelTime);
 			if (currentRoute.size() > 1) {
 				NetworkRoute networkRoute = RouteUtils.createNetworkRoute(currentRoute, null);
@@ -92,13 +94,12 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 				currentRoute = null;
 			} else {
 				Id<Link> startLink;
-				if(currentRoute.size() != 0){
+				if (currentRoute.size() != 0) {
 					startLink = currentRoute.get(0);
-				}
-				else{
+				} else {
 					startLink = event.getLinkId();
 				}
-				Route genericRoute = RouteUtils.createGenericRouteImpl(startLink, event.getLinkId());    
+				Route genericRoute = RouteUtils.createGenericRouteImpl(startLink, event.getLinkId());
 				genericRoute.setDistance(0.0);
 				currentLeg.setRoute(genericRoute);
 			}
@@ -114,22 +115,23 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 		}
 
 		public void handleEvent(LinkEnterEvent event) {
-            currentRoute.add(event.getLinkId());
-            notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
+			currentRoute.add(event.getLinkId());
+			notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
 		}
 
 		public void handleEvent(LinkLeaveEvent event) {
 			notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
 		}
-		
+
 		public void handleEvent(ActivityEndEvent event) {
 			if (currentActivity == null) {
-				Activity  firstActivity = PopulationUtils.createActivityFromLinkId(event.getActType(), event.getLinkId());
+				Activity firstActivity = PopulationUtils.createActivityFromLinkId(event.getActType(),
+						event.getLinkId());
 				firstActivity.setFacilityId(event.getFacilityId());
 				currentActivity = firstActivity;
 			}
 			currentActivity.setEndTime(event.getTime());
-			activityFinished(event); 
+			activityFinished(event);
 		}
 
 		private TourActivity getTourActivity() {
@@ -137,16 +139,16 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 		}
 
 		public void handleEvent(ActivityStartEvent event) {
-			Activity activity = PopulationUtils.createActivityFromLinkId(event.getActType(), event.getLinkId()); 
+			Activity activity = PopulationUtils.createActivityFromLinkId(event.getActType(), event.getLinkId());
 			activity.setFacilityId(event.getFacilityId());
 			activity.setStartTime(event.getTime());
-			if(event.getActType().equals(FreightConstants.END)){
+			if (event.getActType().equals(FreightConstants.END)) {
 				activity.setEndTime(event.getTime());
 				activityStarted(event);
-			}
-			else{
+			} else {
 				TourActivity tourActivity = getTourActivity();
-				assert activity.getLinkId().toString().equals(tourActivity.getLocation().toString()) : "linkId of activity is not equal to linkId of tourActivity. This must not be.";
+				assert activity.getLinkId().toString().equals(tourActivity.getLocation()
+						.toString()) : "linkId of activity is not equal to linkId of tourActivity. This must not be.";
 				FreightActivity freightActivity = new FreightActivity(activity, tourActivity.getTimeWindow());
 				currentActivity = freightActivity;
 				activityStarted(event);
@@ -156,54 +158,56 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 		public void handleEvent(VehicleLeavesTrafficEvent event) {
 			notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
 		}
-		
+
 		public void handleEvent(PersonEntersVehicleEvent event) {
 			notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
 		}
-		
+
 		public void handleEvent(VehicleEntersTrafficEvent event) {
 			notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
 		}
-		
+
 		public void handleEvent(PersonLeavesVehicleEvent event) {
 			notifyEventHappened(event, null, scheduledTour, driverId, activityCounter);
 		}
-		
+
 		private void activityStarted(ActivityStartEvent event) {
 			notifyEventHappened(event, currentActivity, scheduledTour, driverId, activityCounter);
 		}
-		
+
 		private void activityFinished(ActivityEndEvent event) {
-			if(event.getActType().equals(FreightConstants.START)) {
+			if (event.getActType().equals(FreightConstants.START)) {
 				notifyEventHappened(event, currentActivity, scheduledTour, driverId, activityCounter);
 				activityCounter += 1;
-			}
-			else {
+			} else {
 				notifyEventHappened(event, currentActivity, scheduledTour, driverId, activityCounter);
 				activityCounter += 2;
 			}
 		}
-		
-		
+
 		CarrierVehicle getVehicle() {
 			return scheduledTour.getVehicle();
 		}
 
-		TourElement getPlannedTourElement(int elementIndex){
-			int index = elementIndex-1;
+		TourElement getPlannedTourElement(int elementIndex) {
+			int index = elementIndex - 1;
 			int elementsSize = scheduledTour.getTour().getTourElements().size();
-			if(index < 0) return scheduledTour.getTour().getStart();
-			else if(index == elementsSize) return scheduledTour.getTour().getEnd();
-			else if(index < elementsSize){
+			if (index < 0)
+				return scheduledTour.getTour().getStart();
+			else if (index == elementsSize)
+				return scheduledTour.getTour().getEnd();
+			else if (index < elementsSize) {
 				return scheduledTour.getTour().getTourElements().get(index);
-			}
-			else throw new IllegalStateException("index out of bounds");
+			} else
+				throw new IllegalStateException("index out of bounds");
 		}
 	}
 
 	private final Id<Carrier> id;
 
 	private final Carrier carrier;
+
+	private final CarrierResource resource;
 
 	private final CarrierResourceTracker tracker;
 
@@ -217,9 +221,11 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 
 	private final Vehicle2DriverEventHandler vehicle2DriverEventHandler;
 
-	CarrierResourceAgent(CarrierResourceTracker carrierResourceTracker, Carrier carrier, Vehicle2DriverEventHandler vehicle2DriverEventHandler) {
+	CarrierResourceAgent(CarrierResourceTracker carrierResourceTracker, CarrierResource resource,
+			Vehicle2DriverEventHandler vehicle2DriverEventHandler) {
 		this.tracker = carrierResourceTracker;
-		this.carrier = carrier;
+		this.resource = resource;
+		this.carrier = resource.getCarrier();
 		this.id = carrier.getId();
 		this.vehicle2DriverEventHandler = vehicle2DriverEventHandler;
 	}
@@ -231,17 +237,19 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 	/**
 	 * Returns a list of plans created on the basis of the carrier's plan.
 	 * 
-	 * <p>A carrier plan consists usually of many tours (activity chains). Each plan in the returned list represents a carrier tour.
-	 *  
+	 * <p>
+	 * A carrier plan consists usually of many tours (activity chains). Each plan in
+	 * the returned list represents a carrier tour.
+	 * 
 	 * @return list of plans
 	 * @see Plan, CarrierPlan
 	 */
 	List<MobSimVehicleRoute> createFreightDriverPlans() {
 		clear();
 		System.out.flush();
-		System.err.flush() ;
+		System.err.flush();
 		List<MobSimVehicleRoute> routes = new ArrayList<MobSimVehicleRoute>();
-		//		List<Plan> plans = new ArrayList<Plan>();
+		// List<Plan> plans = new ArrayList<Plan>();
 		if (carrier.getSelectedPlan() == null) {
 			return routes;
 		}
@@ -249,38 +257,43 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 			Id<Person> driverId = createDriverId(scheduledTour.getVehicle());
 			CarrierVehicle carrierVehicle = scheduledTour.getVehicle();
 			Person driverPerson = createDriverPerson(driverId);
-			Vehicle vehicle = createVehicle(driverPerson,carrierVehicle);
+			Vehicle vehicle = createVehicle(driverPerson, carrierVehicle);
 			CarrierDriverAgent carrierDriverAgent = new CarrierDriverAgent(driverId, scheduledTour);
 			Plan plan = PopulationUtils.createPlan();
-			Activity startActivity = PopulationUtils.createActivityFromLinkId(FreightConstants.START,scheduledTour.getVehicle().getLocation());
+			Activity startActivity = PopulationUtils.createActivityFromLinkId(FreightConstants.START,
+					scheduledTour.getVehicle().getLocation());
 			startActivity.setEndTime(scheduledTour.getDeparture());
 			plan.addActivity(startActivity);
-			for (TourElement tourElement : scheduledTour.getTour().getTourElements()) {				
+			for (TourElement tourElement : scheduledTour.getTour().getTourElements()) {
 				if (tourElement instanceof org.matsim.contrib.freight.carrier.Tour.Leg) {
 					org.matsim.contrib.freight.carrier.Tour.Leg tourLeg = (org.matsim.contrib.freight.carrier.Tour.Leg) tourElement;
 					Route route = tourLeg.getRoute();
-					if(route == null) throw new IllegalStateException("missing route for carrier " + this.getId());
+					if (route == null)
+						throw new IllegalStateException("missing route for carrier " + this.getId());
 					Leg leg = PopulationUtils.createLeg(TransportMode.car);
 					leg.setRoute(route);
 					leg.setDepartureTime(tourLeg.getExpectedDepartureTime());
 					leg.setTravelTime(tourLeg.getExpectedTransportTime());
-					leg.setTravelTime( tourLeg.getExpectedDepartureTime() + tourLeg.getExpectedTransportTime() - leg.getDepartureTime() );
+					leg.setTravelTime(tourLeg.getExpectedDepartureTime() + tourLeg.getExpectedTransportTime()
+							- leg.getDepartureTime());
 					plan.addLeg(leg);
 				} else if (tourElement instanceof TourActivity) {
 					TourActivity act = (TourActivity) tourElement;
-					Activity tourElementActivity = PopulationUtils.createActivityFromLinkId(act.getActivityType(), act.getLocation());					
-					double duration = act.getDuration() ;
+					Activity tourElementActivity = PopulationUtils.createActivityFromLinkId(act.getActivityType(),
+							act.getLocation());
+					double duration = act.getDuration();
 					tourElementActivity.setMaximumDuration(duration); // "maximum" has become a bit of a misnomer ...
 					plan.addActivity(tourElementActivity);
 				}
 			}
-			Activity endActivity = PopulationUtils.createActivityFromLinkId(FreightConstants.END,scheduledTour.getVehicle().getLocation());
+			Activity endActivity = PopulationUtils.createActivityFromLinkId(FreightConstants.END,
+					scheduledTour.getVehicle().getLocation());
 			plan.addActivity(endActivity);
 			driverPerson.addPlan(plan);
 			plan.setPerson(driverPerson);
 			MobSimVehicleRoute mobsimRoute = new MobSimVehicleRoute(plan, vehicle);
 			routes.add(mobsimRoute);
-			//			plans.add(plan);
+			// plans.add(plan);
 			carrierDriverAgents.put(driverId, carrierDriverAgent);
 			driverTourMap.put(driverId, scheduledTour);
 		}
@@ -288,7 +301,8 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 	}
 
 	private Vehicle createVehicle(Person driverPerson, CarrierVehicle carrierVehicle) {
-		return VehicleUtils.getFactory().createVehicle(Id.create(driverPerson.getId(), Vehicle.class), carrierVehicle.getVehicleType());
+		return VehicleUtils.getFactory().createVehicle(Id.create(driverPerson.getId(), Vehicle.class),
+				carrierVehicle.getVehicleType());
 	}
 
 	private void clear() {
@@ -308,16 +322,18 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 	}
 
 	private Id<Person> createDriverId(CarrierVehicle carrierVehicle) {
-		Id<Person> id = Id.create("freight_" + carrier.getId() + "_veh_" + carrierVehicle.getVehicleId() + "_" + nextId, Person.class);
+		Id<Person> id = Id.create("freight_" + carrier.getId() + "_veh_" + carrierVehicle.getVehicleId() + "_" + nextId,
+				Person.class);
 		driverIds.add(id);
 		++nextId;
 		return id;
 	}
 
-	public void notifyEventHappened(Event event, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId, int activityCounter) {
-		tracker.notifyEventHappened(event, carrier, activity, scheduledTour, driverId, activityCounter);
+	public void notifyEventHappened(Event event, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId,
+			int activityCounter) {
+		tracker.notifyEventHappened(event, resource, activity, scheduledTour, driverId, activityCounter);
 	}
-	 
+
 	@Override
 	public void handleEvent(PersonArrivalEvent event) {
 		getDriver(event.getPersonId()).handleEvent(event);
@@ -346,7 +362,7 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 
 	@Override
 	public void handleEvent(ActivityEndEvent event) {
-			getDriver(event.getPersonId()).handleEvent(event);
+		getDriver(event.getPersonId()).handleEvent(event);
 	}
 
 	@Override
@@ -354,13 +370,13 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 		getDriver(event.getPersonId()).handleEvent(event);
 	}
 
-	CarrierDriverAgent getDriver(Id<Person> driverId){
+	CarrierDriverAgent getDriver(Id<Person> driverId) {
 		return carrierDriverAgents.get(driverId);
 	}
 
 	@Override
 	public void handleEvent(VehicleLeavesTrafficEvent event) {
-		getDriver(event.getPersonId()).handleEvent(event);	
+		getDriver(event.getPersonId()).handleEvent(event);
 	}
 
 	@Override
@@ -370,12 +386,12 @@ class CarrierResourceAgent implements ActivityStartEventHandler, ActivityEndEven
 
 	@Override
 	public void handleEvent(VehicleEntersTrafficEvent event) {
-		getDriver(event.getPersonId()).handleEvent(event);		
+		getDriver(event.getPersonId()).handleEvent(event);
 	}
 
 	@Override
 	public void handleEvent(PersonLeavesVehicleEvent event) {
-		getDriver(event.getPersonId()).handleEvent(event);	
+		getDriver(event.getPersonId()).handleEvent(event);
 	}
 
 }

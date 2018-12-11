@@ -1,4 +1,4 @@
-package testLSPWithCostTracker;
+package lspWithCostTrackerTests;
 
 import java.util.ArrayList;
 import java.util.Collection;

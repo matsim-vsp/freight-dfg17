@@ -1,4 +1,4 @@
-package testLSPWithCostTracker;
+package lspWithCostTrackerTests;
 
 import lsp.functions.Info;
 import lsp.functions.InfoFunction;

@@ -36,11 +36,15 @@ import org.matsim.api.core.v01.population.Route;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.events.EventsUtils;
 import org.matsim.core.events.algorithms.Vehicle2DriverEventHandler;
 import lsp.controler.FreightControlerListener;
 import lsp.events.EventCreator;
 import lsp.events.FreightLinkEnterEvent;
 import lsp.mobsim.CarrierResourceAgent.CarrierDriverAgent;
+import lsp.resources.CarrierResource;
+import lsp.resources.Resource;
 
 
 
@@ -48,9 +52,7 @@ public class CarrierResourceTracker implements ActivityStartEventHandler, Activi
  LinkLeaveEventHandler, VehicleEntersTrafficEventHandler, VehicleLeavesTrafficEventHandler, PersonEntersVehicleEventHandler,  PersonLeavesVehicleEventHandler{
 
 	
-	private final FreightControlerListener listener;
-	
-	private final Carriers carriers;
+	private final Collection<CarrierResource> resources;
 
 	private Vehicle2DriverEventHandler delegate = new Vehicle2DriverEventHandler();
 
@@ -60,17 +62,23 @@ public class CarrierResourceTracker implements ActivityStartEventHandler, Activi
 
 	private Collection<EventCreator> eventCreators;
 	
-	public CarrierResourceTracker(Carriers carriers, Network network,  FreightControlerListener listener, Collection<EventCreator> creators) {
-		this.carriers = carriers;
+	private EventsManager eventsManager;
+	
+	public CarrierResourceTracker(Collection<CarrierResource> resources, Network network, Collection<EventCreator> creators, EventsManager eventsManager) {
+		this.resources = resources;
 		this.eventCreators = creators;
 		createCarrierResourceAgents();
-		this.listener = listener;
+		this.eventsManager = eventsManager;
 	}
 
+	public EventsManager getEventsManager() {
+		return this.eventsManager;
+	}
+	
 	private void createCarrierResourceAgents() {
-		for (Carrier carrier : carriers.getCarriers().values()) {
-			CarrierResourceAgent carrierResourceAgent = new CarrierResourceAgent(this, carrier, delegate);
-			carrierResourceAgents.add(carrierResourceAgent);
+		for (CarrierResource resource : resources) {
+				CarrierResourceAgent carrierResourceAgent = new CarrierResourceAgent(this, resource, delegate);
+				carrierResourceAgents.add(carrierResourceAgent);
 		}
 	}
 
@@ -95,12 +103,12 @@ public class CarrierResourceTracker implements ActivityStartEventHandler, Activi
 	}
 
 	private void processEvent(Event event) {
-		listener.processEvent(event);
+		eventsManager.processEvent(event);
 	}
 	
-	public void notifyEventHappened(Event event, Carrier carrier, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId, int activityCounter) {
+	public void notifyEventHappened(Event event, Resource resource, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId, int activityCounter) {
 		for(EventCreator eventCreator : eventCreators) {
-			Event customEvent = eventCreator.createEvent(event, carrier, activity, scheduledTour, driverId, activityCounter);
+			Event customEvent = eventCreator.createEvent(event, resource, activity, scheduledTour, driverId, activityCounter);
 			if(customEvent != null) {
 				processEvent(customEvent);
 			}

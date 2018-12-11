@@ -3,10 +3,11 @@ package lsp.controler;
 import java.util.Collection;
 
 import org.matsim.contrib.freight.CarrierConfig;
+import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.AbstractModule;
 
 import com.google.inject.Provides;
-import com.google.inject.multibindings.Multibinder;
+import com.google.inject.name.Named;
 
 import lsp.LSPs;
 import lsp.events.EventCreator;
@@ -48,6 +49,7 @@ public class LSPModule extends AbstractModule {
 		bind(LSPControlerListener.class).asEagerSingleton();
         addControlerListenerBinding().to(LSPControlerListener.class);
         bindMobsim().toProvider(FreightQSimFactory.class);
+        addControlerListenerBinding().to(FreightEventsHandlingImpl.class);
 	}
 
 	@Provides
@@ -60,6 +62,11 @@ public class LSPModule extends AbstractModule {
         return lSPControlerListener.getCarrierResourceTracker();
     }
 
+	@Provides @Named("Freight")
+	EventsManager  provideEventsManager(LSPControlerListener lSPControlerListener) {
+		 return lSPControlerListener.getFreightEventsManager();
+	}
+	
     public void setPhysicallyEnforceTimeWindowBeginnings(boolean physicallyEnforceTimeWindowBeginnings) {
         this.carrierConfig.setPhysicallyEnforceTimeWindowBeginnings(physicallyEnforceTimeWindowBeginnings);
     }

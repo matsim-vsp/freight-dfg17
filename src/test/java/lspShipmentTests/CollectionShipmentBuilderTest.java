@@ -1,4 +1,4 @@
-package lspShipmentTest;
+package lspShipmentTests;
 
 import static org.junit.Assert.*;
 

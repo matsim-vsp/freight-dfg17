@@ -11,15 +11,18 @@ import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.contrib.freight.carrier.Tour.Pickup;
 import org.matsim.contrib.freight.events.ShipmentPickedUpEvent;
 
+import lsp.resources.CarrierResource;
+import lsp.resources.Resource;
+
 public class ShipmentPickedUpEventCreator implements EventCreator{
 
 	@Override
-	public Event createEvent(Event event, Carrier carrier, Activity activity, ScheduledTour scheduledTour,
-			Id<Person> driverId, int activityCounter) {
-		if(event instanceof ActivityEndEvent) {
+	public Event createEvent(Event event, Resource resource, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId, int activityCounter) {
+		if(event instanceof ActivityEndEvent && resource instanceof CarrierResource) {
+			CarrierResource carrierResource = (CarrierResource) resource;
 			if(event.getEventType().equals(FreightConstants.PICKUP)) {
 				Pickup pickup = (Pickup) activity;
-				return new ShipmentPickedUpEvent(carrier.getId(), driverId, pickup.getShipment(), event.getTime());
+				return new ShipmentPickedUpEvent(carrierResource.getCarrier().getId(), driverId, pickup.getShipment(), event.getTime());
 			}
 		}
 		return null;

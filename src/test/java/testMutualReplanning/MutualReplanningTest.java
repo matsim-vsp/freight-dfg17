@@ -65,10 +65,10 @@ import lsp.resources.Resource;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
-import testLSPWithCostTracker.CollectionServiceHandler;
-import testLSPWithCostTracker.DistanceAndTimeHandler;
-import testLSPWithCostTracker.LinearCostTracker;
-import testLSPWithCostTracker.TourStartHandler;
+import lspWithCostTrackerTests.CollectionServiceHandler;
+import lspWithCostTrackerTests.DistanceAndTimeHandler;
+import lspWithCostTrackerTests.LinearCostTracker;
+import lspWithCostTrackerTests.TourStartHandler;
 
 public class MutualReplanningTest {
 	

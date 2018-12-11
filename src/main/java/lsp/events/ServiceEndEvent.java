@@ -10,6 +10,8 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierService;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 
+import lsp.resources.CarrierResource;
+
 public class ServiceEndEvent extends Event {
 
 	public static final String ATTRIBUTE_PERSON = "driver";
@@ -19,24 +21,25 @@ public class ServiceEndEvent extends Event {
 	public static final String ATTRIBUTE_SERVICE = "service";
 	public static final String ATTRIBUTE_VEHICLE = "vehicle";
 	public static final String ATTRIBUTE_CARRIER = "carrier";
+	public static final String ATTRIBUTE_RESOURCE = "resource";
 	
 	private CarrierService service;
-	private Id<Carrier> carrierId;
 	private Id<Person> driverId;
 	private CarrierVehicle vehicle;
 	private ActivityEndEvent event;
+	private CarrierResource carrierResource;
 	
-	public ServiceEndEvent(ActivityEndEvent event, Id<Carrier> carrierId, Id<Person> driverId, CarrierService service, double time, CarrierVehicle vehicle) {
+	public ServiceEndEvent(ActivityEndEvent event, CarrierResource carrierResource, Id<Person> driverId, CarrierService service, double time, CarrierVehicle vehicle) {
 		super(time);
 		this.service = service;
 		this.driverId = driverId;
-		this.carrierId = carrierId;
+		this.carrierResource = carrierResource;
 		this.vehicle = vehicle;
 		this.event = event;
 	}
 
 	public Id<Carrier> getCarrierId() {
-		return carrierId;
+		return carrierResource.getCarrier().getId();
 	}
 
 	public Id<Person> getDriverId() {
@@ -66,7 +69,8 @@ public class ServiceEndEvent extends Event {
 		attr.put(ATTRIBUTE_ACTTYPE, event.getActType());
 		attr.put(ATTRIBUTE_SERVICE, service.getId().toString());
 		attr.put(ATTRIBUTE_VEHICLE, vehicle.getVehicleId().toString());
-		attr.put(ATTRIBUTE_CARRIER, carrierId.toString());
+		attr.put(ATTRIBUTE_CARRIER, carrierResource.getCarrier().getId().toString());
+		attr.put(ATTRIBUTE_RESOURCE, carrierResource.getId().toString());
 		return attr;
 	}
 }

@@ -23,6 +23,7 @@ import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
+import org.matsim.core.events.EventsUtils;
 import org.matsim.core.events.handler.EventHandler;
 
 import lsp.functions.Info;
@@ -35,6 +36,7 @@ import lsp.events.EventCreator;
 import lsp.mobsim.CarrierResourceTracker;
 import lsp.replanning.LSPReplanningModule;
 import lsp.resources.CarrierResource;
+import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModule;
 import lsp.shipment.LSPShipment;
 import lsp.tracking.SimulationTracker;
@@ -46,13 +48,13 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 
 	
 	private CarrierResourceTracker carrierResourceTracker;
-	private Carriers carriers;    
+	private Collection<CarrierResource> carrierResources;    
 	private LSPs lsps;
 	private LSPReplanningModule replanningModule;
 	private LSPScoringModule scoringModule;
 	private Collection<EventCreator> creators;
-	
-	private ArrayList <EventHandler> registeredHandlers;
+	private EventsManager freightEventsManager;
+	private Collection <EventHandler> registeredHandlers;
 	
 	
 	@Inject EventsManager eventsManager;
@@ -65,7 +67,8 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 	        this.replanningModule = replanningModule;
 	        this.scoringModule = scoringModule;
 	        this.creators = creators;
-	        this.carriers = getCarriers();
+	        this.carrierResources = getResources();
+	        this.freightEventsManager = EventsUtils.createEventsManager();
 	}
 	
 	@Override
@@ -74,29 +77,38 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 		LSPRescheduler rescheduler = new LSPRescheduler(lsps);
 		rescheduler.notifyBeforeMobsim(event);
 		
-		carrierResourceTracker = new CarrierResourceTracker(carriers, network, this, creators);
+		carrierResourceTracker = new CarrierResourceTracker(carrierResources, network, creators, freightEventsManager);
+		freightEventsManager = carrierResourceTracker.getEventsManager();
 		eventsManager.addHandler(carrierResourceTracker);
 		registeredHandlers = new ArrayList<EventHandler>();
+		 
+		
 		
 		for(LSP lsp : lsps.getLSPs().values()) {
 			for(LSPShipment shipment : lsp.getShipments()) {
 				for(EventHandler handler : shipment.getEventHandlers()) {
-					eventsManager.addHandler(handler);
+					freightEventsManager.addHandler(handler);
+					registeredHandlers.add(handler);
 				}
 			}
 			LSPPlan selectedPlan = lsp.getSelectedPlan();
+				for(Resource resource : lsp.getResources()) {
+					resource.setEventsManager(freightEventsManager);
+				}		
 				for(LogisticsSolution solution : selectedPlan.getSolutions()) {
 					for(EventHandler handler : solution.getEventHandlers()) {
-						eventsManager.addHandler(handler);
+						freightEventsManager.addHandler(handler);
+						registeredHandlers.add(handler);
 					}
 					for(LogisticsSolutionElement element : solution.getSolutionElements()) {
 						for(EventHandler handler : element.getEventHandlers()) {
-							eventsManager.addHandler(handler);
+							freightEventsManager.addHandler(handler);
+							registeredHandlers.add(handler);
 						}	
 						ArrayList <EventHandler> resourceHandlers = (ArrayList<EventHandler>)element.getResource().getEventHandlers();
 							for(EventHandler handler : resourceHandlers) {
 								if(!registeredHandlers.contains(handler)) {
-									eventsManager.addHandler(handler);
+									freightEventsManager.addHandler(handler);
 									registeredHandlers.add(handler);
 								}
 							}
@@ -106,8 +118,6 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 	}
 	
 	
-	//Hier muss noch die Moeglichkeit reinkommen, dass nicht alle LSPs nach jeder Iteration neu planen, sondern nur ein Teil von denen
-	//Das kann durch ein entsprechendes replanningModule erreicht werden. Hier muss man dann nix aendern
 	@Override
 	public void notifyReplanning(ReplanningEvent event) {
 		replanningModule.replanLSPs(event);	
@@ -157,24 +167,16 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 	}
 
 	
-	private Carriers getCarriers() {
-		Carriers carriers = new Carriers();
+	private Collection<CarrierResource> getResources() {
+		ArrayList<CarrierResource> resources = new ArrayList<>();
 		for(LSP lsp : lsps.getLSPs().values()) {
-			LSPPlan selectedPlan = lsp.getSelectedPlan();
-			for(LogisticsSolution solution : selectedPlan.getSolutions()) {
-				for(LogisticsSolutionElement element : solution.getSolutionElements()) {
-					if(element.getResource() instanceof CarrierResource) {
-						
-						CarrierResource carrierResource = (CarrierResource) element.getResource();
-						Carrier carrier = carrierResource.getCarrier();
-						if(!carriers.getCarriers().containsKey(carrier.getId())) {
-							carriers.addCarrier(carrier);
-						}
-					}					
+			for(Resource resource : lsp.getResources()) {
+				if(resource instanceof CarrierResource) {
+					resources.add((CarrierResource) resource);
 				}
 			}
 		}
-		return carriers;
+		return resources;
 	}
 
 	public void processEvent(Event event){
@@ -183,7 +185,38 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 
 	@Override
 	public void notifyIterationEnds(IterationEndsEvent event) {
+		for(EventHandler handler : registeredHandlers) {
+			freightEventsManager.removeHandler(handler);
+		}
+
+		for(LSP lsp : lsps.getLSPs().values()) {
+			for(LSPShipment shipment : lsp.getShipments()) {
+				shipment.getEventHandlers().clear();
+			}
 		
+			for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
+				for(EventHandler handler : solution.getEventHandlers()) {
+					handler.reset(event.getIteration());
+				}
+				for(SimulationTracker tracker : solution.getSimulationTrackers()) {
+					tracker.reset();
+				}			
+				for(LogisticsSolutionElement element : solution.getSolutionElements()) {
+					for(EventHandler handler : element.getEventHandlers()) {
+						handler.reset(event.getIteration());
+					}
+					for(SimulationTracker tracker : element.getSimulationTrackers()) {
+						tracker.reset();
+					}
+					for(EventHandler handler : element.getResource().getEventHandlers()) {
+						handler.reset(event.getIteration());
+					}		
+					for(SimulationTracker tracker : element.getResource().getSimulationTrackers()) {
+						tracker.reset();
+					}
+				}			
+			}		
+		}		
 		
 	}
 
@@ -191,13 +224,17 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 		return carrierResourceTracker;
 	}
 
+	public EventsManager getFreightEventsManager() {
+		return freightEventsManager;
+	}
+	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
-		if(event.getIteration() > 0) {
+		/*if(event.getIteration() > 0) {
 			for(EventHandler handler : registeredHandlers) {
-				eventsManager.removeHandler(handler);
+				freightEventsManager.removeHandler(handler);
 			}
-		
+
 			for(LSP lsp : lsps.getLSPs().values()) {
 				for(LSPShipment shipment : lsp.getShipments()) {
 					shipment.getEventHandlers().clear();
@@ -226,6 +263,6 @@ ReplanningListener, IterationEndsListener, IterationStartsListener{
 					}			
 				}		
 			}			
-		}	
+		}*/	
 	}	
 }

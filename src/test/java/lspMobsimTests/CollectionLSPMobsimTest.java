@@ -136,7 +136,7 @@ public class CollectionLSPMobsimTest {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
         	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
         	//Random random = new Random(1);
-        	int capacityDemand = 1+ new Random().nextInt(4);
+        	int capacityDemand = 1+ new Random(1).nextInt(4);
         	builder.setCapacityDemand(capacityDemand);
         	
         	while(true) {
@@ -188,7 +188,7 @@ public class CollectionLSPMobsimTest {
 			ArrayList<AbstractShipmentPlanElement> logElements = new ArrayList<AbstractShipmentPlanElement>(shipment.getLog().getPlanElements().values());
 			Collections.sort(logElements, new AbstractShipmentPlanElementComparator());
 					
-			//Das muss besser in den SchedulingTest rein
+
 			assertTrue(collectionLSP.getResources().iterator().next() == collectionAdapter);
 			CarrierResource carrierResource = (CarrierResource) collectionAdapter;
 			assertTrue(carrierResource.getCarrier() == carrier);

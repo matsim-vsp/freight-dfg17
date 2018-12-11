@@ -26,7 +26,7 @@ public class DemandObjectImpl implements DemandObject{
 	private double strengthOfFlow;
 	private Id<Link> fromLinkId;
 	private Id<Link> toLinkId;
-	private ArrayList <UtilityFunction> utilityFunctions;
+//	private ArrayList <UtilityFunction> utilityFunctions;
 	private DemandPlan selectedPlan;
 	private DemandScorer scorer;
 	private DemandReplanner replanner;
@@ -139,7 +139,7 @@ public class DemandObjectImpl implements DemandObject{
 	
 	private DemandObjectImpl(Builder builder) {
 		this.plans = new ArrayList<DemandPlan>();
-		this.utilityFunctions = new ArrayList<UtilityFunction>();
+//		this.utilityFunctions = new ArrayList<UtilityFunction>();
 		this.shipper = builder.shipper;
 		if(this.shipper != null) {
 			this.shipper.getDemandObjects().add(this);
@@ -158,7 +158,7 @@ public class DemandObjectImpl implements DemandObject{
 			this.selectedPlan.getShipment().setDemandObject(this);
 		}
 		this.plans.add(builder.initialPlan);
-		this.utilityFunctions = builder.utilityFunctions;
+//		this.utilityFunctions = builder.utilityFunctions;
 		this.scorer = builder.scorer;
 		if(this.scorer != null) {
 			this.scorer.setDemandObject(this);
@@ -214,15 +214,15 @@ public class DemandObjectImpl implements DemandObject{
 		return newPlan;
 	}
 
-	@Override
-	public DemandAgent getShipper() {
-		return shipper;
-	}
-
-	@Override
-	public DemandAgent getRecipient() {
-		return recipient;
-	}
+//	@Override
+//	public DemandAgent getShipper() {
+//		return shipper;
+//	}
+//
+//	@Override
+//	public DemandAgent getRecipient() {
+//		return recipient;
+//	}
 	
 	@Override
 	public Id<DemandObject> getId() {
@@ -249,10 +249,10 @@ public class DemandObjectImpl implements DemandObject{
 		return toLinkId;
 	}
 
-	@Override
-	public Collection<UtilityFunction> getUtilityFunctions() {
-		return utilityFunctions;
-	}
+//	@Override
+//	public Collection<UtilityFunction> getUtilityFunctions() {
+//		return utilityFunctions;
+//	}
 
 	private static DemandPlan copyPlan(DemandPlan plan2copy) {
 		DemandPlanImpl.Builder builder = DemandPlanImpl.Builder.newInstance();
@@ -285,25 +285,25 @@ public class DemandObjectImpl implements DemandObject{
 		return replanner;
 	}
 
-	@Override
-	public void setReplanner(DemandReplanner replanner) {
-		this.replanner = replanner;
-	}
-
-	@Override
-	public void setOfferRequester(OfferRequester requester) {
-		this.offerRequester = requester;
-	}
+//	@Override
+//	public void setReplanner(DemandReplanner replanner) {
+//		this.replanner = replanner;
+//	}
+//
+//	@Override
+//	public void setOfferRequester(OfferRequester requester) {
+//		this.offerRequester = requester;
+//	}
 
 	@Override
 	public OfferRequester getOfferRequester() {
 		return offerRequester;
 	}
 
-	@Override
-	public void setDemandPlanGenerator(DemandPlanGenerator generator) {
-		this.generator = generator;
-	}
+//	@Override
+//	public void setDemandPlanGenerator(DemandPlanGenerator generator) {
+//		this.generator = generator;
+//	}
 
 	@Override
 	public DemandPlanGenerator getDemandPlanGenerator() {
