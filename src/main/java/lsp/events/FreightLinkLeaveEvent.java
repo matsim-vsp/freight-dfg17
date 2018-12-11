@@ -42,7 +42,7 @@ public class FreightLinkLeaveEvent extends Event {
 	}
 
 	public Id<Carrier> getCarrierId() {
-		return carrierId;
+		return resource.getCarrier().getId();
 	}
 
 	public Id<Person> getDriverId() {
@@ -71,7 +71,7 @@ public class FreightLinkLeaveEvent extends Event {
 		Map<String, String> attr = super.getAttributes();
 		attr.put(ATTRIBUTE_VEHICLE, this.vehicleId.toString());
 		attr.put(ATTRIBUTE_LINK, this.linkId.toString());
-		attr.put(ATTRIBUTE_CARRIER, this.carrierId.toString());
+		attr.put(ATTRIBUTE_CARRIER, this.resource.getCarrier().getId().toString());
 		attr.put(ATTRIBUTE_DRIVER, this.driverId.toString());
 		return attr;
 	}

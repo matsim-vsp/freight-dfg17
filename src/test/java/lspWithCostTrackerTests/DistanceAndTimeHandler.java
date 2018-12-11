@@ -43,7 +43,7 @@ public class DistanceAndTimeHandler implements FreightLinkEnterEventHandler, Fre
 		for(FreightLinkEnterEvent enterEvent : events) {
 			if(enterEvent != null) {
 				if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
-						(enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
+						(enterEvent.getResource().getCarrier().getId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 					double linkDuration = leaveEvent.getTime() - enterEvent.getTime();
 					timeCosts = timeCosts + (linkDuration * enterEvent.getCarrierVehicle().getVehicleType().getVehicleCostInformation().perTimeUnit); 
 					double linkLength = network.getLinks().get(enterEvent.getLinkId()).getLength();
@@ -61,7 +61,7 @@ public class DistanceAndTimeHandler implements FreightLinkEnterEventHandler, Fre
 		if(events.size() > 0) {
 			for(FreightLinkEnterEvent enterEvent : events) {
 				if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
-						(enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
+						(enterEvent.getResource().getCarrier().getId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 					double linkDuration = leaveEvent.getTime() - enterEvent.getTime();
 					timeCosts = timeCosts + (linkDuration * enterEvent.getCarrierVehicle().getVehicleType().getVehicleCostInformation().perTimeUnit); 
 					double linkLength = network.getLinks().get(enterEvent.getLinkId()).getLength();

@@ -24,6 +24,7 @@ import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
 import org.matsim.core.controler.listener.StartupListener;
+import org.matsim.core.events.EventsUtils;
 import org.matsim.core.events.handler.EventHandler;
 
 import demand.decoratedLSP.LSPDecorators;
@@ -40,6 +41,7 @@ import lsp.events.EventCreator;
 import lsp.functions.Info;
 import lsp.mobsim.CarrierResourceTracker;
 import lsp.resources.CarrierResource;
+import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModule;
 import lsp.shipment.LSPShipment;
 import lsp.tracking.SimulationTracker;
@@ -48,13 +50,14 @@ public class MutualControlerListener implements FreightControlerListener, Before
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
 	private CarrierResourceTracker carrierResourceTracker;
-	private Carriers carriers;
+	private Collection<CarrierResource> carrierResources;   
 	private LSPDecorators lsps;
 	private DemandObjects demandObjects;
 	private MutualScoringModule mutualScoringModule;
 	private MutualReplanningModule replanningModule;
 	private Collection<EventCreator> creators;
 	private ArrayList<EventHandler> registeredHandlers;
+	private EventsManager freightEventsManager;
 
 	@Inject	EventsManager eventsManager;
 	@Inject	Network network;
@@ -67,7 +70,8 @@ public class MutualControlerListener implements FreightControlerListener, Before
 		this.mutualScoringModule = demandScoringModule;
 		this.replanningModule = replanningModule;
 		this.creators = creators;
-		this.carriers = getCarriers();
+		this.carrierResources = getResources();
+		this.freightEventsManager = EventsUtils.createEventsManager();
 	}
 
 	
@@ -77,7 +81,7 @@ public class MutualControlerListener implements FreightControlerListener, Before
 		SupplyRescheduler rescheduler = new SupplyRescheduler(lsps);
 		rescheduler.notifyBeforeMobsim(event);
 		
-		carrierResourceTracker = new CarrierResourceTracker(carriers, network, this, creators);
+		carrierResourceTracker = new CarrierResourceTracker(carrierResources, network, creators, freightEventsManager);
 		eventsManager.addHandler(carrierResourceTracker);
 		registeredHandlers = new ArrayList<EventHandler>();
 
@@ -169,24 +173,16 @@ public class MutualControlerListener implements FreightControlerListener, Before
 		eventsManager.processEvent(event);
 	}
 
-	private Carriers getCarriers() {
-		Carriers carriers = new Carriers();
-		for (LSP lsp : lsps.getLSPs().values()) {
-			LSPPlan selectedPlan = lsp.getSelectedPlan();
-			for (LogisticsSolution solution : selectedPlan.getSolutions()) {
-				for (LogisticsSolutionElement element : solution.getSolutionElements()) {
-					if (element.getResource() instanceof CarrierResource) {
-
-						CarrierResource carrierResource = (CarrierResource) element.getResource();
-						Carrier carrier = carrierResource.getCarrier();
-						if (!carriers.getCarriers().containsKey(carrier.getId())) {
-							carriers.addCarrier(carrier);
-						}
-					}
+	private Collection<CarrierResource> getResources() {
+		ArrayList<CarrierResource> resources = new ArrayList<>();
+		for(LSP lsp : lsps.getLSPs().values()) {
+			for(Resource resource : lsp.getResources()) {
+				if(resource instanceof CarrierResource) {
+					resources.add((CarrierResource) resource);
 				}
 			}
 		}
-		return carriers;
+		return resources;
 	}
 
 	@Override
