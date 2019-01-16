@@ -165,7 +165,7 @@ import receiver.product.ReceiverProduct;
 			break;
 		case PRODUCT:
 			ReceiverProduct product = currentProductBuilder.build();
-			currentReceiver.getProducts().add(product);
+			currentReceiver.addProduct(product);
 			break;
 		case RECEIVER:
 			receivers.addReceiver(currentReceiver);

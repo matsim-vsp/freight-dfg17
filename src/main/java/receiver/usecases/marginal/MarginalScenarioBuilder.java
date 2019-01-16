@@ -332,8 +332,8 @@ public class MarginalScenarioBuilder {
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
 			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);
 			ReceiverProduct receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 2500);
-			receiver.getProducts().add(receiverProductOne);
-			receiver.getProducts().add(receiverProductTwo);
+			receiver.addProduct(receiverProductOne);
+			receiver.addProduct(receiverProductTwo);
 
 			/* Generate and collate orders for the different receiver/order combination. */
 			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
