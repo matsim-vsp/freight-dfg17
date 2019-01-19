@@ -37,12 +37,6 @@ import receiver.product.ReceiverProduct;
 
 public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attributable {
 
-	/**
-	 * Gets the receiverId.
-	 */
-	@Override
-	public abstract Id<Receiver> getId();
-
 	public Id<Link> getLinkId();
 
 	/**
@@ -74,18 +68,6 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	 */
 	public abstract ReceiverProduct getProduct(Id<ProductType> productType);
 
-	/**
-	 * Gets the selected receiver order.
-	 */
-	@Override
-	public abstract ReceiverPlan getSelectedPlan();
-
-	/**
-	 * Set the selected receiver order.
-	 */
-	@Override
-	public abstract void setSelectedPlan(ReceiverPlan plan);
-	
 
 	/**
 	 * Sets the receiver collaboration status
