@@ -3,6 +3,7 @@ package receiver.replanning;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 
 /**
@@ -29,8 +30,8 @@ public CollaborationStatusMutator(){
 	@Override
 	public void handlePlan(ReceiverPlan receiverPlan) {
 		boolean newstatus;
-		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("grandCoalitionMember");
-		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute("collaborationStatus");
+		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute( ReceiverAttributes.grandCoalitionMember.name() );
+		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name());
 		
 
 		if (grandMember == true){
@@ -41,7 +42,7 @@ public CollaborationStatusMutator(){
 			}
 		} else newstatus = status;
 
-		receiverPlan.getReceiver().getAttributes().putAttribute("collaborationStatus", newstatus);
+		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), newstatus);
 
 	}
 

@@ -140,7 +140,7 @@ public class CapeTownScenarioBuilder {
 		}
 
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -278,14 +278,14 @@ public class CapeTownScenarioBuilder {
 			rOrders.add(rOrder2);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
 						.addReceiverOrder(receiverOrder)
 						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
 						.build();
 				receiver.setSelectedPlan(receiverPlan);
-				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", true);
+				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
 
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
@@ -312,7 +312,7 @@ public class CapeTownScenarioBuilder {
 						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
 				receiver.setSelectedPlan(receiverPlan);
-				receiver.getSelectedPlan().getAttributes().putAttribute("collaborationStatus", false);
+				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), false);
 
 				/* Convert receiver orders to initial carrier services. */
 				for(Order order : receiverOrder.getReceiverProductOrders()){
@@ -356,16 +356,16 @@ public class CapeTownScenarioBuilder {
 					Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
 					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
 							.setLinkId(receiverLink.getId());
-					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), true);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), true);			
+					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
+					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
 					receivers.addReceiver(receiver);
 				} else {
 					/* Franchises */
 					Link receiverLink = FacilitiesUtils.decideOnLink(facility, sc.getNetwork());
 					Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(receiverIndex++), Receiver.class))
 							.setLinkId(receiverLink.getId());
-					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.toString(), false);
-					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), false);			
+					receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), false);
+					receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), false);
 					receivers.addReceiver(receiver);
 				}
 			}

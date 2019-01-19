@@ -50,14 +50,10 @@ import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
-import receiver.Receiver;
-import receiver.ReceiverModule;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
+import receiver.*;
 import receiver.collaboration.Coalition;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.replanning.ReplanningUtils;
-import receiver.ReceiverScoringFunctionFactory;
 
 /**
  *
@@ -123,8 +119,8 @@ public class ReceiverChessboardUtils {
 		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
 		//		if(coalition != null) {
 		for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
-				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if(receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )!=null){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 						coalition.addReceiverCoalitionMember(receiver);
 					}

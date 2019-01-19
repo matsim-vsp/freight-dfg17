@@ -34,6 +34,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 
@@ -106,7 +107,7 @@ public class RunMarginal {
 		
 		for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()) {
 			/* Only execute a marginal calculation run for those in the grand coalition. */
-			if((boolean) receiver.getAttributes().getAttribute("collaborationStatus")) {
+			if((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )) {
 				CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId());
 				Future<Double> job = executor.submit(cmc);
 				jobs.put(receiver.getId(), job);

@@ -35,6 +35,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 import com.google.inject.Inject;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
@@ -124,7 +125,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				Receiver thisReceiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(receiverId);
 				
 //				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) ==  true){
-				if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == true){
+				if ((boolean) thisReceiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 					totalCoalitionVolume += getReceiverOrderTotal(ro);
 				} else {
@@ -141,7 +142,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				Receiver thisReceiver = ReceiverUtils.getReceivers( sc ).getReceivers().get(receiverId);
 				
 //				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == true){
-				if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == true){
+				if ((boolean) thisReceiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) == true){
 					double thisVolume = 0.0;
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carriedId);
 
@@ -187,7 +188,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 
 				/* Score non-collaborating receivers and calculate the total cost allocated to them. */
 //			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
-			if ((boolean) thisReceiver.getAttributes().getAttribute("collaborationStatus") == false){
+			if ((boolean) thisReceiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == false){
 					double total = 0.0;				
 					for(ReceiverOrder ro : plan.getReceiverOrders()) {
 						double thisVolume = 0.0;

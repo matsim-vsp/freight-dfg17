@@ -44,6 +44,7 @@ import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.collaboration.MutableCoalition;
 import receiver.usecases.ReceiverChessboardUtils;
@@ -104,7 +105,7 @@ public class MarginalReceiverClass {
 		}
 		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}

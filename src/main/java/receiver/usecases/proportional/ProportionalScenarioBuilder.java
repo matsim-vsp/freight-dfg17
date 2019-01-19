@@ -66,11 +66,7 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
-import receiver.SSReorderPolicy;
+import receiver.*;
 import receiver.collaboration.MutableCoalition;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -128,7 +124,7 @@ public class ProportionalScenarioBuilder {
 		}
 		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+			if ((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -158,8 +154,8 @@ public class ProportionalScenarioBuilder {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", false);
-			receiver.getAttributes().putAttribute("collaborationStatus", false);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), false);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), false);
 		
 			receivers.addReceiver(receiver);
 		}		
@@ -400,8 +396,8 @@ public class ProportionalScenarioBuilder {
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute("grandCoalitionMember", true);
-			receiver.getAttributes().putAttribute("collaborationStatus", true);			
+			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
+			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
 			receivers.addReceiver(receiver);
 		}
 		

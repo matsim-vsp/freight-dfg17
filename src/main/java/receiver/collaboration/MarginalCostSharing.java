@@ -16,6 +16,7 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 import com.google.inject.Inject;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
@@ -85,7 +86,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 			}
 			
 			/* Count the number of grand coalition receiver members. */			
-			boolean status = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");			
+			boolean status = (boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.grandCoalitionMember.name() );
 			if (status == true){
 				counter += 1;
 			}
@@ -123,7 +124,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 				String coalitionDesc = "C(N|{" ;
 				
 				for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-					if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+					if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 						coalitionDesc =  coalitionDesc + receiver.getId().toString();
 					}
 				}

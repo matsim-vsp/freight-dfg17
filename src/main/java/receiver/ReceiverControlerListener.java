@@ -92,7 +92,7 @@ ReplanningListener, BeforeMobsimListener {
 			 * a coalition at any time. If the receiver is willing to collaborate, the receiver will be allowed to leave
 			 * and join coalitions.
 			 */
-			boolean status = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+			boolean status = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name());
 			if(status == true){	
 				receiverCollection.add(receiver);
 			} else receiverControlCollection.add(receiver);

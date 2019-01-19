@@ -55,6 +55,7 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
@@ -105,7 +106,7 @@ public class RunReceiver {
 					"frequency", 
 					"serviceduration",
 					"collaborate",
-					"grandCoalitionMember"));
+					ReceiverAttributes.grandCoalitionMember.name() ) );
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -148,8 +149,8 @@ public class RunReceiver {
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
 				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute("collaborationStatus") != null){
-						if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
+					if (receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) != null){
+						if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
 								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
 							}
@@ -260,8 +261,8 @@ public class RunReceiver {
 							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
 							float freq = (float) order.getNumberOfWeeklyDeliveries();
 							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");
-							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+							boolean status = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name());
+							boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name());
 
 							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 							try {
