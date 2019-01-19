@@ -28,6 +28,8 @@ package receiver;
  * @author jwjoubert, wlbean
  */
 public enum ReceiverAttributes {
+	// yy these enum types are used as names for {@link Attributable}, including file i/o.  --> DO NOT CHANGE.  Consider replacing
+	// by normal string constants.  kai, jan'19
 	collaborationStatus,
 	grandCoalitionMember
 	
