@@ -44,6 +44,8 @@ public final class SSReorderPolicy implements ReorderPolicy {
 	public SSReorderPolicy(double minLevel, double maxLevel) {
 		this.attributes.putAttribute("s", minLevel);
 		this.attributes.putAttribute("S", maxLevel);
+		// (these need to be attributes since they are written to file and read back in.  yet, they are policy specific, so
+		// there is no reason to make them truly typed. kai, jan'19
 	}
 	
 	/**
