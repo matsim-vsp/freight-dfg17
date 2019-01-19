@@ -58,7 +58,8 @@ import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
 import receiver.*;
-import receiver.collaboration.MutableCoalition;
+import receiver.collaboration.Coalition;
+import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
@@ -109,7 +110,7 @@ public class ReceiverChessboardScenario {
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
 		
 		/* Add carrier and receivers to coalition */
-		MutableCoalition coalition = new MutableCoalition();
+		Coalition coalition = CollaborationUtils.createCoalition();
 		
 		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
 			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){

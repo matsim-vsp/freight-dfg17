@@ -5,7 +5,6 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
 import receiver.collaboration.Coalition;
-import receiver.collaboration.MutableCoalition;
 
 public class ReceiverUtils {
 	private final static String REPLAN_INTERVAL = "replanInterval";
@@ -54,7 +53,7 @@ public class ReceiverUtils {
 		sc.addScenarioElement( CARRIERS_SCENARIO_ELEMENT, carriers );
 	}
 	
-	public static void setCoalition( final MutableCoalition coalition, final Scenario sc ) {
+	public static void setCoalition( final Coalition coalition, final Scenario sc ) {
 		sc.addScenarioElement( COALITION_SCENARIO_ELEMENT, coalition );
 	}
 	
