@@ -117,8 +117,16 @@ public class ReceiverChessboardScenario {
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
+
+		setCoalitionFromReceiverValues( sc, coalition );
+
+		ReceiverUtils.setCoalition( coalition, sc );
 		
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
+		return sc;
+	}
+
+	public static void setCoalitionFromReceiverValues( Scenario sc, Coalition coalition ){
+		for ( Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			if ((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) == true){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
@@ -129,10 +137,6 @@ public class ReceiverChessboardScenario {
 				}
 			}
 		}
-		
-		ReceiverUtils.setCoalition( coalition, sc );
-		
-		return sc;
 	}
 
 
@@ -180,11 +184,8 @@ public class ReceiverChessboardScenario {
 
 	/**
 	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
-	 * 
-	 * @param carriers
-	 * @param network
 	 */
-	public static void generateCarrierPlan(Scenario sc ) {
+	public static void generateCarrierPlan( Scenario sc ) {
 		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class)); 
 
 		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, sc.getNetwork());
@@ -227,7 +228,6 @@ public class ReceiverChessboardScenario {
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
-	 * @param fs
 	 */
 	public static void createReceiverOrders( Scenario sc ) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
@@ -333,8 +333,6 @@ public class ReceiverChessboardScenario {
 	/**
 	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
 	 * their orders as well as decided to join or leave the coalition.
-	 * @param fs
-	 * @param numberOfReceivers
 	 */
 	public static void createAndAddChessboardReceivers( Scenario sc , int numberOfReceivers) {
 		Network network = sc.getNetwork();
@@ -431,9 +429,9 @@ public class ReceiverChessboardScenario {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private static Id<Link> selectRandomLink(Network network){
+	public static Id<Link> selectRandomLink( Network network ){
 		Object[] linkIds = network.getLinks().keySet().toArray();
-		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
+		int sample = MatsimRandom.getRandom().nextInt(linkIds.length );
 		Object o = linkIds[sample];
 		Id<Link> linkId = null;
 		if(o instanceof Id<?>){
@@ -485,14 +483,13 @@ public class ReceiverChessboardScenario {
 		return order;
 	}
 
-	private static TimeWindow selectRandomTimeStart(int tw) {
+	public static TimeWindow selectRandomTimeStart( int tw ) {
 		int min = 06;
 		int max = 18;
 		Random randomTime = new Random();
 		int randomStart =  (min +
-				randomTime.nextInt(max - tw - min + 1));
-		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		return randomTimeWindow;
+				randomTime.nextInt(max - tw - min + 1 ));
+		return TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw *3600 );
 	}
 
 }

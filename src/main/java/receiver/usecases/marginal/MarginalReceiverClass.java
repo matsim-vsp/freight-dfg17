@@ -41,6 +41,7 @@ import receiver.ReceiverUtils;
 import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
 import receiver.usecases.ReceiverChessboardUtils;
+import receiver.usecases.base.ReceiverChessboardScenario;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +88,7 @@ public class MarginalReceiverClass {
 		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
 		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
 		
-		MarginalScenarioBuilder.writeFreightScenario(sc);
+		ReceiverChessboardScenario.writeFreightScenario(sc );
 		
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
@@ -100,19 +101,9 @@ public class MarginalReceiverClass {
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
-		
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) == true){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
-		
+
+		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+
 		ReceiverUtils.setCoalition( coalition, sc );
 		
 		

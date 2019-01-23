@@ -25,10 +25,10 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  * @author wlbean
  *
  */
-public class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	@Inject Scenario sc;
 	
-	public CapeTownReceiverOrderStrategyManagerImpl(){		
+	CapeTownReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override

@@ -33,7 +33,6 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.*;
-import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
@@ -45,7 +44,6 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
-import org.matsim.vehicles.VehicleType;
 import receiver.*;
 import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
@@ -53,13 +51,14 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
+import receiver.usecases.base.ReceiverChessboardScenario;
+import receiver.usecases.marginal.MarginalScenarioBuilder;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -80,7 +79,7 @@ public class ProportionalScenarioBuilder {
 		ReceiverUtils.setReplanInterval(50, sc );
 		
 		/* Create and add chessboard carriers. */
-		createChessboardCarriers(sc);
+		MarginalScenarioBuilder.createChessboardCarriers(sc );
 		
 		/* Create the grand coalition receiver members and allocate orders. */
 		createAndAddChessboardReceivers(sc);		
@@ -110,19 +109,9 @@ public class ProportionalScenarioBuilder {
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
-		
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) == true){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
-		
+
+		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+
 		ReceiverUtils.setCoalition( coalition, sc );
 		return sc;
 	}
@@ -139,7 +128,18 @@ public class ProportionalScenarioBuilder {
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		
 		for (int r = NUMBER_OF_RECEIVERS+1; r < (NUMBER_OF_RECEIVERS*2)+1 ; r++){
-			Id<Link> receiverLocation = selectRandomLink(network);
+			Id<Link> result;
+			Object[] linkIds = network.getLinks().keySet().toArray();
+			int sample = MatsimRandom.getRandom().nextInt(linkIds.length );
+			Object o = linkIds[sample];
+			Id<Link> linkId = null;
+			if(o instanceof Id<?>){
+				linkId = (Id<Link>) o;
+				result = linkId;
+			} else{
+				throw new RuntimeException("Oops, cannot find a correct link Id.");
+			}
+			Id<Link> receiverLocation = result;
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
 			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), false);
@@ -343,7 +343,7 @@ public class ProportionalScenarioBuilder {
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
 					.addReceiverOrder(receiverOrder)
-					.addTimeWindow(selectRandomTimeStart(tw))
+					.addTimeWindow( ReceiverChessboardScenario.selectRandomTimeStart(tw ) )
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
@@ -381,7 +381,18 @@ public class ProportionalScenarioBuilder {
 		receivers.setDescription("Chessboard");
 		
 		for (int r = 1; r < NUMBER_OF_RECEIVERS+1 ; r++){
-			Id<Link> receiverLocation = selectRandomLink(network);
+			Id<Link> result;
+			Object[] linkIds = network.getLinks().keySet().toArray();
+			int sample = MatsimRandom.getRandom().nextInt(linkIds.length );
+			Object o = linkIds[sample];
+			Id<Link> linkId = null;
+			if(o instanceof Id<?>){
+				linkId = (Id<Link>) o;
+				result = linkId;
+			} else{
+				throw new RuntimeException("Oops, cannot find a correct link Id.");
+			}
+			Id<Link> receiverLocation = result;
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
 			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
@@ -390,97 +401,6 @@ public class ProportionalScenarioBuilder {
 		}
 		
 		ReceiverUtils.setReceivers( receivers, sc );
-	}
-
-
-	/**
-	 * Creates the carrier agents for the simulation.
-	 * @param sc
-	 * @return
-	 */
-	public static void createChessboardCarriers(Scenario sc) {
-		Id<Carrier> carrierId = Id.create("Carrier1", Carrier.class);
-		Carrier carrier = CarrierImpl.newInstance(carrierId);
-		Id<Link> carrierLocation = selectRandomLink(sc.getNetwork());
-
-		org.matsim.contrib.freight.carrier.CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
-		CarrierCapabilities carrierCap = capBuilder.setFleetSize(FleetSize.INFINITE).build();
-		carrier.setCarrierCapabilities(carrierCap);						
-		LOG.info("Created a carrier with capabilities.");	
-
-		/*
-		 * Create the carrier vehicle types. 
-		 * TODO This might, potentially, be read from XML file. 
-		 */
-
-		/* Heavy vehicle. */
-		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
-		CarrierVehicleType typeHeavy = typeBuilderHeavy
-				.setCapacity(14000)
-				.setFixCost(2604)
-				.setCostPerDistanceUnit(7.34E-3)
-				.setCostPerTimeUnit(0.171)
-				.build();
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
-		CarrierVehicle heavy = carrierHVehicleBuilder
-				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("18:00:00"))
-				.setType(typeHeavy)
-				.setTypeId(typeHeavy.getId())
-				.build();
-
-		/* Light vehicle. */
-		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderLight = CarrierVehicleType.Builder.newInstance(Id.create("light", VehicleType.class));
-		CarrierVehicleType typeLight = typeBuilderLight
-				.setCapacity(3000)
-				.setFixCost(1168)
-				.setCostPerDistanceUnit(4.22E-3)
-				.setCostPerTimeUnit(0.089)
-				.build();
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
-		CarrierVehicle light = carrierLVehicleBuilder
-				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("18:00:00"))
-				.setType(typeLight)
-				.setTypeId(typeLight.getId())
-				.build();
-
-		/* Assign vehicles to carrier. */
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
-		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);	
-		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
-		LOG.info("Added different vehicle types to the carrier.");
-
-		/* FIXME we do nothing with this */
-		CarrierVehicleTypes types = new CarrierVehicleTypes();
-		types.getVehicleTypes().put(typeLight.getId(), typeLight);
-		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);
-
-		Carriers carriers = new Carriers();
-		carriers.addCarrier(carrier);
-		
-		ReceiverUtils.setCarriers(carriers, sc);
-	}
-
-
-	/**
-	 * Selects a random link in the network.
-	 * @param network
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private static Id<Link> selectRandomLink(Network network){
-		Object[] linkIds = network.getLinks().keySet().toArray();
-		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
-		Object o = linkIds[sample];
-		Id<Link> linkId = null;
-		if(o instanceof Id<?>){
-			linkId = (Id<Link>) o;
-			return linkId;
-		} else{
-			throw new RuntimeException("Oops, cannot find a correct link Id.");
-		}
 	}
 
 
@@ -522,16 +442,6 @@ public class ProportionalScenarioBuilder {
 				.build();
 
 		return order;
-	}
-
-	private static TimeWindow selectRandomTimeStart(int tw) {
-		int min = 06;
-		int max = 18;
-		Random randomTime = new Random();
-		int randomStart =  (min +
-				randomTime.nextInt(max - tw - min + 1));
-		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		return randomTimeWindow;
 	}
 
 }

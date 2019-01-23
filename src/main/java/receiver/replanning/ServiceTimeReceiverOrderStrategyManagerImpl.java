@@ -25,10 +25,11 @@ import receiver.replanning.ServiceTimeMutator;
  * @author wlbean
  *
  */
-public final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+
 	@Inject Scenario sc;
 	
-	public ServiceTimeReceiverOrderStrategyManagerImpl(){		
+	ServiceTimeReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override
@@ -50,6 +51,7 @@ public final class ServiceTimeReceiverOrderStrategyManagerImpl implements Receiv
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			increaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("04:00:00"), true));
+			// (ends up with service time that is <= 4hrs)
 			increaseStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(increaseStrategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), increaseStrategy, null, 0.0);
@@ -61,6 +63,7 @@ public final class ServiceTimeReceiverOrderStrategyManagerImpl implements Receiv
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> decreaseStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			decreaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("01:00:00"), false));
+			// (ends up with service time that is >= 1hrs)
 			decreaseStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(decreaseStrategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), decreaseStrategy, null, 0.0);

@@ -23,26 +23,16 @@
  */
 package receiver.usecases.capetown;
 
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
-import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
-import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
-import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.FacilitiesUtils;
@@ -54,13 +44,13 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
+import receiver.usecases.base.ReceiverChessboardScenario;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
+
+import static receiver.usecases.base.ReceiverChessboardScenario.generateCarrierPlan;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -108,7 +98,7 @@ public class CapeTownScenarioBuilder {
 
 
 		if(write) {
-			writeFreightScenario(sc);
+			ReceiverChessboardScenario.writeFreightScenario(sc );
 		}
 
 		/* Link the carriers to the receivers. */
@@ -123,17 +113,7 @@ public class CapeTownScenarioBuilder {
 			}
 		}
 
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
+		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 
@@ -161,68 +141,9 @@ public class CapeTownScenarioBuilder {
 		return sc;
 	}
 
-	public static void writeFreightScenario( Scenario sc ) {
-		/* Write the necessary bits to file. */
-		String outputFolder = sc.getConfig().controler().getOutputDirectory();
-		outputFolder += outputFolder.endsWith("/") ? "" : "/";
-		new File(outputFolder).mkdirs();
-
-		new ConfigWriter(sc.getConfig()).write(outputFolder + "config.xml");
-		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(outputFolder + "carriers.xml");
-		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
-
-		/* Write the vehicle types. FIXME This will have to change so that vehicle
-		 * types lie at the Carriers level, and not per Carrier. In this scenario 
-		 * there luckily is only a single Carrier. */
-		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
-	}
-
-	/**
-	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
-	 * 
-	 * @param carriers
-	 * @param network
-	 */
-	public static void generateCarrierPlan(Scenario sc ) {
-		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class)); 
-
-		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, sc.getNetwork());
-
-		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(sc.getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
-		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-
-		//read and create a pre-configured algorithms to solve the vrp
-		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
-		
-		//solve the problem
-		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-		//get best (here, there is only one)
-		VehicleRoutingProblemSolution solution = null;
-
-		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-		while(iterator.hasNext()){
-			solution = iterator.next();
-		}
-
-		//create a carrierPlan from the solution 
-		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, solution);
-
-		//route plan 
-		NetworkRouter.routePlan(plan, netBasedCosts);
-
-
-		//assign this plan now to the carrier and make it the selected carrier plan
-		carrier.setSelectedPlan(plan);
-
-	}
-
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
-	 * @param fs
 	 */
 	public static void createReceiverOrders( Scenario sc ) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
@@ -323,8 +244,6 @@ public class CapeTownScenarioBuilder {
 	/**
 	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
 	 * their orders as well as decided to join or leave the coalition.
-	 * @param fs
-	 * @param numberOfReceivers
 	 */
 	public static void createAndAddReceivers( Scenario sc) {
 
@@ -429,25 +348,6 @@ public class CapeTownScenarioBuilder {
 		ReceiverUtils.setCarriers(carriers, sc);
 	}
 
-
-	/**
-	 * Selects a random link in the network.
-	 * @param network
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private static Id<Link> selectRandomLink(Network network){
-		Object[] linkIds = network.getLinks().keySet().toArray();
-		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
-		Object o = linkIds[sample];
-		Id<Link> linkId = null;
-		if(o instanceof Id<?>){
-			linkId = (Id<Link>) o;
-			return linkId;
-		} else{
-			throw new RuntimeException("Oops, cannot find a correct link Id.");
-		}
-	}
 
 	/**
 	 * Selects a random link in the network.

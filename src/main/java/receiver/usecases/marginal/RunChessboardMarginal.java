@@ -63,6 +63,7 @@ import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.usecases.ReceiverChessboardUtils;
 import receiver.usecases.ReceiverScoreStats;
+import receiver.usecases.base.RunReceiver;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -167,19 +168,7 @@ public class RunChessboardMarginal {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) != null){
-						if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
+				RunReceiver.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.

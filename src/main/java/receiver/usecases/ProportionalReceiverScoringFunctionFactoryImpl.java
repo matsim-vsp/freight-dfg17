@@ -15,7 +15,7 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-  
+
 package receiver.usecases;
 
 import org.matsim.core.scoring.ScoringFunction;
@@ -26,32 +26,31 @@ import receiver.Receiver;
 import receiver.ReceiverScoringFunctionFactory;
 
 public class ProportionalReceiverScoringFunctionFactoryImpl implements ReceiverScoringFunctionFactory {
-	
-    public ProportionalReceiverScoringFunctionFactoryImpl() {
-    }
-    
+
+	public ProportionalReceiverScoringFunctionFactoryImpl() {
+	}
+
 	@Override
 	public ScoringFunction createScoringFunction(Receiver receiver) {
 		SumScoringFunction sscorfunc = new SumScoringFunction();
-		
-		MoneyScoring receiverCostAllocation = new ReceiverCostAllocation();
-		sscorfunc.addScoringFunction(receiverCostAllocation);
-	    
+
+		sscorfunc.addScoringFunction( new ReceiverCostAllocation() );
+
 		return sscorfunc;
 	}
 
 	static class ReceiverCostAllocation implements MoneyScoring {
-		
+
 		private double cost = 0.0;
-		
-	 public void reset(){
+
+		public void reset(){
 			this.cost = 0.0;
 		}
 
 		@Override
 		public void finish() {
-		
-		}			
+
+		}
 
 
 		@Override
@@ -67,8 +66,8 @@ public class ProportionalReceiverScoringFunctionFactoryImpl implements ReceiverS
 			this.cost += amount;
 		}
 
-		
-		
+
+
 	}
 
 }

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.graphhopper.jsprit.core.util.Solutions;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -41,6 +42,7 @@ import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
@@ -70,8 +72,10 @@ import receiver.usecases.ReceiverScoreStats;
 
 public class RunReceiver {
 	final private static Logger LOG = Logger.getLogger(RunReceiver.class);
-	final private static long SEED_BASE = 20180816l;	
-//	private static int replanInt;
+	final private static long SEED_BASE = 20180816l;
+	private String outputfolder;
+	private Scenario sc;
+	//	private static int replanInt;
 
 	/**
 	 * @param args
@@ -80,55 +84,30 @@ public class RunReceiver {
 		int startRun = Integer.parseInt(args[0]);
 		int endRun = Integer.parseInt(args[1]);
 		for(int i = startRun; i < endRun; i++) {
-			run(i);
+			new RunReceiver().run(i);
 		}
 	}
 
 
-	public static void run(int run) {
+	public  void run(int run) {
 		LOG.info("Starting run " + run);
-		String outputfolder = String.format("./output/base/tw/run_%03d/", run);
-		new File(outputfolder).mkdirs();
-		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
-//		replanInt = mfs.getReplanInterval();
-		
-		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
-					"iteration", 
-					"receiver_id", 
-					"score", 
-					"timewindow_start", 
-					"timewindow_end", 
-					"order_id", 
-					"volume", 	        				
-					"frequency", 
-					"serviceduration",
-					"collaborate",
-					ReceiverAttributes.grandCoalitionMember.name() ) );
-			bw.newLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Cannot write initial headings");  
-		} finally{
-			try {
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new RuntimeException("Cannot close receiver stats file");
-			}
-		}
+		prepareScenario( run );
+		prepareAndRunControler( run, null);
+	}
 
-		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-
+	void prepareAndRunControler( int run, Collection<AbstractModule> abstractModules ){
 		Controler controler = new Controler(sc);
+		for( AbstractModule abstractModule : abstractModules ){
+			controler.addOverridingModule( abstractModule ) ;
+		}
 
 		/* Set up freight portion. To be repeated every iteration*/
 		setupReceiverAndCarrierReplanning(controler, outputfolder);
-		
-		ReceiverChessboardUtils.setupCarriers(controler);
+
+		ReceiverChessboardUtils.setupCarriers(controler );
+
 		ReceiverChessboardUtils.setupReceivers(controler);
+		// (this one actually sets the receiver strategies!!!!)
 
 		/* TODO This stats must be set up automatically. */
 		prepareFreightOutputDataAndStats(controler, run);
@@ -136,11 +115,50 @@ public class RunReceiver {
 		controler.run();
 	}
 
+	Scenario prepareScenario( int run ){
+		outputfolder = String.format("./output/base/tw/run_%03d/", run);
+		new File(outputfolder).mkdirs();
+		sc = ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true );
+		//		replanInt = mfs.getReplanInterval();
+
+		/* Write headings */
+		//		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+		//		try {
+		//			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+		//					"iteration",
+		//					"receiver_id",
+		//					"score",
+		//					"timewindow_start",
+		//					"timewindow_end",
+		//					"order_id",
+		//					"volume",
+		//					"frequency",
+		//					"serviceduration",
+		//					"collaborate",
+		//					ReceiverAttributes.grandCoalitionMember.name() ) );
+		//			bw.newLine();
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//			throw new RuntimeException("Cannot write initial headings");
+		//		} finally{
+		//			try {
+		//				bw.close();
+		//			} catch (IOException e) {
+		//				e.printStackTrace();
+		//				throw new RuntimeException("Cannot close receiver stats file");
+		//			}
+		//		}
+		// yy the above was nowhere used.  kai, jan'19
+
+		sc.getConfig().controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles );
+		return sc;
+	}
+
 
 	private static void setupReceiverAndCarrierReplanning( MatsimServices controler, String outputFolder) {
 		controler.addControlerListener(new IterationStartsListener() {
 
-			//@Override
+			@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
 				
 				if(event.getIteration() % ReceiverUtils.getReplanInterval( controler.getScenario() ) != 0) {
@@ -148,19 +166,7 @@ public class RunReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) != null){
-						if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
+				setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.
@@ -181,6 +187,8 @@ public class RunReceiver {
 					carrier.removePlan(plan);
 				}
 
+				// yyyy todo: replace above by carrier.clearPlans() (not yet in master).  kai, jan'19
+
 
 				VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, controler.getScenario().getNetwork());
 
@@ -195,16 +203,18 @@ public class RunReceiver {
 				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
 
 				//get best (here, there is only one)
-				VehicleRoutingProblemSolution solution = null;
-
-				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-				while(iterator.hasNext()){
-					solution = iterator.next();
-				}
+//				VehicleRoutingProblemSolution solution = null;
+//
+//				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
+//
+//				while(iterator.hasNext()){
+//					solution = iterator.next();
+//				}
+//
+				// yyyy Why not use Solutions.bestOf(...)?  kai, jan'19
 
 				//create a new carrierPlan from the solution 
-				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, solution);
+				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, Solutions.bestOf( solutions ) );
 
 				//route plan 
 				NetworkRouter.routePlan(newPlan, netBasedCosts);
@@ -221,6 +231,21 @@ public class RunReceiver {
 		});		
 	}
 
+	public static void setCoalitionFromReceiverAttributes( MatsimServices controler ){
+		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
+			if (receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) != null){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
+					if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
+						ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
+					}
+				} else {
+					if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
+						ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
+					}
+				}
+			}
+		}
+	}
 
 
 	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {

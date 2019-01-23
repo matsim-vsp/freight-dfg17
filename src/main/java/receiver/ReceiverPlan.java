@@ -122,8 +122,8 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			receiverString = this.receiver.getId().toString();
 		}
 		
-		return "[receiver: " + receiverString + "; score: " + scoreString + 
-				"; number of orders with carriers: " + orderMap.size() + "]";
+		return "[receiverId=" + receiverString + "; score=" + scoreString +
+				"; number of orders with carriers=" + orderMap.size() + "]";
 	}
 	
 	public final Collection<ReceiverOrder> getReceiverOrders(){

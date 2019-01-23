@@ -39,7 +39,6 @@ import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.io.IOUtils;
@@ -53,13 +52,14 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
+import receiver.usecases.base.ReceiverChessboardScenario;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
+
+import static receiver.usecases.base.ReceiverChessboardScenario.selectRandomLink;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -82,7 +82,7 @@ public class MarginalScenarioBuilder {
 		createChessboardCarriers(sc);
 		
 		/* Create the grand coalition receiver members and allocate orders. */
-		createAndAddChessboardReceivers(sc);		
+		ReceiverChessboardScenario.createAndAddChessboardReceivers(sc, MarginalExperimentParameters.NUMBER_OF_RECEIVERS );
 		
 		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
 		createAndAddControlGroupReceivers(sc);
@@ -95,7 +95,7 @@ public class MarginalScenarioBuilder {
 		
 		
 		if(write) {
-			writeFreightScenario(sc);
+			ReceiverChessboardScenario.writeFreightScenario(sc );
 		}
 		
 		/* Link the carriers to the receivers. */
@@ -109,19 +109,9 @@ public class MarginalScenarioBuilder {
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
-		
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
-		
+
+		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+
 		ReceiverUtils.setCoalition( coalition, sc );
 		return sc;
 	}
@@ -169,22 +159,6 @@ public class MarginalScenarioBuilder {
 	}
 
 
-	public static void writeFreightScenario( Scenario sc) {
-		/* Write the necessary bits to file. */
-		String outputFolder = sc.getConfig().controler().getOutputDirectory();
-		outputFolder += outputFolder.endsWith("/") ? "" : "/";
-		new File(outputFolder).mkdirs();
-		
-		new ConfigWriter(sc.getConfig()).write(outputFolder + "config.xml");
-		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(outputFolder + "carriers.xml");
-		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
-
-		/* Write the vehicle types. FIXME This will have to change so that vehicle
-		 * types lie at the Carriers level, and not per Carrier. In this scenario 
-		 * there luckily is only a single Carrier. */
-		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
-	}
-
 	/**
 	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
 	 * 
@@ -229,7 +203,6 @@ public class MarginalScenarioBuilder {
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
-	 * @param fs
 	 */
 	public static void createReceiverOrders( Scenario sc) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
@@ -335,7 +308,7 @@ public class MarginalScenarioBuilder {
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
 					.addReceiverOrder(receiverOrder)
-					.addTimeWindow(selectRandomTimeStart(tw))
+					.addTimeWindow( ReceiverChessboardScenario.selectRandomTimeStart(tw ) )
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
@@ -361,31 +334,6 @@ public class MarginalScenarioBuilder {
 	}
 
 	/**
-	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
-	 * their orders as well as decided to join or leave the coalition.
-	 * @param fs
-	 */
-	public static void createAndAddChessboardReceivers( Scenario sc) {
-		Network network = sc.getNetwork();
-
-		Receivers receivers = new Receivers();
-		
-		receivers.setDescription("Chessboard");
-		
-		for (int r = 1; r < MarginalExperimentParameters.NUMBER_OF_RECEIVERS+1 ; r++){
-			Id<Link> receiverLocation = selectRandomLink(network);
-			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
-					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
-			receivers.addReceiver(receiver);
-		}
-		
-		ReceiverUtils.setReceivers( receivers, sc );
-	}
-
-
-	/**
 	 * Creates the carrier agents for the simulation.
 	 * @param sc
 	 * @return
@@ -393,7 +341,7 @@ public class MarginalScenarioBuilder {
 	public static void createChessboardCarriers(Scenario sc) {
 		Id<Carrier> carrierId = Id.create("Carrier1", Carrier.class);
 		Carrier carrier = CarrierImpl.newInstance(carrierId);
-		Id<Link> carrierLocation = selectRandomLink(sc.getNetwork());
+		Id<Link> carrierLocation = selectRandomLink(sc.getNetwork() );
 
 		org.matsim.contrib.freight.carrier.CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
 		CarrierCapabilities carrierCap = capBuilder.setFleetSize(FleetSize.INFINITE).build();
@@ -457,25 +405,6 @@ public class MarginalScenarioBuilder {
 
 
 	/**
-	 * Selects a random link in the network.
-	 * @param network
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private static Id<Link> selectRandomLink(Network network){
-		Object[] linkIds = network.getLinks().keySet().toArray();
-		int sample = MatsimRandom.getRandom().nextInt(linkIds.length);
-		Object o = linkIds[sample];
-		Id<Link> linkId = null;
-		if(o instanceof Id<?>){
-			linkId = (Id<Link>) o;
-			return linkId;
-		} else{
-			throw new RuntimeException("Oops, cannot find a correct link Id.");
-		}
-	}
-
-
 	/**
 	 * This method assigns a specific product type to a receiver, and allocates that receiver's order
 	 * policy.
@@ -514,16 +443,6 @@ public class MarginalScenarioBuilder {
 				.build();
 
 		return order;
-	}
-
-	private static TimeWindow selectRandomTimeStart(int tw) {
-		int min = 06;
-		int max = 18;
-		Random randomTime = new Random();
-		int randomStart =  (min +
-				randomTime.nextInt(max - tw - min + 1));
-		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		return randomTimeWindow;
 	}
 
 }

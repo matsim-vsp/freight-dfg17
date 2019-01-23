@@ -78,7 +78,9 @@ public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPla
 				
 				while(iterator.hasNext()){					
 					CarrierService service = iterator.next();
-					if (service.getId().toString() == order.getId().toString()){	
+					if (service.getId().toString() == order.getId().toString()){
+						// yyyyyy use equals instead of == !!
+
 						counter = 1;
 					}
 				}
@@ -94,13 +96,14 @@ public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPla
 						 * carrier service is indeed this receiver's order. Before updating. */
 						
 					
-						if (service.getId().toString() == order.getId().toString()){		
+						if (service.getId().toString() == order.getId().toString()){
+							// yyyyyy use equals instead of == !!
+
 							Builder builder = CarrierService.Builder.newInstance(Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierService.class), receiverPlan.getReceiver().getLinkId());
 							newService = builder
 									.setCapacityDemand((int) ((order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())))
-									/*TODO This only looks at the FIRST time window. 
-									 * This may need revision once we handle multiple 
-									 * time windows. */
+									/*TODO This only looks at the FIRST time window. This may need revision once
+									/*we handle multiple time windows. */
 									.setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0))
 									.setServiceDuration(order.getServiceDuration())
 									.build();
@@ -122,12 +125,10 @@ public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPla
 					ro.getCarrier().getServices().removeAll(servicesToRemove);
 					ro.getCarrier().getServices().addAll(services);
 								
-				} else if (counter == 0){
+				} else {
 					
-					CarrierService newService2 = null;				
-					
-					Builder builder = CarrierService.Builder.newInstance(Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierService.class), receiverPlan.getReceiver().getLinkId());
-					newService2 = builder
+					Builder builder = Builder.newInstance(Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(n), CarrierService.class), receiverPlan.getReceiver().getLinkId());
+					CarrierService newService2 = builder
 							.setCapacityDemand((int) ((order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())))
 							.setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0))
 							.setServiceDuration(order.getServiceDuration())
@@ -138,8 +139,6 @@ public final class OrderChanger implements GenericPlanStrategyModule<ReceiverPla
 					}
 				}
 	
-				counter = 0;
-				
 			}
 		}
 	}

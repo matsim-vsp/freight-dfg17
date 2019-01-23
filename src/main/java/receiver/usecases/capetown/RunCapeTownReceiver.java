@@ -59,7 +59,9 @@ import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
+import receiver.usecases.ReceiverChessboardUtils;
 import receiver.usecases.ReceiverScoreStats;
+import receiver.usecases.base.RunReceiver;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -124,7 +126,7 @@ public class RunCapeTownReceiver {
 		/* Set up freight portion. To be repeated every iteration*/
 		setupReceiverAndCarrierReplanning(controler, outputfolder);
 		
-		CapeTownReceiverUtils.setupCarriers(controler);
+		ReceiverChessboardUtils.setupCarriers(controler );
 		CapeTownReceiverUtils.setupReceivers(controler);
 
 		/* TODO This stats must be set up automatically. */
@@ -145,19 +147,7 @@ public class RunCapeTownReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) != null){
-						if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
+				RunReceiver.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.
