@@ -39,7 +39,10 @@ final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan,Receiver>());
-			strategy.addStrategyModule(new OrderChanger());
+
+//			strategy.addStrategyModule(new OrderChanger());
+			// yyyyyy is this really needed?  It has the consequence that the plan is copied and re-added, although it is really the same as before.  kai, jan'19
+
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 

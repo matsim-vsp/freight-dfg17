@@ -76,7 +76,10 @@ class ReceiverImpl implements Receiver {
 	@Override
 	public ReceiverPlan createCopyOfSelectedPlanAndMakeSelected() {
 		ReceiverPlan plan = selectedPlan.createCopy();
+
 		this.setSelectedPlan(plan);
+		// (implicitly adds if not yet added)
+
 		return plan;
 	}
 	

@@ -91,7 +91,8 @@ public class RunReceiver {
 
 	public  void run(int run) {
 		LOG.info("Starting run " + run);
-		prepareScenario( run );
+		Scenario scenario = prepareScenario( run );
+//		scenario.getConfig().global().setRandomSeed( run );
 		prepareAndRunControler( run, null);
 	}
 

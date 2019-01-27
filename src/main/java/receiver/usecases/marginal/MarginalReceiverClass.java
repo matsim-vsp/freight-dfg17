@@ -42,6 +42,7 @@ import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
 import receiver.usecases.ReceiverChessboardUtils;
 import receiver.usecases.base.ReceiverChessboardScenario;
+import receiver.usecases.proportional.ProportionalScenarioBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class MarginalReceiverClass {
 		ReceiverUtils.setReplanInterval(MarginalExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		MarginalScenarioBuilder.createChessboardCarriers(sc);
-		MarginalScenarioBuilder.createAndAddChessboardReceivers(sc);
+		ProportionalScenarioBuilder.createAndAddChessboardReceivers(sc );
 		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
 		MarginalScenarioBuilder.createReceiverOrders(sc);
 		/* This is the portion that is unique HERE: remove ONE receiver. */

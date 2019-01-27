@@ -349,21 +349,7 @@ public class ProportionalScenarioBuilder {
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
-			for(Order order : receiverOrder.getReceiverProductOrders()){
-				org.matsim.contrib.freight.carrier.CarrierService.Builder serBuilder = CarrierService.
-						Builder.newInstance(Id.create(order.getId(),CarrierService.class), order.getReceiver().getLinkId());
-
-				if(receiverPlan.getTimeWindows().size() > 1) {
-					LOG.warn("Multiple time windows set. Only the first is used");
-				}
-				
-				CarrierService newService = serBuilder
-						.setCapacityDemand((int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity()))).
-						setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
-						setServiceDuration(order.getServiceDuration()).
-						build();
-				carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);	
-			}
+			ReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
 		}
 
 	}

@@ -79,6 +79,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 		this.score = score;
 	}
 	
+	@Override
 	public Double getScore() {
 		return this.score;
 	}
@@ -112,18 +113,42 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	
 	
 	public String toString() {
-		String scoreString = "undefined";
-		if(this.score != null) {
-			scoreString = this.score.toString();
-		}
-		
+		StringBuilder strb = new StringBuilder(  ) ;
+
 		String receiverString = "undefined";
 		if(this.receiver != null) {
 			receiverString = this.receiver.getId().toString();
 		}
-		
-		return "[receiverId=" + receiverString + "; score=" + scoreString +
-				"; number of orders with carriers=" + orderMap.size() + "]";
+		strb.append( "[receiverId=" ).append( receiverString );
+
+		String scoreString = "undefined";
+		if(this.score != null) {
+			scoreString = this.score.toString();
+		}
+		strb.append( "; score=" ).append( scoreString );
+
+		if ( this.selected ){
+			strb.append( "; SELECTED" );
+		} else {
+			strb.append( "; unselected" );
+		}
+
+		strb.append("; collabStatus=").append( this.attributes.getAttribute( ReceiverAttributes.collaborationStatus.name() ) ) ;
+
+		strb.append("; time windows=[") ;
+		for( TimeWindow timeWindow : timeWindows ){
+			strb.append( timeWindow.toString() ) ;
+		}
+		strb.append("]") ;
+
+		strb.append( "; number of orders with carriers=" ).append( orderMap.size() );
+
+		strb.append( "; orders=[" );
+		for( Map.Entry<Id<Carrier>, ReceiverOrder> entry : orderMap.entrySet() ){
+			strb.append( "[carrierId=" ).append( entry.getKey() ).append( "; order=" ).append( entry.getValue() ).append( "]" ) ;
+		}
+
+		return strb.toString() + "]" ;
 	}
 	
 	public final Collection<ReceiverOrder> getReceiverOrders(){
@@ -167,10 +192,11 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	public ReceiverPlan createCopy() {
 		Builder builder = Builder.newInstance(receiver);
 		for(ReceiverOrder ro : this.orderMap.values()) {
-			builder = builder.addReceiverOrder(ro);
+			builder = builder.addReceiverOrder(ro.createCopy());
 		}
 		for(TimeWindow tw : this.timeWindows) {
 			builder.addTimeWindow(tw);
+			// yyyyyy need to make copy!
 		}
 		return builder.build();
 	}
