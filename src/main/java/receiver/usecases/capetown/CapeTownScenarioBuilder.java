@@ -245,7 +245,7 @@ public class CapeTownScenarioBuilder {
 		config.controler().setWriteSnapshotsInterval(CapeTownExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
 		config.network().setInputFile("./network.xml.gz");
-		config.controler().setOutputDirectory(String.format("./output/capetown/case/run_%03d/", run));		
+		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
 		
 		
 //		config.facilities().setInputFile("./facilities.xml");
@@ -440,8 +440,8 @@ public class CapeTownScenarioBuilder {
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
-//						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
-						.addTimeWindow(selectRandomDayTimeStart(tw))
+						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
+//						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
 //				receiverPlan.setCollaborationStatus(true); 
 				receiver.setSelectedPlan(receiverPlan);

@@ -13,7 +13,7 @@ public class CapeTownExperimentParameters {
 
 	public static int NUM_ITERATIONS = 1500;
 	
-	public static int STAT_INTERVAL = 50;
+	public static int STAT_INTERVAL = 100;
 	
 	public static int REPLAN_INTERVAL = 50;
 	
