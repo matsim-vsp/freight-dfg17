@@ -30,33 +30,30 @@ import receiver.product.ReceiverOrder;
 public final class MarginalCostSharing implements ReceiverCarrierCostAllocation {
 	
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
-	private Attributes attributes = new Attributes();
-	private String descr = "Marginal sharing of costs between carrier(s) and receiver(s)";
+//	private Attributes attributes = new Attributes();
+//	private String descr = "Marginal sharing of costs between carrier(s) and receiver(s)";
 	private double fee;
 	private Scenario sc;
 
 	/**
 	 * Create a new marginal cost sharing instance where a fixed fee per tonne (as specified) is 
 	 * charged by the carrier for non-collaborating receivers.
-	 * @param fee
-	 * @param sc 
 	 */
-
 	public MarginalCostSharing(double fee, Scenario sc){
 		this.sc = sc;
 		this.fee = fee;
 	}
 
 
-	@Override
-	public Attributes getAttributes() {
-		return this.attributes;
-	}
+//	@Override
+//	public Attributes getAttributes() {
+//		return this.attributes;
+//	}
 
-	@Override
-	public String getDescription() {
-		return this.descr;
-	}
+//	@Override
+//	public String getDescription() {
+//		return this.descr;
+//	}
 
 	/* TODO Currently assuming that the carrier has no choice but to be part of the coalition. This should 
 	 * be changed when more than one carrier is involved.*/

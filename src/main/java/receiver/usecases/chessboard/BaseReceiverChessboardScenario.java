@@ -21,13 +21,8 @@
 /**
  * 
  */
-package receiver.usecases.base;
+package receiver.usecases.chessboard;
 
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.core.util.Solutions;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -37,7 +32,6 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.contrib.freight.carrier.CarrierImpl;
-import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.carrier.CarrierService;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
@@ -46,15 +40,11 @@ import org.matsim.contrib.freight.carrier.CarrierVehicleTypeWriter;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.carrier.TimeWindow;
-import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
-import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
-import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
@@ -70,7 +60,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -78,8 +67,8 @@ import java.util.Random;
  * 
  * @author jwjoubert, wlbean
  */
-public class ReceiverChessboardScenario {
-	private final static Logger LOG = Logger.getLogger(ReceiverChessboardScenario.class);
+public class BaseReceiverChessboardScenario{
+	private final static Logger LOG = Logger.getLogger( BaseReceiverChessboardScenario.class );
 	
 
 	/**
@@ -87,8 +76,13 @@ public class ReceiverChessboardScenario {
 	 */
 	public static Scenario createChessboardScenario( long seed, int run, boolean write) {
 		MatsimRandom.reset(seed);
-		int numberOfReceivers = 5;
-		Scenario sc = setupChessboardScenario(seed, run);
+		int numberOfReceivers = 1;
+
+		Config config = setupChessboardConfig( seed, run );
+
+		Scenario sc = ScenarioUtils.loadScenario(config);
+
+
 		createChessboardCarriersAndAddToScenario(sc);
 		
 		ReceiverUtils.setReplanInterval( 50, sc );
@@ -100,7 +94,8 @@ public class ReceiverChessboardScenario {
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan( sc );
+//		generateCarrierPlan( sc );
+		// needs to be done in iterations startup listener, where it is also done during the iterations.  kai, jan'19
 		
 		
 		if(write) {
@@ -144,7 +139,7 @@ public class ReceiverChessboardScenario {
 	/**
 	 * FIXME Need to complete this. 
 	 */
-	private static Scenario setupChessboardScenario( long seed, int run ) {
+	private static Config setupChessboardConfig( long seed, int run ) {
 		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
 
 		Config config = ConfigUtils.createConfig();
@@ -162,8 +157,7 @@ public class ReceiverChessboardScenario {
 		config.network().setInputFile( "grid9x9.xml" );
 		config.controler().setOutputDirectory(String.format("./output/base/tw/run_%03d/", run));
 
-		Scenario sc = ScenarioUtils.loadScenario(config);
-		return sc;
+		return config ;
 	}
 	
 	public static void writeFreightScenario( Scenario sc ) {
@@ -182,48 +176,49 @@ public class ReceiverChessboardScenario {
 		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
-	/**
-	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
-	 */
-	public static void generateCarrierPlan( Scenario sc ) {
-		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class)); 
-
-		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, sc.getNetwork());
-
-		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(sc.getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
-		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-
-
-		//read and create a pre-configured algorithms to solve the vrp
-//		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
-
-		//solve the problem
-		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-		//get best (here, there is only one)
-//		VehicleRoutingProblemSolution solution = null;
+	// absorbing this functionality fully into the iterations start listener elsewhere.  kai, jan'19
+//	/**
+//	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
+//	 */
+//	public static void generateCarrierPlan( Scenario sc ) {
+//		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class));
 //
-//		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
+//		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, sc.getNetwork());
 //
-//		while(iterator.hasNext()){
-//			solution = iterator.next();
-//		}
-
-		//create a carrierPlan from the solution 
-		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, Solutions.bestOf(solutions));
-
-		//route plan 
-		NetworkRouter.routePlan(plan, netBasedCosts);
-
-
-		//assign this plan now to the carrier and make it the selected carrier plan
-		carrier.setSelectedPlan(plan);
-
-		//write out the carrierPlan to an xml-file
-		//		new CarrierPlanXmlWriterV2(carriers).write(directory + "/input/carrierPlanned.xml");
-	}
+//		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(sc.getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
+//		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
+//
+//
+//		//read and create a pre-configured algorithms to solve the vrp
+////		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+//		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
+//		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
+//
+//		//solve the problem
+//		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
+//
+//		//get best (here, there is only one)
+////		VehicleRoutingProblemSolution solution = null;
+////
+////		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
+////
+////		while(iterator.hasNext()){
+////			solution = iterator.next();
+////		}
+//
+//		//create a carrierPlan from the solution
+//		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, Solutions.bestOf(solutions));
+//
+//		//route plan
+//		NetworkRouter.routePlan(plan, netBasedCosts);
+//
+//
+//		//assign this plan now to the carrier and make it the selected carrier plan
+//		carrier.setSelectedPlan(plan);
+//
+//		//write out the carrierPlan to an xml-file
+//		//		new CarrierPlanXmlWriterV2(carriers).write(directory + "/input/carrierPlanned.xml");
+//	}
 
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
@@ -248,13 +243,13 @@ public class ReceiverChessboardScenario {
 //			String serdur = "01:00:00"; // -1257
 //			String serdur = "01:30:00"; // -1304
 //			String serdur = "02:00:00"; // -1316
-//			String serdur = "02:30:00"; // -2014
+			String serdur = "02:30:00"; // -2014
 //			String serdur = "03:00:00"; // -1981 // yyyy why becoming better again?
 //			String serdur = "03:30:00"; // -1981
-			String serdur = "04:00:00"; // -1980 // yyyy why becoming better again?
+//			String serdur = "04:00:00"; // -1980 // yyyy why becoming better again?
 			int numDel = 5;
 			
-			/* Set the different time window durations for experiments. */
+			/* Set the different time window durations[[??]] for experiments. */
 			if (r <= 10){
 				tw = 2;
 			} else if (r <= 20){
@@ -268,6 +263,7 @@ public class ReceiverChessboardScenario {
 			} else if (r<=60){
 				tw = 12;
 			}
+			tw = 12 ; // yyyyyy
 			
 //			/* Set the different service durations for experiments. */
 //			if (r <= 15){
@@ -349,7 +345,7 @@ public class ReceiverChessboardScenario {
 	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
 	 * their orders as well as decided to join or leave the coalition.
 	 */
-	public static void createAndAddChessboardReceivers( Scenario sc , int numberOfReceivers) {
+	static void createAndAddChessboardReceivers( Scenario sc, int numberOfReceivers ) {
 		Network network = sc.getNetwork();
 
 		Receivers receivers = new Receivers();
@@ -358,8 +354,7 @@ public class ReceiverChessboardScenario {
 		
 		for (int r = 1; r < numberOfReceivers+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
-			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
-					.setLinkId(receiverLocation);
+			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class)).setLinkId(receiverLocation);
 			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
 			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
 			receivers.addReceiver(receiver);
@@ -379,7 +374,7 @@ public class ReceiverChessboardScenario {
 		Carrier carrier = CarrierImpl.newInstance(carrierId);
 		Id<Link> carrierLocation = selectRandomLink(sc.getNetwork());
 
-		org.matsim.contrib.freight.carrier.CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
+		CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
 		CarrierCapabilities carrierCap = capBuilder.setFleetSize(FleetSize.INFINITE).build();
 		carrier.setCarrierCapabilities(carrierCap);						
 		LOG.info("Created a carrier with capabilities.");	
@@ -444,7 +439,7 @@ public class ReceiverChessboardScenario {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Id<Link> selectRandomLink( Network network ){
+	static Id<Link> selectRandomLink( Network network ){
 		Object[] linkIds = network.getLinks().keySet().toArray();
 		int sample = MatsimRandom.getRandom().nextInt(linkIds.length );
 		Object o = linkIds[sample];
@@ -498,7 +493,7 @@ public class ReceiverChessboardScenario {
 		return order;
 	}
 
-	public static TimeWindow selectRandomTimeStart( int tw ) {
+	static TimeWindow selectRandomTimeStart( int tw ) {
 		int min = 06;
 		int max = 18;
 //		Random randomTime = new Random();

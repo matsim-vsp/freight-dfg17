@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.chessboard;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
@@ -36,13 +36,9 @@ import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.utils.io.IOUtils;
 import receiver.Receiver;
-import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
-import receiver.usecases.ReceiverChessboardUtils;
-import receiver.usecases.base.ReceiverChessboardScenario;
-import receiver.usecases.proportional.ProportionalScenarioBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +85,7 @@ public class MarginalReceiverClass {
 		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
 		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
 		
-		ReceiverChessboardScenario.writeFreightScenario(sc );
+		BaseReceiverChessboardScenario.writeFreightScenario(sc );
 		
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
@@ -103,7 +99,7 @@ public class MarginalReceiverClass {
 			}
 		}
 
-		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 		

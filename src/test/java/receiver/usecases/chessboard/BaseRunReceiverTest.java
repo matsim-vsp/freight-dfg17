@@ -1,4 +1,4 @@
-package receiver.usecases.base;
+package receiver.usecases.chessboard;
 
 import com.google.inject.Inject;
 import org.junit.Test;
@@ -6,7 +6,6 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
-import org.matsim.core.controler.listener.ShutdownListener;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
@@ -15,12 +14,12 @@ import receiver.Receivers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunReceiverTest{
+public class BaseRunReceiverTest{
 
 	@Test
 	public void test(){
 		int runId = 2 ;
-		RunReceiver runReceiver = new RunReceiver();
+		BaseRunReceiver runReceiver = new BaseRunReceiver();
 		Scenario sc = runReceiver.prepareScenario(runId ) ;
 		sc.getConfig().controler().setLastIteration( runId );
 		ReceiverUtils.setReplanInterval( 1, sc );

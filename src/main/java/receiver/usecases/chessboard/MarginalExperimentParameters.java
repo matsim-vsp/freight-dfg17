@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.chessboard;
   
 /**
  * Class to just help with setting experimental parameters, which are called 
@@ -27,7 +27,7 @@ package receiver.usecases.marginal;
  * 
  * @author jwjoubert
  */
-public class MarginalExperimentParameters {
+class MarginalExperimentParameters {
 	
 	public static int NUM_ITERATIONS = 1500;
 	

@@ -1,4 +1,4 @@
-package receiver.usecases;
+package receiver.usecases.chessboard;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ import org.matsim.core.scoring.SumScoringFunction;
  * This is a sample carrier scoring function factory implementation (CarrierScoringFunctionImpl.class) developed by sschroeder, 
  * I just changed the penalty cost and time parameter, etc.
  */
-public class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFactory {
+class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFactory {
 	
 	private Network network;
 	
@@ -35,7 +35,7 @@ public class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFuncti
 
 	        private double score;
 
-	        private double timeParameter = 0.000;
+	        private double timeParameter = 1.000;
 
 	        private double missedTimeWindowPenalty = 0.01667;
 

@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.chessboard;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,7 +33,6 @@ import org.matsim.contrib.freight.carrier.CarrierPlanXmlReaderV2;
 import org.matsim.contrib.freight.carrier.Carriers;
 
 import receiver.Receiver;
-import receiver.usecases.ReceiverChessboardUtils;
 
 /**
  * Executes a MATSim run for a given (freight) scenario, where the scenario
@@ -42,15 +41,15 @@ import receiver.usecases.ReceiverChessboardUtils;
  * 
  * @author jwjoubert
  */
-public class CalculateMarginalCallable implements Callable<Double> {
-	final private Logger log = Logger.getLogger(CalculateMarginalCallable.class);
+class MarginalCalculateCallable implements Callable<Double> {
+	final private Logger log = Logger.getLogger( MarginalCalculateCallable.class );
 	final private Id<Receiver> receiverId;
 	final private String sourceFolder;
 	final private String outputFolder;
 	final private String release;
 	final private long seed;
 	
-	public CalculateMarginalCallable(long seed, String sourceFolder, String outputFolder, String release, Id<Receiver> receiverId) {
+	public MarginalCalculateCallable( long seed, String sourceFolder, String outputFolder, String release, Id<Receiver> receiverId ) {
 		this.receiverId = receiverId;
 		this.sourceFolder = sourceFolder;
 		this.outputFolder = outputFolder;
@@ -101,7 +100,7 @@ public class CalculateMarginalCallable implements Callable<Double> {
 				"-Xmx512m",
 				"-cp",
 				"freight-dfg17-0.0.1-SNAPSHOT/freight-dfg17-0.0.1-SNAPSHOT.jar",
-				"receiver.usecases.marginal.MarginalReceiverClass",
+				"receiver.usecases.chessboard.MarginalReceiverClass",
 				String.valueOf(seed),
 				foldername,
 				receiverId.toString()

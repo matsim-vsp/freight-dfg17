@@ -44,13 +44,11 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.usecases.base.ReceiverChessboardScenario;
+import receiver.usecases.chessboard.BaseReceiverChessboardScenario;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
-
-import static receiver.usecases.base.ReceiverChessboardScenario.generateCarrierPlan;
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -94,11 +92,12 @@ public class CapeTownScenarioBuilder {
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan( sc );
+//		generateCarrierPlan( sc );
+		// needs to be done in the iterations start listener where it is also defined for the iterations.  kai, jan'19
 
 
 		if(write) {
-			ReceiverChessboardScenario.writeFreightScenario(sc );
+			BaseReceiverChessboardScenario.writeFreightScenario(sc );
 		}
 
 		/* Link the carriers to the receivers. */
@@ -113,7 +112,7 @@ public class CapeTownScenarioBuilder {
 			}
 		}
 
-		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 
@@ -193,7 +192,7 @@ public class CapeTownScenarioBuilder {
 				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
 
 				/* Convert receiver orders to initial carrier services. */
-				ReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+				BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
 
 			} else {
 
@@ -206,7 +205,7 @@ public class CapeTownScenarioBuilder {
 				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), false);
 
 				/* Convert receiver orders to initial carrier services. */
-				ReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+				BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
 			}
 
 		}

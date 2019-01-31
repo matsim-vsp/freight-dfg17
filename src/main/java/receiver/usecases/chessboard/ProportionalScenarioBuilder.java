@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.usecases.proportional;
+package receiver.usecases.chessboard;
 
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
@@ -51,8 +51,6 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.usecases.base.ReceiverChessboardScenario;
-import receiver.usecases.marginal.MarginalScenarioBuilder;
 
 import java.io.File;
 import java.net.URL;
@@ -65,7 +63,7 @@ import java.util.Iterator;
  * 
  * @author jwjoubert, wlbean
  */
-public class ProportionalScenarioBuilder {
+class ProportionalScenarioBuilder {
 	private final static Logger LOG = Logger.getLogger(ProportionalScenarioBuilder.class);
 	private final static int NUMBER_OF_RECEIVERS = 60;
 	
@@ -110,7 +108,7 @@ public class ProportionalScenarioBuilder {
 			}
 		}
 
-		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 		return sc;
@@ -343,13 +341,13 @@ public class ProportionalScenarioBuilder {
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
 					.addReceiverOrder(receiverOrder)
-					.addTimeWindow( ReceiverChessboardScenario.selectRandomTimeStart(tw ) )
+					.addTimeWindow( BaseReceiverChessboardScenario.selectRandomTimeStart(tw ) )
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
-			ReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+			BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
 		}
 
 	}

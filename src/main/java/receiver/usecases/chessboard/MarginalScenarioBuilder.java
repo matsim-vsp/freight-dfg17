@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.chessboard;
 
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
@@ -39,7 +39,6 @@ import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
@@ -52,21 +51,20 @@ import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.usecases.base.ReceiverChessboardScenario;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static receiver.usecases.base.ReceiverChessboardScenario.selectRandomLink;
+import static receiver.usecases.chessboard.BaseReceiverChessboardScenario.selectRandomLink;
 
 /**
  * Various utilities for building receiver scenarios (for now).
  * 
  * @author jwjoubert, wlbean
  */
-public class MarginalScenarioBuilder {
+class MarginalScenarioBuilder {
 	private final static Logger LOG = Logger.getLogger(MarginalScenarioBuilder.class);
 
 
@@ -82,7 +80,7 @@ public class MarginalScenarioBuilder {
 		createChessboardCarriers(sc);
 		
 		/* Create the grand coalition receiver members and allocate orders. */
-		ReceiverChessboardScenario.createAndAddChessboardReceivers(sc, MarginalExperimentParameters.NUMBER_OF_RECEIVERS );
+		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, MarginalExperimentParameters.NUMBER_OF_RECEIVERS );
 		
 		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
 		createAndAddControlGroupReceivers(sc);
@@ -95,7 +93,7 @@ public class MarginalScenarioBuilder {
 		
 		
 		if(write) {
-			ReceiverChessboardScenario.writeFreightScenario(sc );
+			BaseReceiverChessboardScenario.writeFreightScenario(sc );
 		}
 		
 		/* Link the carriers to the receivers. */
@@ -110,7 +108,7 @@ public class MarginalScenarioBuilder {
 			}
 		}
 
-		ReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 		return sc;
@@ -308,13 +306,13 @@ public class MarginalScenarioBuilder {
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
 					.addReceiverOrder(receiverOrder)
-					.addTimeWindow( ReceiverChessboardScenario.selectRandomTimeStart(tw ) )
+					.addTimeWindow( BaseReceiverChessboardScenario.selectRandomTimeStart(tw ) )
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
-			ReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+			BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
 		}
 
 	}

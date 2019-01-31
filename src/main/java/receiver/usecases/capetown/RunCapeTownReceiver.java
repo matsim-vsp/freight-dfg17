@@ -59,9 +59,9 @@ import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
-import receiver.usecases.ReceiverChessboardUtils;
-import receiver.usecases.ReceiverScoreStats;
-import receiver.usecases.base.RunReceiver;
+import receiver.usecases.chessboard.ReceiverChessboardUtils;
+import receiver.usecases.chessboard.ReceiverScoreStats;
+import receiver.usecases.chessboard.BaseRunReceiver;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -147,7 +147,7 @@ public class RunCapeTownReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				RunReceiver.setCoalitionFromReceiverAttributes( controler );
+				BaseRunReceiver.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.

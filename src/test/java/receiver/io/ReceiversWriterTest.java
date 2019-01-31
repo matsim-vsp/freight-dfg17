@@ -28,7 +28,7 @@ import org.matsim.testcases.MatsimTestUtils;
 
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
-import receiver.usecases.base.ReceiverChessboardScenario;
+import receiver.usecases.chessboard.BaseReceiverChessboardScenario;
 
 public class ReceiversWriterTest {
 
@@ -36,7 +36,7 @@ public class ReceiversWriterTest {
 	
 	@Test
 	public void testV1() {
-		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		Scenario sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, false );
 		
 		/* Now the receiver is 'complete', and we can write it to file. */
 		try {

@@ -84,18 +84,21 @@ ReplanningListener, BeforeMobsimListener {
 		for(Receiver receiver : receivers.getReceivers().values()){
 			
 			if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
-					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
-				}
+				// (= one iteration after replanning)
+
+				receiver.setInitialCost(receiver.getSelectedPlan().getScore());
+			}
 
 			/*
 			 * Checks to see if a receiver is part of the grand coalition, if not, the receiver are not allowed to join 
 			 * a coalition at any time. If the receiver is willing to collaborate, the receiver will be allowed to leave
 			 * and join coalitions.
 			 */
-			boolean status = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name());
-			if(status == true){	
+			if( (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name() ) ){
 				receiverCollection.add(receiver);
-			} else receiverControlCollection.add(receiver);
+			} else {
+				receiverControlCollection.add(receiver);
+			}
 		}
 		
 		/* Replanning for grand coalition receivers.*/
@@ -106,6 +109,7 @@ ReplanningListener, BeforeMobsimListener {
 //		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
 		
 		if (event.getIteration() % ReceiverUtils.getReplanInterval( sc ) != 0) {
+			// (= not in replanning iteration)
 			return;
 		} 
 		
@@ -127,10 +131,12 @@ ReplanningListener, BeforeMobsimListener {
 		if (event.getIteration() == 0) {
 			this.tracker.scoreSelectedPlans();
 		}
-		
+
 		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
+			// this is called in the iteration after the replanning iteration.
 			this.tracker.scoreSelectedPlans();
-		} else {		
+		} else {
+			// this is called in all other iterations.  why?
 			for (Receiver receiver : receivers.getReceivers().values()){
 				double score = (double) receiver.getAttributes().getAttribute("score");
 				receiver.getSelectedPlan().setScore(score);
@@ -141,7 +147,6 @@ ReplanningListener, BeforeMobsimListener {
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
 		tracker = new ReceiverTracker(scorFuncFac, sc);
-		eMan.addHandler(tracker);		
 	}
 
 }

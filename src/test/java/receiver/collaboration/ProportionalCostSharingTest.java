@@ -30,7 +30,7 @@ import org.matsim.testcases.MatsimTestUtils;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
-import receiver.usecases.base.ReceiverChessboardScenario;
+import receiver.usecases.chessboard.BaseReceiverChessboardScenario;
 
 public class ProportionalCostSharingTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
@@ -81,7 +81,7 @@ public class ProportionalCostSharingTest {
 	}
 	
 	private void setup() {
-		this.sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		this.sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, false );
 	}
 
 }

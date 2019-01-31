@@ -16,7 +16,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package receiver.usecases;
+package receiver.usecases.chessboard;
 
 import org.matsim.core.scoring.ScoringFunction;
 import org.matsim.core.scoring.SumScoringFunction;

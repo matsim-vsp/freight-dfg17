@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
+package receiver.usecases.chessboard;
 
 import java.io.File;
 import java.util.Map;
@@ -45,8 +45,8 @@ import receiver.ReceiversWriter;
  *  
  * @author jwjoubert
  */
-public class RunMarginal {
-	final private static Logger LOG = Logger.getLogger(RunMarginal.class);
+public class MarginalRun{
+	final private static Logger LOG = Logger.getLogger( MarginalRun.class );
 	
 
 	/**
@@ -87,7 +87,7 @@ public class RunMarginal {
 		LOG.info("Building base freight scenario");
 		Scenario sc = MarginalScenarioBuilder.createChessboardScenario(inputPath + "output", seed, 1, false);
 		double grandCoalitionCost = Double.NEGATIVE_INFINITY;
-		CalculateMarginalCallable cmcGrand = new CalculateMarginalCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class));
+		MarginalCalculateCallable cmcGrand = new MarginalCalculateCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class ));
 		Future<Double> grandJob = executor.submit(cmcGrand);
 		executor.shutdown();
 		while(!executor.isTerminated()) {
@@ -108,7 +108,7 @@ public class RunMarginal {
 		for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()) {
 			/* Only execute a marginal calculation run for those in the grand coalition. */
 			if((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )) {
-				CalculateMarginalCallable cmc = new CalculateMarginalCallable(seed, inputPath, outputPath, release, receiver.getId());
+				MarginalCalculateCallable cmc = new MarginalCalculateCallable(seed, inputPath, outputPath, release, receiver.getId());
 				Future<Double> job = executor.submit(cmc);
 				jobs.put(receiver.getId(), job);
 			} else {

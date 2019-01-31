@@ -21,41 +21,14 @@
  */
 package receiver.usecases.capetown;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-
 import org.apache.log4j.Logger;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierVehicleTypeLoader;
-import org.matsim.contrib.freight.carrier.CarrierVehicleTypeReader;
-import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
-import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.contrib.freight.controler.CarrierModule;
-import org.matsim.contrib.freight.replanning.CarrierPlanStrategyManagerFactory;
-import org.matsim.contrib.freight.replanning.modules.ReRouteVehicles;
-import org.matsim.contrib.freight.replanning.modules.TimeAllocationMutator;
-import org.matsim.contrib.freight.scoring.CarrierScoringFunctionFactory;
-import org.matsim.contrib.freight.usecases.chessboard.TravelDisutilities;
 import org.matsim.core.controler.Controler;
-import org.matsim.core.controler.MatsimServices;
-import org.matsim.core.replanning.GenericPlanStrategyImpl;
-import org.matsim.core.replanning.GenericStrategyManager;
-import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
-import org.matsim.core.replanning.selectors.KeepSelected;
-import org.matsim.core.router.util.LeastCostPathCalculator;
-import org.matsim.core.router.util.TravelDisutility;
 
 import receiver.*;
 import receiver.collaboration.Coalition;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.usecases.MyCarrierScoringFunctionFactoryImpl;
-import receiver.usecases.ProportionalReceiverScoringFunctionFactoryImpl;
-import receiver.usecases.ReceiverChessboardUtils;
+import receiver.usecases.chessboard.ProportionalReceiverScoringFunctionFactoryImpl;
+import receiver.usecases.chessboard.ReceiverChessboardUtils;
 
 /**
  *

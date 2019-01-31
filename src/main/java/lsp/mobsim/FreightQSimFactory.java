@@ -30,7 +30,7 @@ package lsp.mobsim;
 
 import com.google.inject.Provider;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.CarrierConfig;
+import org.matsim.contrib.freight.CarrierConfigGroup;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.mobsim.qsim.QSim;
@@ -46,10 +46,10 @@ public class FreightQSimFactory implements Provider<Mobsim> {
 	private final Scenario scenario;
 	private EventsManager eventsManager;
 	private CarrierResourceTracker carrierResourceTracker;
-	private CarrierConfig carrierConfig;
+	private CarrierConfigGroup carrierConfig;
 
 	@Inject
-	public FreightQSimFactory(Scenario scenario, EventsManager eventsManager, CarrierResourceTracker carrierResourceTracker, CarrierConfig carrierConfig) {
+	public FreightQSimFactory(Scenario scenario, EventsManager eventsManager, CarrierResourceTracker carrierResourceTracker, CarrierConfigGroup carrierConfig) {
 		this.scenario = scenario;
 		this.eventsManager = eventsManager;
 		this.carrierResourceTracker = carrierResourceTracker;

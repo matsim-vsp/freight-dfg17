@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.usecases;
+package receiver.usecases.chessboard;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -225,21 +225,9 @@ public class ReceiverChessboardUtils {
 			destFile.createNewFile();
 		}
 
-		FileChannel source = null;
-		FileChannel destination = null;
-
-		try {
-			source = new FileInputStream( sourceFile ).getChannel();
-			destination = new FileOutputStream( destFile ).getChannel();
+		try( FileChannel source = new FileInputStream( sourceFile ).getChannel() ;
+		     FileChannel destination = new FileOutputStream( destFile ).getChannel() ){
 			destination.transferFrom( source, 0, source.size() );
-		}
-		finally {
-			if( source != null) {
-				source.close();
-			}
-			if( destination != null) {
-				destination.close();
-			}
 		}
 	}
 
