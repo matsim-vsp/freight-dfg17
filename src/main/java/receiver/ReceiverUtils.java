@@ -16,6 +16,7 @@ public class ReceiverUtils {
 	
 	public static final String ATTR_COLLABORATION_STATUS = "collaborationStatus" ;
 	public static final String ATTR_GRANDCOALITION_MEMBER = "grandCoalitionMember" ;
+	public static final String ATTR_RECEIVER_SCORE = "score" ;
 
 	private static final String CARRIERS_SCENARIO_ELEMENT = "Carriers";
 	private static final String RECEIVERS_SCENARIO_ELEMENT = "Receivers" ;

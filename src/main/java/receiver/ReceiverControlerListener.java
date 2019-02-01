@@ -138,7 +138,8 @@ ReplanningListener, BeforeMobsimListener {
 		} else {
 			// this is called in all other iterations.  why?
 			for (Receiver receiver : receivers.getReceivers().values()){
-				double score = (double) receiver.getAttributes().getAttribute("score");
+				double score = (double) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_RECEIVER_SCORE );
+//				double score = (double) receiver.getSelectedPlan().getScore();
 				receiver.getSelectedPlan().setScore( new Double(score) );
 			}
 		}
