@@ -202,8 +202,8 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			builder = builder.addReceiverOrder(ro.createCopy());
 		}
 		for(TimeWindow tw : this.timeWindows) {
-			builder.addTimeWindow(tw);
-			// yyyyyy need to make copy!
+			builder.addTimeWindow( TimeWindow.newInstance(tw.getStart(), tw.getEnd()) );
+			// use copy!
 		}
 		return builder.build();
 	}

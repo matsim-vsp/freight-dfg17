@@ -131,6 +131,7 @@ ReplanningListener, BeforeMobsimListener {
 			this.tracker.scoreSelectedPlans();
 		}
 
+//		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
 		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0 && event.getIteration() > 0) {
 			// this is called in the iteration after the replanning iteration.
 			this.tracker.scoreSelectedPlans();
@@ -146,7 +147,7 @@ ReplanningListener, BeforeMobsimListener {
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
 		tracker = new ReceiverTracker(scorFuncFac, sc);
-		eMan.addHandler(tracker);		
+//		eMan.addHandler(tracker);		
 	}
 
 }

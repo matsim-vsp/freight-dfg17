@@ -34,7 +34,7 @@ import receiver.Receiver;
  */
 
 public class ReceiverOrder implements BasicPlan{
-	
+
 	private final Logger log = Logger.getLogger(ReceiverOrder.class);
 	private final Id<Receiver> receiverId;
 	private final Collection<Order> orders;
@@ -54,7 +54,7 @@ public class ReceiverOrder implements BasicPlan{
 		strb.append("]") ;
 		return strb.toString() ;
 	}
-	
+
 	public ReceiverOrder(final Id<Receiver> receiverId, final Collection<Order> orders, final Id<Carrier> carrierId){
 		this.orders = orders;
 		this.receiverId = receiverId;
@@ -71,7 +71,7 @@ public class ReceiverOrder implements BasicPlan{
 		receiverOrderCopy.carrier = this.carrier ;
 		return receiverOrderCopy ;
 	}
-	
+
 	/**
 	 * Get the back pointer to this {@link ReceiverOrder}'s {@link Receiver}.
 	 * @return
@@ -79,7 +79,7 @@ public class ReceiverOrder implements BasicPlan{
 	public Id<Receiver> getReceiverId(){
 		return receiverId;
 	}
-	
+
 	@Override
 	public Double getScore() {
 		if(cost == null) {
@@ -90,14 +90,14 @@ public class ReceiverOrder implements BasicPlan{
 
 	@Override
 	public void setScore(Double cost) {
-	this.cost  = cost;
+		this.cost  = cost;
 	}
-	
+
 	public Collection<Order> getReceiverProductOrders(){
 		return this.orders;
 	}
-	
-	
+
+
 	/**
 	 * Get the actual {@link Carrier} of this {@link ReceiverOrder}. This will
 	 * only be set once FIXME ... has been called to link the receivers and
@@ -111,7 +111,7 @@ public class ReceiverOrder implements BasicPlan{
 		}
 		return this.carrier;
 	}
-	
+
 	/**
 	 * Get the pointer {@link Id} of this {@link ReceiverOrder}'s {@link Carrier}.
 	 * 
@@ -120,17 +120,17 @@ public class ReceiverOrder implements BasicPlan{
 	public Id<Carrier> getCarrierId(){
 		return this.carrierId;
 	}
-	
-//	public ReceiverOrder createCopy() {
-//		ReceiverOrder newOrder = new ReceiverOrder(receiverId, orders, carrierId);
-//		newOrder.setScore(cost == null ? null : Double.valueOf(cost));
-//		return newOrder;
-//	}
-	
+
+	//	public ReceiverOrder createCopy() {
+	//		ReceiverOrder newOrder = new ReceiverOrder(receiverId, orders, carrierId);
+	//		newOrder.setScore(cost == null ? null : Double.valueOf(cost));
+	//		return newOrder;
+	//	}
+
 	public void setCarrier(final Carrier carrier) {
 		this.carrier = carrier;
 	}
 
-	
+
 }
 

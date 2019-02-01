@@ -26,12 +26,13 @@ public class BaseRunReceiverIT{
 
 	@Test
 	public void test(){
-		int runId = 100 ;
+		int runId = 20	 ;
 		BaseRunReceiver runReceiver = new BaseRunReceiver();
 		// ---
 		Scenario sc = runReceiver.prepareScenario(runId ) ;
 		sc.getConfig().controler().setLastIteration( runId );
 		ReceiverUtils.setReplanInterval( 1, sc );
+//		ReceiverUtils.setReplanInterval( 2, sc );
 
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		int cnt = 0 ;
@@ -67,20 +68,20 @@ public class BaseRunReceiverIT{
 						for( Receiver receiver : receivers.getReceivers().values() ){
 //							ReceiverPlan plan = receiver.getSelectedPlan();;
 							for( ReceiverPlan plan : receiver.getPlans() ){
-//								log.warn( plan.toString() );
-								StringBuilder strb = new StringBuilder(  ) ;
-								strb.append( "receiverId=" ).append( plan.getReceiver().getId() ) ;
-								if ( plan.isSelected() ) {
-									strb.append("; SELECTED") ;
-								} else {
-									strb.append("; not selected") ;
-								}
-								strb.append("; score=").append( plan.getScore() ) ;
-								strb.append("; orders=") ;
-								for( ReceiverOrder receiverOrder : plan.getReceiverOrders() ){
-									strb.append( receiverOrder.toString() ) ;
-								}
-								log.warn( strb.toString() ) ;
+								log.warn( plan.toString() );
+//								StringBuilder strb = new StringBuilder(  ) ;
+//								strb.append( "receiverId=" ).append( plan.getReceiver().getId() ) ;
+//								if ( plan.isSelected() ) {
+//									strb.append("; SELECTED") ;
+//								} else {
+//									strb.append("; not selected") ;
+//								}
+//								strb.append("; score=").append( plan.getScore() ) ;
+//								strb.append("; orders=") ;
+//								for( ReceiverOrder receiverOrder : plan.getReceiverOrders() ){
+//									strb.append( receiverOrder.toString() ) ;
+//								}
+//								log.warn( strb.toString() ) ;
 							}
 						}
 						log.warn("") ;

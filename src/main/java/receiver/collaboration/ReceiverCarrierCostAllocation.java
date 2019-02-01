@@ -22,7 +22,6 @@
 package receiver.collaboration;
 
 import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.utils.objectattributes.attributable.Attributable;
 
 import receiver.Receivers;
 

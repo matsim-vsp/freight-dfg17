@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.java.plugin.registry.MatchingRule;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
@@ -122,7 +121,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 			/* Calculate this receiver's total volume with the carrier. */
 			for(Receiver thisReceiver : receiverList ) {
 
-				if ( (boolean) thisReceiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) == true ){
+				if ( (boolean) thisReceiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carrierId);
 					totalCoalitionVolume += getReceiverOrderTotal(ro);
 				} else {

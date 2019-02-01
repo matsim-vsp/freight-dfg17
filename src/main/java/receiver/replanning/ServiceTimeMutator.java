@@ -19,7 +19,6 @@
 package receiver.replanning;
 
 import org.apache.log4j.Logger;
-import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import receiver.ReceiverPlan;
