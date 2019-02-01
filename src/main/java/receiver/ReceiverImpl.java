@@ -22,6 +22,7 @@
 package receiver;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -75,7 +76,10 @@ class ReceiverImpl implements Receiver {
 	@Override
 	public ReceiverPlan createCopyOfSelectedPlanAndMakeSelected() {
 		ReceiverPlan plan = selectedPlan.createCopy();
+
 		this.setSelectedPlan(plan);
+		// (implicitly adds if not yet added)
+
 		return plan;
 	}
 	
@@ -106,14 +110,21 @@ class ReceiverImpl implements Receiver {
 	public List<ReceiverPlan> getPlans() {
 		return plans;
 	}
+	@Override
+	public Receiver addProduct( ReceiverProduct product ) {
+		if ( products.contains( product ) ) {
+			throw new IllegalArgumentException( "receiver already has product " + product + "; not adding it a second time." ) ;
+		}
+		products.add( product ) ;
+		return this ;
+	}
 
 	/*
 	 * Returns a list of the receiver's products.
 	 */
-	
 	@Override
 	public List<ReceiverProduct> getProducts() {
-		return products;
+		return Collections.unmodifiableList( products ) ;
 	}
 
 	@Override
@@ -124,9 +135,8 @@ class ReceiverImpl implements Receiver {
 	
 	/**
 	 * Sets the selected receiver plan.
-	 * @param selectedOrder
+	 * @param selectedPlan
 	 */
-
 	@Override
 	public void setSelectedPlan(ReceiverPlan selectedPlan) {
 		/* Unselected all other plans. */

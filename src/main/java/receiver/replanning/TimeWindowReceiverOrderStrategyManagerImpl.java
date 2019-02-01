@@ -24,10 +24,11 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  * @author wlbean
  *
  */
-public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+
 	@Inject Scenario sc;
 	
-	public TimeWindowReceiverOrderStrategyManagerImpl(){		
+	TimeWindowReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override

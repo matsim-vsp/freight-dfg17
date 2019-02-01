@@ -30,6 +30,7 @@ import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.replanning.TimeWindowMutator;
 
@@ -54,8 +55,8 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 
 	@Override
 	public void handlePlan(ReceiverPlan plan) {
-		boolean status = (boolean) plan.getReceiver().getAttributes().getAttribute("collaborationStatus");
-		plan.getAttributes().putAttribute("collaborationStatus", status);
+		boolean status = (boolean) plan.getReceiver().getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() );
+		plan.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), status);
 		
 		Receiver receiver = plan.getReceiver();
 		//TimeWindow oldWindow = pickRandomTimeWindow(plan);
@@ -80,7 +81,7 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 	 */
 	public TimeWindow wiggleTimeWindow(TimeWindow tw, Receiver receiver) {
 		
-		if ((boolean) receiver.getSelectedPlan().getAttributes().getAttribute("collaborationStatus") == true){
+		if ((boolean) receiver.getSelectedPlan().getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
 			int move = MatsimRandom.getLocalInstance().nextInt(6);
 			switch (move) {
 			case 0:

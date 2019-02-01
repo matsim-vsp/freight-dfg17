@@ -54,11 +54,14 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
-import receiver.usecases.ReceiverScoreStats;
+import receiver.usecases.chessboard.ReceiverChessboardUtils;
+import receiver.usecases.chessboard.ReceiverScoreStats;
+import receiver.usecases.chessboard.BaseRunReceiver;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -102,7 +105,7 @@ public class RunCapeTownReceiver {
 					"serviceduration",
 					"collaborate_p",
 					"collaborate_r",
-					"grandCoalitionMember"));
+					ReceiverAttributes.grandCoalitionMember.name() ) );
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -123,7 +126,7 @@ public class RunCapeTownReceiver {
 		/* Set up freight portion. To be repeated every iteration*/
 		setupReceiverAndCarrierReplanning(controler, outputfolder);
 		
-		CapeTownReceiverUtils.setupCarriers(controler);
+		ReceiverChessboardUtils.setupCarriers(controler );
 		CapeTownReceiverUtils.setupReceivers(controler);
 
 		/* TODO This stats must be set up automatically. */
@@ -144,19 +147,7 @@ public class RunCapeTownReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute("collaborationStatus") != null){
-						if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
+				BaseRunReceiver.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.
@@ -254,9 +245,9 @@ public class RunCapeTownReceiver {
 							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
 							float freq = (float) order.getNumberOfWeeklyDeliveries();
 							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getSelectedPlan().getAttributes().getAttribute("collaborationStatus");
-							boolean status2 = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");							
-							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
+							boolean status = (boolean) receiver.getSelectedPlan().getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name());
+							boolean status2 = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name());
+							boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name());
 
 							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
 							try {

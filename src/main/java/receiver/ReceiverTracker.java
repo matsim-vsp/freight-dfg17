@@ -42,7 +42,7 @@ import receiver.collaboration.ProportionalCostSharing;
  */
 
 
- final class ReceiverTracker implements EventHandler {
+ final class ReceiverTracker {
 //	@Inject Scenario sc;
 	private Scenario sc;
 	
@@ -57,7 +57,7 @@ import receiver.collaboration.ProportionalCostSharing;
 	/**
 	 * Scores the selected receiver order.
 	 */
-	public void scoreSelectedPlans() {
+	void scoreSelectedPlans() {
 		
 //		MarginalCostSharing mcs = new MarginalCostSharing(750, sc);
 //		mcs.allocateCoalitionCosts();

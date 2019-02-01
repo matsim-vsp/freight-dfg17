@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.usecases.base;
+package receiver.usecases.chessboard;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,8 +29,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
+import com.graphhopper.jsprit.core.util.Solutions;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -41,6 +41,7 @@ import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
@@ -55,61 +56,93 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
-import receiver.usecases.ReceiverChessboardUtils;
-import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
  * @author jwjoubert, wlbean
  */
 
-public class RunReceiver {
-	final private static Logger LOG = Logger.getLogger(RunReceiver.class);
-	final private static long SEED_BASE = 20180816l;	
-//	private static int replanInt;
+public class BaseRunReceiver{
+	final private static Logger LOG = Logger.getLogger( BaseRunReceiver.class );
+	final private static long SEED_BASE = 20180816l;
+	private String outputfolder;
+	private Scenario sc;
+	//	private static int replanInt;
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		int startRun = Integer.parseInt(args[0]);
 		int endRun = Integer.parseInt(args[1]);
 		for(int i = startRun; i < endRun; i++) {
-			run(i);
+			new BaseRunReceiver().run(i );
 		}
 	}
 
 
-	public static void run(int run) {
+	public  void run(int run) {
 		LOG.info("Starting run " + run);
-		String outputfolder = String.format("./output/base/tw/run_%03d/", run);
+		Scenario scenario = prepareScenario( run );
+//		scenario.getConfig().global().setRandomSeed( run );
+		prepareAndRunControler( run, null);
+	}
+
+	void prepareAndRunControler( int runId, Collection<AbstractModule> abstractModules ){
+		Controler controler = new Controler(sc);
+		if ( abstractModules!=null ){
+			for( AbstractModule abstractModule : abstractModules ){
+				controler.addOverridingModule( abstractModule );
+			}
+		}
+
+		setupCarrierReplanning(controler, outputfolder );
+
+		ReceiverChessboardUtils.setupCarriers(controler );
+
+		ReceiverChessboardUtils.setupReceivers(controler);
+		// (this one actually sets the receiver strategies!!!!)
+
+		prepareFreightOutputDataAndStats(controler, runId);
+
+		controler.run();
+	}
+
+	Scenario prepareScenario( int run ){
+		outputfolder = String.format("./output/base/tw/run_%03d/", run);
 		new File(outputfolder).mkdirs();
-		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true);
-//		replanInt = mfs.getReplanInterval();
-		
-		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+		sc = BaseReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true );
+		//		replanInt = mfs.getReplanInterval();
+
+//		/* Write headings */
+//		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+//		writeHeadings( bw );
+		// yy the above was nowhere used.  kai, jan'19
+
+		sc.getConfig().controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles );
+		return sc;
+	}
+
+	static void writeHeadings( BufferedWriter bw ){
 		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
-					"iteration", 
-					"receiver_id", 
-					"score", 
-					"timewindow_start", 
-					"timewindow_end", 
-					"order_id", 
-					"volume", 	        				
-					"frequency", 
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+					"iteration",
+					"receiver_id",
+					"score",
+					"timewindow_start",
+					"timewindow_end",
+					"order_id",
+					"volume",
+					"frequency",
 					"serviceduration",
 					"collaborate",
-					"grandCoalitionMember"));
+					ReceiverAttributes.grandCoalitionMember.name() ) );
 			bw.newLine();
-		} catch (IOException e) {
+		} catch ( IOException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Cannot write initial headings");  
+			throw new RuntimeException("Cannot write initial headings");
 		} finally{
 			try {
 				bw.close();
@@ -118,28 +151,13 @@ public class RunReceiver {
 				throw new RuntimeException("Cannot close receiver stats file");
 			}
 		}
-
-		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-
-		Controler controler = new Controler(sc);
-
-		/* Set up freight portion. To be repeated every iteration*/
-		setupReceiverAndCarrierReplanning(controler, outputfolder);
-		
-		ReceiverChessboardUtils.setupCarriers(controler);
-		ReceiverChessboardUtils.setupReceivers(controler);
-
-		/* TODO This stats must be set up automatically. */
-		prepareFreightOutputDataAndStats(controler, run);
-
-		controler.run();
 	}
 
 
-	private static void setupReceiverAndCarrierReplanning( MatsimServices controler, String outputFolder) {
+	private static void setupCarrierReplanning( MatsimServices controler, String outputFolder ) {
 		controler.addControlerListener(new IterationStartsListener() {
 
-			//@Override
+			@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
 				
 				if(event.getIteration() % ReceiverUtils.getReplanInterval( controler.getScenario() ) != 0) {
@@ -147,38 +165,23 @@ public class RunReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute("collaborationStatus") != null){
-						if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
+				setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.
 				 */
 				
 				Carrier carrier = ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
-				ArrayList<CarrierPlan> carrierPlans = new ArrayList<CarrierPlan>();
 
 				/* Remove all existing carrier plans. */
 
-				for (CarrierPlan plan : carrier.getPlans()){
-					carrierPlans.add(plan);
+				ArrayList<CarrierPlan> carrierPlans = new ArrayList<>( carrier.getPlans() );
+
+				for( CarrierPlan plan : carrierPlans ){
+					carrier.removePlan( plan );
 				}
 
-				Iterator<CarrierPlan> planIterator = carrierPlans.iterator();
-				while (planIterator.hasNext()){
-					CarrierPlan plan = planIterator.next();							
-					carrier.removePlan(plan);
-				}
+				// yyyy todo: replace above by carrier.clearPlans() (not yet in master).  kai, jan'19
 
 
 				VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, controler.getScenario().getNetwork());
@@ -194,16 +197,18 @@ public class RunReceiver {
 				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
 
 				//get best (here, there is only one)
-				VehicleRoutingProblemSolution solution = null;
-
-				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-				while(iterator.hasNext()){
-					solution = iterator.next();
-				}
+//				VehicleRoutingProblemSolution solution = null;
+//
+//				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
+//
+//				while(iterator.hasNext()){
+//					solution = iterator.next();
+//				}
+//
+				// yyyy Why not use Solutions.bestOf(...)?  kai, jan'19
 
 				//create a new carrierPlan from the solution 
-				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, solution);
+				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, Solutions.bestOf( solutions ) );
 
 				//route plan 
 				NetworkRouter.routePlan(newPlan, netBasedCosts);
@@ -220,6 +225,21 @@ public class RunReceiver {
 		});		
 	}
 
+	public static void setCoalitionFromReceiverAttributes( MatsimServices controler ){
+		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
+			if (receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) != null){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
+					if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
+						ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
+					}
+				} else {
+					if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
+						ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
+					}
+				}
+			}
+		}
+	}
 
 
 	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
@@ -250,53 +270,57 @@ public class RunReceiver {
 
 				/* Record receiver stats */
 				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
-				for(int i = 1; i < numberOfReceivers+1; i++) {
-					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
-					for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
-						for (Order order : rorder.getReceiverProductOrders()){
-							String score = receiver.getSelectedPlan().getScore().toString();
-							float start = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getStart();
-							float end = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getEnd();
-							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
-							float freq = (float) order.getNumberOfWeeklyDeliveries();
-							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");
-							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
-
-							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-							try {
-								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
-										event.getIteration(), 
-										receiver.getId(), 
-										score, 
-										start, 
-										end,
-										order.getId(), 
-										size,
-										freq,
-										dur,
-										status,
-										member));											 							
-								bw1.newLine();
-
-							} catch (IOException e) {
-								e.printStackTrace();
-								throw new RuntimeException("Cannot write receiver stats");    
-
-							} finally{
-								try {
-									bw1.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-									throw new RuntimeException("Cannot close receiver stats file");
-								}
-							}	
-						}	
-					}
-				}
+				recordReceiverStats( event, numberOfReceivers, controler, run );
 
 			}
 		});	
 
+	}
+
+	public static void recordReceiverStats( IterationEndsEvent event, int numberOfReceivers, MatsimServices controler, int run ){
+		for(int i = 1; i < numberOfReceivers+1; i++) {
+			Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get( Id.create(Integer.toString(i ), Receiver.class ) );
+			for ( ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
+				for ( Order order : rorder.getReceiverProductOrders()){
+					String score = receiver.getSelectedPlan().getScore().toString();
+					float start = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getStart();
+					float end = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getEnd();
+					float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
+					float freq = (float) order.getNumberOfWeeklyDeliveries();
+					float dur =  (float) order.getServiceDuration();
+					boolean status = (boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() );
+					boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name());
+
+					BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv" );
+					try {
+						bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b",
+								event.getIteration(),
+								receiver.getId(),
+								score,
+								start,
+								end,
+								order.getId(),
+								size,
+								freq,
+								dur,
+								status,
+								member));
+						bw1.newLine();
+
+					} catch ( IOException e) {
+						e.printStackTrace();
+						throw new RuntimeException("Cannot write receiver stats");
+
+					} finally{
+						try {
+							bw1.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+							throw new RuntimeException("Cannot close receiver stats file");
+						}
+					}
+				}
+			}
+		}
 	}
 }

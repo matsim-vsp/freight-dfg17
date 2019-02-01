@@ -23,6 +23,8 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  *
  */
 class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+	// never used.  kai, jan'19
+
 	@Inject Scenario sc;
 	
 	NumDelReceiverOrderStrategyManagerImpl(){

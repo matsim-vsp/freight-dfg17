@@ -18,6 +18,7 @@
 
 package receiver.product;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -41,11 +42,34 @@ public class ReceiverOrder implements BasicPlan{
 	private final Id<Carrier> carrierId;
 	private Carrier carrier = null;
 
+	@Override
+	public String toString() {
+		StringBuilder strb = new StringBuilder(  ) ;
+		strb.append("[") ;
+
+		for( Order order : orders ){
+			strb.append( order.toString() ) ;
+		}
+
+		strb.append("]") ;
+		return strb.toString() ;
+	}
 	
 	public ReceiverOrder(final Id<Receiver> receiverId, final Collection<Order> orders, final Id<Carrier> carrierId){
 		this.orders = orders;
 		this.receiverId = receiverId;
 		this.carrierId = carrierId;		
+	}
+
+	public final ReceiverOrder createCopy() {
+		Collection<Order> ordersCopy = new ArrayList<>() ;
+		for( Order order : orders ){
+			ordersCopy.add( order.createCopy() ) ;
+		}
+		ReceiverOrder receiverOrderCopy = new ReceiverOrder( this.receiverId, ordersCopy, this.carrierId );
+		receiverOrderCopy.cost = new Double( this.cost );
+		receiverOrderCopy.carrier = this.carrier ;
+		return receiverOrderCopy ;
 	}
 	
 	/**

@@ -18,6 +18,7 @@
   
 package receiver.replanning;
 
+import org.apache.log4j.Logger;
 import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
@@ -32,9 +33,11 @@ import receiver.product.ReceiverOrder;
  */
 
 public final class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
+	private static final Logger log = Logger.getLogger( ServiceTimeMutator.class ) ;
+
 	private double time;
 	private double range;
-	boolean increase;
+	private boolean increase;
 	
 	/**
 	 * This class changes the service time of a receivers' orders with the 
@@ -63,7 +66,8 @@ public final class ServiceTimeMutator implements GenericPlanStrategyModule<Recei
 
 	@Override
 	public void handlePlan(ReceiverPlan receiverPlan) {
-		
+		log.warn("entering handlePlan with increase=" + increase ) ;
+
 		/* Create list of receiver orders. */
 		for (ReceiverOrder ro: receiverPlan.getReceiverOrders()){
 

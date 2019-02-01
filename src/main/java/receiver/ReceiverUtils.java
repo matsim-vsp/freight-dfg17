@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.core.scenario.MutableScenario;
 import receiver.collaboration.Coalition;
-import receiver.collaboration.MutableCoalition;
 
 public class ReceiverUtils {
 	private final static String REPLAN_INTERVAL = "replanInterval";
@@ -54,7 +54,7 @@ public class ReceiverUtils {
 		sc.addScenarioElement( CARRIERS_SCENARIO_ELEMENT, carriers );
 	}
 	
-	public static void setCoalition( final MutableCoalition coalition, final Scenario sc ) {
+	public static void setCoalition( final Coalition coalition, final Scenario sc ) {
 		sc.addScenarioElement( COALITION_SCENARIO_ELEMENT, coalition );
 	}
 	
@@ -63,6 +63,11 @@ public class ReceiverUtils {
 	}
 	
 	public static void setReplanInterval( final int interval, final Scenario sc ) {
+		Integer result = (Integer) sc.getScenarioElement( REPLAN_INTERVAL );
+		if ( result != null ) {
+			log.warn("replan interval was already set to " + result + "; now setting to " + interval ) ;
+			((MutableScenario)sc).removeScenarioElement( REPLAN_INTERVAL ) ;
+		}
 		sc.addScenarioElement( REPLAN_INTERVAL, interval );
 		// seems a bit overkill to do this as scenarioElement, but I can't think of a better solution right now.  Adding it into
 		// the config would make it very public API, which maybe we don't want at this point. kai, sep'18

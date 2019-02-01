@@ -26,7 +26,7 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 public final class ReceiverModule extends AbstractModule {
 
 	private Receivers receivers;
-	ReceiverScoringFunctionFactory sFuncFac;
+	private ReceiverScoringFunctionFactory sFuncFac;
 	private ReceiverOrderStrategyManagerFactory stratManFac;
 	private Scenario sc;
 

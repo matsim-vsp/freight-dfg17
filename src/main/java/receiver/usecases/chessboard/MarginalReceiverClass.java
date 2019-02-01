@@ -19,11 +19,7 @@
 /**
  * 
  */
-package receiver.usecases.marginal;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+package receiver.usecases.chessboard;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
@@ -39,14 +35,14 @@ import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.utils.io.IOUtils;
-
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
-
 import receiver.Receiver;
 import receiver.ReceiverUtils;
-import receiver.collaboration.MutableCoalition;
-import receiver.usecases.ReceiverChessboardUtils;
+import receiver.collaboration.Coalition;
+import receiver.collaboration.CollaborationUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  *
@@ -76,7 +72,7 @@ public class MarginalReceiverClass {
 		ReceiverUtils.setReplanInterval(MarginalExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		MarginalScenarioBuilder.createChessboardCarriers(sc);
-		MarginalScenarioBuilder.createAndAddChessboardReceivers(sc);
+		ProportionalScenarioBuilder.createAndAddChessboardReceivers(sc );
 		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
 		MarginalScenarioBuilder.createReceiverOrders(sc);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
@@ -89,32 +85,22 @@ public class MarginalReceiverClass {
 		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
 		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
 		
-		MarginalScenarioBuilder.writeFreightScenario(sc);
+		BaseReceiverChessboardScenario.writeFreightScenario(sc );
 		
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
 		
 		/* Add carrier and receivers to coalition */
-		MutableCoalition coalition = new MutableCoalition();
+		Coalition coalition = CollaborationUtils.createCoalition();
 		
 		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
 			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
 				coalition.addCarrierCoalitionMember(carrier);
 			}
 		}
-		
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
-		
+
+		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+
 		ReceiverUtils.setCoalition( coalition, sc );
 		
 		

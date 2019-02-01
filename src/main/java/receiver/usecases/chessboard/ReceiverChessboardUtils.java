@@ -19,7 +19,7 @@
 /**
  * 
  */
-package receiver.usecases;
+package receiver.usecases.chessboard;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
@@ -50,14 +51,10 @@ import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
-import receiver.Receiver;
-import receiver.ReceiverModule;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
+import receiver.*;
 import receiver.collaboration.Coalition;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.replanning.ReplanningUtils;
-import receiver.ReceiverScoringFunctionFactory;
 
 /**
  *
@@ -104,12 +101,12 @@ public class ReceiverChessboardUtils {
 
 	public static void setupReceivers(Controler controler) {
 
-		String outputfolder = controler.getScenario().getConfig().controler().getOutputDirectory();
-		outputfolder += outputfolder.endsWith("/") ? "" : "/";
+//		String outputfolder = controler.getScenario().getConfig().controler().getOutputDirectory();
+//		outputfolder += outputfolder.endsWith("/") ? "" : "/";
 //		Receivers finalReceivers = new Receivers();
 		Receivers finalReceivers = ReceiverUtils.getReceivers( controler.getScenario() );
 //		new ReceiversReader(finalReceivers).readFile(outputfolder + "receivers.xml");
-		finalReceivers = ReceiverUtils.getReceivers( controler.getScenario() );
+//		finalReceivers = ReceiverUtils.getReceivers( controler.getScenario() );
 
 		/* 
 		 * Adds receivers to freight scenario.
@@ -122,15 +119,7 @@ public class ReceiverChessboardUtils {
 		 * able to configure this in a more elegant way. */
 		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
 		//		if(coalition != null) {
-		for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if(receiver.getAttributes().getAttribute("collaborationStatus")!=null){
-				if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
-					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-						coalition.addReceiverCoalitionMember(receiver);
-					}
-				}
-			}
-		}
+		setCoalitionFromReceiverAttributes( controler, coalition );
 		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
 		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()));
@@ -146,30 +135,38 @@ public class ReceiverChessboardUtils {
 		 * Create a new instance of a receiver plan strategy manager factory..
 		 */
 		//int selector = MatsimRandom.getLocalInstance().nextInt(3);
-		//		int selector = 0;
-		//		switch (selector) {
-		//			case 0: {
-//		final ReceiverOrderStrategyManagerFactory rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
-//		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
-//		controler.addOverridingModule(receiverControler);
-		//			}
-		//			case 1: {
-//						final ReceiverOrderStrategyManagerFactory rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-//						ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
-//						controler.addOverridingModule(receiverControler);
-		//			}
-		//			case 2: {
-						final ReceiverOrderStrategyManagerFactory rStratManFac = ReplanningUtils.createNumDelReceiverOrderStrategyManagerImpl();
-						ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
-						controler.addOverridingModule(receiverControler); 
-		//			}
-		//			default: { 
-		//				Log.warn("No order strategy manager selected.");		
-		//			}
-		//		}
+		ReceiverOrderStrategyManagerFactory rStratManFac = null ;
+		int selector = 1;
+		switch (selector) {
+			case 0:
+				rStratManFac = ReplanningUtils.createTimeWindowReceiverOrderStrategyManagerImpl();
+				break ;
+			case 1:
+				rStratManFac = ReplanningUtils.createServiceTimeReceiverOrderStrategyManagerImpl();
+				break ;
+			case 2:
+				rStratManFac = ReplanningUtils.createNumDelReceiverOrderStrategyManagerImpl();
+				break;
+			default:
+				Log.warn("No order strategy manager selected." );
+		}
+		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
+		controler.addOverridingModule(receiverControler);
 	}
 
-	private static class MyCarrierPlanStrategyManagerFactoryImpl implements CarrierPlanStrategyManagerFactory {
+	public static void setCoalitionFromReceiverAttributes( Controler controler, Coalition coalition ){
+		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
+			if(receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )!=null){
+				if ( (boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) ){
+					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
+						coalition.addReceiverCoalitionMember(receiver);
+					}
+				}
+			}
+		}
+	}
+
+	public static class MyCarrierPlanStrategyManagerFactoryImpl implements CarrierPlanStrategyManagerFactory {
 
 		/*
 		 * Adapted from RunChessboard.java by sschroeder and gliedtke.
@@ -178,7 +175,7 @@ public class ReceiverChessboardUtils {
 		private MatsimServices controler;
 		private CarrierVehicleTypes types;
 
-		public MyCarrierPlanStrategyManagerFactoryImpl(final CarrierVehicleTypes types, final Network network, final MatsimServices controler) {
+		MyCarrierPlanStrategyManagerFactoryImpl( final CarrierVehicleTypes types, final Network network, final MatsimServices controler ) {
 			this.types = types;
 			this.network = network;
 			this.controler= controler;
@@ -186,8 +183,14 @@ public class ReceiverChessboardUtils {
 
 		@Override
 		public GenericStrategyManager<CarrierPlan, Carrier> createStrategyManager() {
-			TravelDisutility travelDis = TravelDisutilities.createBaseDisutility(types, controler.getLinkTravelTimes());
-			final LeastCostPathCalculator router = controler.getLeastCostPathCalculatorFactory().createPathCalculator(network,	travelDis, controler.getLinkTravelTimes());
+			return getCarrierPlanCarrierGenericStrategyManager( types, controler, network );
+		}
+
+		static GenericStrategyManager<CarrierPlan, Carrier> getCarrierPlanCarrierGenericStrategyManager( CarrierVehicleTypes types, MatsimServices controler,
+																		 Network network ){
+			TravelDisutility travelDis = TravelDisutilities.createBaseDisutility( types, controler.getLinkTravelTimes() );
+			final LeastCostPathCalculator router = controler.getLeastCostPathCalculatorFactory().createPathCalculator(
+				  network,	travelDis, controler.getLinkTravelTimes() );
 
 			final GenericStrategyManager<CarrierPlan, Carrier> strategyManager = new GenericStrategyManager<>();
 			strategyManager.setMaxPlansPerAgent(5);
@@ -198,7 +201,7 @@ public class ReceiverChessboardUtils {
 
 			{
 				GenericPlanStrategyImpl<CarrierPlan, Carrier> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<CarrierPlan, Carrier>());
-				strategy.addStrategyModule(new TimeAllocationMutator());
+				strategy.addStrategyModule(new TimeAllocationMutator() );
 				ReRouteVehicles reRouteModule = new ReRouteVehicles(router, network, controler.getLinkTravelTimes(), 1.);
 				strategy.addStrategyModule(reRouteModule);
 				strategyManager.addStrategy(strategy, null, 0.5);
@@ -222,21 +225,9 @@ public class ReceiverChessboardUtils {
 			destFile.createNewFile();
 		}
 
-		FileChannel source = null;
-		FileChannel destination = null;
-
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-			destination.transferFrom(source, 0, source.size());
-		}
-		finally {
-			if(source != null) {
-				source.close();
-			}
-			if(destination != null) {
-				destination.close();
-			}
+		try( FileChannel source = new FileInputStream( sourceFile ).getChannel() ;
+		     FileChannel destination = new FileOutputStream( destFile ).getChannel() ){
+			destination.transferFrom( source, 0, source.size() );
 		}
 	}
 

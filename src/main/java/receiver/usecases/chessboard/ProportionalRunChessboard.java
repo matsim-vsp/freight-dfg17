@@ -21,7 +21,7 @@
 /**
  * 
  */
-package receiver.usecases.proportional;
+package receiver.usecases.chessboard;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -54,26 +54,19 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
-import receiver.Receiver;
+import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
-import receiver.product.Order;
-import receiver.product.ReceiverOrder;
-import receiver.usecases.ReceiverChessboardUtils;
-import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
  * @author jwjoubert, wlbean
  */
 
-public class RunChessboardProportional {
-	final private static Logger LOG = Logger.getLogger(RunChessboardProportional.class);
+class ProportionalRunChessboard{
+	final private static Logger LOG = Logger.getLogger( ProportionalRunChessboard.class );
 	final private static long SEED_BASE = 20180816l;	
 //	private static int replanInt;
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		int startRun = Integer.parseInt(args[0]);
 		int endRun = Integer.parseInt(args[1]);
@@ -83,7 +76,7 @@ public class RunChessboardProportional {
 	}
 
 
-	public static void run(int run) {
+	private static void run( int run ) {
 
 		String outputfolder = String.format("./output/proportional/run_%03d/", run);
 		new File(outputfolder).mkdirs();
@@ -92,31 +85,7 @@ public class RunChessboardProportional {
 		
 		/* Write headings */
 		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
-		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
-					"iteration", 
-					"receiver_id", 
-					"score", 
-					"timewindow_start", 
-					"timewindow_end", 
-					"order_id", 
-					"volume", 	        				
-					"frequency", 
-					"serviceduration",
-					"collaborate",
-					"grandCoalitionMember"));
-			bw.newLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Cannot write initial headings");  
-		} finally{
-			try {
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new RuntimeException("Cannot close receiver stats file");
-			}
-		}
+		BaseRunReceiver.writeHeadings( bw );
 
 		sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
 
@@ -142,7 +111,7 @@ public class RunChessboardProportional {
 
 		controler.addControlerListener(new IterationStartsListener() {
 
-			//@Override
+			@Override
 			public void notifyIterationStarts(IterationStartsEvent event) {
 
 				if(event.getIteration() % ReceiverUtils.getReplanInterval( controler.getScenario() ) != 0) {
@@ -150,19 +119,7 @@ public class RunChessboardProportional {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute("collaborationStatus") != null){
-						if ((boolean) receiver.getAttributes().getAttribute("collaborationStatus") == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
+				BaseRunReceiver.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.
@@ -254,56 +211,13 @@ public class RunChessboardProportional {
 
 				//write plans
 
-new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
 				
 				new receiver.ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
 
 				/* Record receiver stats */
 				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
-				for(int i = 1; i < numberOfReceivers+1; i++) {
-					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
-					for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
-						for (Order order : rorder.getReceiverProductOrders()){
-							String score = receiver.getSelectedPlan().getScore().toString();
-							float start = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getStart();
-							float end = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getEnd();
-							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
-							float freq = (float) order.getNumberOfWeeklyDeliveries();
-							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getAttributes().getAttribute("collaborationStatus");
-							boolean member = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
-
-							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-							try {
-								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b", 
-										event.getIteration(), 
-										receiver.getId(), 
-										score, 
-										start, 
-										end,
-										order.getId(), 
-										size,
-										freq,
-										dur,
-										status,
-										member));											 							
-								bw1.newLine();
-
-							} catch (IOException e) {
-								e.printStackTrace();
-								throw new RuntimeException("Cannot write receiver stats");    
-
-							} finally{
-								try {
-									bw1.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-									throw new RuntimeException("Cannot close receiver stats file");
-								}
-							}	
-						}	
-					}
-				}
+				BaseRunReceiver.recordReceiverStats( event, numberOfReceivers, controler, run );
 
 			}
 		});	

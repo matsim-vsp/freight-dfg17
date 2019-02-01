@@ -97,6 +97,23 @@ public final class Receivers implements Attributable{
 	}
 	
 	public ProductType createAndAddProductType(final Id<ProductType> id) {
+		/**
+		 * yyyy current design adds {@link ProductType} (and not, e.g., {@link Id<ProductType>}) into the {@link
+		 * ReceiverProduct}.  It is therefore not really necessary to also maintain a list of ever defined product type, in
+		 * particular since there is no way to enforce completeness of this list.  On the other hand, it makes sense to have the
+		 * product types at the beginning of the {@link Receivers} file.  This feels similar to having vehicle types at the
+		 * beginning of the carriers file.  Yet from a software perspective it is not the same: for vehicles we can enforce that
+		 * a vehicle type is registered, but for products we cannot enforce that there is a product type, since there is one
+		 * additional level of indirection.
+		 *
+		 * So overall my intuition would be to not register the product types.  One can still read them first, and then give
+		 * them to the products and then to the receivers. For writing out, I would suggest to go through all receivers, get
+		 * their products, etc.
+		 *
+		 * ???
+		 *
+		 * kai, jan'19
+		 */
 		if(this.productTypeMap.containsKey(id)) {
 			throw new IllegalArgumentException("ProductType with id \"" + id + "\" already exists.");
 		}
@@ -105,6 +122,7 @@ public final class Receivers implements Attributable{
 		return pt;
 	}
 
+	@Deprecated // is not used; don't start using it.  See comment under createAndAddProductType above.
 	public void addProductType(ProductType productType) {
 		if(this.productTypeMap.containsKey(productType.getId())) {
 			throw new RuntimeException("The product type \"" + productType.getId() 
@@ -112,7 +130,6 @@ public final class Receivers implements Attributable{
 		}
 		this.productTypeMap.put(productType.getId(), productType);
 	}
-	
 	public ProductType getProductType(Id<ProductType> productId) {
 		if(this.productTypeMap.containsKey(productId)) {
 			return this.productTypeMap.get(productId);
