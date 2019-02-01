@@ -36,7 +36,6 @@ class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyMan
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new CollaborationStatusChanger());
-			strategy.addStrategyModule(new OrderChanger());	
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
@@ -49,8 +48,7 @@ class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyMan
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(true));
-			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.15);		
+			stratMan.addStrategy(strategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 		}
 		
@@ -61,8 +59,7 @@ class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyMan
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new OrderSizeMutator(false));
-			strategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(strategy, null, 0.15);	
+			stratMan.addStrategy(strategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 		}
 		

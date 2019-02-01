@@ -230,7 +230,7 @@ public class ReceiverChessboardUtils {
 	 * its contained files (or folders).
 	 * @param folder
 	 */
-	public static void delete(File folder){
+	static void delete( File folder ){
 		if(folder.isDirectory()){
 			File[] contents = folder.listFiles();
 			for(File file : contents){

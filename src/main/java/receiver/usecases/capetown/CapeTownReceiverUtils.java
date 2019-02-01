@@ -21,25 +21,14 @@
  */
 package receiver.usecases.capetown;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierVehicleTypeLoader;
-import org.matsim.contrib.freight.carrier.CarrierVehicleTypeReader;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
-import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.contrib.freight.controler.CarrierModule;
 import org.matsim.contrib.freight.replanning.CarrierPlanStrategyManagerFactory;
 import org.matsim.contrib.freight.replanning.modules.ReRouteVehicles;
 import org.matsim.contrib.freight.replanning.modules.TimeAllocationMutator;
-import org.matsim.contrib.freight.scoring.CarrierScoringFunctionFactory;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
@@ -48,7 +37,6 @@ import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
-
 import receiver.ReceiverModule;
 import receiver.ReceiverScoringFunctionFactory;
 import receiver.ReceiverUtils;
@@ -64,40 +52,6 @@ import receiver.usecases.chessboard.ProportionalReceiverScoringFunctionFactoryIm
  */
 public class CapeTownReceiverUtils {
 	final private static Logger LOG = Logger.getLogger(CapeTownReceiverUtils.class);
-
-
-	public static void setupCarriers(Controler controler) {
-//		final Carriers carriers = new Carriers();							
-		final Carriers carriers = ReceiverUtils.getCarriers( controler.getScenario() );							
-//		new CarrierPlanXmlReaderV2(carriers).readFile(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");	
-		CarrierVehicleTypes types = new CarrierVehicleTypes();
-		new CarrierVehicleTypeReader(types).readFile(controler.getScenario().getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
-		new CarrierVehicleTypeLoader(carriers).loadVehicleTypes(types);
-
-		/* FIXME We added this null check because, essentially, the use of 
-		 * coalitions should be optional. We must eventually find a way to be
-		 * able to configure this in a more elegant way. */
-		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
-		if(coalition != null) {
-			for (Carrier carrier : ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers().values()){
-				if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
-					coalition.addCarrierCoalitionMember(carrier);
-				}
-			}
-		}
-
-		/* Create a new instance of a carrier scoring function factory. */
-		final CarrierScoringFunctionFactory cScorFuncFac = UsecasesUtils.getCarrierScoringFunctionFactory( controler.getScenario().getNetwork() );
-
-		/* Create a new instance of a carrier plan strategy manager factory. */
-		final CarrierPlanStrategyManagerFactory cStratManFac = new MyCarrierPlanStrategyManagerFactoryImpl(types, controler.getScenario().getNetwork(), controler);
-
-		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
-		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
-		controler.addOverridingModule(carrierControler);
-
-//		ReceiverUtils.setCarriers( carriers, controler.getScenario() );
-	}
 
 
 
@@ -178,56 +132,6 @@ public class CapeTownReceiverUtils {
 		}
 	}
 
-
-	/**
-	 * Copies a file from one location to another.
-	 * @param sourceFile
-	 * @param destFile
-	 * @throws IOException
-	 */
-	/* The SuppressWarnings was added because Eclipse complains that file 
-	 * streams are not closed... but they are. */
-	@SuppressWarnings("resource")
-	public static void copyFile(File sourceFile, File destFile) throws IOException {
-		if(!destFile.exists()) {
-			destFile.createNewFile();
-		}
-
-		FileChannel source = null;
-		FileChannel destination = null;
-
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-			destination.transferFrom(source, 0, source.size());
-		}
-		finally {
-			if(source != null) {
-				source.close();
-			}
-			if(destination != null) {
-				destination.close();
-			}
-		}
-	}
-
-
-	/**
-	 * Cleans a given file. If the file is a directory, it first cleans all
-	 * its contained files (or folders).
-	 * @param folder
-	 */
-	public static void delete(File folder){
-		if(folder.isDirectory()){
-			File[] contents = folder.listFiles();
-			for(File file : contents){
-				delete(file);
-			}
-			folder.delete();
-		} else{
-			folder.delete();
-		}
-	}
 
 
 }

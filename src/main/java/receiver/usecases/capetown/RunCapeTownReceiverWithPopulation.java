@@ -68,6 +68,7 @@ import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
+import receiver.usecases.chessboard.ReceiverChessboardUtils;
 import receiver.usecases.chessboard.ReceiverScoreStats;
 
 /**
@@ -199,7 +200,7 @@ public class RunCapeTownReceiverWithPopulation {
 		
 		
 		
-		CapeTownReceiverUtils.setupCarriers(controler);
+		ReceiverChessboardUtils.setupCarriers(controler );
 		CapeTownReceiverUtils.setupReceivers(controler);
 
 		/* TODO This stats must be set up automatically. */

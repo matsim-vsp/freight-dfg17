@@ -9,14 +9,11 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.BestPlanSelector;
-import org.matsim.core.replanning.selectors.ExpBetaPlanSelector;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.replanning.OrderChanger;
-import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
 /**
  * This class implements a receiver reorder strategy that changes the delivery time window of its orders.
@@ -38,8 +35,7 @@ class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrderStrateg
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new OrderChanger());
-			strategy.addStrategyModule(new CollaborationStatusChanger());				
+			strategy.addStrategyModule(new CollaborationStatusChanger());
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
@@ -52,8 +48,7 @@ class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrderStrateg
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			timeStrategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("01:00:00")));
-			timeStrategy.addStrategyModule(new OrderChanger());
-			stratMan.addStrategy(timeStrategy, null, 0.3);	
+			stratMan.addStrategy(timeStrategy, null, 0.3);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), timeStrategy, null, 0.0);
 		}		
 		
