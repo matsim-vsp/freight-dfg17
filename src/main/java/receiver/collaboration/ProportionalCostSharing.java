@@ -27,15 +27,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.java.plugin.registry.MatchingRule;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.utils.objectattributes.attributable.Attributes;
-
-import com.google.inject.Inject;
 
 import receiver.Receiver;
-import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
@@ -125,12 +122,13 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 			/* Calculate this receiver's total volume with the carrier. */
 			for(Receiver thisReceiver : receiverList ) {
 
-				if ( (boolean) thisReceiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) ){
+				if ( (boolean) thisReceiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) == true ){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carrierId);
 					totalCoalitionVolume += getReceiverOrderTotal(ro);
 				} else {
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carrierId);
 					fixedFeeVolume += getReceiverOrderTotal(ro);
+					/*TODO Why not? We need the fixedFeeVolume later (JWJ, Feb19). Come back and check is we find exceptions!! */
 					throw new RuntimeException( "I don't want these." ) ;
 				}
 				//				carrierCoalitionVolume += getReceiverOrderTotal(thisReceiver.getSelectedPlan().getReceiverOrder(carrierId));
@@ -142,7 +140,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 			for(Receiver thisReceiver : receiverList ) {
 
 				//				if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == true){
-				if ( (boolean) thisReceiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) ){
+				if ( (boolean) thisReceiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ){
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carrierId);
 
 					if(!proportionalMap.containsKey(carrierId)) {
@@ -156,7 +154,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 
 
 			/* Calculate the total coalition cost. */
-			totalCoalitionScore = totalCoalitionScore + carrier.getSelectedPlan().getScore() - ((fixedFeeVolume*fee*-1)/1000);
+			totalCoalitionScore = totalCoalitionScore + carrier.getSelectedPlan().getScore() + ((fixedFeeVolume*fee)/1000);
 			// (The above is what I found.  In principle, the carrier first collects the fixed volume fees.  Whatever carrier cost remains, is passed on to the coalition.
 			// The sign convention, however, is odd: the score is typically negative.  So I guess to compensate, the fixedFeeVolume is "-" AND has an additional "*-1".
 			// In the end, we will have a negative coalition cost, which has to be interpreted as a positive cost, but again a negative score.  ???  kai, jan'19)
@@ -194,7 +192,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 
 			/* Score non-collaborating receivers and calculate the total cost allocated to them. */
 			//			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
-			if ( !((boolean) thisReceiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )) ){
+			if ( !((boolean) thisReceiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS )) ){
 				double total = 0.0;
 				for(ReceiverOrder ro : plan.getReceiverOrders()) {
 					double cost = (getReceiverOrderTotal( ro ) /1000)*-1*fee;
@@ -212,7 +210,9 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 					ro.setScore(score);
 					total += score;
 				}
-				plan.setScore(total);
+				/* Fixed fee delivers may cover (more than) Carrier costs. However,
+				 * the Carrier will not PAY the receiver because they collaborate. */
+				plan.setScore( Math.min(total, 0.0) );
 			}
 		}
 

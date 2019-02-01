@@ -82,7 +82,7 @@ ReplanningListener, BeforeMobsimListener {
 		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverControlCollection = new ArrayList<>();
 
 		for(Receiver receiver : receivers.getReceivers().values()){
-			
+
 			if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
 				// (= one iteration after replanning)
 
@@ -94,32 +94,31 @@ ReplanningListener, BeforeMobsimListener {
 			 * a coalition at any time. If the receiver is willing to collaborate, the receiver will be allowed to leave
 			 * and join coalitions.
 			 */
-			if( (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name() ) ){
+			if( (boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER) ){
 				receiverCollection.add(receiver);
 			} else {
 				receiverControlCollection.add(receiver);
 			}
-		}
-		
-		/* Replanning for grand coalition receivers.*/
-		GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
-//		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//		strategy.addStrategyModule(new CollaborationStatusMutator());
-//		collaborationStratMan.addStrategy(strategy, null, 0.2);
-//		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
-		
-		if (event.getIteration() % ReceiverUtils.getReplanInterval( sc ) != 0) {
-			// (= not in replanning iteration)
-			return;
-		} 
-		
-		/* Run replanning for non-collaborating receivers */
-		stratMan.run(receiverControlCollection, null, event.getIteration(), event.getReplanningContext());		
-		
-		/* Run replanning for grand coalition receivers.*/
-		collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());	
-	}
 
+			/* Replanning for grand coalition receivers.*/
+			GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
+			//		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+			//		strategy.addStrategyModule(new CollaborationStatusMutator());
+			//		collaborationStratMan.addStrategy(strategy, null, 0.2);
+			//		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
+
+			if (event.getIteration() % ReceiverUtils.getReplanInterval( sc ) != 0) {
+				// (= not in replanning iteration)
+				return;
+			} 
+
+			/* Run replanning for non-collaborating receivers */
+			stratMan.run(receiverControlCollection, null, event.getIteration(), event.getReplanningContext());		
+
+			/* Run replanning for grand coalition receivers.*/
+			collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());	
+		}
+	}
 
 
 	/*
@@ -132,14 +131,14 @@ ReplanningListener, BeforeMobsimListener {
 			this.tracker.scoreSelectedPlans();
 		}
 
-		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
+		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0 && event.getIteration() > 0) {
 			// this is called in the iteration after the replanning iteration.
 			this.tracker.scoreSelectedPlans();
 		} else {
 			// this is called in all other iterations.  why?
 			for (Receiver receiver : receivers.getReceivers().values()){
 				double score = (double) receiver.getAttributes().getAttribute("score");
-				receiver.getSelectedPlan().setScore(score);
+				receiver.getSelectedPlan().setScore( new Double(score) );
 			}
 		}
 	}
@@ -147,6 +146,7 @@ ReplanningListener, BeforeMobsimListener {
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
 		tracker = new ReceiverTracker(scorFuncFac, sc);
+		eMan.addHandler(tracker);		
 	}
 
 }

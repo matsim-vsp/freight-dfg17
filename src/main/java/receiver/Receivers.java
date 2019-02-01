@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.utils.objectattributes.attributable.Attributable;
@@ -96,6 +97,12 @@ public final class Receivers implements Attributable{
 		else log.warn("receiver \"" + receiver.getId() + "\" already exists.");
 	}
 	
+	/**
+	 * Since using shipments we need to know the origin of the product type.
+	 * @param id
+	 * @return
+	 */
+	@Deprecated
 	public ProductType createAndAddProductType(final Id<ProductType> id) {
 		/**
 		 * yyyy current design adds {@link ProductType} (and not, e.g., {@link Id<ProductType>}) into the {@link
@@ -118,9 +125,25 @@ public final class Receivers implements Attributable{
 			throw new IllegalArgumentException("ProductType with id \"" + id + "\" already exists.");
 		}
 		ProductType pt = ProductUtils.createProductType(id);
+		
 		this.productTypeMap.put(id, pt);
 		return pt;
 	}
+	
+	public ProductType createAndAddProductType(final Id<ProductType> id, final Id<Link> originLinkId) {
+		if(this.productTypeMap.containsKey(id)) {
+			throw new IllegalArgumentException("ProductType with id \"" + id + "\" already exists.");
+		}
+		ProductType pt = ProductUtils.createProductType(id, originLinkId);
+		
+		this.productTypeMap.put(id, pt);
+		return pt;
+		
+	}
+	
+	
+	
+	
 
 	@Deprecated // is not used; don't start using it.  See comment under createAndAddProductType above.
 	public void addProductType(ProductType productType) {

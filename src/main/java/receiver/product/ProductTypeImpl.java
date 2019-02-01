@@ -22,6 +22,7 @@
 package receiver.product;
 
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
 /**
@@ -52,9 +53,18 @@ class ProductTypeImpl implements ProductType{
 	private String descr = "";
 	private double reqCapacity = 1;
 	private Id<ProductType> typeId;
+	private Id<Link> originLinkId;
 	
+	@Deprecated
 	ProductTypeImpl( final Id<ProductType> typeId ){
 		this.typeId = typeId;
+		this.originLinkId = null;
+	}
+	
+	
+	ProductTypeImpl( final Id<ProductType> typeId, Id<Link> originLinkId){
+		this.typeId = typeId;
+		this.originLinkId = originLinkId;
 	}
 
 	
@@ -87,6 +97,14 @@ class ProductTypeImpl implements ProductType{
 	@Override
 	public Attributes getAttributes() {
 		return this.attributes;
+	}
+	
+	@Override
+	public Id<Link> getOriginLinkId(){
+		if(this.originLinkId == null) {
+			throw new RuntimeException("The origin link Id has not been set. Currently null!");
+		}
+		return this.originLinkId;
 	}
 	
 	

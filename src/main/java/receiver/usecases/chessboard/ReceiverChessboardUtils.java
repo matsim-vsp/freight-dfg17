@@ -41,7 +41,6 @@ import org.matsim.contrib.freight.replanning.CarrierPlanStrategyManagerFactory;
 import org.matsim.contrib.freight.replanning.modules.ReRouteVehicles;
 import org.matsim.contrib.freight.replanning.modules.TimeAllocationMutator;
 import org.matsim.contrib.freight.scoring.CarrierScoringFunctionFactory;
-import org.matsim.contrib.freight.usecases.chessboard.TravelDisutilities;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
@@ -51,10 +50,14 @@ import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.TravelDisutility;
 
-import receiver.*;
+import receiver.ReceiverModule;
+import receiver.ReceiverScoringFunctionFactory;
+import receiver.ReceiverUtils;
+import receiver.Receivers;
 import receiver.collaboration.Coalition;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.replanning.ReplanningUtils;
+import receiver.usecases.UsecasesUtils;
 
 /**
  *
@@ -62,6 +65,7 @@ import receiver.replanning.ReplanningUtils;
  */
 public class ReceiverChessboardUtils {
 	final private static Logger LOG = Logger.getLogger(ReceiverChessboardUtils.class);
+//	final static Id<Link> depot_id = Id.createLinkId("1");
 
 
 	public static void setupCarriers(Controler controler) {
@@ -85,7 +89,7 @@ public class ReceiverChessboardUtils {
 		}
 
 		/* Create a new instance of a carrier scoring function factory. */
-		final CarrierScoringFunctionFactory cScorFuncFac = new MyCarrierScoringFunctionFactoryImpl(controler.getScenario().getNetwork());
+		final CarrierScoringFunctionFactory cScorFuncFac = UsecasesUtils.getCarrierScoringFunctionFactory(controler.getScenario().getNetwork());
 
 		/* Create a new instance of a carrier plan strategy manager factory. */
 		final CarrierPlanStrategyManagerFactory cStratManFac = new MyCarrierPlanStrategyManagerFactoryImpl(types, controler.getScenario().getNetwork(), controler);
@@ -119,7 +123,7 @@ public class ReceiverChessboardUtils {
 		 * able to configure this in a more elegant way. */
 		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
 		//		if(coalition != null) {
-		setCoalitionFromReceiverAttributes( controler, coalition );
+		ReceiverUtils.setCoalitionFromReceiverAttributes( controler, coalition );
 		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
 		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()));
@@ -154,17 +158,6 @@ public class ReceiverChessboardUtils {
 		controler.addOverridingModule(receiverControler);
 	}
 
-	public static void setCoalitionFromReceiverAttributes( Controler controler, Coalition coalition ){
-		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if(receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )!=null){
-				if ( (boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) ){
-					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-						coalition.addReceiverCoalitionMember(receiver);
-					}
-				}
-			}
-		}
-	}
 
 	public static class MyCarrierPlanStrategyManagerFactoryImpl implements CarrierPlanStrategyManagerFactory {
 
@@ -188,7 +181,7 @@ public class ReceiverChessboardUtils {
 
 		static GenericStrategyManager<CarrierPlan, Carrier> getCarrierPlanCarrierGenericStrategyManager( CarrierVehicleTypes types, MatsimServices controler,
 																		 Network network ){
-			TravelDisutility travelDis = TravelDisutilities.createBaseDisutility( types, controler.getLinkTravelTimes() );
+			TravelDisutility travelDis = UsecasesUtils.createBaseDisutility( types, controler.getLinkTravelTimes() );
 			final LeastCostPathCalculator router = controler.getLeastCostPathCalculatorFactory().createPathCalculator(
 				  network,	travelDis, controler.getLinkTravelTimes() );
 

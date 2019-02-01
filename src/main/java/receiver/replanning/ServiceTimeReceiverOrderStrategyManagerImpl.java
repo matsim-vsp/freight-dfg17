@@ -9,17 +9,12 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
-import org.matsim.core.replanning.selectors.BestPlanSelector;
 import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.ExpBetaPlanSelector;
-import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.replanning.OrderChanger;
-import receiver.replanning.ReceiverOrderStrategyManagerFactory;
-import receiver.replanning.ServiceTimeMutator;
 
 /**
  * This class implements a receiver reorder strategy that changes the delivery unloading time of its orders.
@@ -56,7 +51,6 @@ final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		 * Increase service duration with specified duration (mutationTime) until specified maximum service time (mutationRange) is reached. 
 		 */
 		{
-//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>( new KeepSelected<>());
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanSelector<>( 10. ) );
 			increaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("04:00:00"), true));
 			// (ends up with service time that is <= 4hrs)

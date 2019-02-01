@@ -58,7 +58,6 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	private List<TimeWindow> timeWindows;
 	private boolean selected = false;
 	
-	
 	private ReceiverPlan() {
 		this.attributes = new Attributes();
 		this.timeWindows = new ArrayList<>();
@@ -95,6 +94,14 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+	
+//	public void setCollaborationStatus(boolean status){
+//		this.attributes.putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, status);
+//	}
+//	
+//	public boolean getCollaborationStatus(){
+//		return (boolean) this.attributes.getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
+//	}
 	
 	/**
 	 * Returns the {@link ReceiverOrder} for a given {@link Carrier}.
@@ -133,7 +140,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			strb.append( "; unselected" );
 		}
 
-		strb.append("; collabStatus=").append( this.attributes.getAttribute( ReceiverAttributes.collaborationStatus.name() ) ) ;
+		strb.append("; collabStatus=").append( this.attributes.getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ) ;
 
 		strb.append("; time windows=[") ;
 		for( TimeWindow timeWindow : timeWindows ){
@@ -190,7 +197,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 
 	
 	public ReceiverPlan createCopy() {
-		Builder builder = Builder.newInstance(receiver);
+		Builder builder = Builder.newInstance(receiver, (boolean) attributes.getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS));
 		for(ReceiverOrder ro : this.orderMap.values()) {
 			builder = builder.addReceiverOrder(ro.createCopy());
 		}
@@ -214,13 +221,15 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 		private boolean selected = false;
 		private Double score = null;
 		private List<TimeWindow> timeWindows = new ArrayList<>();
+		private boolean status;
 		
-		private Builder(Receiver receiver) {
+		private Builder(Receiver receiver, boolean status) {
 			this.receiver = receiver;
+			this.status  = status;
 		}
-		
-		public static Builder newInstance(Receiver receiver) {
-			return new Builder(receiver);
+			
+		public static Builder newInstance(Receiver receiver, boolean status) {
+			return new Builder(receiver, status);
 		};
 		
 
@@ -248,6 +257,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			ReceiverPlan plan = new ReceiverPlan();
 			plan.receiver = this.receiver;
 			plan.selected = this.selected;
+			plan.attributes.putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, this.status );
 			if(this.map.size() > 0) {
 				plan.orderMap.putAll(this.map);			
 			} else {

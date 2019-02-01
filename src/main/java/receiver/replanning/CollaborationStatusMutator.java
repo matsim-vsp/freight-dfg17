@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
-import receiver.ReceiverAttributes;
 import receiver.ReceiverPlan;
+import receiver.ReceiverUtils;
 
 /**
  * This is a class that changes a receiver's collaboration status during replanning.
@@ -35,8 +35,8 @@ public CollaborationStatusMutator(){
 
 
 		boolean newstatus;
-		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute( ReceiverAttributes.grandCoalitionMember.name() );
-		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name());
+		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute( ReceiverUtils.ATTR_GRANDCOALITION_MEMBER );
+		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS );
 		
 
 		if (grandMember == true){
@@ -47,7 +47,7 @@ public CollaborationStatusMutator(){
 			}
 		} else newstatus = status;
 
-		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), newstatus);
+		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, newstatus);
 
 	}
 

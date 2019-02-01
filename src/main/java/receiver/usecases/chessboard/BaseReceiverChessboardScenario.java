@@ -34,6 +34,7 @@ import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.contrib.freight.carrier.CarrierImpl;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.carrier.CarrierService;
+import org.matsim.contrib.freight.carrier.CarrierShipment;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.contrib.freight.carrier.CarrierVehicleType;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypeWriter;
@@ -60,6 +61,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -123,7 +125,7 @@ public class BaseReceiverChessboardScenario{
 
 	public static void setCoalitionFromReceiverValues( Scenario sc, Coalition coalition ){
 		for ( Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ( (boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) ){
+			if ( (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
 					coalition.addReceiverCoalitionMember(receiver);
 				}
@@ -228,13 +230,23 @@ public class BaseReceiverChessboardScenario{
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
+		
+		/* Try and get the first Carrier vehicle so that we can get its origina link.
+		 * FIXME We want the carrier's location to rather be an attribute of the 
+		 * Carrier, but currently (Feb 19, JWJ) Carrier is not Attributable.
+		 */
+		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().iterator();
+		if( !vehicles.hasNext() ) {
+			throw new RuntimeException("Must have vehicles to get origin link!");
+		}
+		Id<Link> carrierOriginLinkId = vehicles.next().getLocation();
 
 		/* Create generic product types with a description and required capacity (in kg per item). */
-		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
+		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class), carrierOriginLinkId);
 		productTypeOne.setDescription("Product 1");
 		productTypeOne.setRequiredCapacity(1);
 
-		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
+		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class), carrierOriginLinkId);
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
 		
@@ -311,18 +323,26 @@ public class BaseReceiverChessboardScenario{
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 					.addReceiverOrder(receiverOrder)
 					.addTimeWindow(selectRandomTimeStart(tw))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
 
 			/* Convert receiver orders to initial carrier services. */
-			convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+//			convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+			convertReceiverOrdersToInitialCarrierShipments(carriers, receiverOrder, receiverPlan);
 		}
 
 	}
 
+	/**
+	 * Use shipments instead of services.
+	 * @param carriers
+	 * @param receiverOrder
+	 * @param receiverPlan
+	 */
+	@Deprecated
 	public static void convertReceiverOrdersToInitialCarrierServices( Carriers carriers, ReceiverOrder receiverOrder, ReceiverPlan receiverPlan ){
 		for( Order order : receiverOrder.getReceiverProductOrders()){
 			CarrierService.Builder serBuilder = CarrierService.
@@ -340,6 +360,30 @@ public class BaseReceiverChessboardScenario{
 			carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);
 		}
 	}
+	
+	
+	public static void convertReceiverOrdersToInitialCarrierShipments(Carriers carriers, ReceiverOrder receiverOrder, ReceiverPlan receiverPlan ){
+		for( Order order : receiverOrder.getReceiverProductOrders()){
+
+			CarrierShipment.Builder shpBuilder = CarrierShipment.Builder
+					.newInstance(Id.create(order.getId(), CarrierShipment.class), 
+							order.getProduct().getProductType().getOriginLinkId(), 
+							order.getReceiver().getLinkId(), 
+							(int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())));
+
+			if(receiverPlan.getTimeWindows().size() > 1) {
+				LOG.warn("Multiple time windows set. Only the first is used" );
+			}
+			
+			CarrierShipment shipment = shpBuilder.setDeliveryServiceTime(order.getServiceDuration())
+					.setDeliveryTimeWindow(receiverPlan.getTimeWindows().get(0))
+					.build();
+			carriers.getCarriers().get(receiverOrder.getCarrierId()).getShipments().add(shipment);
+		}
+	}
+	
+	
+	
 
 	/**
 	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
@@ -355,8 +399,8 @@ public class BaseReceiverChessboardScenario{
 		for (int r = 1; r < numberOfReceivers+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class)).setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER, true);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, true);
 			receivers.addReceiver(receiver);
 		}
 		

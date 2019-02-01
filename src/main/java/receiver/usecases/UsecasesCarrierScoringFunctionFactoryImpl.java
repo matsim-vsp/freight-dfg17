@@ -1,4 +1,4 @@
-package receiver.usecases.chessboard;
+package receiver.usecases;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,16 +18,17 @@ import org.matsim.contrib.freight.scoring.FreightActivity;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.scoring.ScoringFunction;
 import org.matsim.core.scoring.SumScoringFunction;
+import org.matsim.vehicles.Vehicle;
 
 /*
  * This is a sample carrier scoring function factory implementation (CarrierScoringFunctionImpl.class) developed by sschroeder, 
  * I just changed the penalty cost and time parameter, etc.
  */
-class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFactory {
+class UsecasesCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFactory {
 	
 	private Network network;
 	
-	public MyCarrierScoringFunctionFactoryImpl(Network network) {
+	UsecasesCarrierScoringFunctionFactoryImpl(Network network) {
 		this.network = network;
 	}
 
@@ -146,7 +147,7 @@ class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFacto
 	        }
 
 
-	        private CarrierVehicle getVehicle(Id vehicleId) {
+	        private CarrierVehicle getVehicle(Id<Vehicle> vehicleId) {
 	            for(CarrierVehicle cv : carrier.getCarrierCapabilities().getCarrierVehicles()){
 	                if(cv.getVehicleId().equals(vehicleId)){
 	                    return cv;
@@ -159,7 +160,7 @@ class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFacto
 	        public void handleLeg(Leg leg) {
 	            if(leg.getRoute() instanceof NetworkRoute){
 	                NetworkRoute nRoute = (NetworkRoute) leg.getRoute();
-	                Id vehicleId = nRoute.getVehicleId();
+	                Id<Vehicle> vehicleId = nRoute.getVehicleId();
 	                CarrierVehicle vehicle = getVehicle(vehicleId);
 	                if(vehicle == null) throw new IllegalStateException("vehicle with id " + vehicleId + " is missing");
 	                if(!employedVehicles.contains(vehicle)){
@@ -170,7 +171,7 @@ class MyCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFacto
 	                if(leg.getRoute() instanceof NetworkRoute){
 	                    Link startLink = network.getLinks().get(leg.getRoute().getStartLinkId());
 	                    distance += startLink.getLength();
-	                    for(Id linkId : ((NetworkRoute) leg.getRoute()).getLinkIds()){
+	                    for(Id<Link> linkId : ((NetworkRoute) leg.getRoute()).getLinkIds()){
 	                        distance += network.getLinks().get(linkId).getLength();
 
 	                    }

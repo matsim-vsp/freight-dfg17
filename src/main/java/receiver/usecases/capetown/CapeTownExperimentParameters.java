@@ -1,5 +1,8 @@
 package receiver.usecases.capetown;
 
+import org.matsim.api.core.v01.Id;
+import org.matsim.facilities.ActivityFacility;
+
 /**
  * Class to just help with setting experimental parameters, which are called 
  * from multiple places, in ONE location.
@@ -10,11 +13,11 @@ public class CapeTownExperimentParameters {
 
 	public static int NUM_ITERATIONS = 1500;
 	
-	public static int STAT_INTERVAL = 50;
+	public static int STAT_INTERVAL = 100;
 	
 	public static int REPLAN_INTERVAL = 50;
 	
-	public static int NUMBER_OF_RECEIVERS = 5;
+//	public static int NUMBER_OF_RECEIVERS = 5;
 	
 	public static int TIME_WINDOW_DURATION = 4;
 	
@@ -23,4 +26,6 @@ public class CapeTownExperimentParameters {
 	public static int NUM_DELIVERIES = 5;
 	
 	public static double PROPORTION_CORPORATE = 0.4;
+	
+	public static Id<ActivityFacility> DEPOT_ID = Id.create("0", ActivityFacility.class);
 }

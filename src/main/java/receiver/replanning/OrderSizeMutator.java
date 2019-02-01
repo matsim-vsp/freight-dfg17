@@ -67,43 +67,43 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 			for(Order order: ro.getReceiverProductOrders()){
 				
 				double numDel = order.getNumberOfWeeklyDeliveries();
-				double sdemand;
-				double random = MatsimRandom.getLocalInstance().nextDouble();
+//				double sdemand;
+//				double random = MatsimRandom.getLocalInstance().nextDouble();
 				double newNumDel;
-				double weekdemand = order.getOrderQuantity();
-				double pdeliver = numDel/5;
+//				double weekdemand = order.getOrderQuantity();
+//				double pdeliver = numDel/5;
 					
 			if (increase == true){
 					if (numDel + 1 <= 5){
 						newNumDel = numDel + 1;
-						pdeliver = newNumDel/5;
+//						pdeliver = newNumDel/5;
 					} else {
 						newNumDel = numDel;
-						pdeliver = newNumDel/5;
+//						pdeliver = newNumDel/5;
 					}
 				
-					if (random <= pdeliver){
-						sdemand = weekdemand/newNumDel;
-					} else sdemand = 0;
+//					if (random <= pdeliver){
+//						sdemand = weekdemand/newNumDel;
+//					} else sdemand = 0;
 			
 			} else {
 
 				if (numDel - 1 >= 1){					
 					newNumDel = numDel - 1;
-					pdeliver = newNumDel/5;
+//					pdeliver = newNumDel/5;
 				} else {
 					newNumDel = numDel;
-					pdeliver = newNumDel/5;
+//					pdeliver = newNumDel/5;
 				}
 							
 					
-				if (random <= pdeliver){
-					sdemand = weekdemand/newNumDel;
-				} else sdemand = 0;
+//				if (random <= pdeliver){
+//					sdemand = weekdemand/newNumDel;
+//				} else sdemand = 0;
 			}
 			
 			order.setNumberOfWeeklyDeliveries(newNumDel);
-			order.setDailyOrderQuantity(sdemand);
+//			order.setDailyOrderQuantity(sdemand);
 
 			}
 		}

@@ -29,9 +29,6 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
 
-import com.google.inject.Inject;
-
-import receiver.collaboration.MarginalCostSharing;
 import receiver.collaboration.ProportionalCostSharing;
 
 /**
@@ -42,7 +39,7 @@ import receiver.collaboration.ProportionalCostSharing;
  */
 
 
- final class ReceiverTracker {
+ final class ReceiverTracker implements EventHandler {
 //	@Inject Scenario sc;
 	private Scenario sc;
 	

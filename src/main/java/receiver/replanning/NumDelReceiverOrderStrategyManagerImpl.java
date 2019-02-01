@@ -9,12 +9,10 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.BestPlanSelector;
-import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.KeepSelected;
+
 import receiver.Receiver;
 import receiver.ReceiverPlan;
-import receiver.replanning.OrderChanger;
-import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
 /**
  * This class implements a receiver reorder strategy that changes the number of weekly deliveries preferred by receivers.
@@ -36,8 +34,9 @@ class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyMan
 		stratMan.setMaxPlansPerAgent(5);
 		
 		{
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new ExpBetaPlanChanger<ReceiverPlan, Receiver>(1.0));
-			strategy.addStrategyModule(new OrderChanger());
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
+			strategy.addStrategyModule(new CollaborationStatusChanger());
+			strategy.addStrategyModule(new OrderChanger());	
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 

@@ -140,8 +140,8 @@ class ProportionalScenarioBuilder {
 			Id<Link> receiverLocation = result;
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), false);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), false);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER, false);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, false);
 		
 			receivers.addReceiver(receiver);
 		}		
@@ -339,7 +339,8 @@ class ProportionalScenarioBuilder {
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
-			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver)
+			boolean collaborationStatus = (boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
+			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, collaborationStatus)
 					.addReceiverOrder(receiverOrder)
 					.addTimeWindow( BaseReceiverChessboardScenario.selectRandomTimeStart(tw ) )
 //					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
@@ -379,8 +380,8 @@ class ProportionalScenarioBuilder {
 			Id<Link> receiverLocation = result;
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.grandCoalitionMember.name(), true);
-			receiver.getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.name(), true);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER, true);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, true);
 			receivers.addReceiver(receiver);
 		}
 		

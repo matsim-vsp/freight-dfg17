@@ -37,6 +37,7 @@ import receiver.product.ReceiverProduct;
 
 public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attributable {
 
+
 	public Id<Link> getLinkId();
 
 	/**

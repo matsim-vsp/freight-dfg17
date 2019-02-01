@@ -26,7 +26,7 @@ public class BaseRunReceiverIT{
 
 	@Test
 	public void test(){
-		int runId = 1000 ;
+		int runId = 100 ;
 		BaseRunReceiver runReceiver = new BaseRunReceiver();
 		// ---
 		Scenario sc = runReceiver.prepareScenario(runId ) ;

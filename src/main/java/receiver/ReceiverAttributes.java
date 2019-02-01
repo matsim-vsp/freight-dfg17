@@ -25,8 +25,10 @@ package receiver;
  * This class aims to keep track of all the different attributes names that are
  * used throughout the contrib.
  * 
+ * Instead use static strings in {@link ReceiverUtils}.
  * @author jwjoubert, wlbean
  */
+@Deprecated
 public enum ReceiverAttributes {
 	// yy these enum types are used as names for {@link Attributable}, including file i/o.  --> DO NOT CHANGE.  Consider replacing
 	// by normal string constants.  kai, jan'19
