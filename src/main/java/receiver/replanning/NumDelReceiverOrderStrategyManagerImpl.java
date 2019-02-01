@@ -20,12 +20,12 @@ import receiver.ReceiverPlan;
  * @author wlbean
  *
  */
-class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+public class NumDelReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	// never used.  kai, jan'19
 
 	@Inject Scenario sc;
 	
-	NumDelReceiverOrderStrategyManagerImpl(){
+	public NumDelReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override

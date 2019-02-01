@@ -203,7 +203,7 @@ public class CapeTownScenarioBuilder {
 
 		/* Set coalition settings */
 		Coalition coalition = CollaborationUtils.createCoalition();
-		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
 		ReceiverUtils.setCoalition( coalition, sc );
 
 		return sc;

@@ -41,14 +41,13 @@ import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 /**
  *
  * @author jwjoubert
  */
-public class MarginalReceiverClass {
+ class MarginalReceiverClass {
 	final private static Logger LOG = Logger.getLogger(MarginalReceiverClass.class);
 
 	public static void main(String[] args) {
@@ -99,7 +98,7 @@ public class MarginalReceiverClass {
 			}
 		}
 
-		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 		
@@ -148,12 +147,7 @@ public class MarginalReceiverClass {
 				outputDir += outputDir.endsWith("/") ? "" : "/";
 				File f1 = new File(outputDir + "ITERS/it." + lastIteration + "/" + lastIteration + ".carrierPlans.xml.gz");
 				File f2 = new File(outputDir + "output_carrierPlans.xml.gz");
-				try {
-					ReceiverChessboardUtils.copyFile(f1, f2);
-				} catch (IOException e) {
-					e.printStackTrace();
-					throw new RuntimeException("Cannot copy output carrier plans.");
-				}
+				ReceiverChessboardUtils.copyFile(f1, f2);
 			}
 		});
 		

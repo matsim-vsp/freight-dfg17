@@ -25,7 +25,6 @@ package receiver.usecases.chessboard;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -54,8 +53,9 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
-import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
+import receiver.collaboration.CollaborationUtils;
+import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -119,7 +119,7 @@ class ProportionalRunChessboard{
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				BaseRunReceiver.setCoalitionFromReceiverAttributes( controler );
+				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.

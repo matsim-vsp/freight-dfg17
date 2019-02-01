@@ -22,12 +22,12 @@ import receiver.ReceiverPlan;
  * @author wlbean
  *
  */
-final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+public final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	private static final Logger log = Logger.getLogger(ServiceTimeReceiverOrderStrategyManagerImpl.class) ;
 
 	@Inject Scenario sc;
 	
-	ServiceTimeReceiverOrderStrategyManagerImpl(){
+	public ServiceTimeReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override
@@ -38,9 +38,6 @@ final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		{
 //			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new BestPlanSelector<>());
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanChanger<>( 10.) );
-
-//			strategy.addStrategyModule(new OrderChanger());
-			// yyyyyy is this really needed?  It has the consequence that the plan is copied and re-added, although it is really the same as before.  kai, jan'19
 
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
@@ -54,7 +51,6 @@ final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrder
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanSelector<>( 10. ) );
 			increaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("04:00:00"), true));
 			// (ends up with service time that is <= 4hrs)
-			increaseStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(increaseStrategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), increaseStrategy, null, 0.0);
 		}
@@ -67,7 +63,6 @@ final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrder
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> decreaseStrategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanSelector<>( 10. ) );
 			decreaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("01:00:00"), false));
 			// (ends up with service time that is >= 1hrs)
-			decreaseStrategy.addStrategyModule(new OrderChanger());
 			stratMan.addStrategy(decreaseStrategy, null, 0.15);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), decreaseStrategy, null, 0.0);
 		}
@@ -80,6 +75,7 @@ final class ServiceTimeReceiverOrderStrategyManagerImpl implements ReceiverOrder
 //			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);
 //		}
 		log.error("yyyyyy the above needs to be restored again.") ;
+		// yyyyyy I have switched off the coalition mutator!
 		
 		return stratMan;
 	}

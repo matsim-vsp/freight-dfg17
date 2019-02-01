@@ -61,10 +61,6 @@ public final class ReceiverModule extends AbstractModule {
 			bind(Scenario.class).toInstance(sc);
 		}
 
-		/*
-		 * Need a controler listener. Keeping it simple for now.
-		 */
-
 		addControlerListenerBinding().to(ReceiverControlerListener.class);
 
 	}

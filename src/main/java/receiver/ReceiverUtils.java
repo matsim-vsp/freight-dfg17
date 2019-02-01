@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.MutableScenario;
 import receiver.collaboration.Coalition;
 
@@ -83,8 +82,8 @@ public class ReceiverUtils {
 	}
 	
 	
-	public static void setCoalitionFromReceiverAttributes( Controler controler, Coalition coalition ){
-		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
+	public static void setCoalitionFromReceiverAttributes( Scenario scenario, Coalition coalition ){
+		for ( Receiver receiver : ReceiverUtils.getReceivers( scenario ).getReceivers().values()){
 			if(receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS )!=null){
 				if ( (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ){
 					if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
@@ -95,7 +94,7 @@ public class ReceiverUtils {
 		}
 		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
-		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()));
+		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( scenario ).getReceivers().size() ) );
 
 	}
 

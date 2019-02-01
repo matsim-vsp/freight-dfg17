@@ -45,7 +45,7 @@ import receiver.ReceiversWriter;
  *  
  * @author jwjoubert
  */
-public class MarginalRun{
+ class MarginalRun{
 	final private static Logger LOG = Logger.getLogger( MarginalRun.class );
 	
 

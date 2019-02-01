@@ -18,58 +18,23 @@
   
 package receiver.usecases.chessboard;
 
-import org.matsim.core.scoring.ScoringFunction;
-import org.matsim.core.scoring.SumScoringFunction;
-import org.matsim.core.scoring.SumScoringFunction.MoneyScoring;
+import org.junit.Assert;
+import org.junit.Test;
+import org.matsim.api.core.v01.Scenario;
 
-import receiver.Receiver;
-import receiver.ReceiverScoringFunctionFactory;
+public class BaseReceiverChessboardScenarioTest{
 
-class MyReceiverScoringFunctionFactoryImpl implements ReceiverScoringFunctionFactory {
-	
-    public MyReceiverScoringFunctionFactoryImpl() {
-    }
-    
-	@Override
-	public ScoringFunction createScoringFunction(Receiver receiver) {
-		SumScoringFunction sscorfunc = new SumScoringFunction();
+	@Test
+	public void testCreateChessboardScenario() {
 		
-				
-		MoneyScoring carriertoReceiverCostAllocation = new CarriertoReceiverCostAllocation();
-		sscorfunc.addScoringFunction(carriertoReceiverCostAllocation);
-	    
-		return sscorfunc;
-	}
-
-	static class CarriertoReceiverCostAllocation implements MoneyScoring {
-		
-		private double cost = 0.0;
-		
-	 public void reset(){
-			this.cost = 0.0;
+		Scenario sc = null;
+		try {
+			sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, 5, false );
+		} catch (Exception e) {
+			Assert.fail("Should create the scenario without exceptions.");
 		}
-
-		@Override
-		public void finish() {
 		
-		}			
-
-
-		@Override
-		public double getScore() {
-			return this.cost;
-		}
-
-		/*
-		 * Adds the carrier cost to the receiver cost based on the number of receivers it serves. Currently only two receivers...this should be updated.
-		 */
-		@Override
-		public void addMoney(double amount) {
-			this.cost += amount;
-		}
-
-		
-		
+		/* TODO Test the various elements. */
 	}
 
 }

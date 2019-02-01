@@ -69,7 +69,7 @@ import receiver.ReceiversWriter;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.usecases.chessboard.ReceiverChessboardUtils;
-import receiver.usecases.chessboard.ReceiverScoreStats;
+import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -204,7 +204,7 @@ public class RunCapeTownReceiverWithPopulation {
 		CapeTownReceiverUtils.setupReceivers(controler);
 
 		/* TODO This stats must be set up automatically. */
-		prepareFreightOutputDataAndStats(controler, run);
+		RunCapeTownReceiver.prepareFreightOutputDataAndStats(controler, run );
 
 		controler.run();
 		
@@ -297,95 +297,4 @@ public class RunCapeTownReceiverWithPopulation {
 		});		
 	}
 
-	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
-
-		/*
-		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
-		 */
-		final int statInterval = CapeTownExperimentParameters.STAT_INTERVAL;
-		
-		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(controler.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
-
-		controler.addControlerListener(scoreStats);
-		controler.addControlerListener(rScoreStats);
-		controler.addControlerListener(new VehicleTypeListener(controler.getScenario(), run));
-		controler.addControlerListener(new IterationEndsListener() {
-
-			@Override
-			public void notifyIterationEnds(IterationEndsEvent event) {
-				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-
-				if((event.getIteration() + 1) % (statInterval) != 0) return;
-				
-				for(int i = 1; i < (ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()+1); i++) {
-					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
-//					receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverAttributes.collaborationStatus.toString(), (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()));
-					receiver.getSelectedPlan().getAttributes().putAttribute(
-							ReceiverUtils.ATTR_COLLABORATION_STATUS, 
-							(boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS));					}
-
-
-				//write plans
-				
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
-				
-				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml");
-
-				/* Record receiver stats */
-				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
-				for(int i = 1; i < numberOfReceivers+1; i++) {
-					Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get(Id.create(Integer.toString(i), Receiver.class));
-//					if(event.getIteration() == (CapeTownExperimentParameters.REPLAN_INTERVAL-1)){
-//						receiver.getSelectedPlan().setCollaborationStatus((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString())); 
-//					}
-					for (ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
-						for (Order order : rorder.getReceiverProductOrders()){
-							String score = receiver.getSelectedPlan().getScore().toString();
-							float start = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getStart();
-							float end = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getEnd();
-							float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
-							float freq = (float) order.getNumberOfWeeklyDeliveries();
-							float dur =  (float) order.getServiceDuration();
-							boolean status = (boolean) receiver.getSelectedPlan().getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
-							boolean status2 = (boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);							
-							boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER);
-
-							BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-							try {
-								bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b,%b", 
-										event.getIteration(), 
-										receiver.getId(), 
-										score, 
-										start, 
-										end,
-										order.getId(), 
-										size,
-										freq,
-										dur,
-										status,
-										status2,
-										member));											 							
-								bw1.newLine();
-
-							} catch (IOException e) {
-								e.printStackTrace();
-								throw new RuntimeException("Cannot write receiver stats");    
-
-							} finally{
-								try {
-									bw1.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-									throw new RuntimeException("Cannot close receiver stats file");
-								}
-							}	
-						}	
-					}
-				}
-
-			}
-		});	
-
-	}
 }

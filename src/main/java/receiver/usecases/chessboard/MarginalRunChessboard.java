@@ -25,7 +25,6 @@ package receiver.usecases.chessboard;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,16 +54,17 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
-import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
+import receiver.collaboration.CollaborationUtils;
+import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
  * @author jwjoubert, wlbean
  */
 
-public class MarginalRunChessboard{
+ class MarginalRunChessboard{
 	final private static Logger LOG = Logger.getLogger( MarginalRunChessboard.class );
 	final private static long SEED_BASE = 20180816l;	
 //	private static int replanInt;
@@ -127,6 +127,8 @@ public class MarginalRunChessboard{
 
 
 	private static void setupReceiverAndCarrierReplanning( MatsimServices controler) {
+		// yyyyyy this should not be necessary any more ... use variant from elsewhere. kai, feb'19
+
 
 		controler.addControlerListener(new IterationStartsListener() {
 
@@ -138,7 +140,7 @@ public class MarginalRunChessboard{
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				BaseRunReceiver.setCoalitionFromReceiverAttributes( controler );
+				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.

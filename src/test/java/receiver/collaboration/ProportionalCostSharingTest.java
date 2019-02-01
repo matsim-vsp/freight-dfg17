@@ -19,7 +19,6 @@
 package receiver.collaboration;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -38,11 +37,13 @@ public class ProportionalCostSharingTest {
 	
 
 	@Test
-	@Ignore
+//	@Ignore
 	/**
 	 * FIXME This test is important but is currently ignored as I (JWJ, Sep'18)
 	 * cannot get the scenario to create a consistent, reproducible example. We
 	 * may have to create a local test scenario instead.
+	 *
+	 * Might be ok now; I removed at least two sources of randomness.  kai, feb'19
 	 */
 	public void test() {
 		setup();
@@ -81,7 +82,7 @@ public class ProportionalCostSharingTest {
 	}
 	
 	private void setup() {
-		this.sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, false );
+		this.sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, 5, false );
 	}
 
 }

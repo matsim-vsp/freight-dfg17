@@ -57,11 +57,11 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
+import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
-import receiver.usecases.chessboard.BaseRunReceiver;
 import receiver.usecases.chessboard.ReceiverChessboardUtils;
-import receiver.usecases.chessboard.ReceiverScoreStats;
+import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -147,7 +147,7 @@ public class RunCapeTownReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				BaseRunReceiver.setCoalitionFromReceiverAttributes( controler );
+				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
 
 				/*
 				 * Carrier replan with receiver changes.
@@ -207,7 +207,7 @@ public class RunCapeTownReceiver {
 		});		
 	}
 
-	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
+	static void prepareFreightOutputDataAndStats( MatsimServices controler, int run ) {
 
 		/*
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.

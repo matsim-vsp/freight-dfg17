@@ -108,7 +108,7 @@ class ProportionalScenarioBuilder {
 			}
 		}
 
-		BaseReceiverChessboardScenario.setCoalitionFromReceiverValues( sc, coalition );
+		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 		return sc;

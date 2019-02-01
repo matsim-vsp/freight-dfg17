@@ -20,7 +20,7 @@ public class BaseRunReceiverTest{
 	public void test(){
 		int runId = 2 ;
 		BaseRunReceiver runReceiver = new BaseRunReceiver();
-		Scenario sc = runReceiver.prepareScenario(runId ) ;
+		Scenario sc = runReceiver.prepareScenario(runId, 5) ;
 		sc.getConfig().controler().setLastIteration( runId );
 		ReceiverUtils.setReplanInterval( 1, sc );
 		List<AbstractModule> abstractModules = new ArrayList<>() ;

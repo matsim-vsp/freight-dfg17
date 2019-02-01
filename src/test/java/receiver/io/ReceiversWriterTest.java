@@ -36,7 +36,7 @@ public class ReceiversWriterTest {
 	
 	@Test
 	public void testV1() {
-		Scenario sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, false );
+		Scenario sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, 5, false );
 		
 		/* Now the receiver is 'complete', and we can write it to file. */
 		try {

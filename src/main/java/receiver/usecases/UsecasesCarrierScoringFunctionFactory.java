@@ -24,11 +24,11 @@ import org.matsim.vehicles.Vehicle;
  * This is a sample carrier scoring function factory implementation (CarrierScoringFunctionImpl.class) developed by sschroeder, 
  * I just changed the penalty cost and time parameter, etc.
  */
-class UsecasesCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctionFactory {
+public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunctionFactory {
 	
 	private Network network;
 	
-	UsecasesCarrierScoringFunctionFactoryImpl(Network network) {
+	public UsecasesCarrierScoringFunctionFactory( Network network ) {
 		this.network = network;
 	}
 
@@ -37,6 +37,7 @@ class UsecasesCarrierScoringFunctionFactoryImpl implements CarrierScoringFunctio
 	        private double score;
 
 	        private double timeParameter = 1.000;
+	        // yyyyyy I have set the time parameter to a relatively high value.
 
 	        private double missedTimeWindowPenalty = 0.01667;
 

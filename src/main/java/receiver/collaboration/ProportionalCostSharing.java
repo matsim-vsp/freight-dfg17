@@ -45,12 +45,9 @@ import receiver.product.ReceiverOrder;
  * @author jwjoubert, wlbean
  */
 public final class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
-	//	@Inject Scenario sc;
 	private Scenario sc;
 
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
-	//	private Attributes attributes;
-	//	private String descr = "Proportional sharing of costs between carrier(s) and receiver(s)";
 	private double fee;
 
 	/**
@@ -63,19 +60,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 		this.fee = fee;
 	}
 
-
-	//	@Override
-	//	public Attributes getAttributes() {
-	//		return this.attributes;
-	//	}
-
-	//	@Override
-	//	public String getDescription() {
-	//		return this.descr;
-	//	}
-
 	@Override
-	//	public MutableFreightScenario allocateCoalitionCosts( MutableFreightScenario scenario) {
 	public void allocateCoalitionCosts() {
 
 		log.info("Performing proportional cost allocation based on volume.");

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package receiver.usecases.chessboard;
+package receiver.usecases;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

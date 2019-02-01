@@ -71,19 +71,17 @@ import java.util.Random;
  */
 public class BaseReceiverChessboardScenario{
 	private final static Logger LOG = Logger.getLogger( BaseReceiverChessboardScenario.class );
-	
+
 
 	/**
 	 * Build the entire chessboard example.
 	 */
-	public static Scenario createChessboardScenario( long seed, int run, boolean write) {
+	 public static Scenario createChessboardScenario( long seed, int run, int numberOfReceivers, boolean write ) {
 		MatsimRandom.reset(seed);
-		int numberOfReceivers = 1;
 
 		Config config = setupChessboardConfig( seed, run );
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
-
 
 		createChessboardCarriersAndAddToScenario(sc);
 		
@@ -116,25 +114,11 @@ public class BaseReceiverChessboardScenario{
 			}
 		}
 
-		setCoalitionFromReceiverValues( sc, coalition );
+		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
 
 		ReceiverUtils.setCoalition( coalition, sc );
 		
 		return sc;
-	}
-
-	public static void setCoalitionFromReceiverValues( Scenario sc, Coalition coalition ){
-		for ( Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ( (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
 	}
 
 
@@ -178,49 +162,6 @@ public class BaseReceiverChessboardScenario{
 		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
-	// absorbing this functionality fully into the iterations start listener elsewhere.  kai, jan'19
-//	/**
-//	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
-//	 */
-//	public static void generateCarrierPlan( Scenario sc ) {
-//		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class));
-//
-//		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, sc.getNetwork());
-//
-//		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(sc.getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
-//		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-//
-//
-//		//read and create a pre-configured algorithms to solve the vrp
-////		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-//		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-//		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
-//
-//		//solve the problem
-//		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-//
-//		//get best (here, there is only one)
-////		VehicleRoutingProblemSolution solution = null;
-////
-////		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-////
-////		while(iterator.hasNext()){
-////			solution = iterator.next();
-////		}
-//
-//		//create a carrierPlan from the solution
-//		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, Solutions.bestOf(solutions));
-//
-//		//route plan
-//		NetworkRouter.routePlan(plan, netBasedCosts);
-//
-//
-//		//assign this plan now to the carrier and make it the selected carrier plan
-//		carrier.setSelectedPlan(plan);
-//
-//		//write out the carrierPlan to an xml-file
-//		//		new CarrierPlanXmlWriterV2(carriers).write(directory + "/input/carrierPlanned.xml");
-//	}
 
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
@@ -275,7 +216,7 @@ public class BaseReceiverChessboardScenario{
 			} else if (r<=60){
 				tw = 12;
 			}
-			tw = 12 ; // yyyyyy
+			tw = 12 ; // yyyyyy I have changed the initial time windows to 12hrs everywhere.
 			
 //			/* Set the different service durations for experiments. */
 //			if (r <= 15){

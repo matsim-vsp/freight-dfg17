@@ -55,19 +55,12 @@ ReplanningListener, BeforeMobsimListener {
 	@Inject EventsManager eMan;
 	@Inject Scenario sc;
 
-	/**
-	 * This creates a new receiver controler listener for receivers with replanning abilities.
-	 * @param receivers
-	 * @param stratManFac
-	 */
-
 	@Inject
-	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
+	private ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
 		this.receivers = receivers;
 		this.stratManFac = stratManFac;
 		this.scorFuncFac = scorFuncFac;
 	}
-
 
 	@Override
 	public void notifyReplanning(final ReplanningEvent event) {

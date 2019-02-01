@@ -35,10 +35,7 @@ import com.graphhopper.jsprit.core.util.Solutions;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
-import org.matsim.contrib.freight.carrier.CarrierShipment;
+import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
@@ -58,20 +55,22 @@ import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolutio
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.*;
+import receiver.collaboration.Coalition;
+import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
+import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
  * @author jwjoubert, wlbean
  */
 
-public class BaseRunReceiver{
+class BaseRunReceiver{
 	final private static Logger LOG = Logger.getLogger( BaseRunReceiver.class );
 	final private static long SEED_BASE = 20180816l;
 	private String outputfolder;
 	private Scenario sc;
-	//	private static int replanInt;
 
 	public static void main(String[] args) {
 		int startRun = Integer.parseInt(args[0]);
@@ -84,8 +83,7 @@ public class BaseRunReceiver{
 
 	public  void run(int run) {
 		LOG.info("Starting run " + run);
-		Scenario scenario = prepareScenario( run );
-		//		scenario.getConfig().global().setRandomSeed( run );
+		prepareScenario( run, 5 );
 		prepareAndRunControler( run, null);
 	}
 
@@ -97,30 +95,46 @@ public class BaseRunReceiver{
 			}
 		}
 
-		setupCarrierReplanning(controler, outputfolder );
-
 		ReceiverChessboardUtils.setupCarriers(controler );
 
 		ReceiverChessboardUtils.setupReceivers(controler);
-		// (this one actually sets the receiver strategies!!!!)
 
 		prepareFreightOutputDataAndStats(controler, runId);
 
 		controler.run();
 	}
 
-	Scenario prepareScenario( int run ){
+	Scenario prepareScenario( int run, int numberOfReceivers ){
 		outputfolder = String.format("./output/base/tw/run_%03d/", run);
 		new File(outputfolder).mkdirs();
-		sc = BaseReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, true );
+		sc = BaseReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, numberOfReceivers, true );
 		//		replanInt = mfs.getReplanInterval();
-
-		//		/* Write headings */
-		//		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-		//		writeHeadings( bw );
-		// yy the above was nowhere used.  kai, jan'19
-
 		sc.getConfig().controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles );
+
+
+		/* Write headings */
+		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
+		writeHeadings( bw );
+		// (later code appends to this file!)
+
+		final Carriers carriers = ReceiverUtils.getCarriers( sc );
+		CarrierVehicleTypes types = new CarrierVehicleTypes();
+		new CarrierVehicleTypeReader(types).readFile(sc.getConfig().controler().getOutputDirectory()  + "carrierVehicleTypes.xml");
+		new CarrierVehicleTypeLoader(carriers).loadVehicleTypes(types);
+
+		/* FIXME We added this null check because, essentially, the use of
+		 * coalitions should be optional. We must eventually find a way to be
+		 * able to configure this in a more elegant way. */
+		Coalition coalition = ReceiverUtils.getCoalition( sc );
+		if(coalition != null) {
+			for (Carrier carrier : carriers.getCarriers().values()){
+				if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
+					coalition.addCarrierCoalitionMember(carrier);
+				}
+			}
+		}
+
+
 		return sc;
 	}
 
@@ -153,7 +167,7 @@ public class BaseRunReceiver{
 	}
 
 
-	private static void setupCarrierReplanning( MatsimServices controler, String outputFolder ) {
+	static void setupCarrierReplanning( MatsimServices controler ) {
 		controler.addControlerListener(new IterationStartsListener() {
 
 			@Override
@@ -165,7 +179,7 @@ public class BaseRunReceiver{
 				}
 
 				// Adds the receiver agents that are part of the current (sub)coalition.
-				setCoalitionFromReceiverAttributes( controler );
+				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
 
 				// clean out plans, services, shipments from carriers:
 				Map<Id<Carrier>, Carrier> carriers = ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers();
@@ -241,22 +255,6 @@ public class BaseRunReceiver{
 		});
 	}
 
-	public static void setCoalitionFromReceiverAttributes( MatsimServices controler ){
-		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if (receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) != null){
-				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
-					if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-						ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-					}
-				} else {
-					if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-						ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-					}
-				}
-			}
-		}
-	}
-
 
 	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
 
@@ -293,7 +291,7 @@ public class BaseRunReceiver{
 
 	}
 
-	public static void recordReceiverStats( IterationEndsEvent event, int numberOfReceivers, MatsimServices controler, int run ){
+	static void recordReceiverStats( IterationEndsEvent event, int numberOfReceivers, MatsimServices controler, int run ){
 		for(int i = 1; i < numberOfReceivers+1; i++) {
 			Receiver receiver = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().get( Id.create(Integer.toString(i ), Receiver.class ) );
 			for ( ReceiverOrder rorder :  receiver.getSelectedPlan().getReceiverOrders()){
