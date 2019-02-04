@@ -15,10 +15,7 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-  
-/**
- * 
- */
+
 package receiver.usecases.chessboard;
 
 import java.io.File;
@@ -34,7 +31,6 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 
 import receiver.Receiver;
-import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 
@@ -107,7 +103,7 @@ import receiver.ReceiversWriter;
 		
 		for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()) {
 			/* Only execute a marginal calculation run for those in the grand coalition. */
-			if((boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() )) {
+			if((boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS )) {
 				MarginalCalculateCallable cmc = new MarginalCalculateCallable(seed, inputPath, outputPath, release, receiver.getId());
 				Future<Double> job = executor.submit(cmc);
 				jobs.put(receiver.getId(), job);

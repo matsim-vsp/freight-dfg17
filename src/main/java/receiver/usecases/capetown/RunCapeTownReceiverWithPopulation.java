@@ -18,58 +18,28 @@
  *                                                                         *
  * *********************************************************************** */
 
-/**
- * 
- */
 package receiver.usecases.capetown;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
-import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
-import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
-import org.matsim.contrib.freight.jsprit.NetworkRouter;
-import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.StrategyConfigGroup.StrategySettings;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
-import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
-import org.matsim.core.controler.events.IterationEndsEvent;
-import org.matsim.core.controler.events.IterationStartsEvent;
-import org.matsim.core.controler.listener.IterationEndsListener;
-import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule;
 import org.matsim.core.router.NetworkRoutingProvider;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
-
-
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
-
-import receiver.Receiver;
-import receiver.ReceiverUtils;
-import receiver.ReceiversWriter;
-import receiver.product.Order;
-import receiver.product.ReceiverOrder;
 import receiver.usecases.chessboard.ReceiverChessboardUtils;
-import receiver.usecases.ReceiverScoreStats;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -78,7 +48,7 @@ import receiver.usecases.ReceiverScoreStats;
 
 public class RunCapeTownReceiverWithPopulation {
 	final private static Logger LOG = Logger.getLogger(RunCapeTownReceiverWithPopulation.class);
-	final private static long SEED_BASE = 20180816l;	
+	final private static long SEED_BASE = 20180816L;
 
 	/**
 	 * @param args
@@ -132,7 +102,8 @@ public class RunCapeTownReceiverWithPopulation {
 		Controler controler = new Controler(sc);
 
 		/* Set up freight portion. To be repeated every iteration*/
-		setupReceiverAndCarrierReplanning(controler, outputfolder);
+		RunCapeTownReceiver.setupReceiverAndCarrierReplanning(controler, outputfolder);
+
 		/* Add travel time binding for "commercial" mode. */
 		controler.addOverridingModule(new AbstractModule() {
 			@Override
@@ -151,33 +122,33 @@ public class RunCapeTownReceiverWithPopulation {
 		config.strategy().addStrategySettings(changeExpBetaStrategySettings);
 		/* People subpopulation strategy. */
 		StrategySettings peopleChangeExpBeta = new StrategySettings( );
-		peopleChangeExpBeta.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		peopleChangeExpBeta.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta);
 		peopleChangeExpBeta.setWeight(0.70);
 		peopleChangeExpBeta.setSubpopulation("private");
 		config.strategy().addStrategySettings(peopleChangeExpBeta);
 		/* People subpopulation ReRoute. Switch off after a time. */
 		StrategySettings peopleReRoute = new StrategySettings( );
-		peopleReRoute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute.toString());
+		peopleReRoute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute);
 		peopleReRoute.setWeight(0.10);
 		peopleReRoute.setSubpopulation("private");
 		peopleReRoute.setDisableAfter(85);
 		config.strategy().addStrategySettings(peopleReRoute);
 		/* People subpopulation Time allocation mutator AND ReRoute. Switch off after a time. */
 		StrategySettings peopleTimeAndReroute = new StrategySettings( );
-		peopleTimeAndReroute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.TimeAllocationMutator_ReRoute.toString());
+		peopleTimeAndReroute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.TimeAllocationMutator_ReRoute);
 		peopleTimeAndReroute.setWeight(0.20);
 		peopleTimeAndReroute.setSubpopulation("private");
 		peopleTimeAndReroute.setDisableAfter(85);
 		config.strategy().addStrategySettings(peopleTimeAndReroute);
 		/* Commercial subpopulation strategy. */
 		StrategySettings commercialStrategy = new StrategySettings( );
-		commercialStrategy.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		commercialStrategy.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta);
 		commercialStrategy.setWeight(0.85);
 		commercialStrategy.setSubpopulation("commercial");
 		config.strategy().addStrategySettings(commercialStrategy);
 		/* Commercial subpopulation ReRoute. Switch off after a time. */
 		StrategySettings commercialReRoute = new StrategySettings( );
-		commercialReRoute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute.toString());
+		commercialReRoute.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute);
 		commercialReRoute.setWeight(0.15);
 		commercialReRoute.setSubpopulation("commercial");
 		commercialReRoute.setDisableAfter(85);
@@ -213,88 +184,5 @@ public class RunCapeTownReceiverWithPopulation {
 		IOUtils.deleteDirectoryRecursively(itersFolder.toPath());
 	}
 
-
-	private static void setupReceiverAndCarrierReplanning( MatsimServices controler, String outputFolder) {
-		controler.addControlerListener(new IterationStartsListener() {
-
-			//@Override
-			public void notifyIterationStarts(IterationStartsEvent event) {
-				
-				if(event.getIteration() % ReceiverUtils.getReplanInterval( controler.getScenario() ) != 0) {
-					return;
-				}
-
-				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				for (Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-					if (receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) != null){
-						if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
-							if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
-							}
-						} else {
-							if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-								ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
-							}
-						}
-					}
-				}
-
-				/*
-				 * Carrier replan with receiver changes.
-				 */
-				
-				Carrier carrier = ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
-				ArrayList<CarrierPlan> carrierPlans = new ArrayList<CarrierPlan>();
-
-				/* Remove all existing carrier plans. */
-
-				for (CarrierPlan plan : carrier.getPlans()){
-					carrierPlans.add(plan);
-				}
-
-				Iterator<CarrierPlan> planIterator = carrierPlans.iterator();
-				while (planIterator.hasNext()){
-					CarrierPlan plan = planIterator.next();							
-					carrier.removePlan(plan);
-				}
-
-
-				VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, controler.getScenario().getNetwork());
-
-				NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(controler.getScenario().getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
-				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-
-				//read and create a pre-configured algorithms to solve the vrp
-				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-
-				//solve the problem
-				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-				//get best (here, there is only one)
-				VehicleRoutingProblemSolution solution = null;
-
-				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-				while(iterator.hasNext()){
-					solution = iterator.next();
-				}
-
-				//create a new carrierPlan from the solution 
-				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, solution);
-
-				//route plan 
-				NetworkRouter.routePlan(newPlan, netBasedCosts);
-
-
-				//assign this plan now to the carrier and make it the selected carrier plan
-				carrier.setSelectedPlan(newPlan);
-	
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
-				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
-
-			}
-
-		});		
-	}
 
 }

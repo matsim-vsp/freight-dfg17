@@ -18,9 +18,6 @@
  *                                                                         *
  * *********************************************************************** */
 
-/**
- *
- */
 package receiver.usecases.chessboard;
 
 import java.io.BufferedWriter;
@@ -151,7 +148,7 @@ class BaseRunReceiver{
 				  "frequency",
 				  "serviceduration",
 				  "collaborate",
-				  ReceiverAttributes.grandCoalitionMember.name() ) );
+				  ReceiverUtils.ATTR_GRANDCOALITION_MEMBER ) );
 			bw.newLine();
 		} catch ( IOException e) {
 			e.printStackTrace();
@@ -204,7 +201,7 @@ class BaseRunReceiver{
 						for( Order order : receiverOrder.getReceiverProductOrders() ){
 							nn++ ;
 							CarrierShipment.Builder builder = CarrierShipment.Builder.newInstance(
-								  Id.create("Order" + receiverPlan.getReceiver().getId().toString() + Integer.toString(nn), CarrierShipment.class),
+								  Id.create("Order" + receiverPlan.getReceiver().getId().toString() + nn, CarrierShipment.class),
 								  order.getProduct().getProductType().getOriginLinkId(),
 								  order.getReceiver().getLinkId(),
 								  (int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())) );
@@ -302,8 +299,8 @@ class BaseRunReceiver{
 					float size = (float) (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity());
 					float freq = (float) order.getNumberOfWeeklyDeliveries();
 					float dur =  (float) order.getServiceDuration();
-					boolean status = (boolean) receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() );
-					boolean member = (boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.grandCoalitionMember.name());
+					boolean status = (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS );
+					boolean member = (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_GRANDCOALITION_MEMBER );
 
 					BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(controler.getScenario().getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv" );
 					try {

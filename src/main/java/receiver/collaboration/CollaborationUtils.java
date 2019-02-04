@@ -3,7 +3,6 @@ package receiver.collaboration;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.MatsimServices;
 import receiver.Receiver;
-import receiver.ReceiverAttributes;
 import receiver.ReceiverUtils;
 
 public class CollaborationUtils{
@@ -15,8 +14,8 @@ public class CollaborationUtils{
 
 	public static void setCoalitionFromReceiverAttributes( MatsimServices controler ){
 		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
-			if (receiver.getAttributes().getAttribute( ReceiverAttributes.collaborationStatus.name() ) != null){
-				if ((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.name()) == true){
+			if (receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) != null){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
 					if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
 						ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
 					}

@@ -136,7 +136,7 @@ public class RunCapeTownReceiver {
 	}
 
 
-	private static void setupReceiverAndCarrierReplanning( MatsimServices controler, String outputFolder) {
+	static void setupReceiverAndCarrierReplanning(MatsimServices controler, String outputFolder) {
 		controler.addControlerListener(new IterationStartsListener() {
 
 			//@Override

@@ -47,7 +47,7 @@ import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
  *
  * @author jwjoubert
  */
-class ReceiverChessboardUtils {
+public class ReceiverChessboardUtils {
 	final private static Logger LOG = Logger.getLogger(ReceiverChessboardUtils.class);
 
 	public static void setupCarriers(Controler controler) {
