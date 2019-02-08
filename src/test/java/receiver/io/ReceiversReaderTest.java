@@ -64,10 +64,10 @@ public class ReceiversReaderTest {
 		Assert.assertNotNull("Could not find ProductType \"P2\"", receivers.getProductType(Id.create("P2", ProductType.class)));
 		
 		Assert.assertTrue("Wrong ProductType description", pt1.getDescription().equalsIgnoreCase("Product 1"));
-		Assert.assertEquals("Wrong capacity.", 3.0, pt1.getRequiredCapacity(), MatsimTestUtils.EPSILON);
+		Assert.assertEquals("Wrong capacity.", 1.0, pt1.getRequiredCapacity(), MatsimTestUtils.EPSILON);
 		
 		/* Receiver */
-		Assert.assertEquals("Wrong number of receivers.", 2, receivers.getReceivers().size());
+		Assert.assertEquals("Wrong number of receivers.", 5, receivers.getReceivers().size());
 		Receiver r1 = receivers.getReceivers().get(Id.create("1", Receiver.class));
 		Assert.assertNotNull("Should find receiver '1'", r1);
 		/*TODO need to test receiver attributes. */
@@ -76,8 +76,8 @@ public class ReceiversReaderTest {
 		/*TODO Need to test multiple time windows */
 		Assert.assertEquals("Wrong number of time windows.", 1, r1.getSelectedPlan().getTimeWindows().size());
 		TimeWindow t1 = r1.getSelectedPlan().getTimeWindows().get(0);
-		Assert.assertEquals("Wrong time window start time.", Time.parseTime("10:00:00"), t1.getStart(), MatsimTestUtils.EPSILON);
-		Assert.assertEquals("Wrong time window end time.", Time.parseTime("14:00:00"), t1.getEnd(), MatsimTestUtils.EPSILON);
+		Assert.assertEquals("Wrong time window start time.", Time.parseTime("06:00:00"), t1.getStart(), MatsimTestUtils.EPSILON);
+		Assert.assertEquals("Wrong time window end time.", Time.parseTime("18:00:00"), t1.getEnd(), MatsimTestUtils.EPSILON);
 		Assert.assertEquals("Wrong number of products.", 2, r1.getProducts().size());
 		
 		/* Receiver product */
@@ -94,9 +94,8 @@ public class ReceiversReaderTest {
 		Assert.assertNotNull("Could not find attribute 'S'", policy.getAttributes().getAttribute("S"));
 		
 		/* (Receiver)Orders */
-		Assert.assertEquals("Wrong number of orders/plans", 1, r1.getPlans().size());
-		ReceiverPlan plan = r1.getPlans().get(0);
-		Assert.assertTrue("Singular plan should be selected", plan.isSelected());
+		Assert.assertEquals("Wrong number of orders/plans", 5, r1.getPlans().size());
+		ReceiverPlan plan = r1.getSelectedPlan();
 		ReceiverOrder ro = plan.getReceiverOrder(Id.create("Carrier1", Carrier.class));
 		Assert.assertNotNull("Should find ReceiverOrder.", ro);
 		
@@ -107,12 +106,11 @@ public class ReceiversReaderTest {
 		/* Order (items) */
 		Assert.assertEquals("Wrong number of order (items)", 2, ro.getReceiverProductOrders().size());
 		Order o = ro.getReceiverProductOrders().iterator().next();
-		Assert.assertTrue("Wrong order id.", o.getId().equals(Id.create("Order1", Order.class)));
-		//Assert.assertTrue("Wrong order name.", o.getOrderName().equalsIgnoreCase("service"));
-		Assert.assertEquals("Wrong order quantity.", 500, o.getOrderQuantity(), MatsimTestUtils.EPSILON);
+		Assert.assertTrue("Wrong order id.", o.getId().equals(Id.create("Order11", Order.class)));
+		Assert.assertEquals("Wrong order quantity.", 5000, o.getOrderQuantity(), MatsimTestUtils.EPSILON);
 		Assert.assertTrue("Wrong product type.", o.getProduct().getProductType().getId().equals(Id.create("P1", ProductType.class)));
 		Assert.assertTrue("Wrong receiver.", o.getReceiver().getId().equals(Id.create("1", Receiver.class)));
-		Assert.assertEquals("Wrong service duration.", Time.parseTime("00:30:00"), o.getServiceDuration(), MatsimTestUtils.EPSILON);
+		Assert.assertEquals("Wrong service duration.", Time.parseTime("03:00:00"), o.getServiceDuration(), MatsimTestUtils.EPSILON);
 	}
 
 }
