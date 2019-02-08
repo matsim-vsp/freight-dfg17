@@ -72,24 +72,12 @@ public class ReceiverChessboardUtils {
 
 
 	static void setupReceivers( Controler controler ) {
-
 		Receivers receivers = ReceiverUtils.getReceivers( controler.getScenario() );
-
-		receivers.linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( controler.getScenario() ) );
-		// (presumably done twice, to be sure)
-
-		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );
-		ReceiverUtils.setCoalitionFromReceiverAttributes( controler.getScenario(), coalition );
-		// (presumably done twice, to be sure)
-
-		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
-		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
-		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size()));
-
 		final ReceiverScoringFunctionFactory rScorFuncFac = new UsecasesReceiverScoringFunctionFactory();
 
 		ReceiverOrderStrategyManagerFactory rStratManFac = null ;
 
+		/* FIXME This must be configurable from the ConfigGroup OUTSIDE the usecases */
 		int selector = 1;
 		switch (selector) {
 			case 0:

@@ -122,14 +122,14 @@ class BaseRunReceiver{
 		/* FIXME We added this null check because, essentially, the use of
 		 * coalitions should be optional. We must eventually find a way to be
 		 * able to configure this in a more elegant way. */
-		Coalition coalition = ReceiverUtils.getCoalition( sc );
-		if(coalition != null) {
-			for (Carrier carrier : carriers.getCarriers().values()){
-				if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
-					coalition.addCarrierCoalitionMember(carrier);
-				}
-			}
-		}
+//		Coalition coalition = ReceiverUtils.getCoalition( sc );
+//		if(coalition != null) {
+//			for (Carrier carrier : carriers.getCarriers().values()){
+//				if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
+//					coalition.addCarrierCoalitionMember(carrier);
+//				}
+//			}
+//		}
 
 
 		return sc;
@@ -181,13 +181,7 @@ class BaseRunReceiver{
 				// clean out plans, services, shipments from carriers:
 				Map<Id<Carrier>, Carrier> carriers = ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers();
 				for( Carrier carrier : carriers.values() ){
-					/* Remove all existing carrier plans. */
-					ArrayList<CarrierPlan> carrierPlans = new ArrayList<>( carrier.getPlans() );
-					for( CarrierPlan plan : carrierPlans ){
-						carrier.removePlan( plan );
-					}
-					// yyyy todo: replace above by carrier.clearPlans() (not yet in master).  kai, jan'19
-
+					carrier.clearPlans();
 					carrier.getShipments().clear();
 					carrier.getServices().clear();
 				}
@@ -246,9 +240,7 @@ class BaseRunReceiver{
 
 				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
 				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
-
 			}
-
 		});
 	}
 

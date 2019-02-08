@@ -45,7 +45,6 @@ import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import receiver.*;
-import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -99,18 +98,8 @@ class ProportionalScenarioBuilder {
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
 		
-		/* Add carrier and receivers to coalition */
-		Coalition coalition = CollaborationUtils.createCoalition();
-		
-		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
-			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
-				coalition.addCarrierCoalitionMember(carrier);
-			}
-		}
+		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 
-		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
-
-		ReceiverUtils.setCoalition( coalition, sc );
 		return sc;
 	}
 

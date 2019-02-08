@@ -1,6 +1,7 @@
 package receiver.collaboration;
 
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.core.controler.MatsimServices;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
@@ -28,7 +29,16 @@ public class CollaborationUtils{
 		}
 	}
 
-	public static void setCoalitionFromReceiverValues( Scenario sc, Coalition coalition ){
+	public static void createCoalitionWithCarriersAndAddCollaboratingReceivers(Scenario sc ){
+		/* Add carrier and receivers to coalition */
+		Coalition coalition = CollaborationUtils.createCoalition();
+
+		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
+			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
+				coalition.addCarrierCoalitionMember(carrier);
+			}
+		}
+
 		for ( Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			if ( (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) ){
 				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
@@ -40,5 +50,7 @@ public class CollaborationUtils{
 				}
 			}
 		}
+
+		ReceiverUtils.setCoalition( coalition, sc );
 	}
 }

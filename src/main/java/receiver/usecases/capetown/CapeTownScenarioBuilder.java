@@ -133,30 +133,7 @@ public class CapeTownScenarioBuilder {
 
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
-
-		/* Add carrier and receivers to coalition */
-		Coalition coalition = CollaborationUtils.createCoalition();
-
-		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
-			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
-				coalition.addCarrierCoalitionMember(carrier);
-			}
-		}
-
-		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-			if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS ) == true){
-				if (!coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.addReceiverCoalitionMember(receiver);
-				}
-			} else {
-				if (coalition.getReceiverCoalitionMembers().contains(receiver)){
-					coalition.removeReceiverCoalitionMember(receiver);
-				}
-			}
-		}
-
-		ReceiverUtils.setCoalition( coalition, sc );
-
+		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers(sc);
 		return sc;
 	}
 
@@ -202,10 +179,7 @@ public class CapeTownScenarioBuilder {
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
 
 		/* Set coalition settings */
-		Coalition coalition = CollaborationUtils.createCoalition();
-		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
-		ReceiverUtils.setCoalition( coalition, sc );
-
+		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 		return sc;
 	}
 

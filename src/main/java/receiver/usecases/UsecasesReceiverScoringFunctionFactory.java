@@ -18,6 +18,7 @@
   
 package receiver.usecases;
 
+import org.apache.log4j.Logger;
 import org.matsim.core.scoring.ScoringFunction;
 import org.matsim.core.scoring.SumScoringFunction;
 import org.matsim.core.scoring.SumScoringFunction.MoneyScoring;
@@ -65,6 +66,7 @@ public class UsecasesReceiverScoringFunctionFactory implements ReceiverScoringFu
 		 */
 		@Override
 		public void addMoney(double amount) {
+			Logger.getLogger(UsecasesReceiverScoringFunctionFactory.class).error("Where is this used?!");
 			this.cost += amount;
 		}
 

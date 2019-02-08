@@ -55,7 +55,8 @@ import receiver.collaboration.ProportionalCostSharing;
 	 * Scores the selected receiver order.
 	 */
 	void scoreSelectedPlans() {
-		
+
+		/* FIXME this must be relocated to Module level, and configurable in ConfigGroup */
 //		MarginalCostSharing mcs = new MarginalCostSharing(750, sc);
 //		mcs.allocateCoalitionCosts();
 		

@@ -19,7 +19,7 @@
  * *********************************************************************** */
 
 /**
- * 
+ *
  */
 package receiver.usecases.chessboard;
 
@@ -50,7 +50,6 @@ import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
 import receiver.*;
-import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -66,7 +65,7 @@ import java.util.Random;
 
 /**
  * Various utilities for building receiver scenarios (for now).
- * 
+ *
  * @author jwjoubert, wlbean
  */
 public class BaseReceiverChessboardScenario{
@@ -84,46 +83,33 @@ public class BaseReceiverChessboardScenario{
 		Scenario sc = ScenarioUtils.loadScenario(config);
 
 		createChessboardCarriersAndAddToScenario(sc);
-		
+
 		ReceiverUtils.setReplanInterval( 50, sc );
 //		ReceiverUtils.setReplanInterval( 5, sc );
-		
+
 		/* Create the grand coalition receiver members and allocate orders. */
-		createAndAddChessboardReceivers(sc, numberOfReceivers);		
+		createAndAddChessboardReceivers(sc, numberOfReceivers);
 
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 //		generateCarrierPlan( sc );
 		// needs to be done in iterations startup listener, where it is also done during the iterations.  kai, jan'19
-		
-		
+
+
 		if(write) {
 			writeFreightScenario(sc);
 		}
-		
+
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
-		
-		/* Add carrier and receivers to coalition */
-		Coalition coalition = CollaborationUtils.createCoalition();
-		
-		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
-			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
-				coalition.addCarrierCoalitionMember(carrier);
-			}
-		}
-
-		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
-
-		ReceiverUtils.setCoalition( coalition, sc );
-		
+		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 		return sc;
 	}
 
 
 	/**
-	 * FIXME Need to complete this. 
+	 * FIXME Need to complete this.
 	 */
 	private static Config setupChessboardConfig( long seed, int run ) {
 		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
@@ -145,35 +131,35 @@ public class BaseReceiverChessboardScenario{
 
 		return config ;
 	}
-	
+
 	public static void writeFreightScenario( Scenario sc ) {
 		/* Write the necessary bits to file. */
 		String outputFolder = sc.getConfig().controler().getOutputDirectory();
 		outputFolder += outputFolder.endsWith("/") ? "" : "/";
 		new File(outputFolder).mkdirs();
-		
+
 		new ConfigWriter(sc.getConfig()).write(outputFolder + "config.xml");
 		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(outputFolder + "carriers.xml");
 		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
 
 		/* Write the vehicle types. FIXME This will have to change so that vehicle
-		 * types lie at the Carriers level, and not per Carrier. In this scenario 
+		 * types lie at the Carriers level, and not per Carrier. In this scenario
 		 * there luckily is only a single Carrier. */
 		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
 
 	/**
-	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
-	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
+	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders
+	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver.
 	 */
 	private static void createReceiverOrders( Scenario sc ) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
-		
+
 		/* Try and get the first Carrier vehicle so that we can get its origina link.
-		 * FIXME We want the carrier's location to rather be an attribute of the 
+		 * FIXME We want the carrier's location to rather be an attribute of the
 		 * Carrier, but currently (Feb 19, JWJ) Carrier is not Attributable.
 		 */
 		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().iterator();
@@ -190,7 +176,7 @@ public class BaseReceiverChessboardScenario{
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class), carrierOriginLinkId);
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
-		
+
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			int tw = 6;
 //			String serdur = "01:00:00"; // -1257
@@ -201,7 +187,7 @@ public class BaseReceiverChessboardScenario{
 //			String serdur = "03:30:00"; // -1981
 //			String serdur = "04:00:00"; // -1980 // yyyy why becoming better again?
 			int numDel = 5;
-			
+
 			/* Set the different time window durations[[??]] for experiments. */
 			if (r <= 10){
 				tw = 2;
@@ -217,7 +203,7 @@ public class BaseReceiverChessboardScenario{
 				tw = 12;
 			}
 			tw = 12 ; // yyyyyy I have changed the initial time windows to 12hrs everywhere.
-			
+
 //			/* Set the different service durations for experiments. */
 //			if (r <= 15){
 //				serdur = "01:00:00";
@@ -301,30 +287,30 @@ public class BaseReceiverChessboardScenario{
 			carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);
 		}
 	}
-	
-	
+
+
 	public static void convertReceiverOrdersToInitialCarrierShipments(Carriers carriers, ReceiverOrder receiverOrder, ReceiverPlan receiverPlan ){
 		for( Order order : receiverOrder.getReceiverProductOrders()){
 
 			CarrierShipment.Builder shpBuilder = CarrierShipment.Builder
-					.newInstance(Id.create(order.getId(), CarrierShipment.class), 
-							order.getProduct().getProductType().getOriginLinkId(), 
-							order.getReceiver().getLinkId(), 
+					.newInstance(Id.create(order.getId(), CarrierShipment.class),
+							order.getProduct().getProductType().getOriginLinkId(),
+							order.getReceiver().getLinkId(),
 							(int) (Math.round(order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity())));
 
 			if(receiverPlan.getTimeWindows().size() > 1) {
 				LOG.warn("Multiple time windows set. Only the first is used" );
 			}
-			
+
 			CarrierShipment shipment = shpBuilder.setDeliveryServiceTime(order.getServiceDuration())
 					.setDeliveryTimeWindow(receiverPlan.getTimeWindows().get(0))
 					.build();
 			carriers.getCarriers().get(receiverOrder.getCarrierId()).getShipments().add(shipment);
 		}
 	}
-	
-	
-	
+
+
+
 
 	/**
 	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
@@ -334,9 +320,9 @@ public class BaseReceiverChessboardScenario{
 		Network network = sc.getNetwork();
 
 		Receivers receivers = new Receivers();
-		
+
 		receivers.setDescription("Chessboard");
-		
+
 		for (int r = 1; r < numberOfReceivers+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class)).setLinkId(receiverLocation);
@@ -344,7 +330,7 @@ public class BaseReceiverChessboardScenario{
 			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, true);
 			receivers.addReceiver(receiver);
 		}
-		
+
 		ReceiverUtils.setReceivers( receivers, sc );
 	}
 
@@ -361,12 +347,12 @@ public class BaseReceiverChessboardScenario{
 
 		CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
 		CarrierCapabilities carrierCap = capBuilder.setFleetSize(FleetSize.INFINITE).build();
-		carrier.setCarrierCapabilities(carrierCap);						
-		LOG.info("Created a carrier with capabilities.");	
+		carrier.setCarrierCapabilities(carrierCap);
+		LOG.info("Created a carrier with capabilities.");
 
 		/*
-		 * Create the carrier vehicle types. 
-		 * TODO This might, potentially, be read from XML file. 
+		 * Create the carrier vehicle types.
+		 * TODO This might, potentially, be read from XML file.
 		 */
 
 		/* Heavy vehicle. */
@@ -404,7 +390,7 @@ public class BaseReceiverChessboardScenario{
 		/* Assign vehicles to carrier. */
 		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);	
+		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 
@@ -441,15 +427,15 @@ public class BaseReceiverChessboardScenario{
 	/**
 	 * This method assigns a specific product type to a receiver, and allocates that receiver's order
 	 * policy.
-	 * 
+	 *
 	 * TODO This must be made more generic so that multiple policies can be considered. Currently (2018/04
 	 * this is hard-coded to be a min-max (s,S) reordering policy.
-	 *  
+	 *
 	 * @param receiver
 	 * @param productType
 	 * @param minLevel
 	 * @param maxLevel
-	 * @return 
+	 * @return
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();

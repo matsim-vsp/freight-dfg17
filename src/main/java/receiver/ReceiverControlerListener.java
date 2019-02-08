@@ -141,7 +141,7 @@ ReplanningListener, BeforeMobsimListener {
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
 		tracker = new ReceiverTracker(scorFuncFac, sc);
-//		eMan.addHandler(tracker);		
+//		eMan.addHandler(tracker);
 	}
 
 }

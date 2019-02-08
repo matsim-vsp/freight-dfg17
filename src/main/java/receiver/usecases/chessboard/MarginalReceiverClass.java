@@ -24,7 +24,6 @@ package receiver.usecases.chessboard;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.Controler;
@@ -37,7 +36,6 @@ import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.utils.io.IOUtils;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
-import receiver.collaboration.Coalition;
 import receiver.collaboration.CollaborationUtils;
 
 import java.io.File;
@@ -89,24 +87,13 @@ import java.net.URL;
 		/* Link the carriers to the receivers. */
 		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
 		
-		/* Add carrier and receivers to coalition */
-		Coalition coalition = CollaborationUtils.createCoalition();
-		
-		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
-			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
-				coalition.addCarrierCoalitionMember(carrier);
-			}
-		}
+		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 
-		CollaborationUtils.setCoalitionFromReceiverValues( sc, coalition );
 
-		ReceiverUtils.setCoalition( coalition, sc );
-		
-		
 		/* Make config changes relevant to the current marginal run. */
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
 		sc.getConfig().controler().setLastIteration( MarginalExperimentParameters.REPLAN_INTERVAL );
-		
+
 		Controler controler = new Controler(sc);
 
 		ReceiverChessboardUtils.setupCarriers(controler);
