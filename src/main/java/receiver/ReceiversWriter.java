@@ -95,6 +95,7 @@ public final class ReceiversWriter extends MatsimXmlWriter implements MatsimWrit
 						handler.endReorderPolicy(writer);
 						handler.endReceiverProduct(writer);
 					}
+					handler.writeGap(writer);
 				}
 				
 				/* Build receiver orders. */

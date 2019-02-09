@@ -112,7 +112,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				} else {
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carrierId);
 					fixedFeeVolume += getReceiverOrderTotal(ro);
-					/*TODO Why not? We need the fixedFeeVolume later (JWJ, Feb19). Come back and check is we find exceptions!! */
+					/*TODO Why not? We need the fixedFeeVolume later (JWJ, Feb19). Come back and check if we find exceptions!! */
 					throw new RuntimeException( "I don't want these." ) ;
 				}
 				//				carrierCoalitionVolume += getReceiverOrderTotal(thisReceiver.getSelectedPlan().getReceiverOrder(carrierId));
@@ -148,6 +148,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 		/* Allocate the total coalition cost. */
 		final Coalition coalition = ReceiverUtils.getCoalition( sc );
 		coalition.setCoalitionCost(-totalCoalitionScore );
+		log.warn("      Total coalition score: " + totalCoalitionScore);
 
 //		log.warn("totalCoalitionScore=" + totalCoalitionScore) ;
 //		System.exit(-1) ;
@@ -198,6 +199,8 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				 * the Carrier will not PAY the receiver because they collaborate. */
 				plan.setScore( Math.min(total, 0.0) );
 			}
+			log.warn("      Receiver '" + thisReceiver.getId().toString() + "' score:" + plan.getScore());
+
 		}
 
 		log.info("Done with proportional cost calculation.");

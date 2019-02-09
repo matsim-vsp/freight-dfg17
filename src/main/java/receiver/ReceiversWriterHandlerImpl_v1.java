@@ -76,6 +76,9 @@ import receiver.product.Order;
 		out.write(">\n");
 		
 		attributesWriter.writeAttributes("\t\t", out, receiver.getAttributes());
+		if(receiver.getAttributes().size() > 0){
+			this.writeGap(out);
+		}
 	}
 
 	@Override
@@ -86,6 +89,11 @@ import receiver.product.Order;
 	@Override
 	public void writeSeparator(BufferedWriter out) throws IOException {
 		out.write("\n\t<!-- =========================================================================================== -->\n");
+	}
+
+	@Override
+	public void writeGap(BufferedWriter out) throws IOException {
+		out.write("\n");
 	}
 
 	@Override

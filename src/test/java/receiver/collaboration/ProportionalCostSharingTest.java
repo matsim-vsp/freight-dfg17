@@ -24,7 +24,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.*;
+import org.matsim.contrib.freight.utils.FreightUtils;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.testcases.MatsimTestUtils;
 
 import receiver.Receiver;
@@ -32,6 +35,8 @@ import receiver.ReceiverUtils;
 import receiver.product.Order;
 import receiver.usecases.chessboard.BaseReceiverChessboardScenario;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 public class ProportionalCostSharingTest {
@@ -41,7 +46,7 @@ public class ProportionalCostSharingTest {
 
 
     @Test
-	@Ignore
+//    @Ignore
     /**
      * FIXME This test is important but is currently ignored as I (JWJ, Sep'18)
      * cannot get the scenario to create a consistent, reproducible example. We
@@ -71,7 +76,6 @@ public class ProportionalCostSharingTest {
         }
 
         double pOne = receiverOneTotal / total;
-        double pTwo = 1 - pOne;
 
         ProportionalCostSharing pcs = new ProportionalCostSharing(350, sc);
         pcs.allocateCoalitionCosts();
@@ -80,16 +84,16 @@ public class ProportionalCostSharingTest {
                 pOne * carrierCost,
                 ReceiverUtils.getReceivers(sc).getReceivers().get(r1Id).getSelectedPlan().getScore(),
                 MatsimTestUtils.EPSILON);
-
-        Id<Receiver> r2Id = Id.create("2", Receiver.class);
-        Assert.assertEquals("Wrong cost allocated to receiver 2",
-                pTwo * carrierCost,
-                ReceiverUtils.getReceivers(sc).getReceivers().get(r2Id).getSelectedPlan().getScore(),
-                MatsimTestUtils.EPSILON);
     }
 
     private void setup() {
         this.sc = BaseReceiverChessboardScenario.createChessboardScenario(1L, 1, 5, false);
+
+        /* Manipulate the carrier as it has no plan or score without a simulation run. */
+        Carrier carrier = ReceiverUtils.getCarriers(this.sc).getCarriers().get(Id.create("Carrier1", Carrier.class));
+        CarrierPlan plan = new CarrierPlan(carrier, new ArrayList<>());
+        plan.setScore(-10000.);
+        carrier.setSelectedPlan(plan);
     }
 
 }
