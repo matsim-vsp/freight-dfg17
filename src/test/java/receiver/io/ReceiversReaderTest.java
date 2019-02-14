@@ -29,16 +29,11 @@ import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.testcases.MatsimTestUtils;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.Receivers;
-import receiver.ReceiversReader;
+import receiver.*;
 import receiver.product.Order;
 import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
-import receiver.ReorderPolicy;
-import receiver.SSReorderPolicy;
 
 public class ReceiversReaderTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
@@ -71,8 +66,12 @@ public class ReceiversReaderTest {
 		Receiver r1 = receivers.getReceivers().get(Id.create("1", Receiver.class));
 		Assert.assertNotNull("Should find receiver '1'", r1);
 
-		/*TODO need to test receiver attributes. */
-		
+		/* Receiver attributes. */
+		Assert.assertFalse("Attributes should not be empty.", r1.getAttributes().isEmpty());
+		Assert.assertNotNull("Should find attribute '" + ReceiverUtils.ATTR_GRANDCOALITION_MEMBER + "'", r1.getAttributes().getAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER));
+		Assert.assertNotNull("Should find attribute '" + ReceiverUtils.ATTR_COLLABORATION_STATUS + "'", r1.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS));
+		Assert.assertNotNull("Should find attribute '" + ReceiverUtils.ATTR_RECEIVER_SCORE + "'", r1.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_SCORE));
+
 		/* Time window */
 		Assert.assertEquals("Wrong number of time windows.", 2, r1.getSelectedPlan().getTimeWindows().size());
 		TimeWindow t1 = r1.getSelectedPlan().getTimeWindows().get(0);

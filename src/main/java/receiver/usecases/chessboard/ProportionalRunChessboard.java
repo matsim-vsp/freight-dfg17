@@ -25,39 +25,21 @@ package receiver.usecases.chessboard;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
-import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
-import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
-import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.controler.events.IterationEndsEvent;
-import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
-import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.utils.io.IOUtils;
-
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
 import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
-import receiver.collaboration.CollaborationUtils;
 import receiver.replanning.ReceiverReplanningType;
-import receiver.usecases.ReceiverScoreStats;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -105,48 +87,9 @@ class ProportionalRunChessboard {
 
 
         /* TODO This stats must be set up automatically. */
-        prepareFreightOutputDataAndStats(controler, run);
+        BaseRunReceiver.prepareFreightOutputDataAndStats(controler);
 
         controler.run();
     }
 
-    private static void prepareFreightOutputDataAndStats(MatsimServices controler, int run) {
-
-        /*
-         * Adapted from RunChessboard.java by sshroeder and gliedtke.
-         */
-        final int statInterval = ReceiverUtils.getReplanInterval(controler.getScenario());
-        //final LegHistogram freightOnly = new LegHistogram(20);
-
-        // freightOnly.setPopulation(controler.getScenario().getPopulation());
-        //freightOnly.setInclPop(false);
-
-        CarrierScoreStats scoreStats = new CarrierScoreStats(ReceiverUtils.getCarriers(controler.getScenario()), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-        ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
-
-        //controler.getEvents().addHandler(freightOnly);
-        controler.addControlerListener(scoreStats);
-        controler.addControlerListener(rScoreStats);
-        controler.addControlerListener(new IterationEndsListener() {
-
-            @Override
-            public void notifyIterationEnds(IterationEndsEvent event) {
-                String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-
-                if ((event.getIteration() + 1) % (statInterval) != 0) return;
-
-                //write plans
-
-                new CarrierPlanXmlWriterV2(ReceiverUtils.getCarriers(controler.getScenario())).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
-
-                new receiver.ReceiversWriter(ReceiverUtils.getReceivers(controler.getScenario())).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
-
-                /* Record receiver stats */
-                int numberOfReceivers = ReceiverUtils.getReceivers(controler.getScenario()).getReceivers().size();
-                BaseRunReceiver.recordReceiverStats(event, numberOfReceivers, controler, run);
-
-            }
-        });
-
-    }
 }

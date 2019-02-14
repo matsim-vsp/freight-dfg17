@@ -18,35 +18,35 @@
 
 package receiver;
 
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 
 import receiver.replanning.*;
-import receiver.usecases.ReceiverScoreStats;
 import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
 
 public final class ReceiverModule extends AbstractModule {
 
     private final ReceiverReplanningType type;
 
-    //TODO Get from ConfigGroup
-    private boolean createPNG = true;
-
-
     public ReceiverModule(ReceiverReplanningType replanningType) {
         this.type = replanningType;
     }
 
-
     @Override
     public void install() {
+        /* ConfigGroup */
+        ReceiverConfigGroup configGroup;
+        if (!this.getConfig().getModules().containsKey(ReceiverConfigGroup.NAME)) {
+            configGroup = new ReceiverConfigGroup(ReceiverConfigGroup.NAME);
+            this.getConfig().addModule(configGroup);
+        }
+        configGroup = ConfigUtils.addOrGetModule(this.getConfig(), ReceiverConfigGroup.NAME, ReceiverConfigGroup.class);
 
         /* Carrier */
         this.addControlerListenerBinding().to( ReceiverResponseCarrierReplanning.class);
 
 
-        /* Receiver FIXME at thos point the strategies are mutually exclusive. That is, only one allowed. */
+        /* Receiver FIXME at this point the strategies are mutually exclusive. That is, only one allowed. */
         bind(ReceiverScoringFunctionFactory.class).toInstance(new UsecasesReceiverScoringFunctionFactory());
         switch (this.type) {
             case timeWindow:
@@ -66,19 +66,16 @@ public final class ReceiverModule extends AbstractModule {
 
         /* Statistics and output */
 //        CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", this.createPNG);
-//        ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
-//        addEventHandlerBinding().toInstance( new ReceiverScoreStats() );
-//        addControlerListenerBinding().to(ReceiverScoreStats.class);
-
+        addControlerListenerBinding().to(ReceiverScoreStats.class);
     }
 
 
     public boolean isCreatePNG() {
-        return createPNG;
+        return ConfigUtils.addOrGetModule(this.getConfig(), ReceiverConfigGroup.class).isCreatePNG();
     }
 
     public void setCreatePNG(boolean createPNG) {
-        this.createPNG = createPNG;
+        ConfigUtils.addOrGetModule(this.getConfig(), ReceiverConfigGroup.class).setCreatePNG(createPNG);
     }
 }
 

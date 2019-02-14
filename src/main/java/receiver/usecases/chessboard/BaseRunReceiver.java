@@ -20,45 +20,31 @@
 
 package receiver.usecases.chessboard;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
-import com.graphhopper.jsprit.core.util.Solutions;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.*;
-import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
-import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
-import org.matsim.contrib.freight.jsprit.NetworkRouter;
+import org.matsim.contrib.freight.carrier.CarrierVehicleTypeLoader;
+import org.matsim.contrib.freight.carrier.CarrierVehicleTypeReader;
+import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
+import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.controler.events.IterationEndsEvent;
-import org.matsim.core.controler.events.IterationStartsEvent;
-import org.matsim.core.controler.listener.IterationEndsListener;
-import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.utils.io.IOUtils;
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
-
-import receiver.*;
-import receiver.collaboration.Coalition;
-import receiver.collaboration.CollaborationUtils;
+import receiver.Receiver;
+import receiver.ReceiverModule;
+import receiver.ReceiverUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
 import receiver.replanning.ReceiverReplanningType;
-import receiver.replanning.ReceiverResponseCarrierReplanning;
-import receiver.usecases.ReceiverScoreStats;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -80,7 +66,7 @@ class BaseRunReceiver{
 	}
 
 
-	public  void run(int run) {
+	public void run(int run) {
 		LOG.info("Starting run " + run);
 		prepareScenario( run, 5 );
 		prepareAndRunControler( run, null);
@@ -99,7 +85,7 @@ class BaseRunReceiver{
 		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
 		controler.addOverridingModule(receiverModule);
 
-		prepareFreightOutputDataAndStats(controler, runId);
+		prepareFreightOutputDataAndStats(controler);
 
 		controler.run();
 	}
@@ -172,39 +158,14 @@ class BaseRunReceiver{
 	}
 
 
-	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
-
-		/*
-		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
-		 */
-		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
-
+	/**
+	 * FIXME This can be removed, like ReceiverScoreStats as soon as the Scenario can be injected into the ScoreStats class.
+	 * @param controler
+	 */
+	@Deprecated
+	static void prepareFreightOutputDataAndStats( MatsimServices controler) {
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
-
 		controler.addControlerListener(scoreStats);
-		controler.addControlerListener(rScoreStats);
-		controler.addControlerListener(new IterationEndsListener() {
-
-			@Override
-			public void notifyIterationEnds(IterationEndsEvent event) {
-				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-
-				if((event.getIteration() + 1) % (statInterval) != 0) return;
-
-				//write plans
-
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml");
-
-				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml");
-
-				/* Record receiver stats */
-				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
-				recordReceiverStats( event, numberOfReceivers, controler, run );
-
-			}
-		});
-
 	}
 
 	static void recordReceiverStats( IterationEndsEvent event, int numberOfReceivers, MatsimServices controler, int run ){
