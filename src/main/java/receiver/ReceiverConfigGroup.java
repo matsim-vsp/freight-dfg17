@@ -19,6 +19,7 @@ package receiver;
 
 import org.apache.log4j.Logger;
 import org.matsim.core.config.ReflectiveConfigGroup;
+import receiver.replanning.ReceiverReplanningType;
 
 import java.util.Map;
 
@@ -35,11 +36,13 @@ final class ReceiverConfigGroup extends ReflectiveConfigGroup {
     final static String CARRIERS_FILE = "carriersFile";
     final static String NONCOLLABORATING_FEE = "noncollaboratingFee";
     final static String CREATE_PNG = "createPNG";
+    final static String REPLANNING_TYPE = "replanningModules";
 
     private String receiversFile = "./receivers.xml.gz";
     private String carriersFile = "./carriers.xml.gz";
     private String costSharing = "proportional";
     private boolean createPNG = true;
+    private ReceiverReplanningType replanningType = ReceiverReplanningType.serviceTime;
 
     @Override
     public Map<String, String> getComments() {
@@ -50,6 +53,8 @@ final class ReceiverConfigGroup extends ReflectiveConfigGroup {
         comments.put(CARRIERS_FILE, "Path to the file containing the carriers.");
         comments.put(NONCOLLABORATING_FEE, "The fixed fee charged per receiver NOT collaborating in a coalition.");
         comments.put(CREATE_PNG, "Should PNG output be created? Default is 'true'");
+        comments.put(REPLANNING_TYPE, "Replanning strategy used. Available values are 'serviceTime' (default), " +
+                "'timeWindow' and 'deliveryFrequency'.");
         return comments;
     }
 
@@ -88,4 +93,12 @@ final class ReceiverConfigGroup extends ReflectiveConfigGroup {
 
     @StringSetter(CREATE_PNG)
     public void setCreatePNG(boolean createPNG) { this.createPNG = createPNG; }
+
+    @StringGetter(REPLANNING_TYPE)
+    public ReceiverReplanningType getReplanningType() { return replanningType; }
+
+    @StringSetter(REPLANNING_TYPE)
+    public void setReplanningType(ReceiverReplanningType replanningType) {
+        this.replanningType = replanningType;
+    }
 }

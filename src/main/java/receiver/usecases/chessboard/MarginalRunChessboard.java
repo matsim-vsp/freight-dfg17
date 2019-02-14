@@ -96,7 +96,7 @@ import java.io.File;
 //		setupReceiverAndCarrierReplanning(sc);
 
 		ReceiverChessboardUtils.setupCarriers(controler);
-		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		ReceiverModule receiverModule = new ReceiverModule();
 		controler.addOverridingModule(receiverModule);
 
 		/* TODO This stats must be set up automatically. */

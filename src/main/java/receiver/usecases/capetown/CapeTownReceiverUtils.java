@@ -52,7 +52,8 @@ public class CapeTownReceiverUtils {
 		ReceiverUtils.setCoalitionFromReceiverAttributes( controler.getScenario(), coalition );
 		// (presumably done twice, just to be sure)
 
-		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		ReceiverModule receiverModule = new ReceiverModule();
+		receiverModule.setReplanningType( ReceiverReplanningType.serviceTime );
 		controler.addOverridingModule(receiverModule);
 	}
 

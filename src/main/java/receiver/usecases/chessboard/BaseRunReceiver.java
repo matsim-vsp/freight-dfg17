@@ -82,7 +82,8 @@ class BaseRunReceiver{
 
 		ReceiverChessboardUtils.setupCarriers(controler );
 
-		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		ReceiverModule receiverModule = new ReceiverModule();
+		receiverModule.setReplanningType( ReceiverReplanningType.serviceTime );
 		controler.addOverridingModule(receiverModule);
 
 		prepareFreightOutputDataAndStats(controler);

@@ -100,7 +100,7 @@ import java.net.URL;
 
 		ReceiverChessboardUtils.setupCarriers(controler);
 
-		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		ReceiverModule receiverModule = new ReceiverModule();
 		controler.addOverridingModule(receiverModule);
 
 		prepareFreightOutputDataAndStats(controler, 1);

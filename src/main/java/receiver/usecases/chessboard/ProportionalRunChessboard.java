@@ -82,7 +82,7 @@ class ProportionalRunChessboard {
 
 //		setupReceiverAndCarrierReplanning(controler);
         ReceiverChessboardUtils.setupCarriers(controler);
-        ReceiverModule receiverModule = new ReceiverModule(ReceiverReplanningType.serviceTime);
+        ReceiverModule receiverModule = new ReceiverModule();
         controler.addOverridingModule(receiverModule);
 
 
