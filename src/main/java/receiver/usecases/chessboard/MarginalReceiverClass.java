@@ -35,8 +35,10 @@ import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.utils.io.IOUtils;
 import receiver.Receiver;
+import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.collaboration.CollaborationUtils;
+import receiver.replanning.ReceiverReplanningType;
 
 import java.io.File;
 import java.net.URL;
@@ -80,7 +82,7 @@ import java.net.URL;
 		/* Let jsprit do its magic and route the given receiver orders. */
 //		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  "input/algorithm.xml");
 		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
-		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
+		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
 		
 		BaseReceiverChessboardScenario.writeFreightScenario(sc );
 		
@@ -98,8 +100,9 @@ import java.net.URL;
 
 		ReceiverChessboardUtils.setupCarriers(controler);
 
-		ReceiverChessboardUtils.setupReceivers(controler);	
-		
+		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		controler.addOverridingModule(receiverModule);
+
 		prepareFreightOutputDataAndStats(controler, 1);
 
 		controler.run();

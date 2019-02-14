@@ -70,16 +70,20 @@ public class ReceiversReaderTest {
 		Assert.assertEquals("Wrong number of receivers.", 5, receivers.getReceivers().size());
 		Receiver r1 = receivers.getReceivers().get(Id.create("1", Receiver.class));
 		Assert.assertNotNull("Should find receiver '1'", r1);
+
 		/*TODO need to test receiver attributes. */
 		
 		/* Time window */
-		/*TODO Need to test multiple time windows */
-		Assert.assertEquals("Wrong number of time windows.", 1, r1.getSelectedPlan().getTimeWindows().size());
+		Assert.assertEquals("Wrong number of time windows.", 2, r1.getSelectedPlan().getTimeWindows().size());
 		TimeWindow t1 = r1.getSelectedPlan().getTimeWindows().get(0);
 		Assert.assertEquals("Wrong time window start time.", Time.parseTime("06:00:00"), t1.getStart(), MatsimTestUtils.EPSILON);
-		Assert.assertEquals("Wrong time window end time.", Time.parseTime("18:00:00"), t1.getEnd(), MatsimTestUtils.EPSILON);
+		Assert.assertEquals("Wrong time window end time.", Time.parseTime("10:00:00"), t1.getEnd(), MatsimTestUtils.EPSILON);
+		TimeWindow t2 = r1.getSelectedPlan().getTimeWindows().get(1);
+		Assert.assertEquals("Wrong time window start time.", Time.parseTime("15:00:00"), t2.getStart(), MatsimTestUtils.EPSILON);
+		Assert.assertEquals("Wrong time window end time.", Time.parseTime("18:00:00"), t2.getEnd(), MatsimTestUtils.EPSILON);
+
 		Assert.assertEquals("Wrong number of products.", 2, r1.getProducts().size());
-		
+
 		/* Receiver product */
 		ReceiverProduct rp1 = r1.getProduct(Id.create("P1", ProductType.class));
 		Assert.assertNotNull("Could not find receiver product \"P1\"", rp1);

@@ -16,9 +16,6 @@
  *                                                                         *
  * *********************************************************************** */
 
-/**
- *
- */
 package receiver.collaboration;
 
 import java.util.ArrayList;

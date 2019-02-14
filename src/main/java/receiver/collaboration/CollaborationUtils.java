@@ -2,7 +2,6 @@ package receiver.collaboration;
 
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.core.controler.MatsimServices;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 
@@ -13,16 +12,16 @@ public class CollaborationUtils{
 		return new MutableCoalition();
 	}
 
-	public static void setCoalitionFromReceiverAttributes( MatsimServices controler ){
-		for ( Receiver receiver : ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().values()){
+	public static void setCoalitionFromReceiverAttributes( Scenario sc ){
+		for ( Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			if (receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) != null){
 				if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
-					if (!ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-						ReceiverUtils.getCoalition( controler.getScenario() ).addReceiverCoalitionMember(receiver);
+					if (!ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
+						ReceiverUtils.getCoalition( sc ).addReceiverCoalitionMember(receiver);
 					}
 				} else {
-					if ( ReceiverUtils.getCoalition( controler.getScenario() ).getReceiverCoalitionMembers().contains(receiver)){
-						ReceiverUtils.getCoalition( controler.getScenario() ).removeReceiverCoalitionMember(receiver);
+					if ( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
+						ReceiverUtils.getCoalition( sc ).removeReceiverCoalitionMember(receiver);
 					}
 				}
 			}

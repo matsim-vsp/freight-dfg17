@@ -29,6 +29,7 @@ import receiver.ReceiverUtils;
 import receiver.Receivers;
 import receiver.collaboration.Coalition;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
+import receiver.replanning.ReceiverReplanningType;
 import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
 
 /**
@@ -51,13 +52,8 @@ public class CapeTownReceiverUtils {
 		ReceiverUtils.setCoalitionFromReceiverAttributes( controler.getScenario(), coalition );
 		// (presumably done twice, just to be sure)
 
-		final ReceiverScoringFunctionFactory rScorFuncFac = new UsecasesReceiverScoringFunctionFactory();
-
-		final ReceiverOrderStrategyManagerFactory rStratManFac = new CapeTownReceiverOrderStrategyManagerImpl();
-
-		ReceiverModule receiverControler = new ReceiverModule(finalReceivers, rScorFuncFac, rStratManFac, controler.getScenario());
-
-		controler.addOverridingModule(receiverControler);
+		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		controler.addOverridingModule(receiverModule);
 	}
 
 }

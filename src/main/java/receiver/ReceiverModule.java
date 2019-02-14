@@ -19,51 +19,67 @@
 package receiver;
 
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.AbstractModule;
 
-import receiver.replanning.ReceiverOrderStrategyManagerFactory;
+import receiver.replanning.*;
+import receiver.usecases.ReceiverScoreStats;
+import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
 
 public final class ReceiverModule extends AbstractModule {
 
-	private Receivers receivers;
-	private ReceiverScoringFunctionFactory sFuncFac;
-	private ReceiverOrderStrategyManagerFactory stratManFac;
-	private Scenario sc;
+    private final ReceiverReplanningType type;
+
+    //TODO Get from ConfigGroup
+    private boolean createPNG = true;
 
 
-	public ReceiverModule(
-			Receivers receivers, 
-			ReceiverScoringFunctionFactory sFuncFac, 
-			ReceiverOrderStrategyManagerFactory stratManFac,
-			Scenario sc){
-		this.receivers = receivers;
-		this.sFuncFac = sFuncFac;
-		this.stratManFac = stratManFac;
-		this.sc = sc;
-	};
+    public ReceiverModule(ReceiverReplanningType replanningType) {
+        this.type = replanningType;
+    }
 
 
+    @Override
+    public void install() {
 
-	@Override
-	public void install() {
-
-		bind(Receivers.class).toInstance(receivers);
-
-		if (sFuncFac != null){
-			bind(ReceiverScoringFunctionFactory.class).toInstance(sFuncFac);
-		}
-
-		if (stratManFac != null){
-			bind(ReceiverOrderStrategyManagerFactory.class).toInstance(stratManFac);
-		}
-
-		if(sc != null) {
-			bind(Scenario.class).toInstance(sc);
-		}
-
-		addControlerListenerBinding().to(ReceiverControlerListener.class);
-
-	}
+        /* Carrier */
+        this.addControlerListenerBinding().to( ReceiverResponseCarrierReplanning.class);
 
 
+        /* Receiver FIXME at thos point the strategies are mutually exclusive. That is, only one allowed. */
+        bind(ReceiverScoringFunctionFactory.class).toInstance(new UsecasesReceiverScoringFunctionFactory());
+        switch (this.type) {
+            case timeWindow:
+                bind(ReceiverOrderStrategyManagerFactory.class).toInstance( new TimeWindowReceiverOrderStrategyManagerImpl() );
+                break ;
+            case serviceTime:
+                bind(ReceiverOrderStrategyManagerFactory.class).toInstance( new ServiceTimeReceiverOrderStrategyManagerImpl() );
+                break ;
+            case orderFrequency:
+                bind(ReceiverOrderStrategyManagerFactory.class).toInstance( new NumDelReceiverOrderStrategyManagerImpl() );
+                break;
+            default:
+                throw new RuntimeException("No valid (receiver) order strategy manager selected." );
+        }
+        addControlerListenerBinding().to(ReceiverControlerListener.class);
+
+
+        /* Statistics and output */
+//        CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", this.createPNG);
+//        ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
+//        addEventHandlerBinding().toInstance( new ReceiverScoreStats() );
+//        addControlerListenerBinding().to(ReceiverScoreStats.class);
+
+    }
+
+
+    public boolean isCreatePNG() {
+        return createPNG;
+    }
+
+    public void setCreatePNG(boolean createPNG) {
+        this.createPNG = createPNG;
+    }
 }
+
+

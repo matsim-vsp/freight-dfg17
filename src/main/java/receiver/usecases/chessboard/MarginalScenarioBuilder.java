@@ -88,7 +88,7 @@ class MarginalScenarioBuilder {
 
 		/* Let jsprit do its magic and route the given receiver orders. */		
 		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-		generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
+		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		
 		if(write) {
@@ -144,46 +144,6 @@ class MarginalScenarioBuilder {
 	}
 
 
-	/**
-	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
-	 * 
-	 * @param carriers
-	 * @param network
-	 */
-	public static void generateCarrierPlan(Carriers carriers, Network network, URL algorithmFile) {
-		Carrier carrier = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class)); 
-
-		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, network);
-
-		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(network, carrier.getCarrierCapabilities().getVehicleTypes()).build();
-		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-
-		//read and create a pre-configured algorithms to solve the vrp
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algorithmFile);
-
-		//solve the problem
-		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-		//get best (here, there is only one)
-		VehicleRoutingProblemSolution solution = null;
-
-		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-		while(iterator.hasNext()){
-			solution = iterator.next();
-		}
-
-		//create a carrierPlan from the solution 
-		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, solution);
-
-		//route plan 
-		NetworkRouter.routePlan(plan, netBasedCosts);
-
-
-		//assign this plan now to the carrier and make it the selected carrier plan
-		carrier.setSelectedPlan(plan);
-
-	}
 
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 

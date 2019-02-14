@@ -22,22 +22,32 @@
 package receiver.usecases.chessboard;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.util.Collection;
+import java.util.Iterator;
 
+import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
+import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
+import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
+import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.jfree.util.Log;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.controler.CarrierModule;
+import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
+import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
+import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.replanning.CarrierPlanStrategyManagerFactory;
 import org.matsim.contrib.freight.scoring.CarrierScoringFunctionFactory;
 import org.matsim.core.controler.Controler;
 
-import receiver.ReceiverModule;
-import receiver.ReceiverScoringFunctionFactory;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
-import receiver.collaboration.Coalition;
+import receiver.*;
 import receiver.replanning.*;
 import receiver.usecases.UsecasesCarrierScoringFunctionFactory;
 import receiver.usecases.UsecasesCarrierStrategyManagerFactory;
@@ -49,6 +59,7 @@ import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
  */
 public class ReceiverChessboardUtils {
 	final private static Logger LOG = Logger.getLogger(ReceiverChessboardUtils.class);
+	final public static int STATISTICS_INTERVAL = 50;
 
 	public static void setupCarriers(Controler controler) {
 
@@ -66,37 +77,50 @@ public class ReceiverChessboardUtils {
 		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
 		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
 		controler.addOverridingModule(carrierControler);
-
 	}
 
 
+	/**
+	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
+	 *
+	 * @param carriers
+	 * @param network
+	 */
+	public static void generateCarrierPlan(Carriers carriers, Network network, URL algorithmFile) {
+		Carrier carrier = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
-	static void setupReceivers( Controler controler ) {
-		Receivers receivers = ReceiverUtils.getReceivers( controler.getScenario() );
-		final ReceiverScoringFunctionFactory rScorFuncFac = new UsecasesReceiverScoringFunctionFactory();
+		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, network);
 
-		ReceiverOrderStrategyManagerFactory rStratManFac = null ;
+		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(network, carrier.getCarrierCapabilities().getVehicleTypes()).build();
+		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
-		/* FIXME This must be configurable from the ConfigGroup OUTSIDE the usecases */
-		int selector = 1;
-		switch (selector) {
-			case 0:
-				rStratManFac = new TimeWindowReceiverOrderStrategyManagerImpl();
-				break ;
-			case 1:
-				rStratManFac = new ServiceTimeReceiverOrderStrategyManagerImpl();
-				break ;
-			case 2:
-				rStratManFac = new NumDelReceiverOrderStrategyManagerImpl();
-				break;
-			default:
-				Log.warn("No order strategy manager selected." );
+		//read and create a pre-configured algorithms to solve the vrp
+		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algorithmFile);
+
+		//solve the problem
+		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
+
+		//get best (here, there is only one)
+		VehicleRoutingProblemSolution solution = null;
+
+		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
+
+		while(iterator.hasNext()){
+			solution = iterator.next();
 		}
 
-		ReceiverModule receiverControler = new ReceiverModule(receivers, rScorFuncFac, rStratManFac, controler.getScenario());
+		//create a carrierPlan from the solution
+		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, solution);
 
-		controler.addOverridingModule(receiverControler);
+		//route plan
+		NetworkRouter.routePlan(plan, netBasedCosts);
+
+
+		//assign this plan now to the carrier and make it the selected carrier plan
+		carrier.setSelectedPlan(plan);
+
 	}
+
 
 
 	/**

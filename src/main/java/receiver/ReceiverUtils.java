@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.MutableScenario;
 import receiver.collaboration.Coalition;
 
@@ -20,7 +22,10 @@ public class ReceiverUtils {
 	private static final String CARRIERS_SCENARIO_ELEMENT = "Carriers";
 	private static final String RECEIVERS_SCENARIO_ELEMENT = "Receivers" ;
 	private static final String COALITION_SCENARIO_ELEMENT = "Coalition" ;
-	
+
+	public static final String FILENAME_RECEIVER_SCORES = "/receiver_scores";
+
+
 	/*
 	 * Create a new instance of a receiver.
 	 */
@@ -95,7 +100,10 @@ public class ReceiverUtils {
 		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
 		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( scenario ).getReceivers().size() ) );
+	}
 
+	public ReceiverConfigGroup getConfigGroup(Config config){
+		return ConfigUtils.addOrGetModule(config, ReceiverConfigGroup.class);
 	}
 
 	

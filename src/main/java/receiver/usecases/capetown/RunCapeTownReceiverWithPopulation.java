@@ -54,11 +54,7 @@ public class RunCapeTownReceiverWithPopulation {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int startRun = Integer.parseInt(args[0]);
-		int endRun = Integer.parseInt(args[1]);
-		for(int i = startRun; i < endRun; i++) {
-			run(i);
-		}
+		RunCapeTownReceiver.main(args);
 	}
 
 
@@ -102,6 +98,7 @@ public class RunCapeTownReceiverWithPopulation {
 		Controler controler = new Controler(sc);
 
 		/* Set up freight portion. To be repeated every iteration*/
+		/* FIXME This should be removed and used from ReceiverModule */
 		RunCapeTownReceiver.setupReceiverAndCarrierReplanning(controler, outputfolder);
 
 		/* Add travel time binding for "commercial" mode. */

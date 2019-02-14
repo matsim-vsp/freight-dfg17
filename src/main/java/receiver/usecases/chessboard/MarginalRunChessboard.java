@@ -54,9 +54,11 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
+import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
 import receiver.collaboration.CollaborationUtils;
+import receiver.replanning.ReceiverReplanningType;
 import receiver.usecases.ReceiverScoreStats;
 
 /**
@@ -66,7 +68,9 @@ import receiver.usecases.ReceiverScoreStats;
 
  class MarginalRunChessboard{
 	final private static Logger LOG = Logger.getLogger( MarginalRunChessboard.class );
-	final private static long SEED_BASE = 20180816l;	
+	final private static long SEED_BASE = 20180816l;
+	final private static String DESCRIPTION = "marginal";
+
 //	private static int replanInt;
 
 	/**
@@ -84,7 +88,7 @@ import receiver.usecases.ReceiverScoreStats;
 
 	public static void run(int run, int numberOfThreads) {
 
-		String outputfolder = String.format("./output/marginal/run_%03d/", run);
+		String outputfolder = String.format("./output/" + DESCRIPTION + "/run_%03d/", run);
 		new File(outputfolder).mkdirs();
 		
 		/* Before the main run starts, we need to calculate the marginal 
@@ -113,12 +117,12 @@ import receiver.usecases.ReceiverScoreStats;
 		/* Set up freight portion.To be repeated every iteration*/
 		//FIXME
 		sc.getConfig().controler().setOutputDirectory(outputfolder);
-		setupReceiverAndCarrierReplanning(controler);
+//		setupReceiverAndCarrierReplanning(sc);
 
 		ReceiverChessboardUtils.setupCarriers(controler);
-		ReceiverChessboardUtils.setupReceivers(controler);	
-//
-//
+		ReceiverModule receiverModule = new ReceiverModule( ReceiverReplanningType.serviceTime );
+		controler.addOverridingModule(receiverModule);
+
 		/* TODO This stats must be set up automatically. */
 		prepareFreightOutputDataAndStats(controler, run);
 
@@ -126,89 +130,7 @@ import receiver.usecases.ReceiverScoreStats;
 	}
 
 
-	private static void setupReceiverAndCarrierReplanning( MatsimServices controler) {
-		// yyyyyy this should not be necessary any more ... use variant from elsewhere. kai, feb'19
-
-
-		controler.addControlerListener(new IterationStartsListener() {
-
-			//@Override
-			public void notifyIterationStarts(IterationStartsEvent event) {
-				
-				if(event.getIteration() % MarginalExperimentParameters.REPLAN_INTERVAL != 0) {
-					return;
-				}
-
-				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
-
-				/*
-				 * Carrier replan with receiver changes.
-				 */
-				
-				Carrier carrier = ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
-				ArrayList<CarrierPlan> carrierPlans = new ArrayList<CarrierPlan>();
-
-				/* Remove all existing carrier plans. */
-
-				for (CarrierPlan plan : carrier.getPlans()){
-					carrierPlans.add(plan);
-				}
-
-				Iterator<CarrierPlan> planIterator = carrierPlans.iterator();
-				while (planIterator.hasNext()){
-					CarrierPlan plan = planIterator.next();							
-					carrier.removePlan(plan);
-				}
-
-
-				VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, controler.getScenario().getNetwork());
-
-				NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(controler.getScenario().getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
-				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-
-				//read and create a pre-configured algorithms to solve the vrp
-//				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-				URL algoConfigFileName = IOUtils.newUrl( controler.getScenario().getConfig().getContext(), "initialPlanAlgorithm.xml" );
-				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName );
-				
-				
-				//solve the problem
-				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-				//get best (here, there is only one)
-				VehicleRoutingProblemSolution solution = null;
-
-				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-				while(iterator.hasNext()){
-					solution = iterator.next();
-				}
-
-				//create a new carrierPlan from the solution 
-				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, solution);
-
-				//route plan 
-				NetworkRouter.routePlan(newPlan, netBasedCosts);
-
-
-				//assign this plan now to the carrier and make it the selected carrier plan
-				carrier.setSelectedPlan(newPlan);
-
-				//write out the carrierPlan to an xml-file
-//				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
-				
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
-				new ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
-				
-				//FIXME As in base case, this need not be required anymore.
-//				ReceiverUtils.setCarriers( ReceiverUtils.getCarriers( mfs.getScenario() ), fs.getScenario() );
-//				ReceiverUtils.setReceivers( ReceiverUtils.getReceivers( mfs.getScenario() ), fs.getScenario() );
-			}
-
-		});		
-	}
-
+	@Deprecated
 	private static void prepareFreightOutputDataAndStats( MatsimServices controler, int run) {
 
 		/*
@@ -221,7 +143,7 @@ import receiver.usecases.ReceiverScoreStats;
 		//freightOnly.setInclPop(false);
 		
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(controler.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
+		ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
 
 		//controler.getEvents().addHandler(freightOnly);
 		controler.addControlerListener(scoreStats);

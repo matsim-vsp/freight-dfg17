@@ -19,7 +19,7 @@
  * *********************************************************************** */
 
 /**
- * 
+ *
  */
 package receiver.usecases.chessboard;
 
@@ -53,8 +53,10 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
+import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.collaboration.CollaborationUtils;
+import receiver.replanning.ReceiverReplanningType;
 import receiver.usecases.ReceiverScoreStats;
 
 /**
@@ -62,165 +64,89 @@ import receiver.usecases.ReceiverScoreStats;
  * @author jwjoubert, wlbean
  */
 
-class ProportionalRunChessboard{
-	final private static Logger LOG = Logger.getLogger( ProportionalRunChessboard.class );
-	final private static long SEED_BASE = 20180816l;	
+class ProportionalRunChessboard {
+    final private static Logger LOG = Logger.getLogger(ProportionalRunChessboard.class);
+    final private static long SEED_BASE = 20180816l;
+    final private static String DESCRIPTION = "proportional";
 //	private static int replanInt;
 
-	public static void main(String[] args) {
-		int startRun = Integer.parseInt(args[0]);
-		int endRun = Integer.parseInt(args[1]);
-		for(int i = startRun; i < endRun; i++) {
-			run(i);
-		}
-	}
+    public static void main(String[] args) {
+        int startRun = Integer.parseInt(args[0]);
+        int endRun = Integer.parseInt(args[1]);
+        for (int i = startRun; i < endRun; i++) {
+            run(i);
+        }
+    }
 
 
-	private static void run( int run ) {
+    private static void run(int run) {
 
-		String outputfolder = String.format("./output/proportional/run_%03d/", run);
-		new File(outputfolder).mkdirs();
-		
-		Scenario sc = ProportionalScenarioBuilder.createChessboardScenario(outputfolder, SEED_BASE*run, run, true);
-		
-		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
-		BaseRunReceiver.writeHeadings( bw );
+        String outputFolder = String.format("./output/" + DESCRIPTION + "/run_%03d/", run);
+        new File(outputFolder).mkdirs();
 
-		sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
+        Scenario sc = ProportionalScenarioBuilder.createChessboardScenario(outputFolder, SEED_BASE * run, run, true);
 
-		Controler controler = new Controler(sc);
+        /* Write headings */
+        BufferedWriter bw = IOUtils.getBufferedWriter(outputFolder + "/ReceiverStats" + run + ".csv");
+        BaseRunReceiver.writeHeadings(bw);
 
-		/* Set up freight portion.To be repeated every iteration*/
-		//FIXME
-		sc.getConfig().controler().setOutputDirectory(outputfolder);
-		
-		setupReceiverAndCarrierReplanning(controler);
-		ReceiverChessboardUtils.setupCarriers(controler);
-		ReceiverChessboardUtils.setupReceivers(controler);	
+        sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
 
+        Controler controler = new Controler(sc);
 
-		/* TODO This stats must be set up automatically. */
-		prepareFreightOutputDataAndStats(controler, run);
+        /* Set up freight portion.To be repeated every iteration*/
+        //FIXME
+        sc.getConfig().controler().setOutputDirectory(outputFolder);
 
-		controler.run();
-	}
+//		setupReceiverAndCarrierReplanning(controler);
+        ReceiverChessboardUtils.setupCarriers(controler);
+        ReceiverModule receiverModule = new ReceiverModule(ReceiverReplanningType.serviceTime);
+        controler.addOverridingModule(receiverModule);
 
 
-	private static void setupReceiverAndCarrierReplanning(MatsimServices controler) {
+        /* TODO This stats must be set up automatically. */
+        prepareFreightOutputDataAndStats(controler, run);
 
-		controler.addControlerListener(new IterationStartsListener() {
+        controler.run();
+    }
 
-			@Override
-			public void notifyIterationStarts(IterationStartsEvent event) {
+    private static void prepareFreightOutputDataAndStats(MatsimServices controler, int run) {
 
-				if(event.getIteration() % ReceiverUtils.getReplanInterval( controler.getScenario() ) != 0) {
-					return;
-				}
+        /*
+         * Adapted from RunChessboard.java by sshroeder and gliedtke.
+         */
+        final int statInterval = ReceiverUtils.getReplanInterval(controler.getScenario());
+        //final LegHistogram freightOnly = new LegHistogram(20);
 
-				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
+        // freightOnly.setPopulation(controler.getScenario().getPopulation());
+        //freightOnly.setInclPop(false);
 
-				/*
-				 * Carrier replan with receiver changes.
-				 */
+        CarrierScoreStats scoreStats = new CarrierScoreStats(ReceiverUtils.getCarriers(controler.getScenario()), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+        ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
 
-				Carrier carrier = ReceiverUtils.getCarriers( controler.getScenario() ).getCarriers().get(Id.create("Carrier1", Carrier.class));
-				ArrayList<CarrierPlan> carrierPlans = new ArrayList<CarrierPlan>();
+        //controler.getEvents().addHandler(freightOnly);
+        controler.addControlerListener(scoreStats);
+        controler.addControlerListener(rScoreStats);
+        controler.addControlerListener(new IterationEndsListener() {
 
-				/* Remove all existing carrier plans. */
+            @Override
+            public void notifyIterationEnds(IterationEndsEvent event) {
+                String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 
-				for (CarrierPlan plan : carrier.getPlans()){
-					carrierPlans.add(plan);
-				}
+                if ((event.getIteration() + 1) % (statInterval) != 0) return;
 
-				Iterator<CarrierPlan> planIterator = carrierPlans.iterator();
-				while (planIterator.hasNext()){
-					CarrierPlan plan = planIterator.next();							
-					carrier.removePlan(plan);
-				}
+                //write plans
 
+                new CarrierPlanXmlWriterV2(ReceiverUtils.getCarriers(controler.getScenario())).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
 
-				VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, controler.getScenario().getNetwork());
+                new receiver.ReceiversWriter(ReceiverUtils.getReceivers(controler.getScenario())).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
 
-				NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(controler.getScenario().getNetwork(), carrier.getCarrierCapabilities().getVehicleTypes()).build();
-				VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
+                /* Record receiver stats */
+                int numberOfReceivers = ReceiverUtils.getReceivers(controler.getScenario()).getReceivers().size();
+                BaseRunReceiver.recordReceiverStats(event, numberOfReceivers, controler, run);
 
-				//read and create a pre-configured algorithms to solve the vrp
-//				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-				String algoConfigFileName = IOUtils.newUrl( controler.getScenario().getConfig().getContext(), "initialPlanAlgorithm.xml" ).getFile();
-				VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName);
+            }
+        });
 
-				//solve the problem
-				Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-				//get best (here, there is only one)
-				VehicleRoutingProblemSolution solution = null;
-
-				Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-				while(iterator.hasNext()){
-					solution = iterator.next();
-				}
-
-				//create a new carrierPlan from the solution 
-				CarrierPlan newPlan = MatsimJspritFactory.createPlan(carrier, solution);
-
-				//route plan 
-				NetworkRouter.routePlan(newPlan, netBasedCosts);
-
-
-				//assign this plan now to the carrier and make it the selected carrier plan
-				carrier.setSelectedPlan(newPlan);
-
-				//write out the carrierPlan to an xml-file
-//				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "../../../input/carrierPlanned.xml");
-
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "carriers.xml");
-				new receiver.ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(controler.getScenario().getConfig().controler().getOutputDirectory() + "receivers.xml");
-			}
-
-		});		
-
-	}
-
-	private static void prepareFreightOutputDataAndStats(MatsimServices controler, int run) {
-
-		/*
-		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
-		 */
-		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
-		//final LegHistogram freightOnly = new LegHistogram(20);
-
-		// freightOnly.setPopulation(controler.getScenario().getPopulation());
-		//freightOnly.setInclPop(false);
-
-		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(controler.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
-
-		//controler.getEvents().addHandler(freightOnly);
-		controler.addControlerListener(scoreStats);
-		controler.addControlerListener(rScoreStats);
-		controler.addControlerListener(new IterationEndsListener() {
-
-			@Override
-			public void notifyIterationEnds(IterationEndsEvent event) {
-				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-
-				if((event.getIteration() + 1) % (statInterval) != 0) return;
-
-				//write plans
-
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
-				
-				new receiver.ReceiversWriter( ReceiverUtils.getReceivers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".receivers.xml.gz");
-
-				/* Record receiver stats */
-				int numberOfReceivers = ReceiverUtils.getReceivers( controler.getScenario() ).getReceivers().size();
-				BaseRunReceiver.recordReceiverStats( event, numberOfReceivers, controler, run );
-
-			}
-		});	
-
-	}
+    }
 }

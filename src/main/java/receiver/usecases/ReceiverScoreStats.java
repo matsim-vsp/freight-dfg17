@@ -1,6 +1,3 @@
-/**
- * 
- */
 package receiver.usecases;
 
 import java.io.BufferedWriter;
@@ -39,8 +36,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		final private static int INDEX_EXECUTED = 3;
 
 		private BufferedWriter out;
-		final private String fileName;
-		
+
 		private final boolean createPNG;
 		private double[][] history = null;
 		private int minIteration = 0;
@@ -51,17 +47,16 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 		/**
 		 * Creates a new ScoreStats instance.
 		 *
-		 * @param filename including the path, excluding the file type extension
-		 * @param createPNG true if in every iteration, the scorestats should be visualized in a graph and written to disk.
 		 * @throws UncheckedIOException
 		 */
-		public ReceiverScoreStats(final String filename, final boolean createPNG) throws UncheckedIOException {
-			this.fileName = filename;
-			this.createPNG = createPNG;
+		public ReceiverScoreStats() throws UncheckedIOException {
+			/*FIXME Incorporate into ConfigGroup. */
+			this.createPNG = true;
 		}
 
 		@Override
 		public void notifyStartup(final StartupEvent event) {
+			String fileName = sc.getConfig().controler().getOutputDirectory() + ReceiverUtils.FILENAME_RECEIVER_SCORES;
 			if (fileName.toLowerCase(Locale.ROOT).endsWith(".txt")) {
 				this.out = IOUtils.getBufferedWriter(fileName);
 			} else {
@@ -81,7 +76,8 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 
 		@Override
 		public void notifyIterationEnds(final IterationEndsEvent event) {
-			
+			String fileName = sc.getConfig().controler().getOutputDirectory() + ReceiverUtils.FILENAME_RECEIVER_SCORES;
+
 //			if (event.getIteration() != 0){
 //				if ((event.getIteration()+1) % fsc.getReplanInterval() != 0) {
 //					return;
@@ -197,7 +193,7 @@ public class ReceiverScoreStats implements StartupListener, IterationEndsListene
 					System.arraycopy(this.history[INDEX_EXECUTED], 0, values, 0, index + 1);
 					chart.addSeries("avg. executed score", iterations, values);
 					chart.addMatsimLogo();
-					chart.saveAsPng(this.fileName + ".png", 1000, 600);
+					chart.saveAsPng(fileName + ".png", 1000, 600);
 				}
 				if (index == (this.history[0].length - 1)) {
 					// we cannot store more information, so disable the graph feature.

@@ -123,7 +123,8 @@ public class RunCapeTownReceiver {
 
 		Controler controler = new Controler(sc);
 
-		/* Set up freight portion. To be repeated every iteration*/
+		/* Set up freight portion. To be repeated every iteration.
+		* FIXME should be replaced by ReceiverModule. */
 		setupReceiverAndCarrierReplanning(controler, outputfolder);
 
 		ReceiverChessboardUtils.setupCarriers(controler );
@@ -147,7 +148,7 @@ public class RunCapeTownReceiver {
 				}
 
 				/* Adds the receiver agents that are part of the current (sub)coalition. */
-				CollaborationUtils.setCoalitionFromReceiverAttributes( controler );
+				CollaborationUtils.setCoalitionFromReceiverAttributes( controler.getScenario() );
 
 				/*
 				 * Carrier replan with receiver changes.
@@ -215,7 +216,7 @@ public class RunCapeTownReceiver {
 		final int statInterval = CapeTownExperimentParameters.STAT_INTERVAL;
 
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
-		ReceiverScoreStats rScoreStats = new ReceiverScoreStats(controler.getScenario().getConfig().controler().getOutputDirectory() + "/receiver_scores", true);
+		ReceiverScoreStats rScoreStats = new ReceiverScoreStats();
 
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(rScoreStats);

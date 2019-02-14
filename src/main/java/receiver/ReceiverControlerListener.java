@@ -48,7 +48,6 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 class ReceiverControlerListener implements ScoringListener,
 ReplanningListener, BeforeMobsimListener {
 
-	private Receivers receivers;
 	private ReceiverOrderStrategyManagerFactory stratManFac;
 	private ReceiverScoringFunctionFactory scorFuncFac;
 	private ReceiverTracker tracker;
@@ -56,8 +55,7 @@ ReplanningListener, BeforeMobsimListener {
 	@Inject Scenario sc;
 
 	@Inject
-	private ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
-		this.receivers = receivers;
+	private ReceiverControlerListener(ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
 		this.stratManFac = stratManFac;
 		this.scorFuncFac = scorFuncFac;
 	}
@@ -74,7 +72,7 @@ ReplanningListener, BeforeMobsimListener {
 		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverCollection = new ArrayList<>();
 		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverControlCollection = new ArrayList<>();
 
-		for(Receiver receiver : receivers.getReceivers().values()){
+		for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 
 			if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
 				// (= one iteration after replanning)
@@ -130,7 +128,7 @@ ReplanningListener, BeforeMobsimListener {
 			this.tracker.scoreSelectedPlans();
 		} else {
 			// this is called in all other iterations.  why?
-			for (Receiver receiver : receivers.getReceivers().values()){
+			for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 				double score = (double) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_RECEIVER_SCORE );
 //				double score = (double) receiver.getSelectedPlan().getScore();
 				receiver.getSelectedPlan().setScore( new Double(score) );

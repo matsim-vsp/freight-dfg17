@@ -64,7 +64,8 @@
 			</order>
 		</plan>
 		<plan score="-19428.336" selected="yes">
-			<timeWindow start="06:00:00" end="18:00:00"/>
+			<timeWindow start="06:00:00" end="10:00:00"/>
+			<timeWindow start="15:00:00" end="18:00:00"/>
 			<order carrierId="Carrier1">
 				<item id="Order11" productId="P1" quantity="5000.0" serviceTime="03:00:00"/>
 				<item id="Order12" productId="P2" quantity="2500.0" serviceTime="03:00:00"/>

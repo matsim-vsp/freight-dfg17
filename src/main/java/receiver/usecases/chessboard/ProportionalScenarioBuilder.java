@@ -89,7 +89,7 @@ class ProportionalScenarioBuilder {
 		/* Let jsprit do its magic and route the given receiver orders. */
 //		generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
 		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-		generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
+		ReceiverChessboardUtils.generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		if(write) {
 			writeFreightScenario(sc);
@@ -139,8 +139,8 @@ class ProportionalScenarioBuilder {
 
 	/**
 	 * FIXME Need to complete this. 
-	 * @param outputDirectory 
-	 * @param string 
+	 * @param inputNetwork
+	 * @param outputDirectory
 	 * @return
 	 */
 	public static Scenario setupChessboardScenario(String inputNetwork, String outputDirectory, long seed, int run) {
@@ -175,55 +175,11 @@ class ProportionalScenarioBuilder {
 		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
-	/**
-	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
-	 * 
-	 * @param carriers
-	 * @param network
-	 * @param url 
-	 */
-	public static void generateCarrierPlan(Carriers carriers, Network network, URL algorithmFile) {
-		Carrier carrier = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class)); 
-
-		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, network);
-
-		NetworkBasedTransportCosts netBasedCosts = NetworkBasedTransportCosts.Builder.newInstance(network, carrier.getCarrierCapabilities().getVehicleTypes()).build();
-		VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
-
-		//read and create a pre-configured algorithms to solve the vrp
-		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algorithmFile);
-
-		//solve the problem
-		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
-
-		//get best (here, there is only one)
-		VehicleRoutingProblemSolution solution = null;
-
-		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-		while(iterator.hasNext()){
-			solution = iterator.next();
-		}
-
-		//create a carrierPlan from the solution 
-		CarrierPlan plan = MatsimJspritFactory.createPlan(carrier, solution);
-
-		//route plan 
-		NetworkRouter.routePlan(plan, netBasedCosts);
-
-
-		//assign this plan now to the carrier and make it the selected carrier plan
-		carrier.setSelectedPlan(plan);
-
-		//write out the carrierPlan to an xml-file
-		//		new CarrierPlanXmlWriterV2(carriers).write(directory + "/input/carrierPlanned.xml");
-	}
 
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
-	 * @param fs
-	 * @param receivers 
+	 * @param sc
 	 */
 	public static void createReceiverOrders( Scenario sc) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );

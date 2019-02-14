@@ -46,17 +46,6 @@ public class ProportionalCostSharingTest {
 
 
     @Test
-//    @Ignore
-    /**
-     * FIXME This test is important but is currently ignored as I (JWJ, Sep'18)
-     * cannot get the scenario to create a consistent, reproducible example. We
-     * may have to create a local test scenario instead.
-     *
-     * Might be ok now; I removed at least two sources of randomness.  kai, feb'19
-     *
-     * Still not. Now there is a NullPointerException as the carrier does not have
-     * a selected plan.
-     */
     public void test() {
         setup();
 
