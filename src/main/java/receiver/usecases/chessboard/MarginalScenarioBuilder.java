@@ -23,10 +23,6 @@
  */
 package receiver.usecases.chessboard;
 
-import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -34,9 +30,6 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
-import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
-import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
-import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -54,7 +47,6 @@ import receiver.product.ReceiverProduct;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import static receiver.usecases.chessboard.BaseReceiverChessboardScenario.selectRandomLink;
 
@@ -73,13 +65,13 @@ class MarginalScenarioBuilder {
 	public static Scenario createChessboardScenario( String outputDirectory, long seed, int run, boolean write) {
 		Scenario sc = setupChessboardScenario("grid9x9.xml", outputDirectory, seed, run);
 		
-		ReceiverUtils.setReplanInterval(MarginalExperimentParameters.REPLAN_INTERVAL, sc );
+		ReceiverUtils.setReplanInterval(ExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		/* Create and add the carrier agent(s). */
 		createChessboardCarriers(sc);
 		
 		/* Create the grand coalition receiver members and allocate orders. */
-		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, MarginalExperimentParameters.NUMBER_OF_RECEIVERS );
+		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
 		
 		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
 		createAndAddControlGroupReceivers(sc);
@@ -110,9 +102,9 @@ class MarginalScenarioBuilder {
 		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(MarginalExperimentParameters.NUM_ITERATIONS);
+		config.controler().setLastIteration(ExperimentParameters.NUM_ITERATIONS);
 		config.controler().setMobsim("qsim");
-		config.controler().setWriteSnapshotsInterval(MarginalExperimentParameters.STAT_INTERVAL);
+		config.controler().setWriteSnapshotsInterval(ExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
 		config.setContext( context );
 		config.network().setInputFile(inputNetwork);
@@ -131,7 +123,7 @@ class MarginalScenarioBuilder {
 		Network network = sc.getNetwork();
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		
-		for (int r = MarginalExperimentParameters.NUMBER_OF_RECEIVERS+1; r < (MarginalExperimentParameters.NUMBER_OF_RECEIVERS*2)+1 ; r++){
+		for (int r = ExperimentParameters.NUMBER_OF_RECEIVERS+1; r < (ExperimentParameters.NUMBER_OF_RECEIVERS*2)+1 ; r++){
 			Id<Link> receiverLocation = selectRandomLink(network);
 			Receiver receiver = ReceiverUtils.newInstance(Id.create(Integer.toString(r), Receiver.class))
 					.setLinkId(receiverLocation);
@@ -164,9 +156,9 @@ class MarginalScenarioBuilder {
 		productTypeTwo.setRequiredCapacity(2);
 		
 		for ( int r = 1 ; r < receivers.getReceivers().size()+1 ; r++){
-			int tw = MarginalExperimentParameters.TIME_WINDOW_DURATION;
-			String serdur = MarginalExperimentParameters.SERVICE_TIME;
-			int numDel = MarginalExperimentParameters.NUM_DELIVERIES;
+			int tw = ExperimentParameters.TIME_WINDOW_DURATION;
+			String serdur = ExperimentParameters.SERVICE_TIME;
+			int numDel = ExperimentParameters.NUM_DELIVERIES;
 			
 			/* Set the different time window durations for experiments. */
 //			if (r <= 10){
@@ -295,8 +287,8 @@ class MarginalScenarioBuilder {
 				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
 		CarrierVehicle heavy = carrierHVehicleBuilder
-				.setEarliestStart(Time.parseTime(MarginalExperimentParameters.DAY_START))
-				.setLatestEnd(Time.parseTime(MarginalExperimentParameters.DAY_END))
+				.setEarliestStart(Time.parseTime(ExperimentParameters.DAY_START))
+				.setLatestEnd(Time.parseTime(ExperimentParameters.DAY_END))
 				.setType(typeHeavy)
 				.setTypeId(typeHeavy.getId())
 				.build();
@@ -311,8 +303,8 @@ class MarginalScenarioBuilder {
 				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
 		CarrierVehicle light = carrierLVehicleBuilder
-				.setEarliestStart(Time.parseTime(MarginalExperimentParameters.DAY_START))
-				.setLatestEnd(Time.parseTime(MarginalExperimentParameters.DAY_END))
+				.setEarliestStart(Time.parseTime(ExperimentParameters.DAY_START))
+				.setLatestEnd(Time.parseTime(ExperimentParameters.DAY_END))
 				.setType(typeLight)
 				.setTypeId(typeLight.getId())
 				.build();

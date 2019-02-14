@@ -66,9 +66,9 @@ import java.net.URL;
 		/* Use the code (components) from ReceiverChessboardScenario */
 		String inputNetwork = "input/network.xml";
 		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(inputNetwork, "./output/", seed, 1);
-		sc.getConfig().controler().setLastIteration(MarginalExperimentParameters.REPLAN_INTERVAL);
+		sc.getConfig().controler().setLastIteration(ExperimentParameters.REPLAN_INTERVAL);
 		
-		ReceiverUtils.setReplanInterval(MarginalExperimentParameters.REPLAN_INTERVAL, sc );
+		ReceiverUtils.setReplanInterval(ExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		MarginalScenarioBuilder.createChessboardCarriers(sc);
 		ProportionalScenarioBuilder.createAndAddChessboardReceivers(sc );
@@ -94,7 +94,7 @@ import java.net.URL;
 
 		/* Make config changes relevant to the current marginal run. */
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-		sc.getConfig().controler().setLastIteration( MarginalExperimentParameters.REPLAN_INTERVAL );
+		sc.getConfig().controler().setLastIteration( ExperimentParameters.REPLAN_INTERVAL );
 
 		Controler controler = new Controler(sc);
 
@@ -114,7 +114,7 @@ import java.net.URL;
 		 * Adapted from RunChessboard.java by sshroeder and gliedtke.
 		 */
 //		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
-		final int statInterval = MarginalExperimentParameters.STAT_INTERVAL;
+		final int statInterval = ExperimentParameters.STAT_INTERVAL;
 		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 
 		controler.addControlerListener(scoreStats);

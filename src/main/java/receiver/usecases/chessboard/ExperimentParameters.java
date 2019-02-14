@@ -27,7 +27,7 @@ package receiver.usecases.chessboard;
  * 
  * @author jwjoubert
  */
-class MarginalExperimentParameters {
+class ExperimentParameters {
 	
 	public static int NUM_ITERATIONS = 1500;
 	
