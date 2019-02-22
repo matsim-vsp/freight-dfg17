@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.TimeWindow;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -171,6 +172,9 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 
 		for(Receiver thisReceiver : receivers.values()) {
 			ReceiverPlan plan = thisReceiver.getSelectedPlan();
+			TimeWindow tw = plan.getTimeWindows().get(0);
+			//Calculate the receiver's timewindow cost for the selected plan.
+			double twCost = ((tw.getEnd()-tw.getStart())/3600)*((double) thisReceiver.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST));
 
 			/* Score non-collaborating receivers and calculate the total cost allocated to them. */
 			//			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
@@ -181,7 +185,14 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 					ro.setScore(cost);
 					total += cost;
 				}
-				plan.setScore(total);
+				
+				/*
+				 * Include the total order cost and allocate to receiver. Also add an hourly time window cost for the receiver, 
+				 * assuming that receivers must hire at least one employee to be available at receiving for deliveries every 
+				 * hour of the delivery time window.
+				  */
+				
+				plan.setScore(total + twCost);
 
 			} else {
 

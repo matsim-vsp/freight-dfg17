@@ -84,8 +84,7 @@ public class BaseReceiverChessboardScenario{
 
 		createChessboardCarriersAndAddToScenario(sc);
 
-		ReceiverUtils.setReplanInterval( 50, sc );
-//		ReceiverUtils.setReplanInterval( 5, sc );
+		ReceiverUtils.setReplanInterval( 1, sc );
 
 		/* Create the grand coalition receiver members and allocate orders. */
 		createAndAddChessboardReceivers(sc, numberOfReceivers);
@@ -119,15 +118,11 @@ public class BaseReceiverChessboardScenario{
 		config.setContext( context );
 
 		config.controler().setFirstIteration(0);
-		config.controler().setLastIteration(1500);
-//		config.controler().setLastIteration(20);
+		config.controler().setLastIteration(ExperimentParameters.NUM_ITERATIONS);
 		config.controler().setMobsim("qsim");
-		config.controler().setWriteSnapshotsInterval(50);
-//		config.controler().setWriteSnapshotsInterval(5);
+		config.controler().setWriteSnapshotsInterval(ExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
-//		config.network().setInputFile("./scenarios/chessboard/network/grid9x9.xml");
 		config.network().setInputFile( "grid9x9.xml" );
-		config.controler().setOutputDirectory(String.format("./output/base/tw/run_%03d/", run));
 
 		return config ;
 	}
@@ -178,31 +173,34 @@ public class BaseReceiverChessboardScenario{
 		productTypeTwo.setRequiredCapacity(2);
 
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
-			int tw = 6;
+			int tw = ExperimentParameters.TIME_WINDOW_DURATION;
+			int numDel = ExperimentParameters.NUM_DELIVERIES;
+			String serdur = ExperimentParameters.SERVICE_TIME;
+			
 //			String serdur = "01:00:00"; // -1257
 //			String serdur = "01:30:00"; // -1304
 //			String serdur = "02:00:00"; // -1316
-			String serdur = "02:30:00"; // -2014
+//			String serdur = "02:30:00"; // -2014
 //			String serdur = "03:00:00"; // -1981 // yyyy why becoming better again?
 //			String serdur = "03:30:00"; // -1981
 //			String serdur = "04:00:00"; // -1980 // yyyy why becoming better again?
-			int numDel = 5;
-
-			/* Set the different time window durations[[??]] for experiments. */
-			if (r <= 10){
-				tw = 2;
-			} else if (r <= 20){
-				tw = 4;
-			} else if (r <= 30){
-				tw = 6;
-			} else if (r <= 40){
-				tw = 8;
-			} else if (r <= 50){
-				tw = 10;
-			} else if (r<=60){
-				tw = 12;
-			}
-			tw = 12 ; // yyyyyy I have changed the initial time windows to 12hrs everywhere.
+			
+//
+//			/* Set the different time window durations[[??]] for experiments. */
+//			if (r <= 10){
+//				tw = 2;
+//			} else if (r <= 20){
+//				tw = 4;
+//			} else if (r <= 30){
+//				tw = 6;
+//			} else if (r <= 40){
+//				tw = 8;
+//			} else if (r <= 50){
+//				tw = 10;
+//			} else if (r<=60){
+//				tw = 12;
+//			}
+//			tw = 12 ; // yyyyyy I have changed the initial time windows to 12hrs everywhere.
 
 //			/* Set the different service durations for experiments. */
 //			if (r <= 15){
@@ -252,9 +250,13 @@ public class BaseReceiverChessboardScenario{
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 					.addReceiverOrder(receiverOrder)
+//					// setting the time window start time of ALL receivers to 08:00 for time window experiments.
+//					.addTimeWindow(TimeWindow.newInstance(6*3600,(6*3600+tw*3600)))
+					// selecting a random time window start time.
 					.addTimeWindow(selectRandomTimeStart(tw))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST, ExperimentParameters.TIME_WINDOW_HOURLY_COST);
 
 			/* Convert receiver orders to initial carrier services. */
 //			convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );

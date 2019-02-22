@@ -77,6 +77,10 @@ final class ReceiverScoreStats implements StartupListener, IterationEndsListener
         int iterations = maxIter - this.minIteration;
         if (iterations > 5000) iterations = 5000; // limit the history size
         this.history = new double[4][iterations + 1];
+        
+        /* Write headings of receiver stats file */
+		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + RECEIVER_STATS_CSV);
+		writeHeadings( bw );
     }
 
     @Override
@@ -224,6 +228,34 @@ final class ReceiverScoreStats implements StartupListener, IterationEndsListener
             e.printStackTrace();
         }
     }
+    
+	static void writeHeadings( BufferedWriter bw ){
+		try {
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+				  "iteration",
+				  "receiver_id",
+				  "score",
+				  "timewindow_start",
+				  "timewindow_end",
+				  "order_id",
+				  "volume",
+				  "frequency",
+				  "serviceduration",
+				  "collaborate",
+				  "grandCoalitionMember" ) );
+			bw.newLine();
+		} catch ( IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Cannot write initial headings");
+		} finally{
+			try {
+				bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Cannot close receiver stats file");
+			}
+		}
+	}
 
     private void recordReceiverStats(IterationEndsEvent event) {
         for (Receiver receiver : ReceiverUtils.getReceivers(sc).getReceivers().values()) {

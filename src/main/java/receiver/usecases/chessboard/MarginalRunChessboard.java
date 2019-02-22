@@ -82,9 +82,9 @@ import java.io.File;
 		
 		Scenario newSc = MarginalScenarioBuilder.createChessboardScenario(outputfolder, SEED_BASE*run, run, true);
 		
-		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
-		BaseRunReceiver.writeHeadings( bw );
+//		/* Write headings */
+//		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
+//		BaseRunReceiver.writeHeadings( bw );
 
 		sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
 

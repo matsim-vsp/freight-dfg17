@@ -35,29 +35,40 @@ public class TimeWindowReceiverOrderStrategyManagerImpl implements ReceiverOrder
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
-			strategy.addStrategyModule(new CollaborationStatusChanger());
-			stratMan.addStrategy(strategy, null, 0.5);
+//			strategy.addStrategyModule(new CollaborationStatusChanger());
+			stratMan.addStrategy(strategy, null, 0.7);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
 		}
 		
+//		/*
+//		 * Increases or decreases the time window start or time window end times.
+//		 */
+//		
+//		{
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//			timeStrategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("01:00:00")));
+//			stratMan.addStrategy(timeStrategy, null, 0.3);
+//			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), timeStrategy, null, 0.0);
+//		}		
+		
 		/*
-		 * Increases or decreases the time window start or time window end times.
+		 * Increases or decreases the time window end times.
 		 */
 		
 		{
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-			timeStrategy.addStrategyModule(new TimeWindowMutator(Time.parseTime("01:00:00")));
+			timeStrategy.addStrategyModule(new TimeWindowMutatorV2(Time.parseTime("02:00:00")));
 			stratMan.addStrategy(timeStrategy, null, 0.3);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), timeStrategy, null, 0.0);
-		}		
+		}	
 		
 		/* Replanning for grand coalition receivers.*/
 		
 		{			
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			strategy.addStrategyModule(new CollaborationStatusMutator());
-			stratMan.addStrategy(strategy, null, 0.2);
+			stratMan.addStrategy(strategy, null, 0.0);
 			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);			
 		}
 

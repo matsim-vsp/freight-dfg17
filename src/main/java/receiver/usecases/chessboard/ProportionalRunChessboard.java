@@ -68,9 +68,9 @@ class ProportionalRunChessboard {
 
         Scenario sc = ProportionalScenarioBuilder.createChessboardScenario(outputFolder, SEED_BASE * run, run, true);
 
-        /* Write headings */
-        BufferedWriter bw = IOUtils.getBufferedWriter(outputFolder + "/ReceiverStats" + run + ".csv");
-        BaseRunReceiver.writeHeadings(bw);
+//        /* Write headings */
+//        BufferedWriter bw = IOUtils.getBufferedWriter(outputFolder + "/ReceiverStats" + run + ".csv");
+//        BaseRunReceiver.writeHeadings(bw);
 
         sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
 
