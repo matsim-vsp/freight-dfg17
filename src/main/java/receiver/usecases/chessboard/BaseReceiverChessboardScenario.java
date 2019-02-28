@@ -177,51 +177,6 @@ public class BaseReceiverChessboardScenario{
 			int numDel = ExperimentParameters.NUM_DELIVERIES;
 			String serdur = ExperimentParameters.SERVICE_TIME;
 			
-//			String serdur = "01:00:00"; // -1257
-//			String serdur = "01:30:00"; // -1304
-//			String serdur = "02:00:00"; // -1316
-//			String serdur = "02:30:00"; // -2014
-//			String serdur = "03:00:00"; // -1981 // yyyy why becoming better again?
-//			String serdur = "03:30:00"; // -1981
-//			String serdur = "04:00:00"; // -1980 // yyyy why becoming better again?
-			
-//
-//			/* Set the different time window durations[[??]] for experiments. */
-//			if (r <= 10){
-//				tw = 2;
-//			} else if (r <= 20){
-//				tw = 4;
-//			} else if (r <= 30){
-//				tw = 6;
-//			} else if (r <= 40){
-//				tw = 8;
-//			} else if (r <= 50){
-//				tw = 10;
-//			} else if (r<=60){
-//				tw = 12;
-//			}
-//			tw = 12 ; // yyyyyy I have changed the initial time windows to 12hrs everywhere.
-
-//			/* Set the different service durations for experiments. */
-//			if (r <= 15){
-//				serdur = "01:00:00";
-//			} else if (r <= 30){
-//				serdur = "02:00:00";
-//			} else if (r <= 45){
-//				serdur = "03:00:00";
-//			} else serdur = "04:00:00";
-//			
-//			/* Set the different delivery frequencies for experiments. */
-//			if (r <= 12){
-//				numDel = 1;
-//			} else if (r <= 24){
-//				numDel = 2;
-//			} else if (r <= 36){
-//				numDel = 3;
-//			} else if (r <= 48){
-//				numDel = 4;
-//			} else numDel = 5;
-
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
 

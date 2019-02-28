@@ -171,10 +171,11 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 		log.info("  Scoring the individual receivers...");
 
 		for(Receiver thisReceiver : receivers.values()) {
+			double twCost = 0.0;
 			ReceiverPlan plan = thisReceiver.getSelectedPlan();
 			TimeWindow tw = plan.getTimeWindows().get(0);
 			//Calculate the receiver's timewindow cost for the selected plan.
-			double twCost = ((tw.getEnd()-tw.getStart())/3600)*((double) thisReceiver.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST));
+			twCost = ((tw.getEnd()-tw.getStart())/3600)*((double) thisReceiver.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST));
 
 			/* Score non-collaborating receivers and calculate the total cost allocated to them. */
 			//			if( ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(thisReceiver) == false){
@@ -191,8 +192,8 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				 * assuming that receivers must hire at least one employee to be available at receiving for deliveries every 
 				 * hour of the delivery time window.
 				  */
-				
-				plan.setScore(total + twCost);
+
+				plan.setScore(total - twCost);
 
 			} else {
 
@@ -205,7 +206,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				}
 				/* Fixed fee delivers may cover (more than) Carrier costs. However,
 				 * the Carrier will not PAY the receiver because they collaborate. */
-				plan.setScore( Math.min(total, 0.0) );
+				plan.setScore( Math.min(total - twCost, 0.0) );
 			}
 			log.warn("      Receiver '" + thisReceiver.getId().toString() + "' score:" + plan.getScore());
 
