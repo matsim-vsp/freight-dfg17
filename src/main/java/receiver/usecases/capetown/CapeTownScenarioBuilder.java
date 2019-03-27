@@ -24,6 +24,8 @@
 package receiver.usecases.capetown;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -55,6 +57,7 @@ import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.population.io.PopulationReader;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.misc.Time;
+import org.matsim.examples.ExamplesUtils;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.FacilitiesUtils;
 import org.matsim.vehicles.VehicleType;
@@ -77,6 +80,7 @@ import receiver.product.ProductType;
 import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
 import receiver.usecases.chessboard.BaseReceiverChessboardScenario;
+
 
 /**
  * Various utilities for building receiver scenarios (for now).
@@ -169,7 +173,7 @@ public class CapeTownScenarioBuilder {
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */
-		generateCarrierPlan( sc );
+//		generateCarrierPlan( sc );
 
 		if(write) {
 			writeFreightScenario(sc);
@@ -195,12 +199,12 @@ public class CapeTownScenarioBuilder {
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(CapeTownExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
-		config.network().setInputFile("./network.xml.gz");
-		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));		
+		config.network().setInputFile("./network.xml");
+//		config.controler().setOutputDirectory(String.format("./output/capetown/run_%03d/", run));
 
 
 		//		config.facilities().setInputFile("./facilities.xml");
-		config.facilities().setInputFile("./facilities_used.xml.gz");
+		config.facilities().setInputFile("./facilities_used.xml");
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 
@@ -223,7 +227,7 @@ public class CapeTownScenarioBuilder {
 		//		sc.getConfig().facilities().setInputFile("scenarios/capeTown/facilities_used.xml.gz");
 
 		PopulationReader reader = new PopulationReader(sc);
-		reader.readFile("scenarios/capeTown/population_020.xml.gz");
+		reader.readFile("scenarios/capeTown/population_020.xml");
 
 
 		//		ObjectAttributesXmlReader reader2 = new ObjectAttributesXmlReader(sc.getPopulation().getPersonAttributes());
@@ -236,16 +240,28 @@ public class CapeTownScenarioBuilder {
 	 * FIXME Need to complete this. 
 	 * @return
 	 */
-	public static Scenario setupCapeTownScenario(long seed, int run) {		
-		Config config = ConfigUtils.createConfig();
+	public static Scenario setupCapeTownScenario(long seed, int run) {	
+		
+		Config config = ConfigUtils.loadConfig("./scenarios/capeTown/config.xml");
+		config.plans().setInputFile(null);
+//		Config config = ConfigUtils.createConfig();
+//		try {
+//			config.setContext(new URL("file://./scenarios/capeTown/"));
+//		} catch (MalformedURLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			throw new RuntimeException("CRASH!!");
+//		}
+		
+		
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(CapeTownExperimentParameters.NUM_ITERATIONS);
 		config.controler().setMobsim("qsim");
 		config.controler().setWriteSnapshotsInterval(CapeTownExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
-		config.network().setInputFile("./scenarios/capeTown/network.xml.gz");
-		config.controler().setOutputDirectory(String.format("./output/capetown/base/run_%03d/", run));		
-		config.facilities().setInputFile("./scenarios/capeTown/facilities.xml.gz");
+		config.network().setInputFile("network.xml");
+
+		config.facilities().setInputFile("facilities.xml");
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		for (Id<ActivityFacility> facility : sc.getActivityFacilities().getFacilities().keySet()){
@@ -254,8 +270,6 @@ public class CapeTownScenarioBuilder {
 
 		return sc;
 	}
-
-
 
 	public static void writeFreightScenario( Scenario sc ) {
 		/* Write the necessary bits to file. */
@@ -276,8 +290,7 @@ public class CapeTownScenarioBuilder {
 	/**
 	 * Route the services that are allocated to the carrier and writes the initial carrier plans.
 	 * 
-	 * @param carriers
-	 * @param network
+	 * @param sc
 	 */
 	public static void generateCarrierPlan(Scenario sc ) {
 		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class)); 
@@ -317,7 +330,7 @@ public class CapeTownScenarioBuilder {
 	/**
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
-	 * @param fs
+	 * @param sc
 	 */
 	public static void createReceiverOrders( Scenario sc ) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
@@ -331,14 +344,14 @@ public class CapeTownScenarioBuilder {
 		productTypeOne.setDescription("Product 1");
 		productTypeOne.setRequiredCapacity(1);
 
-
-		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class), carrierLink.getId());
-		productTypeTwo.setDescription("Product 2");
-		productTypeTwo.setRequiredCapacity(2);
-
-		ProductType productTypeThree = receivers.createAndAddProductType(Id.create("P3", ProductType.class), carrierLink.getId());
-		productTypeThree.setDescription("Product 3");
-		productTypeThree.setRequiredCapacity(3);
+//
+//		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class), carrierLink.getId());
+//		productTypeTwo.setDescription("Product 2");
+//		productTypeTwo.setRequiredCapacity(2);
+//
+//		ProductType productTypeThree = receivers.createAndAddProductType(Id.create("P3", ProductType.class), carrierLink.getId());
+//		productTypeThree.setDescription("Product 3");
+//		productTypeThree.setRequiredCapacity(3);
 
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			int tw = CapeTownExperimentParameters.TIME_WINDOW_DURATION;
@@ -349,49 +362,51 @@ public class CapeTownScenarioBuilder {
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
 
 			ReceiverProduct receiverProductOne;
-			ReceiverProduct receiverProductTwo;
-			ReceiverProduct receiverProductThree;
+//			ReceiverProduct receiverProductTwo;
+//			ReceiverProduct receiverProductThree;
 
 			if((boolean) receiver.getAttributes().getAttribute("corporate") == true){
 				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 9000);
-				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 750, 4500);
-				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 1000, 6000);
-				receiver.getProducts().add(receiverProductOne);
-				receiver.getProducts().add(receiverProductTwo);
-				receiver.getProducts().add(receiverProductThree);						
+//				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 750, 4500);
+//				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 1000, 6000);
+				receiver.addProduct(receiverProductOne);
+//				receiver.getProducts().add(receiverProductTwo);
+//				receiver.getProducts().add(receiverProductThree);						
 			} else {
 				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 750, 6000);
-				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 3000);
-				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 750, 4000);
-				receiver.getProducts().add(receiverProductOne);
-				receiver.getProducts().add(receiverProductTwo);
-				receiver.getProducts().add(receiverProductThree);
+//				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 3000);
+//				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 750, 4000);
+				receiver.addProduct(receiverProductOne);
+//				receiver.getProducts().add(receiverProductTwo);
+//				receiver.getProducts().add(receiverProductThree);
 			}
 
 			/* Generate and collate orders for the different receiver/order combination. */
 			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
 					receiverProductOne, Time.parseTime(serdur));
 			rOrder1.setNumberOfWeeklyDeliveries(numDel);
-			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
-					receiverProductTwo, Time.parseTime(serdur));
-			rOrder2.setNumberOfWeeklyDeliveries(numDel);
-			Order rOrder3 = createProductOrder(Id.create("Order"+Integer.toString(r)+"3",  Order.class), receiver, 
-					receiverProductThree, Time.parseTime(serdur));
-			rOrder3.setNumberOfWeeklyDeliveries(numDel);
+//			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
+//					receiverProductTwo, Time.parseTime(serdur));
+//			rOrder2.setNumberOfWeeklyDeliveries(numDel);
+//			Order rOrder3 = createProductOrder(Id.create("Order"+Integer.toString(r)+"3",  Order.class), receiver, 
+//					receiverProductThree, Time.parseTime(serdur));
+//			rOrder3.setNumberOfWeeklyDeliveries(numDel);
 			Collection<Order> rOrders = new ArrayList<Order>();
 			rOrders.add(rOrder1);
-			rOrders.add(rOrder2);
-			rOrders.add(rOrder3);
+//			rOrders.add(rOrder2);
+//			rOrders.add(rOrder3);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS ) == true){
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
-						.addTimeWindow(selectRandomNightTimeStart(tw, receiver))
+						.addTimeWindow(selectRandomNightTimeStart(tw))
+//						.addTimeWindow(selectRandomDayTimeStart(tw))
 						.build();
 				receiver.setSelectedPlan(receiverPlan);
 				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, true);
+				receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST, CapeTownExperimentParameters.TIME_WINDOW_HOURLY_COST);
 
 				/* Convert receiver orders to initial carrier services. */
 				BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierShipments( carriers, receiverOrder, receiverPlan );
@@ -405,6 +420,7 @@ public class CapeTownScenarioBuilder {
 						.build();
 				receiver.setSelectedPlan(receiverPlan);
 				receiver.getSelectedPlan().getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, false);
+				receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST, CapeTownExperimentParameters.TIME_WINDOW_HOURLY_COST);
 
 				/* Convert receiver orders to initial carrier services. */
 				BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierShipments( carriers, receiverOrder, receiverPlan );
@@ -495,8 +511,8 @@ public class CapeTownScenarioBuilder {
 				.build();		
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
 		CarrierVehicle heavy = carrierHVehicleBuilder
-				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("30:00:00"))
+				.setEarliestStart(Time.parseTime(CapeTownExperimentParameters.DAY_START))
+				.setLatestEnd(Time.parseTime(CapeTownExperimentParameters.DAY_END))
 				.setType(typeHeavy)
 				.setTypeId(typeHeavy.getId())
 				.build();
@@ -511,8 +527,8 @@ public class CapeTownScenarioBuilder {
 				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierMVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("medium"), carrierLocation);
 		CarrierVehicle medium = carrierMVehicleBuilder
-				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("30:00:00"))
+				.setEarliestStart(Time.parseTime(CapeTownExperimentParameters.DAY_START))
+				.setLatestEnd(Time.parseTime(CapeTownExperimentParameters.DAY_END))
 				.setType(typeMedium)
 				.setTypeId(typeMedium.getId())
 				.build();
@@ -528,8 +544,8 @@ public class CapeTownScenarioBuilder {
 				.build();
 		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
 		CarrierVehicle light = carrierLVehicleBuilder
-				.setEarliestStart(Time.parseTime("06:00:00"))
-				.setLatestEnd(Time.parseTime("30:00:00"))
+				.setEarliestStart(Time.parseTime(CapeTownExperimentParameters.DAY_START))
+				.setLatestEnd(Time.parseTime(CapeTownExperimentParameters.DAY_END))
 				.setType(typeLight)
 				.setTypeId(typeLight.getId())
 				.build();
@@ -619,7 +635,7 @@ public class CapeTownScenarioBuilder {
 		return randomTimeWindow;
 	}
 
-	public static TimeWindow selectRandomNightTimeStart(int tw, Receiver receiver) {
+	public static TimeWindow selectRandomNightTimeStart(int tw) {
 		int min = 18;
 		int max = 30;
 		//		Random randomTime = new Random();

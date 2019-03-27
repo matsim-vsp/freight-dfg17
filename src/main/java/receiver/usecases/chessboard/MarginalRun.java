@@ -33,6 +33,7 @@ import org.matsim.api.core.v01.Scenario;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
+import receiver.collaboration.Coalition;
 
 /**
  * Executes the receiver run by starting off with calculating the grand
@@ -81,7 +82,9 @@ import receiver.ReceiversWriter;
 		
 		/* Calculate grand coalition cost. */
 		LOG.info("Building base freight scenario");
-		Scenario sc = MarginalScenarioBuilder.createChessboardScenario(inputPath + "output", seed, 1, false);
+//		Scenario sc = MarginalScenarioBuilder.createChessboardScenario(inputPath + "output", seed, 1, false);
+		Scenario sc = MarginalScenarioBuilder.createChessboardScenario(seed, true );
+		
 		double grandCoalitionCost = Double.NEGATIVE_INFINITY;
 		MarginalCalculateCallable cmcGrand = new MarginalCalculateCallable(seed, inputPath, outputPath, release, Id.create("0", Receiver.class ));
 		Future<Double> grandJob = executor.submit(cmcGrand);
@@ -133,7 +136,7 @@ import receiver.ReceiversWriter;
 		/* TODO Check if we really need to write the receivers to file. */
 		String receiversFilename = outputPath + "receivers.xml.gz";
 		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(receiversFilename );
-		
+
 		return sc;
 	}
 	
@@ -144,15 +147,15 @@ import receiver.ReceiversWriter;
 	 * @param folder
 	 */
 	private static void checkInputPath(String folder, String release) {
-		File gridNetwork = new File(folder + "/chessboard/network/grid9x9.xml");
-		if(!gridNetwork.exists()) {
-			throw new RuntimeException("The given input path '" + folder + "' does not contain a grid9x9.xml network");
-		}
-
-		File algorithm = new File(folder + "/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-		if(!algorithm.exists()) {
-			throw new RuntimeException("The given input path '" + folder + "' does not contain an initialPlanAlgorithm.xml file");
-		}
+//		File gridNetwork = new File(folder + "/chessboard/network/grid9x9.xml");
+//		if(!gridNetwork.exists()) {
+//			throw new RuntimeException("The given input path '" + folder + "' does not contain a grid9x9.xml network");
+//		}
+//
+//		File algorithm = new File(folder + "/chessboard/vrpalgo/initialPlanAlgorithm.xml");
+//		if(!algorithm.exists()) {
+//			throw new RuntimeException("The given input path '" + folder + "' does not contain an initialPlanAlgorithm.xml file");
+//		}
 
 		File releaseFile = new File(release);
 		if(!releaseFile.exists()) {

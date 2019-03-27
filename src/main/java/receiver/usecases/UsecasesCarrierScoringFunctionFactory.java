@@ -36,10 +36,12 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	        private double score;
 
-	        private double timeParameter = 1.000;
+//	        private double timeParameter = 0.0889;
+	        private double timeParameter = 1.0000;
 	        // yyyyyy I have set the time parameter to a relatively high value.
 
 	        private double missedTimeWindowPenalty = 0.01667;
+//	        private double missedTimeWindowPenalty = 1.000;
 
 	        public DriversActivityScoring() {
 	            super();

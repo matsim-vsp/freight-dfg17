@@ -49,6 +49,7 @@ import java.net.URL;
  */
  class MarginalReceiverClass {
 	final private static Logger LOG = Logger.getLogger(MarginalReceiverClass.class);
+	static String folder;
 
 	public static void main(String[] args) {
 		LOG.info("Running with the following arguments: ");
@@ -57,21 +58,20 @@ import java.net.URL;
 		}
 		
 		long seed = Long.parseLong(args[0]);
-		String folder = args[1];
+		folder = args[1];
 		folder += folder.endsWith("/") ? "" : "/";
-		
 		String idString = args[2];
 		Id<Receiver> receiverId = Id.create(idString, Receiver.class);
 	
 		/* Use the code (components) from ReceiverChessboardScenario */
 		String inputNetwork = "input/network.xml";
-		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(inputNetwork, "./output/", seed, 1);
+		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(seed);
 		sc.getConfig().controler().setLastIteration(ExperimentParameters.REPLAN_INTERVAL);
 		
 		ReceiverUtils.setReplanInterval(ExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		MarginalScenarioBuilder.createChessboardCarriers(sc);
-		ProportionalScenarioBuilder.createAndAddChessboardReceivers(sc );
+		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
 		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
 		MarginalScenarioBuilder.createReceiverOrders(sc);
 		/* This is the portion that is unique HERE: remove ONE receiver. */
@@ -81,7 +81,8 @@ import java.net.URL;
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 //		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  "input/algorithm.xml");
-		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
+//		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
+		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
 		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
 		
 		BaseReceiverChessboardScenario.writeFreightScenario(sc );
@@ -126,6 +127,7 @@ import java.net.URL;
 				if((event.getIteration() + 1) % (statInterval) != 0) return;
 				//write plans
 				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+				LOG.info("Writing carrier plans to: " + dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
 			}
 		});
 		
@@ -133,8 +135,9 @@ import java.net.URL;
 			@Override
 			public void notifyShutdown(ShutdownEvent event) {
 				int lastIteration = controler.getScenario().getConfig().controler().getLastIteration();
-				String outputDir = controler.getConfig().controler().getOutputDirectory();
+				String outputDir =  "./output/";
 				outputDir += outputDir.endsWith("/") ? "" : "/";
+				LOG.info("Reading carrier plans from: " + outputDir + "ITERS/it." + lastIteration + "/" + lastIteration + ".carrierPlans.xml.gz");
 				File f1 = new File(outputDir + "ITERS/it." + lastIteration + "/" + lastIteration + ".carrierPlans.xml.gz");
 				File f2 = new File(outputDir + "output_carrierPlans.xml.gz");
 				ReceiverChessboardUtils.copyFile(f1, f2);

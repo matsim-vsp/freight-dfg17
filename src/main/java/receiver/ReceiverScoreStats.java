@@ -231,12 +231,13 @@ final class ReceiverScoreStats implements StartupListener, IterationEndsListener
     
 	static void writeHeadings( BufferedWriter bw ){
 		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
 				  "iteration",
 				  "receiver_id",
 				  "score",
 				  "timewindow_start",
 				  "timewindow_end",
+				  "timewindow_duration",
 				  "order_id",
 				  "volume",
 				  "frequency",
@@ -264,6 +265,7 @@ final class ReceiverScoreStats implements StartupListener, IterationEndsListener
                     String score = receiver.getSelectedPlan().getScore().toString();
                     float start = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getStart();
                     float end = (float) receiver.getSelectedPlan().getTimeWindows().get(0).getEnd();
+                    float duration = (end - start)/3600;
                     float size = (float) (order.getDailyOrderQuantity() * order.getProduct().getProductType().getRequiredCapacity());
                     float freq = (float) order.getNumberOfWeeklyDeliveries();
                     float dur = (float) order.getServiceDuration();
@@ -272,12 +274,13 @@ final class ReceiverScoreStats implements StartupListener, IterationEndsListener
 
                     BufferedWriter bw1 = IOUtils.getAppendingBufferedWriter(sc.getConfig().controler().getOutputDirectory() + RECEIVER_STATS_CSV);
                     try {
-                        bw1.write(String.format("%d,%s,%s,%f,%f,%s,%f,%f,%f,%b,%b",
+                        bw1.write(String.format("%d,%s,%s,%f,%f,%f,%s,%f,%f,%f,%b,%b",
                                 event.getIteration(),
                                 receiver.getId(),
                                 score,
                                 start,
                                 end,
+                                duration,
                                 order.getId(),
                                 size,
                                 freq,

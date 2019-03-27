@@ -42,6 +42,7 @@ import org.matsim.core.utils.misc.Time;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -164,7 +165,6 @@ class ReceiverControlerListener implements ScoringListener,
             throw new RuntimeException("Cannot write receiver output, linking them to tour positions.");
         }
 
-
     }
 
     private void linkReceiverTimewindowToCarrierTourPosition() throws IOException {
@@ -174,10 +174,10 @@ class ReceiverControlerListener implements ScoringListener,
         Receivers receivers = ReceiverUtils.getReceivers(this.sc);
         for (Receiver receiver : receivers.getReceivers().values()) {
             Id<Link> linkId = receiver.getLinkId();
-            if (receiverLinkMap.containsKey(linkId)) {
-                LOG.error("There are multiple receivers at the same link Id. Fix how this is dealt with.");
-                throw new RuntimeException("Multiple receivers on same link.");
-            }
+//            if (receiverLinkMap.containsKey(linkId)) {
+//                LOG.error("There are multiple receivers at the same link Id. Fix how this is dealt with.");
+//                throw new RuntimeException("Multiple receivers on same link.");
+//            }
             receiverLinkMap.put(linkId, receiver);
         }
 

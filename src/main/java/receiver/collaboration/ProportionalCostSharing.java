@@ -111,7 +111,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 					ReceiverOrder ro = thisReceiver.getSelectedPlan().getReceiverOrder(carrierId);
 					fixedFeeVolume += getReceiverOrderTotal(ro);
 					/*TODO Why not? We need the fixedFeeVolume later (JWJ, Feb19). Come back and check if we find exceptions!! */
-					throw new RuntimeException( "I don't want these." ) ;
+//					throw new RuntimeException( "I don't want these." ) ;
 				}
 				//				carrierCoalitionVolume += getReceiverOrderTotal(thisReceiver.getSelectedPlan().getReceiverOrder(carrierId));
 			}
@@ -182,10 +182,60 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 			if ( !((boolean) thisReceiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS )) ){
 				double total = 0.0;
 				for(ReceiverOrder ro : plan.getReceiverOrders()) {
-					double cost = (getReceiverOrderTotal( ro ) /1000)*-1*fee;
+					double volume = 0.0;
+					double nonDeliveryCost = 0.0;
+					for(Order order : ro.getReceiverProductOrders()) {
+						if (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity() != 0) {
+							volume += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+						} else {
+							int counter = (int) order.getNumberOfWeeklyDeliveries();
+
+							/*
+							 * TODO This is currently hard coded with one experiment parameter values.
+							 * This should be updated to determine the costs based on each experiment's
+							 * unique parameters.
+							 */
+							
+							if (counter == 4) {
+								// (light vehicle fixed cost + carrierTimeCost) * 4/5 * 1
+								nonDeliveryCost += 1702.50;
+							} else if (counter == 3) {
+								// (light vehicle fixed cost+ carrierTimeCost) * 3/5 * 2
+								nonDeliveryCost += 2553.74;
+							} else if (counter == 2) {
+								// (light vehicle fixed cost + carrierTimeCost) * 2/5 * 3
+								nonDeliveryCost += 2553.74;
+							} else if (counter == 1) {
+								// (heavy vehicle fixed cost + carrierTimeCost) * 1/5 * 4
+								nonDeliveryCost += 2851.30;
+							} else {
+								throw new IllegalArgumentException("Number of deliveries must be between 1 and 4 for non delivery fee.");
+							}
+//							if (counter == 4) {
+//								// (light vehicle fixed cost + carrierTimeCost) * 4/5 * 1
+//								nonDeliveryCost += 2553.74;
+//							} else if (counter == 3) {
+//								// (light vehicle fixed cost+ carrierTimeCost) * 3/5 * 2
+//								nonDeliveryCost += 2553.74;
+//							} else if (counter == 2) {
+//								// (light vehicle fixed cost + carrierTimeCost) * 2/5 * 3
+//								nonDeliveryCost += 1702.50;;
+//							} else if (counter == 1) {
+//								// (heavy vehicle fixed cost + carrierTimeCost) * 1/5 * 4
+//								nonDeliveryCost += 1000.00;
+//							} else {
+//								throw new IllegalArgumentException("Number of deliveries must be between 1 and 4 for non delivery fee.");
+//							}
+						
+						}
+					}
+
+					double cost = (volume /1000)*-1*fee  - nonDeliveryCost;
 					ro.setScore(cost);
 					total += cost;
+
 				}
+			
 				
 				/*
 				 * Include the total order cost and allocate to receiver. Also add an hourly time window cost for the receiver, 
@@ -200,9 +250,56 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 				/* Score the collaborating receiver plans. */
 				double total = 0.0;
 				for(ReceiverOrder ro : plan.getReceiverOrders()) {
-					double score = -coalition.getCoalitionCost() * proportionalMap.get(ro.getCarrierId() ).get(thisReceiver.getId() );
-					ro.setScore(score);
-					total += score;
+					double score = 0.0;
+					double nonDeliveryCost = 0.0;
+					for(Order order : ro.getReceiverProductOrders()) {
+						if (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity() != 0) {
+//							if (getReceiverOrderTotal(ro) != 0.0) {
+							score = coalition.getCoalitionCost() * proportionalMap.get(ro.getCarrierId() ).get(thisReceiver.getId() );
+//							double newscore = score;
+						} else {
+								int counter = (int) order.getNumberOfWeeklyDeliveries();
+							/*
+							 * TODO This is currently hard coded with one experiment parameter values.
+							 * This should be updated to determine the costs based on each experiment's
+							 * unique parameters.
+							 */
+							if (counter == 4) {
+								// (light vehicle fixed cost + carrierTimeCost) * 4/5 * 1
+								nonDeliveryCost += 1702.50;
+							} else if (counter == 3) {
+								// (light vehicle fixed cost+ carrierTimeCost) * 3/5 * 2
+								nonDeliveryCost += 2553.74;
+							} else if (counter == 2) {
+								// (light vehicle fixed cost + carrierTimeCost) * 2/5 * 3
+								nonDeliveryCost += 2553.74;
+							} else if (counter == 1) {
+								// (heavy vehicle fixed cost + carrierTimeCost) * 1/5 * 4
+								nonDeliveryCost += 2851.30;
+							} else {
+								throw new IllegalArgumentException("Number of deliveries must be between 1 and 4 for non delivery fee.");
+							}
+//							if (counter == 4) {
+//								// (light vehicle fixed cost + carrierTimeCost) * 4/5 * 1
+//								nonDeliveryCost += 2553.74;
+//							} else if (counter == 3) {
+//								// (light vehicle fixed cost+ carrierTimeCost) * 3/5 * 2
+//								nonDeliveryCost += 2553.74;
+//							} else if (counter == 2) {
+//								// (light vehicle fixed cost + carrierTimeCost) * 2/5 * 3
+//								nonDeliveryCost += 1702.50;;
+//							} else if (counter == 1) {
+//								// (heavy vehicle fixed cost + carrierTimeCost) * 1/5 * 4
+//								nonDeliveryCost += 1000.00;
+//							} else {
+//								throw new IllegalArgumentException("Number of deliveries must be between 1 and 4 for non delivery fee.");
+//							}
+						
+						}
+					}
+					
+					ro.setScore(-1*score - nonDeliveryCost);
+					total += -1*score  - nonDeliveryCost;
 				}
 				/* Fixed fee delivers may cover (more than) Carrier costs. However,
 				 * the Carrier will not PAY the receiver because they collaborate. */

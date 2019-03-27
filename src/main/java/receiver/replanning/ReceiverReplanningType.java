@@ -18,5 +18,5 @@
 package receiver.replanning;
 
 public enum ReceiverReplanningType {
-    serviceTime, timeWindow, orderFrequency;
+    serviceTime, timeWindow, orderFrequency, afterHoursTimeWindow;
 }

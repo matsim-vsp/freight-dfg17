@@ -9,6 +9,7 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
 import org.matsim.core.replanning.selectors.BestPlanSelector;
+import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.utils.misc.Time;
 
@@ -23,10 +24,10 @@ import receiver.replanning.ReceiverOrderStrategyManagerFactory;
  * @author wlbean
  *
  */
-class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
+public class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyManagerFactory{
 	@Inject Scenario sc;
 	
-	CapeTownReceiverOrderStrategyManagerImpl(){
+	public CapeTownReceiverOrderStrategyManagerImpl(){
 	}
 
 	@Override
@@ -35,9 +36,10 @@ class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyM
 		stratMan.setMaxPlansPerAgent(5);
 		
 		{
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanChanger<>( 1.) );
 			strategy.addStrategyModule(new CollaborationStatusChanger());
-			stratMan.addStrategy(strategy, null, 0.5);
+			stratMan.addStrategy(strategy, null, 0.7);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 		}
 		
@@ -46,7 +48,8 @@ class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyM
 		 */
 		
 		{
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> timeStrategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanChanger<>( 1.) );
 			timeStrategy.addStrategyModule(new CapeTownTimeWindowMutator(Time.parseTime("01:00:00")));
 			stratMan.addStrategy(timeStrategy, null, 0.3);
 			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), timeStrategy, null, 0.0);
@@ -56,7 +59,8 @@ class CapeTownReceiverOrderStrategyManagerImpl implements ReceiverOrderStrategyM
 		/* Replanning for grand coalition receivers.*/
 		
 		{			
-			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanChanger<>( 1.) );
 			strategy.addStrategyModule(new CapeTownCollaborationStatusMutator());
 			stratMan.addStrategy(strategy, null, 0.2);
 			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);			

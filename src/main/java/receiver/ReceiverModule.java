@@ -24,6 +24,7 @@ import org.matsim.core.controler.AbstractModule;
 
 import receiver.replanning.*;
 import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
+import receiver.usecases.capetown.CapeTownReceiverOrderStrategyManagerImpl;
 
 public final class ReceiverModule extends AbstractModule {
     final private static Logger LOG = Logger.getLogger(ReceiverModule.class);
@@ -70,6 +71,9 @@ public final class ReceiverModule extends AbstractModule {
             case orderFrequency:
                 bind(ReceiverOrderStrategyManagerFactory.class).toInstance(new NumDelReceiverOrderStrategyManagerImpl());
                 break;
+            case afterHoursTimeWindow:
+            	bind(ReceiverOrderStrategyManagerFactory.class).toInstance(new CapeTownReceiverOrderStrategyManagerImpl());
+            	break;
             default:
                 throw new RuntimeException("No valid (receiver) order strategy manager selected.");
         }

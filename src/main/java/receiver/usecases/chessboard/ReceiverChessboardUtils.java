@@ -27,6 +27,7 @@ import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.google.inject.Inject;
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
@@ -34,9 +35,11 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.jfree.util.Log;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
+import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.controler.CarrierModule;
@@ -60,9 +63,8 @@ import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
 public class ReceiverChessboardUtils {
 	final private static Logger LOG = Logger.getLogger(ReceiverChessboardUtils.class);
 	final public static int STATISTICS_INTERVAL = 50;
-
+	
 	public static void setupCarriers(Controler controler) {
-
 		Carriers carriers = ReceiverUtils.getCarriers( controler.getScenario() );;
 
 		BaseRunReceiver.setupCarrierReplanning(controler );
@@ -118,6 +120,7 @@ public class ReceiverChessboardUtils {
 
 		//assign this plan now to the carrier and make it the selected carrier plan
 		carrier.setSelectedPlan(plan);
+		
 
 	}
 

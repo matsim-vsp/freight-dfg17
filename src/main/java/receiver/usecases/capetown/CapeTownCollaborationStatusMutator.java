@@ -46,7 +46,7 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 			} else {
 				newstatus = true;
 				/* Select a random night time window for collaborating receivers */
-				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomNightTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION, receiverPlan.getReceiver());
+				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomNightTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION);
 				TimeWindow oldWindow = receiverPlan.getTimeWindows().get(0);
 				/* Remove old and add new time windows */
 				receiverPlan.getTimeWindows().remove(oldWindow);

@@ -47,6 +47,7 @@ import receiver.product.ReceiverProduct;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import static receiver.usecases.chessboard.BaseReceiverChessboardScenario.selectRandomLink;
 
@@ -62,14 +63,14 @@ class MarginalScenarioBuilder {
 	/**
 	 * Build the entire chessboard example.
 	 */
-	public static Scenario createChessboardScenario( String outputDirectory, long seed, int run, boolean write) {
-		Scenario sc = setupChessboardScenario("grid9x9.xml", outputDirectory, seed, run);
+	public static Scenario createChessboardScenario( long seed, boolean write) {
+		Scenario sc = setupChessboardScenario(seed);
 		
 		ReceiverUtils.setReplanInterval(ExperimentParameters.REPLAN_INTERVAL, sc );
 		
 		/* Create and add the carrier agent(s). */
 		createChessboardCarriers(sc);
-		
+
 		/* Create the grand coalition receiver members and allocate orders. */
 		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
 		
@@ -98,7 +99,7 @@ class MarginalScenarioBuilder {
 	 * FIXME Need to complete this. 
 	 * @return
 	 */
-	public static Scenario setupChessboardScenario(String inputNetwork, String outputDirectory, long seed, int run) {
+	public static Scenario setupChessboardScenario(long seed) {
 		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
@@ -107,8 +108,7 @@ class MarginalScenarioBuilder {
 		config.controler().setWriteSnapshotsInterval(ExperimentParameters.STAT_INTERVAL);
 		config.global().setRandomSeed(seed);
 		config.setContext( context );
-		config.network().setInputFile(inputNetwork);
-		config.controler().setOutputDirectory(outputDirectory);
+		config.network().setInputFile("grid9x9.xml");
 
 		Scenario sc = ScenarioUtils.loadScenario(config);
 		return sc;
@@ -146,113 +146,59 @@ class MarginalScenarioBuilder {
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
+		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().iterator();
+		if( !vehicles.hasNext() ) {
+			throw new RuntimeException("Must have vehicles to get origin link!");
+		}
+		Id<Link> carrierOriginLinkId = vehicles.next().getLocation();
+		
 		/* Create generic product types with a description and required capacity (in kg per item). */
-		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class));
+		ProductType productTypeOne = receivers.createAndAddProductType(Id.create("P1", ProductType.class), carrierOriginLinkId);
 		productTypeOne.setDescription("Product 1");
 		productTypeOne.setRequiredCapacity(1);
 
-		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class));
+		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class), carrierOriginLinkId);
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
 		
-		for ( int r = 1 ; r < receivers.getReceivers().size()+1 ; r++){
+		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			int tw = ExperimentParameters.TIME_WINDOW_DURATION;
-			String serdur = ExperimentParameters.SERVICE_TIME;
 			int numDel = ExperimentParameters.NUM_DELIVERIES;
-			
-			/* Set the different time window durations for experiments. */
-//			if (r <= 10){
-//				tw = 2;
-//			} else if (r <= 20){
-//				tw = 4;
-//			} else if (r <= 30){
-//				tw = 6;
-//			} else if (r <= 40){
-//				tw = 8;
-//			} else if (r <= 50){
-//				tw = 10;
-//			} else if (r <= 60){
-//				tw = 12;
-//			} else if (r <= 70){
-//				tw = 2;
-//			} else if (r <= 80){
-//				tw = 4;
-//			} else if (r <= 90){
-//				tw = 6;
-//			} else if (r <= 100){
-//				tw = 8;
-//			} else if (r <= 110){
-//				tw = 10;
-//			} else tw = 12;
-			
-//			/* Set the different service durations for experiments. */
-//			if (r <= 15){
-//				serdur = "01:00:00";
-//			} else if (r <= 30){
-//				serdur = "02:00:00";
-//			} else if (r <= 45){
-//				serdur = "03:00:00";
-//			} else if (r <=60) {
-//				serdur = "04:00:00";
-//			} else if (r <= 75){
-//				serdur = "01:00:00";
-//			} else if (r <= 90){
-//				serdur = "02:00:00";
-//			} else if (r <= 105){
-//				serdur = "03:00:00";
-//			} else serdur = "04:00:00";
-			
-			/* Set the different delivery frequencies for experiments. */
-			if (r <= 12){
-				numDel = 1;
-			} else if (r <= 24){
-				numDel = 2;
-			} else if (r <= 36){
-				numDel = 3;
-			} else if (r <= 48){
-				numDel = 4;
-			} else if (r <= 60){
-				numDel = 5;
-			} else if (r <= 72){
-				numDel = 1;
-			} else if (r <= 84){
-				numDel = 2;
-			} else if (r <= 96){
-				numDel = 3;
-			} else if (r <= 108){
-				numDel = 4;
-			} else numDel = 5;
+			String serdur = ExperimentParameters.SERVICE_TIME;
+
 	
 			/* Create receiver-specific products */
 			Receiver receiver = receivers.getReceivers().get(Id.create(Integer.toString(r), Receiver.class));
 			ReceiverProduct receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 5000);
-			ReceiverProduct receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 2500);
+//			ReceiverProduct receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 500, 2500);
 			receiver.addProduct(receiverProductOne);
-			receiver.addProduct(receiverProductTwo);
+//			receiver.addProduct(receiverProductTwo);
 
 			/* Generate and collate orders for the different receiver/order combination. */
 			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
 					receiverProductOne, Time.parseTime(serdur));
 			rOrder1.setNumberOfWeeklyDeliveries(numDel);
-			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
-					receiverProductTwo, Time.parseTime(serdur));
-			rOrder2.setNumberOfWeeklyDeliveries(numDel);
+//			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
+//					receiverProductTwo, Time.parseTime(serdur));
+//			rOrder2.setNumberOfWeeklyDeliveries(numDel);
 			Collection<Order> rOrders = new ArrayList<Order>();
 			rOrders.add(rOrder1);
-			rOrders.add(rOrder2);
+//			rOrders.add(rOrder2);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
 			ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 			boolean collaborationStatus = (boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
 			ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, collaborationStatus)
 					.addReceiverOrder(receiverOrder)
-					.addTimeWindow( BaseReceiverChessboardScenario.selectRandomTimeStart(tw ) )
-//					.addTimeWindow(TimeWindow.newInstance(Time.parseTime("12:00:00"), Time.parseTime("12:00:00") + tw*3600))
+					.addTimeWindow(BaseReceiverChessboardScenario.selectRandomTimeStart(tw ) )
+//					// setting the time window start time of ALL receivers to 08:00 for time window experiments.
+//					.addTimeWindow(TimeWindow.newInstance(6*3600,(6*3600+tw*3600)))
 					.build();
 			receiver.setSelectedPlan(receiverPlan);
+			receiver.getAttributes().putAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST, ExperimentParameters.TIME_WINDOW_HOURLY_COST);
 
 			/* Convert receiver orders to initial carrier services. */
-			BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierServices( carriers, receiverOrder, receiverPlan );
+			BaseReceiverChessboardScenario.convertReceiverOrdersToInitialCarrierShipments( carriers, receiverOrder, receiverPlan );
 		}
 
 	}

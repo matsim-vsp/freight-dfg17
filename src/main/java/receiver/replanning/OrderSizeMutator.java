@@ -102,7 +102,7 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 			}
 			
 			order.setNumberOfWeeklyDeliveries(newNumDel);
-//			order.setDailyOrderQuantity(sdemand);
+			order.setDailyOrderQuantity(sdemand);
 
 			}
 		}

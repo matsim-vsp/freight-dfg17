@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.TimeWindow;
 
 import receiver.Receiver;
 import receiver.ReceiverPlan;
@@ -40,16 +41,6 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 		this.fee = fee;
 	}
 
-
-//	@Override
-//	public Attributes getAttributes() {
-//		return this.attributes;
-//	}
-
-//	@Override
-//	public String getDescription() {
-//		return this.descr;
-//	}
 
 	/* TODO Currently assuming that the carrier has no choice but to be part of the coalition. This should 
 	 * be changed when more than one carrier is involved.*/
@@ -95,7 +86,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 //			
 //			/* Determine the total volume of non-coalition members. */
 //			for(Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()) {
-//				if((boolean) receiver.getAttributes().getAttribute(ReceiverAttributes.collaborationStatus.toString()) == false){
+//				if((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER ) == false){
 //					ReceiverOrder ro = receiver.getSelectedPlan().getReceiverOrder(carrierId);					
 //					fixedFeeVolume += getReceiverOrderTotal(ro);
 //				}								
@@ -146,11 +137,19 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 		}
 		
 		for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
+			double twCost = 0.0;
+			double total = 0.0;
+			ReceiverPlan plan = receiver.getSelectedPlan();
+			TimeWindow tw = plan.getTimeWindows().get(0);
+			//Calculate the receiver's timewindow cost for the selected plan.
+			twCost = ((tw.getEnd()-tw.getStart())/3600)*((double) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_TW_COST));
+			
 			/* 
 			 * Checks to see if the receiver is part of the coalition, if so, allocate marginal cost, 
 			 * if not allocate fixed fee per tonne.					 
 			 */
 //			if ( !ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
+//			double total = 0.0;
 			if((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
 				double subScore = 0;
 				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N|{" + receiver.getId().toString() + "})")){
@@ -158,32 +157,84 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 							.getAttributes()
 							.getAttribute("C(N|{" + receiver.getId().toString() + "})");
 				}
-				if (grandScore - subScore < 0){
-					receiver.getSelectedPlan().setScore(grandScore - subScore);
-				} else {
-					receiver.getSelectedPlan().setScore(0.0);
+				
+				total = grandScore - subScore;
+				
+				plan.setScore( Math.min(total - twCost, twCost) );
+				/*
+				 * Setting the receiver order score as the receiver plan score.
+				 * TODO This only works with one carrier and one receiver order....must be updated.
+				 */
+				for (ReceiverOrder ro : plan.getReceiverOrders()) {
+					ro.setScore(Math.min(total - twCost, 0.0));
 				}
 
 			} else {
+				
+				for(ReceiverOrder ro : plan.getReceiverOrders()) {
+					double volume = 0.0;
+					double nonDeliveryCost = 0.0;
+					for(Order order : ro.getReceiverProductOrders()) {
+					if (order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity() != 0) {
+						volume += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+					} else {
+						int countertwo = (int) order.getNumberOfWeeklyDeliveries();
 
-				double fixedFeeScore = 0.0;					
-				double thisVolume = 0.0;
-				for (ReceiverOrder ro : receiver.getSelectedPlan().getReceiverOrders()){						
-					thisVolume += getReceiverOrderTotal(ro);
+						/*
+						 * TODO This is currently hard coded with one experiment parameter values.
+						 * This should be updated to determine the costs based on each experiment's
+						 * unique parameters.
+						 */
+						
+						if (countertwo == 4) {
+							// (light vehicle fixed cost + carrierTimeCost) * 4/5 * 1
+							nonDeliveryCost += 1702.50;
+						} else if (countertwo == 3) {
+							// (light vehicle fixed cost+ carrierTimeCost) * 3/5 * 2
+							nonDeliveryCost += 2553.74;
+						} else if (countertwo == 2) {
+							// (light vehicle fixed cost + carrierTimeCost) * 2/5 * 3
+							nonDeliveryCost += 2553.74;
+						} else if (countertwo == 1) {
+							// (heavy vehicle fixed cost + carrierTimeCost) * 1/5 * 4 
+							nonDeliveryCost += 2851.30;
+						} else {
+							throw new IllegalArgumentException("Number of deliveries must be between 1 and 4 for non delivery fee.");
+						}
+					
+					}
 				}
-				fixedFeeScore = (thisVolume*fee*-1)/1000;					
-				receiver.getSelectedPlan().setScore(fixedFeeScore);						
+
+				double cost = (volume /1000)*-1*fee  - nonDeliveryCost;
+				ro.setScore(cost);
+				total += cost;
+				
+				}
+				plan.setScore(total - twCost);
 			}
+				
+		
+		log.warn("      Receiver '" + receiver.getId().toString() + "' score:" + plan.getScore());
 		}
+			
+				
+//				double fixedFeeScore = 0.0;					
+//				double thisVolume = 0.0;
+//				for (ReceiverOrder ro : receiver.getSelectedPlan().getReceiverOrders()){						
+//					thisVolume += getReceiverOrderTotal(ro);
+//				}
+//				fixedFeeScore = (thisVolume*fee*-1)/1000;					
+//				receiver.getSelectedPlan().setScore(fixedFeeScore);			
+		log.info("Done with marginal cost calculation.");
 	}
 	
-	/* Calculates the total volume of a ReceiverOrder. */
-	private double getReceiverOrderTotal(ReceiverOrder ro) {
-		double total = 0.0;
-		for(Order order : ro.getReceiverProductOrders()) {
-			total += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
-		}
-		return total;
-	}
+//	/* Calculates the total volume of a ReceiverOrder. */
+//	private double getReceiverOrderTotal(ReceiverOrder ro) {
+//		double total = 0.0;
+//		for(Order order : ro.getReceiverProductOrders()) {
+//			total += order.getDailyOrderQuantity()*order.getProduct().getProductType().getRequiredCapacity();
+//		}
+//		return total;
+//	}
 
 }

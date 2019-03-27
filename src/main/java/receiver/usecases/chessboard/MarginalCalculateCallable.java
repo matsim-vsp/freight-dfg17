@@ -26,8 +26,11 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlReaderV2;
 import org.matsim.contrib.freight.carrier.Carriers;
@@ -44,14 +47,14 @@ import receiver.Receiver;
 class MarginalCalculateCallable implements Callable<Double> {
 	final private Logger log = Logger.getLogger( MarginalCalculateCallable.class );
 	final private Id<Receiver> receiverId;
-	final private String sourceFolder;
+//	final private String sourceFolder;
 	final private String outputFolder;
 	final private String release;
 	final private long seed;
 	
 	public MarginalCalculateCallable( long seed, String sourceFolder, String outputFolder, String release, Id<Receiver> receiverId ) {
 		this.receiverId = receiverId;
-		this.sourceFolder = sourceFolder;
+//		this.sourceFolder = sourceFolder;
 		this.outputFolder = outputFolder;
 		this.release = release;
 		this.seed = seed;
@@ -68,14 +71,14 @@ class MarginalCalculateCallable implements Callable<Double> {
 			log.error("Check that the output folder does NOT exist. If so, delete and restart");
 			throw new RuntimeException("Could not create receiver pipe " + foldername);
 		}
-		new File(foldername + "input/").mkdirs();
+//		new File(foldername + "input/").mkdirs();
 		new File(foldername + "output/").mkdirs();
-		ReceiverChessboardUtils.copyFile(
-				new File(sourceFolder + "chessboard/network/grid9x9.xml"),
-				new File(foldername + "/input/network.xml"));
-		ReceiverChessboardUtils.copyFile(
-				new File(sourceFolder + "chessboard/vrpalgo/initialPlanAlgorithm.xml"),
-				new File(foldername + "input/algorithm.xml"));
+//		ReceiverChessboardUtils.copyFile(
+//				new File(sourceFolder + "chessboard/network/grid9x9.xml"),
+//				new File(foldername + "/input/network.xml"));
+//		ReceiverChessboardUtils.copyFile(
+//				new File(sourceFolder + "chessboard/vrpalgo/initialPlanAlgorithm.xml"),
+//				new File(foldername + "input/algorithm.xml"));
 		ReceiverChessboardUtils.copyFile(
 				new File(release),
 				new File(foldername + "release.zip"));
@@ -94,18 +97,23 @@ class MarginalCalculateCallable implements Callable<Double> {
 			log.error("Could not unzip release for receiver '" + receiverId.toString() + "'. Exit status '" + zipExitCode + "'");
 		}
 
+		String newfoldername = foldername + "/freight-dfg17-0.0.1-SNAPSHOT/";
+		
 		/* Execute the scenario, i.e. the MATSim run. */
 		ProcessBuilder runBuilder = new ProcessBuilder(
 				"java",
 				"-Xmx512m",
 				"-cp",
-				"freight-dfg17-0.0.1-SNAPSHOT/freight-dfg17-0.0.1-SNAPSHOT.jar",
+				"freight-dfg17-0.0.1-SNAPSHOT.jar:libs/matsim-0.11.0-SNAPSHOT.jar:libs/matsim-examples-0.11.0-SNAPSHOT.jar",
 				"receiver.usecases.chessboard.MarginalReceiverClass",
 				String.valueOf(seed),
-				foldername,
+				newfoldername,
 				receiverId.toString()
 				);
-		runBuilder.directory(folder);
+		
+		File newfolder = new File(newfoldername);
+		runBuilder.directory(newfolder);
+//		runBuilder.directory(folder);
 		runBuilder.redirectErrorStream(true);
 		final Process equilProcess = runBuilder.start();
 		log.info("Process started for receiver '" + receiverId.toString() + "'...");
@@ -124,8 +132,8 @@ class MarginalCalculateCallable implements Callable<Double> {
 		
 		/* Calculate the marginal contribution. */
 		Carriers outputCarriers = new Carriers();
-		new CarrierPlanXmlReaderV2(outputCarriers).readFile(foldername + "output/output_carrierPlans.xml.gz");
-		
+		new CarrierPlanXmlReaderV2(outputCarriers).readFile(newfoldername + "output/output_carrierPlans.xml.gz");
+
 		double coalitionCost = outputCarriers.getCarriers().get(Id.create("Carrier1", Carrier.class)).getSelectedPlan().getScore();
 		
 		/* Clean up */

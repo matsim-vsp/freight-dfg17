@@ -23,31 +23,26 @@
  */
 package receiver.usecases.chessboard;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
 import org.matsim.core.controler.Controler;
-import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
-import org.matsim.core.utils.io.IOUtils;
-import receiver.ReceiverModule;
-import receiver.ReceiverUtils;
-import receiver.replanning.ReceiverReplanningType;
 
-import java.io.BufferedWriter;
-import java.io.File;
+import receiver.ReceiverModule;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
  * @author jwjoubert, wlbean
  */
 
- class MarginalRunChessboard{
-	final private static Logger LOG = Logger.getLogger( MarginalRunChessboard.class );
+ class MarginalRunReceiver {
+	final private static Logger LOG = Logger.getLogger( MarginalRunReceiver.class );
 	final private static long SEED_BASE = 20180816l;
-	final private static String DESCRIPTION = "marginal";
+//	private Scenario sc;
+	private String outputFolder;
 
-//	private static int replanInt;
 
 	/**
 	 * @param args
@@ -57,15 +52,16 @@ import java.io.File;
 		int endRun = Integer.parseInt(args[1]);
 		int numberOfThreads = Integer.parseInt(args[2]);
 		for(int i = startRun; i < endRun; i++) {
-			run(i, numberOfThreads);
+//			run(i, numberOfThreads);
+			new MarginalRunReceiver().run(i , numberOfThreads);
 		}
 	}
 
 
-	public static void run(int run, int numberOfThreads) {
-
-		String outputfolder = String.format("./output/" + DESCRIPTION + "/run_%03d/", run);
-		new File(outputfolder).mkdirs();
+	public void run(int run, int numberOfThreads) {
+		LOG.info("Starting run " + run);
+		String outputFolder = String.format("./output/marg/serdur/run_%03d/", run);
+		new File(outputFolder).mkdirs();
 		
 		/* Before the main run starts, we need to calculate the marginal 
 		 * contribution for each receiver. This is done, for now, by running
@@ -73,30 +69,26 @@ import java.io.File;
 		LOG.info("Calculating the initial marginal cost for each receiver.");
 		String[] marginalArgs = {
 				"./scenarios/",
-				outputfolder,
+				outputFolder,
 				"./target/freight-dfg17-0.0.1-SNAPSHOT-release.zip",
 				String.valueOf(numberOfThreads),
-				String.valueOf(SEED_BASE),
+				String.valueOf(SEED_BASE*run),
 		};
 		Scenario sc = MarginalRun.run(marginalArgs );
-		
-		Scenario newSc = MarginalScenarioBuilder.createChessboardScenario(outputfolder, SEED_BASE*run, run, true);
-		
-//		/* Write headings */
-//		BufferedWriter bw = IOUtils.getBufferedWriter(outputfolder + "/ReceiverStats" + run + ".csv");
-//		BaseRunReceiver.writeHeadings( bw );
-
+//		prepareScenario( run, ExperimentParameters.NUMBER_OF_RECEIVERS );
+//		Coalition coalition = ReceiverUtils.getCoalition( sc );
 		sc.getConfig().controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
 
 		Controler controler = new Controler(sc);
 
 		/* Set up freight portion.To be repeated every iteration*/
 		//FIXME
-		sc.getConfig().controler().setOutputDirectory(outputfolder);
-//		setupReceiverAndCarrierReplanning(sc);
-
+		sc.getConfig().controler().setOutputDirectory(outputFolder);
+		
 		ReceiverChessboardUtils.setupCarriers(controler);
+		
 		ReceiverModule receiverModule = new ReceiverModule();
+		receiverModule.setReplanningType(ExperimentParameters.REPLANNING_STRATEGY );
 		controler.addOverridingModule(receiverModule);
 
 		/* TODO This stats must be set up automatically. */
@@ -104,5 +96,53 @@ import java.io.File;
 
 		controler.run();
 	}
+
+
+//	void prepareAndRunControler(int run, Collection<AbstractModule> abstractModules ) {
+//		Controler controler = new Controler(sc);
+//		if ( abstractModules!=null ){
+//			for( AbstractModule abstractModule : abstractModules ){
+//				controler.addOverridingModule( abstractModule );
+//			}
+//		}
+//		
+////		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
+//
+//		ReceiverChessboardUtils.setupCarriers(controler );
+////		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
+//		
+////		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers(sc).write(sc.getConfig().controler().get + ".carrierPlans.xml.gz");
+//		
+//		ReceiverModule receiverModule = new ReceiverModule();
+//		receiverModule.setReplanningType(ExperimentParameters.REPLANNING_STRATEGY );
+//		
+//		controler.addOverridingModule(receiverModule);
+//
+//		prepareFreightOutputDataAndStats(controler);
+//
+//		controler.run();
+//		
+//		/* Clean up iterations folder */
+//		File itersFolder = new File(outputFolder + "ITERS/");
+//		IOUtils.deleteDirectoryRecursively(itersFolder.toPath());
+//		
+//	}
+//
+//
+//	private static void prepareFreightOutputDataAndStats(Controler controler) {
+//		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+//		controler.addControlerListener(scoreStats);
+//	}
+//
+//
+//	Scenario prepareScenario(int run, int numberOfReceivers) {
+//		outputFolder = String.format("./output/marg/freq5/run_%03d/", run);
+////		new File(outputFolder).mkdirs();
+//		sc = MarginalScenarioBuilder.createChessboardScenario(SEED_BASE*run, true );
+//		sc.getConfig().controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles );
+//		sc.getConfig().controler().setOutputDirectory(outputFolder);
+//		
+//		return sc;
+//	}
 }
 

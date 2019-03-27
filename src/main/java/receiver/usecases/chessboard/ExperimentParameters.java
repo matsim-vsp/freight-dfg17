@@ -49,7 +49,7 @@ class ExperimentParameters {
 
 	public static String DAY_END = "18:00:00";
 	
-	public static double TIME_WINDOW_HOURLY_COST = 0;
+	public static double TIME_WINDOW_HOURLY_COST = 0.0;
 	
 	public static ReceiverReplanningType REPLANNING_STRATEGY = ReceiverReplanningType.serviceTime;
 }

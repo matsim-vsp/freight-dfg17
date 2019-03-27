@@ -48,6 +48,7 @@ public CollaborationStatusMutator(){
 		} else newstatus = status;
 
 		receiverPlan.getReceiver().getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, newstatus);
+		receiverPlan.getAttributes().putAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS, newstatus);
 
 	}
 

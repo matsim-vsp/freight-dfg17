@@ -54,52 +54,28 @@ public class RunCapeTownReceiverWithPopulation {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		RunCapeTownReceiver.main(args);
+		int startRun = Integer.parseInt(args[0]);
+		int endRun = Integer.parseInt(args[1]);
+		for(int i = startRun; i < endRun; i++) {
+			run(i);
+		}
 	}
 
 
 	public static void run(int run) {
 		LOG.info("Starting run " + run);
-		String outputfolder = String.format("./output/capetown/run_%03d/", run);
+		String outputfolder = String.format("./output/capetown/caseWP/run_%03d/", run);
 		new File(outputfolder).mkdirs();
 		Scenario sc = CapeTownScenarioBuilder.createCapeTownScenarioWithPassengers(SEED_BASE*run, run, true);
-		
-		/* Write headings */
-		BufferedWriter bw = IOUtils.getBufferedWriter(sc.getConfig().controler().getOutputDirectory() + "/ReceiverStats" + run + ".csv");
-		try {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", 
-					"iteration", 
-					"receiver_id", 
-					"score", 
-					"timewindow_start", 
-					"timewindow_end", 
-					"order_id", 
-					"volume", 	        				
-					"frequency", 
-					"serviceduration",
-					"collaborate_p",
-					"collaborate_r",
-					"grandCoalitionMember"));
-			bw.newLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Cannot write initial headings");  
-		} finally{
-			try {
-				bw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new RuntimeException("Cannot close receiver stats file");
-			}
-		}
 
 		sc.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-
+		sc.getConfig().controler().setOutputDirectory(outputfolder);
+		
 		Controler controler = new Controler(sc);
 
 		/* Set up freight portion. To be repeated every iteration*/
 		/* FIXME This should be removed and used from ReceiverModule */
-		RunCapeTownReceiver.setupReceiverAndCarrierReplanning(controler, outputfolder);
+//		RunCapeTownReceiver.setupReceiverAndCarrierReplanning(controler, outputfolder);
 
 		/* Add travel time binding for "commercial" mode. */
 		controler.addOverridingModule(new AbstractModule() {

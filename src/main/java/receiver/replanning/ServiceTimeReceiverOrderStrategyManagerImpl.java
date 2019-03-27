@@ -9,8 +9,10 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.replanning.GenericPlanStrategyImpl;
 import org.matsim.core.replanning.GenericStrategyManager;
+import org.matsim.core.replanning.selectors.BestPlanSelector;
 import org.matsim.core.replanning.selectors.ExpBetaPlanChanger;
 import org.matsim.core.replanning.selectors.ExpBetaPlanSelector;
+import org.matsim.core.replanning.selectors.KeepSelected;
 import org.matsim.core.utils.misc.Time;
 
 import receiver.Receiver;
@@ -36,9 +38,9 @@ public final class ServiceTimeReceiverOrderStrategyManagerImpl implements Receiv
 		stratMan.setMaxPlansPerAgent(5);
 		
 		{
-//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new BestPlanSelector<>());
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new BestPlanSelector<ReceiverPlan, Receiver>());
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanChanger<>( 10.) );
-
+//			strategy.addStrategyModule(new CollaborationStatusChanger());
 			stratMan.addStrategy(strategy, null, 0.5);
 //			stratMan.addChangeRequest((int) (sc.getConfig().controler().getLastIteration()*0.9), strategy, null, 0.0);
 
@@ -48,6 +50,7 @@ public final class ServiceTimeReceiverOrderStrategyManagerImpl implements Receiv
 		 * Increase service duration with specified duration (mutationTime) until specified maximum service time (mutationRange) is reached. 
 		 */
 		{
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
 			GenericPlanStrategyImpl<ReceiverPlan, Receiver> increaseStrategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanSelector<>( 10. ) );
 			increaseStrategy.addStrategyModule(new ServiceTimeMutator(Time.parseTime("01:00:00"), Time.parseTime("04:00:00"), true));
 			// (ends up with service time that is <= 4hrs)
@@ -69,12 +72,13 @@ public final class ServiceTimeReceiverOrderStrategyManagerImpl implements Receiv
 		
 		/* Replanning for grand coalition receivers.*/
 //		{
-//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+////			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+//			GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>( new ExpBetaPlanSelector<>( 10. ) );
 //			strategy.addStrategyModule(new CollaborationStatusMutator());
 //			stratMan.addStrategy(strategy, null, 0.2);
 //			stratMan.addChangeRequest((int) Math.round((sc.getConfig().controler().getLastIteration())*0.9), strategy, null, 0.0);
 //		}
-		log.error("yyyyyy the above needs to be restored again.") ;
+//		log.error("yyyyyy the above needs to be restored again.") ;
 		// yyyyyy I have switched off the coalition mutator!
 		
 		return stratMan;

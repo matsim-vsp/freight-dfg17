@@ -53,7 +53,7 @@ public class CapeTownReceiverUtils {
 		// (presumably done twice, just to be sure)
 
 		ReceiverModule receiverModule = new ReceiverModule();
-		receiverModule.setReplanningType( ReceiverReplanningType.serviceTime );
+		receiverModule.setReplanningType( ReceiverReplanningType.afterHoursTimeWindow);
 		controler.addOverridingModule(receiverModule);
 	}
 

@@ -53,7 +53,7 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 
 	@Override
 	public void handlePlan(ReceiverPlan plan) {
-//		boolean status = (boolean) plan.getReceiver().getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS );
+		
 		Object o = plan.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
 		if(o == null) {
 			throw new IllegalArgumentException("Current plan has no status. This must likely be set first.");
@@ -65,8 +65,44 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 		Receiver receiver = plan.getReceiver();
 		TimeWindow oldWindow = plan.getTimeWindows().get(0);
 		TimeWindow newWindow = wiggleTimeWindow(oldWindow, receiver, plan);
+//		double finalend;
+//
+//		if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true) {
+//			
+//			if (newWindow.getStart() <= Time.parseTime("18:00:00")){
+//				finalstart = Time.parseTime("18:00:00");
+//			} else if (newWindow.getStart() >= Time.parseTime("30:00:00")){
+//				finalstart = Time.parseTime("30:00:00") - MINIMUM_TIME_WINDOW;
+//			} else finalstart = newWindow.getStart();
+//
+//			if (newWindow.getEnd() >= Time.parseTime("30:00:00")) {
+//				finalle finalstart;
+//		doubend = Time.parseTime("30:00:00");
+//			} else if (newWindow.getEnd() <= Time.parseTime("18:00:00")) {
+//				finalend = Time.parseTime("18:00:00") + MINIMUM_TIME_WINDOW;
+//			} else finalend = newWindow.getEnd();
+//			
+//		} else {
+//			
+//			if (newWindow.getStart() >= Time.parseTime("18:00:00")  - MINIMUM_TIME_WINDOW) {
+//				finalstart = Time.parseTime("18:00:00")  - MINIMUM_TIME_WINDOW;
+//			} else if (newWindow.getStart() <= Time.parseTime("06:00:00")) {
+//				finalstart = Time.parseTime("06:00:00");
+//			} else finalstart = newWindow.getStart();
+//
+//
+//			if (newWindow.getEnd() >= Time.parseTime("18:00:00")) {
+//				finalend = Time.parseTime("18:00:00");
+//			} else if (newWindow.getEnd() <= Time.parseTime("06:00:00")) {
+//				finalend = Time.parseTime("06:00:00") + MINIMUM_TIME_WINDOW;
+//			} else finalend = newWindow.getEnd();
+//		}
+		
+//		TimeWindow finalWindow = TimeWindow.newInstance(finalstart, finalend);
+		
 		plan.getTimeWindows().remove(oldWindow);
 		plan.getTimeWindows().add(newWindow);
+//		plan.getTimeWindows().add(finalWindow);
 	}
 	
 	
@@ -80,16 +116,17 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 	 * @return
 	 */
 	public TimeWindow wiggleTimeWindow(TimeWindow tw, Receiver receiver, ReceiverPlan plan) {
+		boolean status = (boolean) plan.getReceiver().getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS );
 		int move = MatsimRandom.getLocalInstance().nextInt(4);
 		switch (move) {
 		case 0:
-			return extendTimeWindowDownwards(tw);
+			return extendTimeWindowDownwards(tw, status);
 		case 1:
-			return extendTimeWindowUpwards(tw);
+			return extendTimeWindowUpwards(tw, status);
 		case 2:
-			return contractTimeWindowBottom(tw);
+			return contractTimeWindowBottom(tw, status);
 		case 3:
-			return contractTimeWindowTop(tw);
+			return contractTimeWindowTop(tw, status);
 		default:
 			throw new IllegalArgumentException("Cannot wiggle TimeWindow with move type '" + move + "'.");
 		}
@@ -102,18 +139,35 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 	 * instantiation.
 	 * 
 	 * @param tw
-	 * @param receiver 
 	 * @return
 	 */
-	public TimeWindow extendTimeWindowDownwards(final TimeWindow tw) {
+	public TimeWindow extendTimeWindowDownwards(final TimeWindow tw, boolean status) {
 		//double newLow = tw.getStart() - MatsimRandom.getLocalInstance().nextDouble()*this.stepSize;		
 		double newLow;
 
 		if (tw.getEnd() - (tw.getStart() - this.stepSize) <= MAXIMUM_TIME_WINDOW){
 			newLow = tw.getStart() - this.stepSize;
-		} else newLow = tw.getEnd() - MAXIMUM_TIME_WINDOW ;		
-		
-		return TimeWindow.newInstance(newLow, tw.getEnd());
+		} else newLow = tw.getEnd() - MAXIMUM_TIME_WINDOW ;
+
+//			if ((boolean) status == true) {
+//				
+//				if (newLow <= Time.parseTime("18:00:00")){
+//					newLow = Time.parseTime("18:00:00");
+//				} else if (newLow >= Time.parseTime("30:00:00")){
+//					newLow = Time.parseTime("30:00:00") - MINIMUM_TIME_WINDOW;
+//				
+//			} else {
+//				
+//				if (newLow >= Time.parseTime("18:00:00")  - MINIMUM_TIME_WINDOW) {
+//					newLow = Time.parseTime("18:00:00")  - MINIMUM_TIME_WINDOW;
+//				} else if (newLow <= Time.parseTime("06:00:00")) {
+//					newLow = Time.parseTime("06:00:00");
+//				}
+//
+//			}
+//			}
+			
+			return TimeWindow.newInstance(newLow, tw.getEnd());	
 	}
 	
 	
@@ -125,15 +179,35 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 	 * @param tw
 	 * @return
 	 */
-	public TimeWindow extendTimeWindowUpwards(final TimeWindow tw) {
+	public TimeWindow extendTimeWindowUpwards(final TimeWindow tw, boolean status) {
+//		double newHigh = tw.getEnd() + MatsimRandom.getLocalInstance().nextDouble()*this.stepSize;
 		double newHigh;
 
 		if ((tw.getEnd() + this.stepSize) - tw.getStart() <= MAXIMUM_TIME_WINDOW){
 			newHigh = tw.getEnd() + this.stepSize;
 		} else newHigh = tw.getStart() + MAXIMUM_TIME_WINDOW ;
+//
+//			if (status == true) {
+//	
+//				if (newHigh >= Time.parseTime("30:00:00")) {
+//					newHigh = Time.parseTime("30:00:00");
+//				} else if (newHigh <= Time.parseTime("18:00:00")) {
+//					newHigh = Time.parseTime("18:00:00") + MINIMUM_TIME_WINDOW;
+//				}
+//				
+//			} else {
+//	
+//				if (newHigh >= Time.parseTime("18:00:00")) {
+//					newHigh = Time.parseTime("18:00:00");
+//				} else if (newHigh <= Time.parseTime("06:00:00")) {
+//					newHigh = Time.parseTime("06:00:00") + MINIMUM_TIME_WINDOW;
+//				}
+//			}
+			
+			return TimeWindow.newInstance(tw.getStart(), newHigh);
 
-		return TimeWindow.newInstance(tw.getStart(), newHigh);
 	}
+
 	
 	
 	/**
@@ -144,13 +218,31 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 	 * @param tw
 	 * @return
 	 */
-	public TimeWindow contractTimeWindowBottom(final TimeWindow tw) {
+	public TimeWindow contractTimeWindowBottom(final TimeWindow tw, boolean status) {
 		double gap = Math.max(0, (tw.getEnd() - tw.getStart()) - MINIMUM_TIME_WINDOW);
 		double step = Math.min(gap, stepSize);
-		//double newLow = tw.getStart() + MatsimRandom.getLocalInstance().nextDouble()*step;
 		double newLow = tw.getStart() + step;
+
+//		if ((boolean) status == true) {
+//			
+//			if (newLow <= Time.parseTime("18:00:00")){
+//				newLow = Time.parseTime("18:00:00");
+//			} else if (newLow >= Time.parseTime("30:00:00")){
+//				newLow = Time.parseTime("30:00:00") - MINIMUM_TIME_WINDOW;
+//			
+//		} else {
+//			
+//			if (newLow >= Time.parseTime("18:00:00")  - MINIMUM_TIME_WINDOW) {
+//				newLow = Time.parseTime("18:00:00")  - MINIMUM_TIME_WINDOW;
+//			} else if (newLow <= Time.parseTime("06:00:00")) {
+//				newLow = Time.parseTime("06:00:00");
+//			}
+//
+//		}
+//		}
 		
-		return TimeWindow.newInstance(newLow, tw.getEnd());
+		return TimeWindow.newInstance(newLow, tw.getEnd());	
+
 	}
 	
 	
@@ -162,11 +254,29 @@ public class CapeTownTimeWindowMutator implements GenericPlanStrategyModule<Rece
 	 * @param tw
 	 * @return
 	 */
-	public TimeWindow contractTimeWindowTop(final TimeWindow tw) {
+	public TimeWindow contractTimeWindowTop(final TimeWindow tw, boolean status) {
 		double gap = Math.max(0, (tw.getEnd() - tw.getStart()) - MINIMUM_TIME_WINDOW);
 		double step = Math.min(gap, stepSize);
+		//double newHigh = tw.getEnd() - MatsimRandom.getLocalInstance().nextDouble()*step;
 		double newHigh = tw.getEnd() - step;
 
+//		if (status == true) {
+//			
+//			if (newHigh >= Time.parseTime("30:00:00")) {
+//				newHigh = Time.parseTime("30:00:00");
+//			} else if (newHigh <= Time.parseTime("18:00:00")) {
+//				newHigh = Time.parseTime("18:00:00") + MINIMUM_TIME_WINDOW;
+//			}
+//			
+//		} else {
+//
+//			if (newHigh >= Time.parseTime("18:00:00")) {
+//				newHigh = Time.parseTime("18:00:00");
+//			} else if (newHigh <= Time.parseTime("06:00:00")) {
+//				newHigh = Time.parseTime("06:00:00") + MINIMUM_TIME_WINDOW;
+//			}
+//		}
+		
 		return TimeWindow.newInstance(tw.getStart(), newHigh);
 	}
 	
