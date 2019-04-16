@@ -29,7 +29,7 @@ public class InitialDemandAssigner implements StartupListener{
 
 	private DemandObjects demandObjects;
 	private LSPDecorators lsps;
-
+	
 	public InitialDemandAssigner(DemandObjects demandObjects, LSPDecorators lsps) {
 		this.demandObjects = demandObjects;
 		this.lsps = lsps;
@@ -41,8 +41,9 @@ public class InitialDemandAssigner implements StartupListener{
 			if(demandObject.getSelectedPlan() == null) {
 				createInitialPlan(demandObject);
 			}
-				assignShipmentToLSP(demandObject);			
-			}
+				assignShipmentToLSP(demandObject);
+		}
+
 		for(LSPDecorator lsp : lsps.getLSPs().values()) {
 			lsp.scheduleSoultions();
 		}
@@ -67,10 +68,8 @@ public class InitialDemandAssigner implements StartupListener{
 			builder.addInfo(info);
 		}
 		LSPShipment lspShipment = builder.build();
-		if(demandObject.getSelectedPlan().getLsp() != null) {
-			demandObject.getSelectedPlan().getLsp().assignShipmentToSolution(lspShipment, demandObject.getSelectedPlan().getSolutionId());
-			demandObject.getSelectedPlan().getShipment().setLSPShipment(lspShipment);
-		}
+		demandObject.getSelectedPlan().getLsp().assignShipmentToSolution(lspShipment, demandObject.getSelectedPlan().getSolutionId());
+		demandObject.getSelectedPlan().getShipment().setLSPShipment(lspShipment);
 	}
 	
 	

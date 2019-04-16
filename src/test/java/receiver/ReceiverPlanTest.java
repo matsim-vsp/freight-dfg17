@@ -33,8 +33,8 @@ public class ReceiverPlanTest {
 	
 	@Test
 	public void testBuilderTwo() {
-		Receiver receiver = ReceiverImpl.newInstance(Id.create("1", Receiver.class));
-		Builder builder = Builder.newInstance(receiver);
+		Receiver receiver = ReceiverUtils.newInstance( Id.create( "1", Receiver.class ) );
+		Builder builder = Builder.newInstance(receiver, true);
 		ReceiverPlan plan = builder.build();
 		Assert.assertEquals("Wrong receiver Id", Id.create("1", Receiver.class), plan.getReceiver().getId());
 		Assert.assertNull("Score should be null", plan.getScore());

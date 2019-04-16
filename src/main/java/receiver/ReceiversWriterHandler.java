@@ -86,5 +86,6 @@ import receiver.ReorderPolicy;
 	/*TODO <route ... > */
 
 	public void writeSeparator(final BufferedWriter out) throws IOException;
+	public void writeGap(final BufferedWriter out) throws IOException;
 
 }

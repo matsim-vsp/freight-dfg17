@@ -8,7 +8,7 @@ import receiver.io.ReceiversReaderTest;
 import receiver.io.ReceiversWriterTest;
 import receiver.reorderPolicy.SSReorderPolicyTest;
 import receiver.replanning.TimeWindowMutatorTest;
-import receiver.usecases.ReceiverChessboardScenarioTest;
+import receiver.usecases.chessboard.BaseReceiverChessboardScenarioTest;
 
 /**
  * Add all the receiver tests in here so that there is a single class to run
@@ -23,7 +23,7 @@ import receiver.usecases.ReceiverChessboardScenarioTest;
 	ReceiversWriterTest.class,
 	SSReorderPolicyTest.class,
 	TimeWindowMutatorTest.class,
-	ReceiverChessboardScenarioTest.class,
+	BaseReceiverChessboardScenarioTest.class,
 	ReceiverPlanTest.class
 })
 

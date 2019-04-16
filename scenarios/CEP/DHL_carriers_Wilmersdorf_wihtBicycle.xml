@@ -1,0 +1,1533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<carriers>
+	<carrier id="DHL_carrier_130">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_vehicle" depotLinkId="91832" typeId="dhl_vehicle" earliestStart="09:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/102064" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="152249"/>
+			<service id="node/102065" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="143152"/>
+			<service id="node/102066" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="125064"/>
+			<service id="node/102067" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:30:00" capacityDemand="12" to="112408"/>
+			<service id="node/102068" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="143793"/>
+			<service id="node/102069" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="148245"/>
+			<service id="node/102070" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="143016"/>
+			<service id="node/102071" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143161"/>
+			<service id="node/102072" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="152337"/>
+			<service id="node/102073" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="152224"/>
+			<service id="node/102074" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="143294"/>
+			<service id="node/102075" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159420"/>
+			<service id="node/102076" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7007"/>
+			<service id="node/102077" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="141969"/>
+			<service id="node/102078" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="73962"/>
+			<service id="node/102079" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="73958"/>
+			<service id="node/102080" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="159437"/>
+			<service id="node/102082" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="147973"/>
+			<service id="node/102083" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="41113"/>
+			<service id="node/102084" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81691"/>
+			<service id="node/102085" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="147985"/>
+			<service id="node/102086" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="81684"/>
+			<service id="node/102087" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="26789"/>
+			<service id="node/102089" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="126091"/>
+			<service id="node/102090" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="126168"/>
+			<service id="node/102091" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:40:00" capacityDemand="16" to="74736"/>
+			<service id="node/102092" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="129694"/>
+			<service id="node/102093" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="80200"/>
+			<service id="node/102094" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:30:00" capacityDemand="12" to="53065"/>
+			<service id="node/102095" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="80199"/>
+			<service id="node/102096" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="53149"/>
+			<service id="node/102097" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80980"/>
+			<service id="node/102098" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="77663"/>
+			<service id="node/102099" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="91837"/>
+			<service id="node/102100" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143164"/>
+			<service id="node/102101" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="26782"/>
+			<service id="node/102102" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="93914"/>
+			<service id="node/102103" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="87741"/>
+			<service id="node/102105" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:30:00" capacityDemand="12" to="77998"/>
+			<service id="node/102106" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="142800"/>
+			<service id="node/102107" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="142568"/>
+			<service id="node/102108" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="143667"/>
+			<service id="node/102109" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="55934"/>
+			<service id="node/102110" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="55935"/>
+			<service id="node/102111" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="158047"/>
+			<service id="node/102112" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="147610"/>
+			<service id="node/102113" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="78134"/>
+			<service id="node/102114" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="151231"/>
+			<service id="node/102115" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="79009"/>
+			<service id="node/102116" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="112407"/>
+			<service id="node/102117" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="112405"/>
+			<service id="node/102118" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="32864"/>
+			<service id="node/102119" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="32880"/>
+			<service id="node/102120" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="143801"/>
+			<service id="node/102121" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="142572"/>
+			<service id="node/102122" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="143269"/>
+			<service id="node/102123" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142831"/>
+			<service id="node/102124" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="87848"/>
+			<service id="node/102125" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="143275"/>
+			<service id="node/102126" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="43493"/>
+			<service id="node/102127" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="44288"/>
+			<service id="node/102128" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="44310"/>
+			<service id="node/102129" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="143794"/>
+			<service id="node/102130" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="143798"/>
+			<service id="node/102131" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="143800"/>
+			<service id="node/102132" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:40:00" capacityDemand="16" to="142814"/>
+			<service id="node/102133" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="87737"/>
+			<service id="node/102134" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="46885"/>
+			<service id="node/102135" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="24233"/>
+			<service id="node/102136" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="142828"/>
+			<service id="node/102137" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="44312"/>
+			<service id="node/102138" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="152339"/>
+			<service id="node/102139" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="95418"/>
+			<service id="node/102140" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="95616"/>
+			<service id="node/102141" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="94560"/>
+			<service id="node/102142" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="95617"/>
+			<service id="node/102143" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="95615"/>
+			<service id="node/102144" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79913"/>
+			<service id="node/102145" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="152016"/>
+			<service id="node/102146" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="28930"/>
+			<service id="node/102147" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:35:00" capacityDemand="14" to="87828"/>
+			<service id="node/102148" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="46869"/>
+			<service id="node/102149" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="46870"/>
+			<service id="node/102150" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="88866"/>
+			<service id="node/102151" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="44284"/>
+			<service id="node/102152" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:32:30" capacityDemand="13" to="45774"/>
+			<service id="node/102153" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="135793"/>
+			<service id="node/102154" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="44511"/>
+			<service id="node/102155" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:30:00" capacityDemand="12" to="87727"/>
+			<service id="node/102156" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="88852"/>
+			<service id="node/102157" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="88875"/>
+			<service id="node/102158" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="45775"/>
+			<service id="node/102159" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="88869"/>
+			<service id="node/102160" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="74725"/>
+			<service id="node/102161" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:35:00" capacityDemand="14" to="106022"/>
+			<service id="node/102162" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:52:30" capacityDemand="21" to="93485"/>
+			<service id="node/102163" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106362"/>
+			<service id="node/102164" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="74734"/>
+			<service id="node/102165" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:57:30" capacityDemand="23" to="53143"/>
+			<service id="node/102166" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="01:05:00" capacityDemand="26" to="53144"/>
+			<service id="node/102167" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="149227"/>
+			<service id="node/102168" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="13328"/>
+			<service id="node/102169" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="101846"/>
+			<service id="node/102170" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="87732"/>
+			<service id="node/102171" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="143557"/>
+			<service id="node/102172" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="123383"/>
+			<service id="node/102173" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44287"/>
+			<service id="node/102174" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="43456"/>
+			<service id="node/102175" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="44274"/>
+			<service id="node/102176" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="4267"/>
+			<service id="node/102177" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="145590"/>
+			<service id="node/102178" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="142576"/>
+			<service id="node/102179" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:37:30" capacityDemand="15" to="160730"/>
+			<service id="node/102180" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="8703"/>
+			<service id="node/102181" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="157325"/>
+			<service id="node/102182" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="119652"/>
+			<service id="node/102183" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="41492"/>
+			<service id="node/102184" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="98120"/>
+			<service id="node/102185" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="54892"/>
+			<service id="node/102186" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="106362"/>
+			<service id="node/102187" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:37:30" capacityDemand="15" to="88761"/>
+			<service id="node/102189" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="149207"/>
+			<service id="node/102190" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="98533"/>
+			<service id="node/102191" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:35:00" capacityDemand="14" to="98535"/>
+			<service id="node/102192" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="53146"/>
+			<service id="node/102193" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="149172"/>
+			<service id="node/102194" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="151512"/>
+			<service id="node/102195" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="125263"/>
+			<service id="node/102196" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="47949"/>
+			<service id="node/102198" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="125268"/>
+			<service id="node/102200" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="79336"/>
+			<service id="node/102201" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="160517"/>
+			<service id="node/102202" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="40101"/>
+			<service id="node/102203" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="160510"/>
+			<service id="node/102204" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="149130"/>
+			<service id="node/102205" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="149130"/>
+			<service id="node/102206" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="98580"/>
+			<service id="node/102207" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:30:00" capacityDemand="12" to="149141"/>
+			<service id="node/102208" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="149147"/>
+			<service id="node/102209" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:25:00" capacityDemand="10" to="87799"/>
+			<service id="node/102210" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="53042"/>
+			<service id="node/102211" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="49019"/>
+			<service id="node/102213" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="151932"/>
+			<service id="node/102214" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:35:00" capacityDemand="14" to="142347"/>
+			<service id="node/102215" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:27:30" capacityDemand="11" to="164775"/>
+			<service id="node/102216" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:42:30" capacityDemand="17" to="149142"/>
+			<service id="node/102217" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="87979"/>
+			<service id="node/102218" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:22:30" capacityDemand="9" to="149161"/>
+			<service id="node/102219" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:32:30" capacityDemand="13" to="87981"/>
+			<service id="node/102220" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="79003"/>
+			<service id="node/102221" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="149173"/>
+			<service id="node/102222" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:30:00" capacityDemand="12" to="143603"/>
+			<service id="node/102223" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:20:00" capacityDemand="8" to="143600"/>
+			<service id="node/102224" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="143599"/>
+			<service id="node/102225" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149168"/>
+			<service id="node/102226" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="6" to="47019"/>
+			<service id="node/102227" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:17:30" capacityDemand="7" to="87980"/>
+			<service id="node/102228" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:10:00" capacityDemand="4" to="6838"/>
+			<service id="node/102229" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53048"/>
+			<service id="node/102230" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:05:00" capacityDemand="2" to="134894"/>
+			<service id="node/102231" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87967"/>
+			<service id="node/102232" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:07:30" capacityDemand="3" to="91840"/>
+			<service id="node/102233" latestEnd="17:00:00" earliestStart="09:00:00" serviceDuration="00:12:30" capacityDemand="5" to="104319"/>
+			<service id="node/115081" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="5" to="79417"/>
+			<service id="node/115108" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="9" to="143277"/>
+			<service id="node/115117" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="77663"/>
+			<service id="node/115118" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="3" to="74736"/>
+			<service id="node/115121" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="80199"/>
+			<service id="node/115123" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="142570"/>
+			<service id="node/115129" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="7" to="98584"/>
+			<service id="node/115130" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="4" to="142811"/>
+			<service id="node/115138" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="3" to="106022"/>
+			<service id="node/115139" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="1" to="87979"/>
+			<service id="node/115141" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="74733"/>
+			<service id="node/115143" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="5" to="28930"/>
+			<service id="node/115144" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="120109"/>
+			<service id="node/115149" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="24232"/>
+			<service id="node/115152" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="4" to="47683"/>
+			<service id="node/115157" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="4" to="105200"/>
+			<service id="node/115160" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="3" to="98731"/>
+			<service id="node/115168" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="3" to="79017"/>
+			<service id="node/115169" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="2" to="87717"/>
+			<service id="node/115173" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="5" to="125266"/>
+			<service id="node/115176" latestEnd="18:00:00" earliestStart="17:00:00" serviceDuration="00:15:00" capacityDemand="4" to="44307"/>
+			<service id="node/800018" to="149159" capacityDemand="3" earliestStart="17:00:00" latestEnd="18:00:00" serviceDuration="00:15:00"/>
+			<service id="node/800019" to="36659" capacityDemand="3" earliestStart="17:00:00" latestEnd="18:00:00" serviceDuration="00:15:00"/>
+			<service id="node/800020" to="74738" capacityDemand="2" earliestStart="17:00:00" latestEnd="18:00:00" serviceDuration="00:15:00"/>
+		</services>
+	</carrier>
+
+	<carrier id="DHL_carrier_13">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_vehicle" depotLinkId="91832" typeId="dhl_vehicle" earliestStart="09:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/115081" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="197" to="79417"/>
+			<service id="node/115108" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="291" to="143277"/>
+			<service id="node/115117" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="125" to="77663"/>
+			<service id="node/115118" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="200" to="74736"/>
+			<service id="node/115121" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="60" to="80199"/>
+			<service id="node/115123" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="86" to="142570"/>
+			<service id="node/115129" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="182" to="98584"/>
+			<service id="node/115130" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="37" to="142811"/>
+			<service id="node/115138" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="80" to="106022"/>
+			<service id="node/115139" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="48" to="87979"/>
+			<service id="node/115141" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="175" to="74733"/>
+			<service id="node/115143" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="93" to="28930"/>
+			<service id="node/115144" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="223" to="120109"/>
+			<service id="node/115149" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="95" to="24232"/>
+			<service id="node/115152" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="89" to="47683"/>
+			<service id="node/115157" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="43" to="105200"/>
+			<service id="node/115160" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="112" to="98731"/>
+			<service id="node/115168" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="58" to="79017"/>
+			<service id="node/115169" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="27" to="87717"/>
+			<service id="node/115173" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="97" to="125266"/>
+			<service id="node/115176" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="37" to="44307"/>
+			<service id="node/116025" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="21" to="152225"/>
+			<service id="node/116030" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="117" to="159440"/>
+			<service id="node/116034" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="44" to="80987"/>
+			<service id="node/116041" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="38" to="19667"/>
+			<service id="node/116042" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="12" to="142200"/>
+			<service id="node/116044" latestEnd="12:00:00" earliestStart="09:00:00" serviceDuration="00:15:00" capacityDemand="146" to="88855"/>
+			<service id="node/800018" to="149159" capacityDemand="25" earliestStart="09:00:00" latestEnd="12:00:00" serviceDuration="00:15:00"/>
+			<service id="node/800019" to="36659" capacityDemand="103" earliestStart="09:00:00" latestEnd="12:00:00" serviceDuration="00:15:00"/>
+			<service id="node/800020" to="74738" capacityDemand="36" earliestStart="09:00:00" latestEnd="12:00:00" serviceDuration="00:15:00"/>
+		</services>
+	</carrier>
+	
+	<carrier id="dhl_carrier_0018">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="149159" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/914048" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149147"/>
+			<service id="node/914523" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149139"/>
+			<service id="node/914555" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87981"/>
+			<service id="node/914565" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87981"/>
+			<service id="node/914589" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149158"/>
+			<service id="node/914616" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149158"/>
+			<service id="node/914637" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87981"/>
+			<service id="node/914645" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87981"/>
+			<service id="node/914865" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98412"/>
+			<service id="node/914882" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149159"/>
+			<service id="node/914888" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149158"/>
+			<service id="node/914889" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149158"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_0019">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="36659" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/914793" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43490"/>
+			<service id="node/914893" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="43491"/>
+			<service id="node/914937" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="158047"/>
+			<service id="node/915078" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="43491"/>
+			<service id="node/915309" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="43479"/>
+			<service id="node/915522" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="83036"/>
+			<service id="node/915628" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="83035"/>
+			<service id="node/915743" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="36659"/>
+			<service id="node/915751" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="36659"/>
+			<service id="node/915773" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="83036"/>
+			<service id="node/915774" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="69966"/>
+			<service id="node/915872" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79009"/>
+			<service id="node/915876" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="158052"/>
+			<service id="node/915894" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79009"/>
+			<service id="node/915978" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="148310"/>
+			<service id="node/915992" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79009"/>
+			<service id="node/916000" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="148309"/>
+			<service id="node/916030" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="119234"/>
+			<service id="node/916032" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79009"/>
+			<service id="node/916085" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79009"/>
+			<service id="node/916181" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="151232"/>
+			<service id="node/916210" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="78134"/>
+			<service id="node/916324" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43466"/>
+			<service id="node/916347" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="78135"/>
+			<service id="node/916367" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="160707"/>
+			<service id="node/916417" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="151232"/>
+			<service id="node/916445" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79007"/>
+			<service id="node/916449" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="147607"/>
+			<service id="node/916524" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="148310"/>
+			<service id="node/916561" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="151231"/>
+			<service id="node/916618" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43470"/>
+			<service id="node/916639" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="44273"/>
+			<service id="node/916662" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44273"/>
+			<service id="node/916889" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43456"/>
+			<service id="node/916899" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="151229"/>
+			<service id="node/916920" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43456"/>
+			<service id="node/916955" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43456"/>
+			<service id="node/917051" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43474"/>
+			<service id="node/917114" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="43475"/>
+			<service id="node/917118" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43475"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_0020">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="74738" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/913102" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53149"/>
+			<service id="node/913165" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74737"/>
+			<service id="node/913193" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="74737"/>
+			<service id="node/913251" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="106022"/>
+			<service id="node/913310" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74737"/>
+			<service id="node/913506" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="106022"/>
+			<service id="node/913525" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="74738"/>
+			<service id="node/913544" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="93484"/>
+			<service id="node/913584" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74738"/>
+			<service id="node/913585" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74738"/>
+			<service id="node/913592" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106022"/>
+			<service id="node/913608" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106022"/>
+			<service id="node/913744" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106022"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5081">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="79417" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/914876" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98405"/>
+			<service id="node/914902" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98405"/>
+			<service id="node/914945" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98405"/>
+			<service id="node/915178" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98731"/>
+			<service id="node/915255" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98731"/>
+			<service id="node/915287" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143603"/>
+			<service id="node/915317" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143603"/>
+			<service id="node/915359" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143603"/>
+			<service id="node/915389" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="143603"/>
+			<service id="node/915426" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143603"/>
+			<service id="node/915449" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143603"/>
+			<service id="node/915458" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98731"/>
+			<service id="node/915475" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143603"/>
+			<service id="node/915482" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="13288"/>
+			<service id="node/915492" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="6838"/>
+			<service id="node/915493" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="6838"/>
+			<service id="node/915494" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="6838"/>
+			<service id="node/915593" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="42512"/>
+			<service id="node/915610" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143602"/>
+			<service id="node/915631" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143602"/>
+			<service id="node/915654" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143602"/>
+			<service id="node/915678" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143602"/>
+			<service id="node/915697" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53047"/>
+			<service id="node/915711" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53048"/>
+			<service id="node/915761" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53048"/>
+			<service id="node/915878" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="75672"/>
+			<service id="node/915919" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="98733"/>
+			<service id="node/915975" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143600"/>
+			<service id="node/916013" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98733"/>
+			<service id="node/916021" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143600"/>
+			<service id="node/916128" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143599"/>
+			<service id="node/916131" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="19553"/>
+			<service id="node/916132" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="19553"/>
+			<service id="node/916173" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98734"/>
+			<service id="node/916180" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98734"/>
+			<service id="node/916231" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="49018"/>
+			<service id="node/916235" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98734"/>
+			<service id="node/916253" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="136874"/>
+			<service id="node/916373" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="49019"/>
+			<service id="node/916438" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="49018"/>
+			<service id="node/916546" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="48922"/>
+			<service id="node/916581" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142166"/>
+			<service id="node/916641" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="49013"/>
+			<service id="node/916659" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="48923"/>
+			<service id="node/916753" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="49014"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5108">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="143277" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/912431" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79410"/>
+			<service id="node/912544" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125048"/>
+			<service id="node/912851" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87967"/>
+			<service id="node/912943" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="111686"/>
+			<service id="node/912974" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142346"/>
+			<service id="node/912977" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87984"/>
+			<service id="node/913000" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87984"/>
+			<service id="node/913005" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142346"/>
+			<service id="node/913066" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87984"/>
+			<service id="node/913119" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87984"/>
+			<service id="node/913178" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87984"/>
+			<service id="node/913331" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87979"/>
+			<service id="node/913420" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149155"/>
+			<service id="node/913428" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87979"/>
+			<service id="node/913612" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149155"/>
+			<service id="node/913687" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149155"/>
+			<service id="node/913906" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149160"/>
+			<service id="node/913913" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149160"/>
+			<service id="node/914008" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87980"/>
+			<service id="node/914015" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149163"/>
+			<service id="node/914147" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87981"/>
+			<service id="node/914236" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87980"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5117">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="77663" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/910368" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="22655"/>
+			<service id="node/910478" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="165701"/>
+			<service id="node/910638" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="14447"/>
+			<service id="node/910701" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="165700"/>
+			<service id="node/910790" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="40016"/>
+			<service id="node/910826" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="40101"/>
+			<service id="node/910836" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="79327"/>
+			<service id="node/910884" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81036"/>
+			<service id="node/910951" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="126166"/>
+			<service id="node/910954" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="87964"/>
+			<service id="node/911018" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="40063"/>
+			<service id="node/911346" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80999"/>
+			<service id="node/911358" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87901"/>
+			<service id="node/911388" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="151933"/>
+			<service id="node/911418" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80987"/>
+			<service id="node/911460" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80987"/>
+			<service id="node/911542" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87900"/>
+			<service id="node/911554" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87900"/>
+			<service id="node/911570" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="151933"/>
+			<service id="node/911574" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="151933"/>
+			<service id="node/911599" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="111704"/>
+			<service id="node/911606" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="85094"/>
+			<service id="node/911607" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="85093"/>
+			<service id="node/911652" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="85094"/>
+			<service id="node/911695" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="160509"/>
+			<service id="node/911833" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87899"/>
+			<service id="node/911892" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87965"/>
+			<service id="node/912109" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149150"/>
+			<service id="node/912139" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80989"/>
+			<service id="node/912148" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149150"/>
+			<service id="node/912166" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80989"/>
+			<service id="node/912168" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149151"/>
+			<service id="node/912192" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149150"/>
+			<service id="node/912199" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149132"/>
+			<service id="node/912282" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149150"/>
+			<service id="node/912323" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80989"/>
+			<service id="node/912384" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="80989"/>
+			<service id="node/912472" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149151"/>
+			<service id="node/912506" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149133"/>
+			<service id="node/912514" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149131"/>
+			<service id="node/912561" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149131"/>
+			<service id="node/912563" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149131"/>
+			<service id="node/912578" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142347"/>
+			<service id="node/912590" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80990"/>
+			<service id="node/912622" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149131"/>
+			<service id="node/912639" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149153"/>
+			<service id="node/912834" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98582"/>
+			<service id="node/912846" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98584"/>
+			<service id="node/912879" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98584"/>
+			<service id="node/912887" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98584"/>
+			<service id="node/912897" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98580"/>
+			<service id="node/912902" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98580"/>
+			<service id="node/912958" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="164773"/>
+			<service id="node/912975" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98585"/>
+			<service id="node/912995" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149141"/>
+			<service id="node/912996" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149140"/>
+			<service id="node/912998" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98581"/>
+			<service id="node/912999" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149141"/>
+			<service id="node/913009" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98577"/>
+			<service id="node/913010" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="82817"/>
+			<service id="node/913026" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98576"/>
+			<service id="node/913028" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98577"/>
+			<service id="node/913034" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149141"/>
+			<service id="node/913054" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149141"/>
+			<service id="node/913109" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149141"/>
+			<service id="node/913191" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98585"/>
+			<service id="node/913220" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149141"/>
+			<service id="node/913223" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="164775"/>
+			<service id="node/913231" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="98576"/>
+			<service id="node/913260" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="88764"/>
+			<service id="node/913279" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149141"/>
+			<service id="node/913313" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149143"/>
+			<service id="node/913368" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="164774"/>
+			<service id="node/913473" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="88760"/>
+			<service id="node/913497" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87846"/>
+			<service id="node/913512" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149142"/>
+			<service id="node/913560" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149169"/>
+			<service id="node/913923" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149145"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5118">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="74736" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/914032" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149147"/>
+			<service id="node/914044" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87798"/>
+			<service id="node/914216" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87798"/>
+			<service id="node/914343" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87798"/>
+			<service id="node/914429" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149136"/>
+			<service id="node/914588" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87800"/>
+			<service id="node/914921" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="105200"/>
+			<service id="node/914942" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="105200"/>
+			<service id="node/914960" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149149"/>
+			<service id="node/915217" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="105200"/>
+			<service id="node/915224" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="88761"/>
+			<service id="node/915444" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53046"/>
+			<service id="node/915534" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87799"/>
+			<service id="node/915708" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53041"/>
+			<service id="node/915723" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53041"/>
+			<service id="node/915805" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53041"/>
+			<service id="node/915918" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="73504"/>
+			<service id="node/915977" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="61418"/>
+			<service id="node/916081" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125264"/>
+			<service id="node/916152" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="4855"/>
+			<service id="node/916364" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125268"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5121">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="80199" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/915824" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149207"/>
+			<service id="node/915839" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="151512"/>
+			<service id="node/915895" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="47698"/>
+			<service id="node/915923" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="151511"/>
+			<service id="node/916007" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47698"/>
+			<service id="node/916070" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125262"/>
+			<service id="node/916099" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125264"/>
+			<service id="node/916103" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98545"/>
+			<service id="node/916135" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125264"/>
+			<service id="node/916161" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47685"/>
+			<service id="node/916223" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="125263"/>
+			<service id="node/916274" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98548"/>
+			<service id="node/916276" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143559"/>
+			<service id="node/916328" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47699"/>
+			<service id="node/916337" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="88854"/>
+			<service id="node/916358" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87732"/>
+			<service id="node/916360" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87732"/>
+			<service id="node/916368" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125268"/>
+			<service id="node/916378" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="88855"/>
+			<service id="node/916387" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125268"/>
+			<service id="node/916405" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125265"/>
+			<service id="node/916425" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="125268"/>
+			<service id="node/916434" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="98548"/>
+			<service id="node/916435" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="47699"/>
+			<service id="node/916442" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="88855"/>
+			<service id="node/916444" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143558"/>
+			<service id="node/916465" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="125268"/>
+			<service id="node/916466" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="125266"/>
+			<service id="node/916479" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98533"/>
+			<service id="node/916494" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143558"/>
+			<service id="node/916534" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="86099"/>
+			<service id="node/916541" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98534"/>
+			<service id="node/916547" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="125267"/>
+			<service id="node/916609" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="47953"/>
+			<service id="node/916613" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="125269"/>
+			<service id="node/916643" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="47953"/>
+			<service id="node/916665" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53213"/>
+			<service id="node/916697" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="47951"/>
+			<service id="node/916709" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="47951"/>
+			<service id="node/916727" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="164120"/>
+			<service id="node/916729" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="86099"/>
+			<service id="node/916740" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143556"/>
+			<service id="node/916750" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="86099"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5123">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="142570" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/910017" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77655"/>
+			<service id="node/910267" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="26782"/>
+			<service id="node/910310" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="41494"/>
+			<service id="node/910449" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="160517"/>
+			<service id="node/910475" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="26788"/>
+			<service id="node/910946" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="77657"/>
+			<service id="node/911090" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="24620"/>
+			<service id="node/911671" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="77659"/>
+			<service id="node/911764" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77659"/>
+			<service id="node/911913" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="126169"/>
+			<service id="node/911919" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="77664"/>
+			<service id="node/911990" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77664"/>
+			<service id="node/912017" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912044" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912046" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="98123"/>
+			<service id="node/912087" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102702"/>
+			<service id="node/912092" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="98121"/>
+			<service id="node/912152" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912155" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="77664"/>
+			<service id="node/912170" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102701"/>
+			<service id="node/912181" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912267" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77664"/>
+			<service id="node/912298" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102702"/>
+			<service id="node/912306" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912331" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="15260"/>
+			<service id="node/912372" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912383" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="54892"/>
+			<service id="node/912577" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102701"/>
+			<service id="node/912593" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102701"/>
+			<service id="node/912599" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102701"/>
+			<service id="node/912624" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="54892"/>
+			<service id="node/912653" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77663"/>
+			<service id="node/912672" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="102701"/>
+			<service id="node/912720" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="54892"/>
+			<service id="node/912730" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="54892"/>
+			<service id="node/912741" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="54892"/>
+			<service id="node/912772" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77663"/>
+			<service id="node/912858" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="54892"/>
+			<service id="node/912882" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="54892"/>
+			<service id="node/912903" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="104264"/>
+			<service id="node/912908" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="104264"/>
+			<service id="node/912913" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="102701"/>
+			<service id="node/912938" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102700"/>
+			<service id="node/912939" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102700"/>
+			<service id="node/912942" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102700"/>
+			<service id="node/912947" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102700"/>
+			<service id="node/912955" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="20577"/>
+			<service id="node/912960" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="20577"/>
+			<service id="node/913053" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="54892"/>
+			<service id="node/913057" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102697"/>
+			<service id="node/913105" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="102700"/>
+			<service id="node/913120" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="20577"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5129">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="98584" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/914365" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="104319"/>
+			<service id="node/914371" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="74929"/>
+			<service id="node/914425" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="74927"/>
+			<service id="node/914490" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74929"/>
+			<service id="node/914533" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="74929"/>
+			<service id="node/914561" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74928"/>
+			<service id="node/914573" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80976"/>
+			<service id="node/914590" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53145"/>
+			<service id="node/914600" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53145"/>
+			<service id="node/914601" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53145"/>
+			<service id="node/914694" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53146"/>
+			<service id="node/914705" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53146"/>
+			<service id="node/914872" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="91575"/>
+			<service id="node/914954" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149180"/>
+			<service id="node/915020" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47683"/>
+			<service id="node/915132" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47683"/>
+			<service id="node/915169" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="104254"/>
+			<service id="node/915218" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80931"/>
+			<service id="node/915240" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149183"/>
+			<service id="node/915264" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="101758"/>
+			<service id="node/915267" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="101758"/>
+			<service id="node/915268" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44513"/>
+			<service id="node/915284" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="104280"/>
+			<service id="node/915289" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="44513"/>
+			<service id="node/915295" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149227"/>
+			<service id="node/915305" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149227"/>
+			<service id="node/915319" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="47682"/>
+			<service id="node/915333" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="104256"/>
+			<service id="node/915347" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44513"/>
+			<service id="node/915355" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="101758"/>
+			<service id="node/915402" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="101798"/>
+			<service id="node/915660" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47694"/>
+			<service id="node/915680" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="101798"/>
+			<service id="node/915820" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149197"/>
+			<service id="node/915833" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149197"/>
+			<service id="node/915841" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="101846"/>
+			<service id="node/915843" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="101846"/>
+			<service id="node/915846" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79909"/>
+			<service id="node/915893" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="101846"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5130">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="142811" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/913107" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102700"/>
+			<service id="node/913124" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102700"/>
+			<service id="node/913152" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913217" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913246" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913262" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="91839"/>
+			<service id="node/913270" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913299" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913301" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7650"/>
+			<service id="node/913342" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7650"/>
+			<service id="node/913356" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913362" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="134299"/>
+			<service id="node/913391" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7650"/>
+			<service id="node/913395" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7650"/>
+			<service id="node/913444" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="91837"/>
+			<service id="node/913449" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="91837"/>
+			<service id="node/913466" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="91837"/>
+			<service id="node/913467" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74737"/>
+			<service id="node/913478" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80979"/>
+			<service id="node/913485" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="104264"/>
+			<service id="node/913486" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74737"/>
+			<service id="node/913494" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="8345"/>
+			<service id="node/913498" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8345"/>
+			<service id="node/913499" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7661"/>
+			<service id="node/913502" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8345"/>
+			<service id="node/913543" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="91838"/>
+			<service id="node/913561" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="91837"/>
+			<service id="node/913580" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="82865"/>
+			<service id="node/913599" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="82865"/>
+			<service id="node/913636" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="104258"/>
+			<service id="node/913641" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8343"/>
+			<service id="node/913642" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="91837"/>
+			<service id="node/913644" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="82867"/>
+			<service id="node/913646" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="91837"/>
+			<service id="node/913651" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8343"/>
+			<service id="node/913652" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8343"/>
+			<service id="node/913653" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="134300"/>
+			<service id="node/913666" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80977"/>
+			<service id="node/913675" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106360"/>
+			<service id="node/913683" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106361"/>
+			<service id="node/913699" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="93485"/>
+			<service id="node/913700" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80977"/>
+			<service id="node/913706" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="104319"/>
+			<service id="node/913722" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106362"/>
+			<service id="node/913736" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80977"/>
+			<service id="node/913747" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="104319"/>
+			<service id="node/913771" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="74733"/>
+			<service id="node/913772" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="80977"/>
+			<service id="node/913795" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80977"/>
+			<service id="node/913818" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80977"/>
+			<service id="node/913837" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80977"/>
+			<service id="node/913850" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80977"/>
+			<service id="node/913852" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106363"/>
+			<service id="node/913859" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="104319"/>
+			<service id="node/913866" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106362"/>
+			<service id="node/913869" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="106362"/>
+			<service id="node/913890" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106363"/>
+			<service id="node/913941" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74732"/>
+			<service id="node/914025" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106363"/>
+			<service id="node/914027" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="104319"/>
+			<service id="node/914031" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="104319"/>
+			<service id="node/914056" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106363"/>
+			<service id="node/914070" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="106362"/>
+			<service id="node/914087" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80976"/>
+			<service id="node/914089" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="104258"/>
+			<service id="node/914160" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87830"/>
+			<service id="node/914205" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80976"/>
+			<service id="node/914245" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106363"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5138">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="106022" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/912572" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="80199"/>
+			<service id="node/912685" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53149"/>
+			<service id="node/912714" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74726"/>
+			<service id="node/912729" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74726"/>
+			<service id="node/912731" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74726"/>
+			<service id="node/912743" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77664"/>
+			<service id="node/912792" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="155701"/>
+			<service id="node/912811" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="155701"/>
+			<service id="node/912819" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53094"/>
+			<service id="node/912849" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53149"/>
+			<service id="node/912866" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53149"/>
+			<service id="node/912869" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74727"/>
+			<service id="node/912906" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="80198"/>
+			<service id="node/912909" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53094"/>
+			<service id="node/912922" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="54891"/>
+			<service id="node/912925" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53139"/>
+			<service id="node/912933" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102700"/>
+			<service id="node/912935" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102700"/>
+			<service id="node/912937" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="54891"/>
+			<service id="node/912963" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="102700"/>
+			<service id="node/912982" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53095"/>
+			<service id="node/913022" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53140"/>
+			<service id="node/913060" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80980"/>
+			<service id="node/913118" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53140"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5139">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="87979" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/907204" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="141963"/>
+			<service id="node/907313" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="141963"/>
+			<service id="node/907327" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="38578"/>
+			<service id="node/907368" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="141963"/>
+			<service id="node/907403" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="141964"/>
+			<service id="node/907404" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="141963"/>
+			<service id="node/907470" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="141964"/>
+			<service id="node/907495" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="141964"/>
+			<service id="node/907517" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="141964"/>
+			<service id="node/907602" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="18748"/>
+			<service id="node/907603" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93914"/>
+			<service id="node/907621" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="18748"/>
+			<service id="node/907660" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="18748"/>
+			<service id="node/907668" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="18748"/>
+			<service id="node/907757" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="141967"/>
+			<service id="node/907850" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="152226"/>
+			<service id="node/907874" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53442"/>
+			<service id="node/907885" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53442"/>
+			<service id="node/907907" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53442"/>
+			<service id="node/907924" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="50917"/>
+			<service id="node/907940" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="50917"/>
+			<service id="node/907957" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="141970"/>
+			<service id="node/907960" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="152225"/>
+			<service id="node/907967" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="6474"/>
+			<service id="node/907975" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152225"/>
+			<service id="node/907980" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79417"/>
+			<service id="node/907984" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="6474"/>
+			<service id="node/907985" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159429"/>
+			<service id="node/907990" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142552"/>
+			<service id="node/907996" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="47310"/>
+			<service id="node/908000" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152224"/>
+			<service id="node/908004" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142552"/>
+			<service id="node/908042" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79417"/>
+			<service id="node/908046" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="47309"/>
+			<service id="node/908065" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="141970"/>
+			<service id="node/908072" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79417"/>
+			<service id="node/908080" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="152249"/>
+			<service id="node/908088" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="6624"/>
+			<service id="node/908089" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="152249"/>
+			<service id="node/908114" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="70585"/>
+			<service id="node/908149" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="70589"/>
+			<service id="node/908161" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="8703"/>
+			<service id="node/908165" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="47309"/>
+			<service id="node/908216" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="70589"/>
+			<service id="node/908223" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8702"/>
+			<service id="node/908225" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="6624"/>
+			<service id="node/908329" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="70589"/>
+			<service id="node/908408" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="70586"/>
+			<service id="node/908417" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="22327"/>
+			<service id="node/908532" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="31430"/>
+			<service id="node/908585" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143297"/>
+			<service id="node/908592" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143297"/>
+			<service id="node/908605" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143154"/>
+			<service id="node/908622" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143297"/>
+			<service id="node/908670" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143295"/>
+			<service id="node/908689" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="8697"/>
+			<service id="node/908690" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="159435"/>
+			<service id="node/908694" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143157"/>
+			<service id="node/908704" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="157327"/>
+			<service id="node/908711" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="157327"/>
+			<service id="node/908735" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="8697"/>
+			<service id="node/908813" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143157"/>
+			<service id="node/908875" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="159436"/>
+			<service id="node/908905" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="73958"/>
+			<service id="node/908979" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="157326"/>
+			<service id="node/909028" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="157326"/>
+			<service id="node/909069" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="73957"/>
+			<service id="node/909091" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159436"/>
+			<service id="node/909174" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="70582"/>
+			<service id="node/909191" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="159438"/>
+			<service id="node/909215" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143164"/>
+			<service id="node/909217" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143164"/>
+			<service id="node/909227" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="36805"/>
+			<service id="node/909301" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143164"/>
+			<service id="node/909374" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77669"/>
+			<service id="node/909407" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="31433"/>
+			<service id="node/909420" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="37978"/>
+			<service id="node/909550" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="119651"/>
+			<service id="node/909552" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77670"/>
+			<service id="node/909554" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="12920"/>
+			<service id="node/909563" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77670"/>
+			<service id="node/909601" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="147972"/>
+			<service id="node/909668" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="41112"/>
+			<service id="node/909673" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="41112"/>
+			<service id="node/909708" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81671"/>
+			<service id="node/909794" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="41111"/>
+			<service id="node/909852" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="41110"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5141">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="74733" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/910104" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77681"/>
+			<service id="node/910197" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159444"/>
+			<service id="node/910223" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="41110"/>
+			<service id="node/910231" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159443"/>
+			<service id="node/910349" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81690"/>
+			<service id="node/910352" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="26783"/>
+			<service id="node/910387" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77682"/>
+			<service id="node/910473" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159444"/>
+			<service id="node/910518" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159443"/>
+			<service id="node/910568" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106291"/>
+			<service id="node/910570" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81685"/>
+			<service id="node/910600" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="81685"/>
+			<service id="node/910656" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="81685"/>
+			<service id="node/910678" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81685"/>
+			<service id="node/910681" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81685"/>
+			<service id="node/910713" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81685"/>
+			<service id="node/910715" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="26786"/>
+			<service id="node/910738" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81685"/>
+			<service id="node/910752" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81685"/>
+			<service id="node/910763" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81689"/>
+			<service id="node/910802" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="26787"/>
+			<service id="node/910867" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81688"/>
+			<service id="node/910871" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81688"/>
+			<service id="node/910883" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81688"/>
+			<service id="node/910896" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="47928"/>
+			<service id="node/910948" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81687"/>
+			<service id="node/910958" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81688"/>
+			<service id="node/910983" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="81687"/>
+			<service id="node/911016" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="81688"/>
+			<service id="node/911039" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="47935"/>
+			<service id="node/911046" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81688"/>
+			<service id="node/911048" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="81687"/>
+			<service id="node/911067" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81687"/>
+			<service id="node/911070" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81676"/>
+			<service id="node/911137" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="126045"/>
+			<service id="node/911158" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81687"/>
+			<service id="node/911223" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="81676"/>
+			<service id="node/911258" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="81676"/>
+			<service id="node/911475" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="158335"/>
+			<service id="node/911484" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="20289"/>
+			<service id="node/911526" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="158335"/>
+			<service id="node/911579" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149713"/>
+			<service id="node/911604" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="15257"/>
+			<service id="node/911605" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149712"/>
+			<service id="node/911610" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="149712"/>
+			<service id="node/911657" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="149712"/>
+			<service id="node/911696" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="149712"/>
+			<service id="node/911741" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32877"/>
+			<service id="node/911780" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32877"/>
+			<service id="node/911942" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="102813"/>
+			<service id="node/911951" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="151848"/>
+			<service id="node/912219" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="129694"/>
+			<service id="node/912221" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74736"/>
+			<service id="node/912230" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143034"/>
+			<service id="node/912233" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="126082"/>
+			<service id="node/912241" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="97264"/>
+			<service id="node/912253" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152027"/>
+			<service id="node/912256" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152027"/>
+			<service id="node/912265" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152027"/>
+			<service id="node/912287" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152027"/>
+			<service id="node/912320" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="74736"/>
+			<service id="node/912412" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74736"/>
+			<service id="node/912417" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53066"/>
+			<service id="node/912426" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74736"/>
+			<service id="node/912478" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="134303"/>
+			<service id="node/912623" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53065"/>
+			<service id="node/912625" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53065"/>
+			<service id="node/912677" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="126084"/>
+			<service id="node/912681" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="126083"/>
+			<service id="node/912705" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74724"/>
+			<service id="node/912709" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="126083"/>
+			<service id="node/912716" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74724"/>
+			<service id="node/912725" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74724"/>
+			<service id="node/912726" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74724"/>
+			<service id="node/912734" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74726"/>
+			<service id="node/912825" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74727"/>
+			<service id="node/912831" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74725"/>
+			<service id="node/912842" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74725"/>
+			<service id="node/912844" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74727"/>
+			<service id="node/912873" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53150"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5143">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="28930" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/912809" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74725"/>
+			<service id="node/912839" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="74725"/>
+			<service id="node/912840" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="74725"/>
+			<service id="node/912855" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="131067"/>
+			<service id="node/912968" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="74725"/>
+			<service id="node/913230" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79912"/>
+			<service id="node/913269" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106021"/>
+			<service id="node/913285" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106022"/>
+			<service id="node/913394" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="106022"/>
+			<service id="node/913661" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79914"/>
+			<service id="node/913681" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93484"/>
+			<service id="node/913730" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="93499"/>
+			<service id="node/913770" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93485"/>
+			<service id="node/913776" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="93485"/>
+			<service id="node/913789" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93485"/>
+			<service id="node/913803" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="93485"/>
+			<service id="node/913810" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93485"/>
+			<service id="node/913825" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93485"/>
+			<service id="node/913842" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="93504"/>
+			<service id="node/913904" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="7751"/>
+			<service id="node/913951" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="7751"/>
+			<service id="node/913964" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7751"/>
+			<service id="node/913989" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7751"/>
+			<service id="node/914063" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7751"/>
+			<service id="node/914169" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87829"/>
+			<service id="node/914243" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87830"/>
+			<service id="node/914248" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87830"/>
+			<service id="node/914250" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87830"/>
+			<service id="node/914254" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87830"/>
+			<service id="node/914256" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87830"/>
+			<service id="node/914270" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87830"/>
+			<service id="node/914532" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53143"/>
+			<service id="node/914568" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53143"/>
+			<service id="node/914587" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="53143"/>
+			<service id="node/914711" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53144"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5144">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="120109" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/915965" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79921"/>
+			<service id="node/916225" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87730"/>
+			<service id="node/916243" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87728"/>
+			<service id="node/916297" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="79923"/>
+			<service id="node/916317" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79923"/>
+			<service id="node/916339" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="88854"/>
+			<service id="node/916354" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87732"/>
+			<service id="node/916355" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87732"/>
+			<service id="node/916356" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87732"/>
+			<service id="node/916362" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87732"/>
+			<service id="node/916363" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87732"/>
+			<service id="node/916416" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87717"/>
+			<service id="node/916502" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44268"/>
+			<service id="node/916602" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79930"/>
+			<service id="node/916615" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="45774"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5149">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="24232" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/913280" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87849"/>
+			<service id="node/913419" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87849"/>
+			<service id="node/913447" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87849"/>
+			<service id="node/913508" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="152016"/>
+			<service id="node/913537" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87850"/>
+			<service id="node/913546" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87737"/>
+			<service id="node/913763" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="11784"/>
+			<service id="node/913806" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28874"/>
+			<service id="node/913862" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87736"/>
+			<service id="node/913867" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7752"/>
+			<service id="node/913914" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="28875"/>
+			<service id="node/913920" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28875"/>
+			<service id="node/913928" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28875"/>
+			<service id="node/913942" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28875"/>
+			<service id="node/913983" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28930"/>
+			<service id="node/914042" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87735"/>
+			<service id="node/914060" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152018"/>
+			<service id="node/914192" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87827"/>
+			<service id="node/914293" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="7753"/>
+			<service id="node/914326" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7753"/>
+			<service id="node/914338" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7754"/>
+			<service id="node/914351" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7753"/>
+			<service id="node/914387" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7754"/>
+			<service id="node/914441" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7753"/>
+			<service id="node/914485" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7753"/>
+			<service id="node/914502" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="7753"/>
+			<service id="node/914546" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7754"/>
+			<service id="node/914560" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="7753"/>
+			<service id="node/914584" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="7753"/>
+			<service id="node/914592" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7754"/>
+			<service id="node/914596" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87831"/>
+			<service id="node/914721" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7755"/>
+			<service id="node/914726" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87832"/>
+			<service id="node/914753" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7755"/>
+			<service id="node/914833" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="135793"/>
+			<service id="node/914857" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="7755"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5152">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="47683" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/915143" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="135793"/>
+			<service id="node/915238" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="135796"/>
+			<service id="node/915257" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46870"/>
+			<service id="node/915488" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="142828"/>
+			<service id="node/915586" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="7757"/>
+			<service id="node/915643" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="137882"/>
+			<service id="node/915685" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="137881"/>
+			<service id="node/915687" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="137881"/>
+			<service id="node/915763" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="160714"/>
+			<service id="node/915765" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="160711"/>
+			<service id="node/915791" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="13213"/>
+			<service id="node/915827" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="13212"/>
+			<service id="node/915828" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="13213"/>
+			<service id="node/915830" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="13213"/>
+			<service id="node/915865" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="13214"/>
+			<service id="node/915874" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79017"/>
+			<service id="node/915880" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="79016"/>
+			<service id="node/915957" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79013"/>
+			<service id="node/916010" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79016"/>
+			<service id="node/916027" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="44275"/>
+			<service id="node/916089" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79017"/>
+			<service id="node/916119" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79017"/>
+			<service id="node/916279" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="88866"/>
+			<service id="node/916290" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="88866"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5157">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="105200" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/913882" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28931"/>
+			<service id="node/913888" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="28931"/>
+			<service id="node/913891" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120111"/>
+			<service id="node/913896" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="120111"/>
+			<service id="node/913899" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120111"/>
+			<service id="node/913900" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120111"/>
+			<service id="node/913901" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="24230"/>
+			<service id="node/913910" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="120111"/>
+			<service id="node/913936" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="120111"/>
+			<service id="node/914052" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120112"/>
+			<service id="node/914054" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="120112"/>
+			<service id="node/914059" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="24232"/>
+			<service id="node/914093" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914096" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="24233"/>
+			<service id="node/914181" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="24232"/>
+			<service id="node/914217" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46885"/>
+			<service id="node/914290" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="24232"/>
+			<service id="node/914444" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142830"/>
+			<service id="node/914564" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46888"/>
+			<service id="node/914655" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="24233"/>
+			<service id="node/914735" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46888"/>
+			<service id="node/914789" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="87832"/>
+			<service id="node/914841" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46869"/>
+			<service id="node/914900" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142828"/>
+			<service id="node/914940" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142828"/>
+			<service id="node/914995" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142827"/>
+			<service id="node/915012" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152020"/>
+			<service id="node/915017" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142828"/>
+			<service id="node/915019" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="142827"/>
+			<service id="node/915032" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142827"/>
+			<service id="node/915098" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142828"/>
+			<service id="node/915147" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46870"/>
+			<service id="node/915159" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152020"/>
+			<service id="node/915166" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46870"/>
+			<service id="node/915172" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="46870"/>
+			<service id="node/915176" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="46870"/>
+			<service id="node/915204" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142828"/>
+			<service id="node/915220" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142827"/>
+			<service id="node/915385" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142827"/>
+			<service id="node/915527" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142827"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5160">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="98731" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/915766" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="79004"/>
+			<service id="node/915877" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="79009"/>
+			<service id="node/915968" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="160730"/>
+			<service id="node/916237" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="34859"/>
+			<service id="node/916278" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44279"/>
+			<service id="node/916409" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="88866"/>
+			<service id="node/916426" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="44304"/>
+			<service id="node/916433" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="160729"/>
+			<service id="node/916550" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44305"/>
+			<service id="node/916562" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="44289"/>
+			<service id="node/916586" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="44284"/>
+			<service id="node/916725" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="160734"/>
+			<service id="node/916924" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="160734"/>
+			<service id="node/916956" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="44285"/>
+			<service id="node/917059" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="44295"/>
+			<service id="node/917178" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="150467"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5168">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="79017" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/911219" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143032"/>
+			<service id="node/912338" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="142577"/>
+			<service id="node/912552" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142576"/>
+			<service id="node/912699" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142813"/>
+			<service id="node/912750" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143663"/>
+			<service id="node/912794" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142574"/>
+			<service id="node/912824" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142813"/>
+			<service id="node/912854" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142813"/>
+			<service id="node/912857" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142576"/>
+			<service id="node/912951" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142811"/>
+			<service id="node/912954" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142811"/>
+			<service id="node/913014" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="24229"/>
+			<service id="node/913075" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142812"/>
+			<service id="node/913324" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="24229"/>
+			<service id="node/913346" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87849"/>
+			<service id="node/913387" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143269"/>
+			<service id="node/913463" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87849"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5169">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="87717" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/913500" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143270"/>
+			<service id="node/913583" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143269"/>
+			<service id="node/913603" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53153"/>
+			<service id="node/913611" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143279"/>
+			<service id="node/913614" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143269"/>
+			<service id="node/913618" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="87850"/>
+			<service id="node/913664" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87848"/>
+			<service id="node/913682" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="53153"/>
+			<service id="node/913684" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="53153"/>
+			<service id="node/913704" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="87848"/>
+			<service id="node/913766" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143274"/>
+			<service id="node/913779" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142831"/>
+			<service id="node/913793" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143274"/>
+			<service id="node/913831" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="143273"/>
+			<service id="node/913857" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="143274"/>
+			<service id="node/913894" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143273"/>
+			<service id="node/913902" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143274"/>
+			<service id="node/913909" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142832"/>
+			<service id="node/913921" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120109"/>
+			<service id="node/913993" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120109"/>
+			<service id="node/914014" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120109"/>
+			<service id="node/914026" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120109"/>
+			<service id="node/914065" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120107"/>
+			<service id="node/914066" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143274"/>
+			<service id="node/914100" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914102" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120107"/>
+			<service id="node/914103" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914106" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914109" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914116" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914138" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120110"/>
+			<service id="node/914150" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55934"/>
+			<service id="node/914157" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142830"/>
+			<service id="node/914161" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55934"/>
+			<service id="node/914179" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142829"/>
+			<service id="node/914182" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="55934"/>
+			<service id="node/914185" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120108"/>
+			<service id="node/914197" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120108"/>
+			<service id="node/914215" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120108"/>
+			<service id="node/914219" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120108"/>
+			<service id="node/914223" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="120108"/>
+			<service id="node/914235" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143668"/>
+			<service id="node/914274" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="55935"/>
+			<service id="node/914275" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914279" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914280" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914294" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="55935"/>
+			<service id="node/914298" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914299" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143275"/>
+			<service id="node/914318" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914324" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914332" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143276"/>
+			<service id="node/914335" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914339" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914353" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914354" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143275"/>
+			<service id="node/914358" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914364" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914366" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="55935"/>
+			<service id="node/914395" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143275"/>
+			<service id="node/914412" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="55935"/>
+			<service id="node/914424" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143275"/>
+			<service id="node/914452" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143276"/>
+			<service id="node/914505" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143275"/>
+			<service id="node/914506" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142829"/>
+			<service id="node/914510" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="120222"/>
+			<service id="node/914594" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120222"/>
+			<service id="node/914605" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143276"/>
+			<service id="node/914613" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142830"/>
+			<service id="node/914638" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="120222"/>
+			<service id="node/914660" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="143276"/>
+			<service id="node/914747" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142829"/>
+			<service id="node/914751" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120222"/>
+			<service id="node/914766" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120222"/>
+			<service id="node/914770" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120222"/>
+			<service id="node/914783" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120222"/>
+			<service id="node/914788" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="43490"/>
+			<service id="node/914907" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120223"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5173">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="125266" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/912220" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="32881"/>
+			<service id="node/912222" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143026"/>
+			<service id="node/912242" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142800"/>
+			<service id="node/912394" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32880"/>
+			<service id="node/912399" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="32881"/>
+			<service id="node/912421" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32881"/>
+			<service id="node/912454" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32880"/>
+			<service id="node/912467" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32881"/>
+			<service id="node/912492" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="32880"/>
+			<service id="node/912499" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="32881"/>
+			<service id="node/912591" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142569"/>
+			<service id="node/912609" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="32880"/>
+			<service id="node/912642" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142569"/>
+			<service id="node/912657" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="32881"/>
+			<service id="node/912713" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142570"/>
+			<service id="node/912732" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142800"/>
+			<service id="node/912742" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143675"/>
+			<service id="node/912764" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143674"/>
+			<service id="node/912765" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142568"/>
+			<service id="node/912782" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143674"/>
+			<service id="node/912853" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="142568"/>
+			<service id="node/912924" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142809"/>
+			<service id="node/912952" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142809"/>
+			<service id="node/912970" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142809"/>
+			<service id="node/912985" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142811"/>
+			<service id="node/913064" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="142807"/>
+			<service id="node/913094" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142812"/>
+			<service id="node/913116" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142812"/>
+			<service id="node/913145" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="142806"/>
+			<service id="node/913182" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143270"/>
+			<service id="node/913390" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143279"/>
+			<service id="node/913396" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143279"/>
+		</services>
+	</carrier>
+
+	<carrier id="dhl_carrier_5176">
+		<capabilities fleetSize="INFINITE">
+			<vehicles>
+				<vehicle id="dhl_bicycle" depotLinkId="44307" typeId="dhl_bicycle" earliestStart="12:00:00" latestEnd="18:00:00"/>
+			</vehicles>
+
+		</capabilities>
+		<services>
+			<service id="node/908611" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143154"/>
+			<service id="node/908658" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143150"/>
+			<service id="node/908775" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143153"/>
+			<service id="node/908914" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143158"/>
+			<service id="node/908940" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="125064"/>
+			<service id="node/909041" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="142824"/>
+			<service id="node/909072" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143159"/>
+			<service id="node/909149" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="152253"/>
+			<service id="node/909170" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152253"/>
+			<service id="node/909260" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152254"/>
+			<service id="node/909271" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="80209"/>
+			<service id="node/909295" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152254"/>
+			<service id="node/909334" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152263"/>
+			<service id="node/909365" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152263"/>
+			<service id="node/909375" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143160"/>
+			<service id="node/909434" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143164"/>
+			<service id="node/909448" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="148242"/>
+			<service id="node/909449" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="148242"/>
+			<service id="node/909450" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="148242"/>
+			<service id="node/909457" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="148242"/>
+			<service id="node/909465" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="167104"/>
+			<service id="node/909469" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143164"/>
+			<service id="node/909480" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/909494" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="148245"/>
+			<service id="node/909520" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="152262"/>
+			<service id="node/909556" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77998"/>
+			<service id="node/909598" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77998"/>
+			<service id="node/909603" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="167143"/>
+			<service id="node/909611" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="167103"/>
+			<service id="node/909616" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143271"/>
+			<service id="node/909627" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="167143"/>
+			<service id="node/909635" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/909646" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="77998"/>
+			<service id="node/909653" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143262"/>
+			<service id="node/909655" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/909685" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143262"/>
+			<service id="node/909689" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="77998"/>
+			<service id="node/909712" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143792"/>
+			<service id="node/909720" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="152308"/>
+			<service id="node/909736" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="152308"/>
+			<service id="node/909748" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="152310"/>
+			<service id="node/909754" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143164"/>
+			<service id="node/909759" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143015"/>
+			<service id="node/909865" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="152308"/>
+			<service id="node/909933" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="9225"/>
+			<service id="node/909968" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="159420"/>
+			<service id="node/909977" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="159420"/>
+			<service id="node/909985" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="51519"/>
+			<service id="node/910019" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="51519"/>
+			<service id="node/910072" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="51519"/>
+			<service id="node/910103" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="51519"/>
+			<service id="node/910135" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="51519"/>
+			<service id="node/910176" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112400"/>
+			<service id="node/910229" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="41115"/>
+			<service id="node/910260" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="51519"/>
+			<service id="node/910272" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="47928"/>
+			<service id="node/910307" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="51519"/>
+			<service id="node/910333" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="143271"/>
+			<service id="node/910342" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="41114"/>
+			<service id="node/910370" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/910380" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143271"/>
+			<service id="node/910400" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143015"/>
+			<service id="node/910425" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/910438" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112404"/>
+			<service id="node/910441" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143271"/>
+			<service id="node/910442" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112401"/>
+			<service id="node/910463" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/910472" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/910498" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112401"/>
+			<service id="node/910555" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143018"/>
+			<service id="node/910612" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/910654" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="143018"/>
+			<service id="node/910655" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143262"/>
+			<service id="node/910691" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="77998"/>
+			<service id="node/910704" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112405"/>
+			<service id="node/910712" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="112408"/>
+			<service id="node/910748" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112408"/>
+			<service id="node/910767" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="84549"/>
+			<service id="node/910769" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112408"/>
+			<service id="node/910792" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143272"/>
+			<service id="node/910830" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="112408"/>
+			<service id="node/910838" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112408"/>
+			<service id="node/910845" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112408"/>
+			<service id="node/910875" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="112407"/>
+			<service id="node/910886" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="112407"/>
+			<service id="node/910897" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:12:30" capacityDemand="5" to="112407"/>
+			<service id="node/910918" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112420"/>
+			<service id="node/910931" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112420"/>
+			<service id="node/910934" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="112420"/>
+			<service id="node/910952" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112420"/>
+			<service id="node/910957" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112420"/>
+			<service id="node/910962" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112420"/>
+			<service id="node/910972" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112420"/>
+			<service id="node/910994" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112420"/>
+			<service id="node/911006" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143797"/>
+			<service id="node/911095" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="112398"/>
+			<service id="node/911132" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="120747"/>
+			<service id="node/911136" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112398"/>
+			<service id="node/911170" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="112398"/>
+			<service id="node/911202" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:05:00" capacityDemand="2" to="30372"/>
+			<service id="node/911242" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143277"/>
+			<service id="node/911267" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143029"/>
+			<service id="node/911415" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143799"/>
+			<service id="node/911457" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143821"/>
+			<service id="node/911575" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143029"/>
+			<service id="node/911586" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143029"/>
+			<service id="node/911620" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143823"/>
+			<service id="node/911674" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:02:30" capacityDemand="1" to="143798"/>
+			<service id="node/911802" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143823"/>
+			<service id="node/911859" latestEnd="18:00:00" earliestStart="12:00:00" serviceDuration="00:07:30" capacityDemand="3" to="143823"/>
+		</services>
+	</carrier>
+
+</carriers>

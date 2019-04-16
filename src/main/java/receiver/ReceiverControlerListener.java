@@ -16,132 +16,225 @@
  *                                                                         *
  * *********************************************************************** */
 
-/**
- * 
- */
 package receiver;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
+import com.google.inject.Inject;
+import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.HasPlansAndId;
+import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.ScheduledTour;
+import org.matsim.contrib.freight.carrier.Tour;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
 import org.matsim.core.controler.events.ReplanningEvent;
 import org.matsim.core.controler.events.ScoringEvent;
+import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.BeforeMobsimListener;
 import org.matsim.core.controler.listener.ReplanningListener;
 import org.matsim.core.controler.listener.ScoringListener;
+import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.replanning.GenericStrategyManager;
-
-import com.google.inject.Inject;
-
+import org.matsim.core.utils.io.IOUtils;
+import org.matsim.core.utils.misc.Time;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This controller ensures that each receiver receives a cost (score) per order at the end of each iteration and replans its orders based on the cost of the previous iteration and past iterations.
- * 
+ *
  * @author wlbean
  *
  */
 class ReceiverControlerListener implements ScoringListener,
-ReplanningListener, BeforeMobsimListener {
+        ReplanningListener, BeforeMobsimListener, ShutdownListener {
 
-	private Receivers receivers;
-	private ReceiverOrderStrategyManagerFactory stratManFac;
-	private ReceiverScoringFunctionFactory scorFuncFac;
-	private ReceiverTracker tracker;
-	@Inject EventsManager eMan;
-	@Inject Scenario sc;
+    final private static Logger LOG = Logger.getLogger(ReceiverControlerListener.class);
+    private ReceiverOrderStrategyManagerFactory stratManFac;
+    private ReceiverScoringFunctionFactory scorFuncFac;
+    private ReceiverTracker tracker;
+    @Inject
+    EventsManager eMan;
+    @Inject
+    Scenario sc;
 
-	/**
-	 * This creates a new receiver controler listener for receivers with replanning abilities.
-	 * @param receivers
-	 * @param stratManFac
-	 */
+    @Inject
+    private ReceiverControlerListener(ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac) {
+        this.stratManFac = stratManFac;
+        this.scorFuncFac = scorFuncFac;
+    }
 
-	@Inject
-	ReceiverControlerListener(Receivers receivers, ReceiverOrderStrategyManagerFactory stratManFac, ReceiverScoringFunctionFactory scorFuncFac){
-		this.receivers = receivers;
-		this.stratManFac = stratManFac;
-		this.scorFuncFac = scorFuncFac;
-	}
+    @Override
+    public void notifyReplanning(final ReplanningEvent event) {
 
+        if (stratManFac == null) {
+            return;
+        }
 
-	@Override
-	public void notifyReplanning(final ReplanningEvent event) {
+        GenericStrategyManager<ReceiverPlan, Receiver> stratMan = stratManFac.createReceiverStrategyManager();
 
-		if (stratManFac == null){
-			return;
-		}
+        Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverCollection = new ArrayList<>();
+        Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverControlCollection = new ArrayList<>();
 
-		GenericStrategyManager<ReceiverPlan, Receiver> stratMan = stratManFac.createReceiverStrategyManager();
+        for (Receiver receiver : ReceiverUtils.getReceivers(sc).getReceivers().values()) {
 
-		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverCollection = new ArrayList<>();
-		Collection<HasPlansAndId<ReceiverPlan, Receiver>> receiverControlCollection = new ArrayList<>();
+            if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval(sc) == 0) {
+                // (= one iteration after replanning)
 
-		for(Receiver receiver : receivers.getReceivers().values()){
-			
-			if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
-					receiver.setInitialCost(receiver.getSelectedPlan().getScore());
-				}
+                receiver.setInitialCost(receiver.getSelectedPlan().getScore());
+            }
 
-			/*
-			 * Checks to see if a receiver is part of the grand coalition, if not, the receiver are not allowed to join 
-			 * a coalition at any time. If the receiver is willing to collaborate, the receiver will be allowed to leave
-			 * and join coalitions.
-			 */
-			boolean status = (boolean) receiver.getAttributes().getAttribute("grandCoalitionMember");
-			if(status == true){	
-				receiverCollection.add(receiver);
-			} else receiverControlCollection.add(receiver);
-		}
-		
-		/* Replanning for grand coalition receivers.*/
-		GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
-//		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
-//		strategy.addStrategyModule(new CollaborationStatusMutator());
-//		collaborationStratMan.addStrategy(strategy, null, 0.2);
-//		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
-		
-		if (event.getIteration() % ReceiverUtils.getReplanInterval( sc ) != 0) {
-			return;
-		} 
-		
-		/* Run replanning for non-collaborating receivers */
-		stratMan.run(receiverControlCollection, null, event.getIteration(), event.getReplanningContext());		
-		
-		/* Run replanning for grand coalition receivers.*/
-		collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());	
-	}
+            /*
+             * Checks to see if a receiver is part of the grand coalition, if not, the receiver are not allowed to join
+             * a coalition at any time. If the receiver is willing to collaborate, the receiver will be allowed to leave
+             * and join coalitions.
+             */
+            if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_GRANDCOALITION_MEMBER)) {
+                receiverCollection.add(receiver);
+            } else {
+                receiverControlCollection.add(receiver);
+            }
+
+            /* Replanning for grand coalition receivers.*/
+            GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
+            //		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
+            //		strategy.addStrategyModule(new CollaborationStatusMutator());
+            //		collaborationStratMan.addStrategy(strategy, null, 0.2);
+            //		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
+
+            if (event.getIteration() % ReceiverUtils.getReplanInterval(sc) != 0) {
+                // (= not in replanning iteration)
+                return;
+            }
+
+            /* Run replanning for non-collaborating receivers */
+            stratMan.run(receiverControlCollection, null, event.getIteration(), event.getReplanningContext());
+
+            /* Run replanning for grand coalition receivers.*/
+            collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());
+        }
+    }
 
 
+    /*
+     * Determines the order cost at the end of each iteration.
+     */
 
-	/*
-	 * Determines the order cost at the end of each iteration.
-	 */
+    @Override
+    public void notifyScoring(ScoringEvent event) {
+        if (event.getIteration() == 0) {
+            this.tracker.scoreSelectedPlans();
+        }
 
-	@Override
-	public void notifyScoring(ScoringEvent event) {
-		if (event.getIteration() == 0) {
-			this.tracker.scoreSelectedPlans();
-		}
-		
-		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
-			this.tracker.scoreSelectedPlans();
-		} else {		
-			for (Receiver receiver : receivers.getReceivers().values()){
-				double score = (double) receiver.getAttributes().getAttribute("score");
-				receiver.getSelectedPlan().setScore(score);
-			}
-		}
-	}
+//		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
+        if ((event.getIteration() + 1) % ReceiverUtils.getReplanInterval(sc) == 0 && event.getIteration() > 0) {
+            // this is called in the iteration after the replanning iteration.
+            this.tracker.scoreSelectedPlans();
+        } else {
+            // this is called in all other iterations.  why?
+            for (Receiver receiver : ReceiverUtils.getReceivers(sc).getReceivers().values()) {
+                double score = (double) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_SCORE);
+//				double score = (double) receiver.getSelectedPlan().getScore();
+                receiver.getSelectedPlan().setScore(new Double(score));
+            }
+        }
+    }
 
-	@Override
-	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
-		tracker = new ReceiverTracker(scorFuncFac, sc);
-		eMan.addHandler(tracker);		
-	}
+    @Override
+    public void notifyBeforeMobsim(BeforeMobsimEvent event) {
+        tracker = new ReceiverTracker(scorFuncFac, sc);
+//		eMan.addHandler(tracker);
+    }
+
+    @Override
+    public void notifyShutdown(ShutdownEvent event) {
+        /* Method to check the status of time windows. */
+        try {
+            linkReceiverTimewindowToCarrierTourPosition();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Cannot write receiver output, linking them to tour positions.");
+        }
+
+    }
+
+    private void linkReceiverTimewindowToCarrierTourPosition() throws IOException {
+        LOG.info("Writing output to link receivers to the position in the carrier's tour.");
+        /* Map the receivers to link Ids */
+        Map<Id<Link>, Receiver> receiverLinkMap = new HashMap<>();
+        Receivers receivers = ReceiverUtils.getReceivers(this.sc);
+        for (Receiver receiver : receivers.getReceivers().values()) {
+            Id<Link> linkId = receiver.getLinkId();
+//            if (receiverLinkMap.containsKey(linkId)) {
+//                LOG.error("There are multiple receivers at the same link Id. Fix how this is dealt with.");
+//                throw new RuntimeException("Multiple receivers on same link.");
+//            }
+            receiverLinkMap.put(linkId, receiver);
+        }
+
+        BufferedWriter bw = IOUtils.getBufferedWriter(this.sc.getConfig().controler().getOutputDirectory() + "output_receiverInTourPlacement.csv.gz");
+        try {
+            bw.write("receiverId,twStart,twEnd,twDuration,positionInTour,product,deliveryStart,deliveryEnd");
+            bw.newLine();
+
+            for (Carrier carrier : ReceiverUtils.getCarriers(this.sc).getCarriers().values()) {
+                Collection<ScheduledTour> scheduledTours = carrier.getSelectedPlan().getScheduledTours();
+                for (ScheduledTour tour : scheduledTours) {
+                    for (int i = 0; i < tour.getTour().getTourElements().size(); i++) {
+                        Tour.TourElement element = tour.getTour().getTourElements().get(i);
+                        if (element instanceof Tour.ShipmentBasedActivity) {
+                            Tour.ShipmentBasedActivity act = (Tour.ShipmentBasedActivity) element;
+
+                            String shipmentId = act.getShipment().getId().toString();
+                            if (act.getActivityType().equalsIgnoreCase("delivery")) {
+                                Id<Link> linkId = act.getShipment().getTo();
+                                if (!receiverLinkMap.containsKey(linkId)) {
+                                    LOG.error("Woops, the carrier is delivering a shipment to an unknown receiver!");
+                                    throw new RuntimeException("Don't know to whom delivery is.");
+                                }
+
+                                Tour.Leg precedingLeg = (Tour.Leg) tour.getTour().getTourElements().get(i - 1);
+                                Tour.Leg followingLeg = (Tour.Leg) tour.getTour().getTourElements().get(i + 1);
+
+                                String startTime = Time.writeTime(
+                                        precedingLeg.getExpectedDepartureTime() +
+                                                precedingLeg.getExpectedTransportTime());
+                                String endTime = Time.writeTime(followingLeg.getExpectedDepartureTime());
+
+                                Receiver thisReceiver = receiverLinkMap.get(linkId);
+                                String twStart = Time.writeTime(thisReceiver.getSelectedPlan().getTimeWindows().get(0).getStart());
+                                String twEnd = Time.writeTime(thisReceiver.getSelectedPlan().getTimeWindows().get(0).getEnd());
+                                String tw = Time.writeTime(Time.parseTime(twEnd) - Time.parseTime(twStart));
+                                double position = ((double) i) / ((double) tour.getTour().getTourElements().size());
+                                bw.write(String.format("%s,%s,%s,%s,%.4f,%s,%s,%s\n",
+                                        thisReceiver.getId().toString(),
+                                        twStart,
+                                        twEnd,
+                                        tw,
+                                        position,
+                                        shipmentId,
+                                        startTime,
+                                        endTime)
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+            bw.close();
+        }
+
+    }
+
 
 }

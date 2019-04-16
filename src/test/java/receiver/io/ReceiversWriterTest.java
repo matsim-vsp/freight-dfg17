@@ -28,7 +28,10 @@ import org.matsim.testcases.MatsimTestUtils;
 
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
-import receiver.usecases.base.ReceiverChessboardScenario;
+import receiver.usecases.chessboard.BaseReceiverChessboardScenario;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ReceiversWriterTest {
 
@@ -36,7 +39,9 @@ public class ReceiversWriterTest {
 	
 	@Test
 	public void testV1() {
-		Scenario sc = ReceiverChessboardScenario.createChessboardScenario(1l, 1, false);
+		Scenario sc = BaseReceiverChessboardScenario.createChessboardScenario(1l, 1, 5, false );
+		ReceiverUtils.getReceivers(sc).getAttributes().putAttribute("date",
+				new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format( Calendar.getInstance().getTime()));
 		
 		/* Now the receiver is 'complete', and we can write it to file. */
 		try {

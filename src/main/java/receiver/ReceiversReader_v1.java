@@ -171,7 +171,7 @@ import receiver.SSReorderPolicy;
 			break;
 		case PRODUCT:
 			ReceiverProduct product = currentProductBuilder.build();
-			currentReceiver.getProducts().add(product);
+			currentReceiver.addProduct(product);
 			break;
 		case RECEIVER:
 			receivers.addReceiver(currentReceiver);
@@ -245,7 +245,8 @@ import receiver.SSReorderPolicy;
 	
 	private void startPlan(Attributes atts) {
 		this.currentOrders = new ArrayList<Order>();
-		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver);
+		boolean collaborationStatus = (boolean) currentReceiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
+		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver, collaborationStatus);
 		
 		String score = atts.getValue(ATTR_PLAN_SCORE);
 		if(score != null) {

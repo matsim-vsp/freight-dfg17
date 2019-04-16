@@ -14,7 +14,7 @@ public class TourStartHandler implements TourStartEventHandler{
 
 	@Override
 	public void handleEvent(TourStartEvent event) {
-		vehicleFixedCosts = vehicleFixedCosts + event.getVehicle().getVehicleType().getVehicleCostInformation().fix;
+		vehicleFixedCosts = vehicleFixedCosts + event.getVehicle().getVehicleType().getVehicleCostInformation().getFix();
 	}
 
 	public double getVehicleFixedCosts() {

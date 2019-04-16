@@ -40,9 +40,8 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 
 	/**
 	 * This class changes the delivery frequency of a receiver by either
-	 * increasing (if {@link increase} is true) or decreasing (if {@link increase} 
+	 * increasing (if increase is true) or decreasing (if increase
 	 * is false) the weekly delivery frequency with one day.
-	 * @param fs 
 	 *  
 	 * @param increase
 	 */

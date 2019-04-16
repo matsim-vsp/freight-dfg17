@@ -21,8 +21,12 @@
  */
 package receiver.product;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Identifiable;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.utils.objectattributes.attributable.Attributable;
+
+import receiver.Receiver;
 
 /**
  * General interface for different product types.
@@ -38,6 +42,15 @@ public interface ProductType extends Identifiable<ProductType>, Attributable{
 	public String getDescription();
 
 	public double getRequiredCapacity();
-
-
+	
+	/**
+	 * TODO The origin of a product is currently (Dec '18, JWJ) associated with
+	 * the {@link ProductType}, assuming it comes from the same source for all
+	 * {@link Receiver}s. In future this might change to rather be associated
+	 * with the {@link ReceiverProduct}. 
+	 * @return
+	 */
+	public Id<Link> getOriginLinkId();
+	
+//	public void setOriginLinkId(Id<Link> originLinkId);
 }

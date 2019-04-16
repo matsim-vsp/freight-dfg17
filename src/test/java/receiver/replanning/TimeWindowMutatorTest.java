@@ -100,7 +100,7 @@ public class TimeWindowMutatorTest {
 		LOG.info("Test wiggle: " + tw.toString());
 		
 		Assert.assertEquals("Wrong time window start.", getTimeWindow().getStart(), tw.getStart(), 1.0);
-		Assert.assertEquals("Wrong time window end.", Time.parseTime("15:10:48"), tw.getEnd(), 1.0);
+		Assert.assertEquals("Wrong time window end.", Time.parseTime("15:00:00"), tw.getEnd(), 1.0);
 	}
 	
 	@Test
@@ -111,8 +111,8 @@ public class TimeWindowMutatorTest {
 		
 		TimeWindow tw = plan.getTimeWindows().get(0);
 		LOG.info("Test adapted plan: " + tw.toString());
-		Assert.assertEquals("Wrong time window start.", Time.parseTime("08:00:00"), tw.getStart(), 1.0);
-		Assert.assertEquals("Wrong time window end.", Time.parseTime("15:15:48"), tw.getEnd(), 1.0);
+		Assert.assertEquals("Wrong time window start.", Time.parseTime("09:00:00"), tw.getStart(), 1.0);
+		Assert.assertEquals("Wrong time window end.", Time.parseTime("16:00:00"), tw.getEnd(), 1.0);
 	}
 	
 	
@@ -122,7 +122,7 @@ public class TimeWindowMutatorTest {
 	
 	private ReceiverPlan getPlanWithTimeWindow() {
 		Receiver receiver = ReceiverUtils.newInstance(Id.create("test", Receiver.class));
-		return ReceiverPlan.Builder.newInstance(receiver).addTimeWindow(getTimeWindow()).build();
+		return ReceiverPlan.Builder.newInstance(receiver, true).addTimeWindow(getTimeWindow()).build();
 	}
 	
 }

@@ -198,10 +198,10 @@ public class LSPImpl implements LSP {
 	}
 
 	public void scoreSelectedPlan() {
-		if ( this.scorer!=null ) {
+		if(this.scorer != null) {
 			double score = scorer.scoreCurrentPlan(this);
 			this.selectedPlan.setScore(score);
-		}
+		}	
 	}
 	
 //	public LSPReplanner getReplanner() {

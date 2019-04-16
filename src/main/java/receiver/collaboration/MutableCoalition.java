@@ -17,7 +17,7 @@ import receiver.Receiver;
  * @author wlbean
  *
  */
-public class MutableCoalition implements Coalition {
+/* package-private */ final class MutableCoalition implements Coalition {
 	//private final Logger log = Logger.getLogger(MutableCoalition.class);
 	private double coalitionCost = 0.0;
 	private Attributes attributes = new Attributes();
@@ -25,7 +25,7 @@ public class MutableCoalition implements Coalition {
 	private ArrayList<Carrier> carrierMembers = new ArrayList<Carrier>();
 
 
-	public MutableCoalition(){
+	/* package-private */ MutableCoalition(){
 
 	}
 	

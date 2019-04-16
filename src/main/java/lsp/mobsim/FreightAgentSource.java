@@ -37,7 +37,6 @@ import org.matsim.core.mobsim.framework.AgentSource;
 import org.matsim.core.mobsim.framework.MobsimAgent;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.mobsim.qsim.agents.AgentFactory;
-import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicleImpl;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleUtils;
@@ -81,8 +80,9 @@ class FreightAgentSource implements AgentSource {
 				log.warn("vehicleType for agent "+vRoute.getPlan().getPerson().getId() + " is missing. set default vehicleType where maxVelocity is solely defined by link.speed.");
 			}
 			else vehicle = vRoute.getVehicle();
-			QVehicle qVehicle = new QVehicleImpl(vehicle);
-			qsim.addParkedVehicle(qVehicle, agent.getCurrentLinkId());
+//			qsim.createAndParkVehicleOnLink(vehicle, agent.getCurrentLinkId());
+			QVehicleImpl qVeh = new QVehicleImpl( vehicle );
+			qsim.addParkedVehicle( qVeh, agent.getCurrentLinkId() );
 			qsim.insertAgentIntoMobsim(agent);
 			mobSimAgents.add(agent);
 		}

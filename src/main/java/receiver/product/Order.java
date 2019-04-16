@@ -51,7 +51,17 @@ public class Order {
 	private Double serviceTime;
 	private double numDel = 5;
 
-	
+	@Override
+	public String toString() {
+		StringBuilder strb = new StringBuilder(  ) ;
+		strb.append( "[orderId=" ).append( orderId ) ;
+
+		strb.append("; serviceTime=").append( serviceTime ) ;
+
+		strb.append( "]" ) ;
+		return strb.toString() ;
+	}
+
 	
 	/* protected */ 
 	/*Order(Id<Order> orderId, Receiver receiver, 
