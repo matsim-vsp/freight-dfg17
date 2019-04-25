@@ -26,7 +26,7 @@ public class Solution
 	private static final int DISTANCE_INTERVAL = 2000; //Distance interval
 	private static final int DISTANCE_TYPE_CNT = 30; //Distance classification
 	private static final int INIT_TIME = 1000; //The number of initialization attempts. If the number of times is exceeded, the initialization will stop.
-	private static final int ITERATION_TIME = 1000000; //Number of iterations
+	private static final int MAX_NUMBER_OF_ITERATION = 1000000; //Number of iterations
 	private static final int UPDATE_CNT_PER_ITERATION = 1; //The number of S updates per iteration
 	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000; 
 
@@ -80,14 +80,14 @@ public class Solution
 
 		Random random = new Random();
 		double minRelativeEntropy = Double.MAX_VALUE;
-		for (int iter = 1; iter <= ITERATION_TIME; ++iter)
+		for (int iter = 1; iter <= MAX_NUMBER_OF_ITERATION; ++iter)
 		{
 			HashSet<S> rollbackSet = new HashSet<>();
 			for (int i = 0; i < UPDATE_CNT_PER_ITERATION; ++i)
 			{
 				int index = random.nextInt(SList.size() - i);
 				S s = SList.get(index);
-				exchange(SList, index, SList.size() - 1 - i);
+				exchange(SList, index, SList.size() - 1 - i); //Maybe randomize also the second one (b), kai/KMT apr19
 				s.save();
 				s.updateSelect();
 				rollbackSet.add(s);
