@@ -78,7 +78,7 @@ public class Solution
 		File dir = new File(dirName);
 		deleteFile(dir);
 
-		Random random = new Random();
+		Random random = new Random(4711);
 		double minRelativeEntropy = Double.MAX_VALUE;
 		for (int iter = 1; iter <= MAX_NUMBER_OF_ITERATION; ++iter)
 		{
