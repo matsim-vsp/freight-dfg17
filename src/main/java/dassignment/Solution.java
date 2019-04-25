@@ -32,15 +32,15 @@ public class Solution
 
 	public void process() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
-		String xlsFilename = "./input/in_all.xlsx";
+		String xlsFilename = "./scenarios/dassignment/in_ALL.xlsx";
 		File xlsFile = new File(xlsFilename);
 		if (!xlsFile.exists())
 		{
-			System.out.println("Excel file does not exist");
+			System.out.println("Excel file does not exist: " + xlsFile.getAbsolutePath());
 			return;
 		}
 
-		String outputDirName = "./result";
+		String outputDirName = "./output/result";
 		File outputDir = new File(outputDirName);
 		if (!outputDir.exists())
 		{
