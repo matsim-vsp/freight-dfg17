@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Lei Zhang.
  ******************************************************************************/
 
-package dsassignment;
+package dassignment;
 
 import java.io.IOException;
 
