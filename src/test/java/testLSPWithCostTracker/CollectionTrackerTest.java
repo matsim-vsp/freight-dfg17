@@ -9,7 +9,7 @@ import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModuleImpl;
 import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
+import lsp.shipment.ShipmentUtils;
 import lsp.tracking.SimulationTracker;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
@@ -99,12 +99,12 @@ public class CollectionTrackerTest {
 		collectionAdapter = adapterBuilder.build();
 
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(elementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		collectionElement = collectionElementBuilder.build();
 
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder collectionSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(collectionSolutionId);
+		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
 		collectionSolutionBuilder.addSolutionElement(collectionElement);
 		collectionSolution = collectionSolutionBuilder.build();
 
@@ -138,7 +138,7 @@ public class CollectionTrackerTest {
 
 	    for(int i = 1; i < 2; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
         	Random random = new Random(1);
         	int capacityDemand = random.nextInt(4);
         	builder.setCapacityDemand(capacityDemand);

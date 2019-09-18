@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.shipment.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -34,10 +35,6 @@ import lsp.usecase.CollectionTourEndEventHandler;
 import lsp.usecase.DeterministicShipmentAssigner;
 import lsp.usecase.SimpleForwardSolutionScheduler;
 import lsp.resources.Resource;
-import lsp.shipment.AbstractShipmentPlanElement;
-import lsp.shipment.AbstractShipmentPlanElementComparator;
-import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
 
 public class CollectionLSPSchedulingTest {
 	
@@ -89,12 +86,12 @@ public class CollectionLSPSchedulingTest {
 		collectionAdapter = adapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(elementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		collectionElement = collectionElementBuilder.build();
 		
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder collectionSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(collectionSolutionId);
+		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
 		collectionSolutionBuilder.addSolutionElement(collectionElement);
 		LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
 		
@@ -120,7 +117,7 @@ public class CollectionLSPSchedulingTest {
 	        
 	    for(int i = 1; i < 2; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
         	Random random = new Random(1);
         	int capacityDemand = random.nextInt(4);
         	builder.setCapacityDemand(capacityDemand);

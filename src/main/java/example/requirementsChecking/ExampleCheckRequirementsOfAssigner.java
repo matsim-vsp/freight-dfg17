@@ -3,7 +3,7 @@ package example.requirementsChecking;
 import lsp.*;
 import lsp.resources.Resource;
 import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
+import lsp.shipment.ShipmentUtils;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
@@ -66,12 +66,12 @@ public class ExampleCheckRequirementsOfAssigner {
 		Resource redAdapter = redAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> redElementId = Id.create("RedElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder redElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(redElementId);
+		LSPUtils.LogisticsSolutionElementBuilder redElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(redElementId );
 		redElementBuilder.setResource(redAdapter);
 		LogisticsSolutionElement redElement = redElementBuilder.build();
 		
 		Id<LogisticsSolution> redSolutionId = Id.create("RedSolution", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder redSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(redSolutionId);
+		LSPUtils.LogisticsSolutionBuilder redSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(redSolutionId );
 		redSolutionBuilder.addSolutionElement(redElement);
 		LogisticsSolution redSolution = redSolutionBuilder.build();
 		
@@ -102,12 +102,12 @@ public class ExampleCheckRequirementsOfAssigner {
 		Resource blueAdapter = blueAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> blueElementId = Id.create("BlueCElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder blueElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(blueElementId);
+		LSPUtils.LogisticsSolutionElementBuilder blueElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(blueElementId );
 		blueElementBuilder.setResource(blueAdapter);
 		LogisticsSolutionElement blueElement = blueElementBuilder.build();
 		
 		Id<LogisticsSolution> blueSolutionId = Id.create("BlueSolution", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder blueSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(blueSolutionId);
+		LSPUtils.LogisticsSolutionBuilder blueSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(blueSolutionId );
 		blueSolutionBuilder.addSolutionElement(blueElement);
 		LogisticsSolution blueSolution = blueSolutionBuilder.build();
 		
@@ -146,7 +146,7 @@ public class ExampleCheckRequirementsOfAssigner {
 	    
 	    for(int i = 1; i < 11; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
         	int capacityDemand = rand.nextInt(10);
         	builder.setCapacityDemand(capacityDemand);
         	

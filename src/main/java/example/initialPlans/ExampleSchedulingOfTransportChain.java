@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.shipment.*;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -24,10 +25,6 @@ import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
 import lsp.resources.Resource;
-import lsp.shipment.AbstractShipmentPlanElement;
-import lsp.shipment.AbstractShipmentPlanElementComparator;
-import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.DeterministicShipmentAssigner;
@@ -85,7 +82,7 @@ public class ExampleSchedulingOfTransportChain {
 		
 		//The adapter is now inserted into the corresponding LogisticsSolutionElement of the only LogisticsSolution of the LSP
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(elementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 
@@ -106,7 +103,7 @@ public class ExampleSchedulingOfTransportChain {
         
         //The SolutionElement for the first reloading point is created
         Id<LogisticsSolutionElement> firstReloadingElementId = Id.create("FirstReloadElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder firstReloadingElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(firstReloadingElementId);
+		LSPUtils.LogisticsSolutionElementBuilder firstReloadingElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(firstReloadingElementId );
 		firstReloadingElementBuilder.setResource(firstReloadingPointAdapter);
 		LogisticsSolutionElement firstReloadElement = firstReloadingElementBuilder.build();
 		
@@ -150,7 +147,7 @@ public class ExampleSchedulingOfTransportChain {
 
         //The LogisticsSolutionElement for the main run Resource is created
         Id<LogisticsSolutionElement> mainRunElementId = Id.create("MainRunElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder mainRunBuilder = LogisticsSolutionElementImpl.Builder.newInstance(mainRunElementId);
+		LSPUtils.LogisticsSolutionElementBuilder mainRunBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(mainRunElementId );
 		mainRunBuilder.setResource(mainRunAdapter);
 		LogisticsSolutionElement mainRunElement = mainRunBuilder.build();
 		
@@ -171,7 +168,7 @@ public class ExampleSchedulingOfTransportChain {
         
         //The adapter is now inserted into the corresponding LogisticsSolutionElement of the only LogisticsSolution of the LSP
         Id<LogisticsSolutionElement> secondReloadingElementId = Id.create("SecondReloadElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder secondReloadingElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(secondReloadingElementId);
+		LSPUtils.LogisticsSolutionElementBuilder secondReloadingElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(secondReloadingElementId );
 		secondReloadingElementBuilder.setResource(secondReloadingPointAdapter);
 		LogisticsSolutionElement secondReloadElement = secondReloadingElementBuilder.build();
 		
@@ -213,7 +210,7 @@ public class ExampleSchedulingOfTransportChain {
 		
 		//The adapter is now inserted into the corresponding LogisticsSolutionElement of the only LogisticsSolution of the LSP
 		Id<LogisticsSolutionElement> distributionElementId = Id.create("DistributionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder distributionBuilder = LogisticsSolutionElementImpl.Builder.newInstance(distributionElementId);
+		LSPUtils.LogisticsSolutionElementBuilder distributionBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(distributionElementId );
 		distributionBuilder.setResource(distributionAdapter);
 		LogisticsSolutionElement distributionElement =    distributionBuilder.build();
 		
@@ -230,7 +227,7 @@ public class ExampleSchedulingOfTransportChain {
 		
 		//The SolutionElements are now inserted into the only LogisticsSolution of the LSP
 		Id<LogisticsSolution> solutionId = Id.create("SolutionId", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder completeSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(solutionId);
+		LSPUtils.LogisticsSolutionBuilder completeSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(solutionId );
 		completeSolutionBuilder.addSolutionElement(collectionElement);
 		completeSolutionBuilder.addSolutionElement(firstReloadElement);
 		completeSolutionBuilder.addSolutionElement(mainRunElement);
@@ -270,7 +267,7 @@ public class ExampleSchedulingOfTransportChain {
 		Random rand = new Random(1);
 		 for(int i = 1; i < 6; i++) {
 	        	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-	        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+	        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
 	        	int capacityDemand = rand.nextInt(10);
 	        	builder.setCapacityDemand(capacityDemand);
 	        	

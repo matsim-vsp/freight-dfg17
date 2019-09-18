@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import lsp.*;
+import lsp.shipment.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -41,10 +42,6 @@ import lsp.usecase.ReloadingPointEventHandler;
 import lsp.usecase.ReloadingPointScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
 import lsp.resources.Resource;
-import lsp.shipment.AbstractShipmentPlanElement;
-import lsp.shipment.AbstractShipmentPlanElementComparator;
-import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
 
 public class MultipleShipmentsFirstReloadLSPSchedulingTest {
 	private Network network;
@@ -100,7 +97,7 @@ public class MultipleShipmentsFirstReloadLSPSchedulingTest {
 		collectionAdapter = collectionAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> collectionElementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionBuilder = LogisticsSolutionElementImpl.Builder.newInstance(collectionElementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId );
 		collectionBuilder.setResource(collectionAdapter);
 		collectionElement = collectionBuilder.build();
 		
@@ -117,7 +114,7 @@ public class MultipleShipmentsFirstReloadLSPSchedulingTest {
         firstReloadingPointAdapter = firstReloadingPointBuilder.build();
         
         Id<LogisticsSolutionElement> firstReloadingElementId = Id.create("FirstReloadElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder firstReloadingElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(firstReloadingElementId);
+		LSPUtils.LogisticsSolutionElementBuilder firstReloadingElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(firstReloadingElementId );
 		firstReloadingElementBuilder.setResource(firstReloadingPointAdapter);
 		firstReloadElement = firstReloadingElementBuilder.build();
 		
@@ -126,7 +123,7 @@ public class MultipleShipmentsFirstReloadLSPSchedulingTest {
 		
 		
 		Id<LogisticsSolution> solutionId = Id.create("SolutionId", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder completeSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(solutionId);
+		LSPUtils.LogisticsSolutionBuilder completeSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(solutionId );
 		completeSolutionBuilder.addSolutionElement(collectionElement);
 		completeSolutionBuilder.addSolutionElement(firstReloadElement);
 		completeSolution = completeSolutionBuilder.build();
@@ -154,7 +151,7 @@ public class MultipleShipmentsFirstReloadLSPSchedulingTest {
 		
 		 for(int i = 1; i < 100; i++) {
 	        	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-	        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+	        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
 	        	//Random random = new Random(1);
 	        	int capacityDemand = new Random().nextInt(4);
 	        	builder.setCapacityDemand(capacityDemand);

@@ -11,11 +11,9 @@ import demand.demandObject.DemandObject;
 import demand.offer.Offer;
 import demand.offer.OfferFactory;
 import lsp.functions.Info;
-import lsp.LogisticsSolutionImpl;
 import lsp.LSP;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionImpl.Builder;
 import lsp.shipment.LSPShipment;
 import lsp.tracking.SimulationTracker;
 

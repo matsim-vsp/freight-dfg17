@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.shipment.ShipmentUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -33,7 +34,6 @@ import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModuleImpl;
 import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.DeterministicShipmentAssigner;
@@ -87,13 +87,13 @@ public class ExampleLSPScoring {
 		
 		//The adapter is now inserted into the only LogisticsSolutionElement of the only LogisticsSolution of the LSP
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(elementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 		
 		//The LogisticsSolutionElement is now inserted into the only LogisticsSolution of the LSP
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder collectionSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(collectionSolutionId);
+		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
 		collectionSolutionBuilder.addSolutionElement(collectionElement);
 		LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
 		
@@ -147,7 +147,7 @@ public class ExampleLSPScoring {
 		//Create five LSPShipments that are located in the left half of the network.
 		for(int i = 1; i < 6; i++) {
 	        	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-	        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+	        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
 	        	Random random = new Random(1);
 	        	int capacityDemand = random.nextInt(4);
 	        	builder.setCapacityDemand(capacityDemand);

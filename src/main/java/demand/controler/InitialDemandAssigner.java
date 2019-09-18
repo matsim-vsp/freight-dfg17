@@ -2,28 +2,19 @@ package demand.controler;
 
 import java.util.Collection;
 
+import lsp.shipment.ShipmentUtils;
 import org.matsim.api.core.v01.Id;
-import org.matsim.contrib.freight.carrier.ScheduledTour;
-import org.matsim.contrib.freight.carrier.Tour.Leg;
-import org.matsim.contrib.freight.carrier.Tour.ServiceActivity;
-import org.matsim.contrib.freight.carrier.Tour.TourElement;
 import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LSPDecorators;
-import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjects;
 import demand.demandObject.DemandPlan;
 import demand.offer.Offer;
 import lsp.functions.Info;
-import lsp.functions.InfoFunctionValue;
-import lsp.resources.CarrierResource;
-import lsp.resources.Resource;
 import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
 
 public class InitialDemandAssigner implements StartupListener{
 
@@ -57,7 +48,7 @@ public class InitialDemandAssigner implements StartupListener{
 	
 	private void assignShipmentToLSP(DemandObject demandObject) {
 		Id<LSPShipment> id = Id.create(demandObject.getSelectedPlan().getShipment().getId(), LSPShipment.class);
-		LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+		ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
 		builder.setFromLinkId(demandObject.getFromLinkId());
 		builder.setToLinkId(demandObject.getToLinkId());
 		builder.setCapacityDemand((int)demandObject.getSelectedPlan().getShipment().getShipmentSize());

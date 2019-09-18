@@ -3,10 +3,10 @@ package testMutualreplanningWithOfferUpdate;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+import lsp.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -59,11 +59,6 @@ import demand.offer.OfferUpdaterImpl;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
 import lsp.functions.Info;
-import lsp.LSP;
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionElementImpl;
-import lsp.SolutionScheduler;
 import lsp.events.EventUtils;
 import lsp.resources.Resource;
 import lsp.usecase.CollectionCarrierAdapter;
@@ -127,7 +122,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		Resource collectionAdapter = collectionAdapterBuilder.build();
 				
 		Id<LogisticsSolutionElement> collectionElementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(collectionElementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 				

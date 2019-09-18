@@ -2,6 +2,7 @@ package testMutualReplanning;
 
 import java.util.ArrayList;
 
+import lsp.*;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -26,11 +27,6 @@ import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
-import lsp.LSP;
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionElementImpl;
-import lsp.SolutionScheduler;
 import lsp.resources.Resource;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
@@ -41,10 +37,6 @@ import lsp.usecase.MainRunCarrierScheduler;
 import lsp.usecase.ReloadingPoint;
 import lsp.usecase.ReloadingPointScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
-import requirementsCheckerTests.BlueInfo;
-import requirementsCheckerTests.NonsenseOffer;
-import requirementsCheckerTests.RedInfo;
-import requirementsCheckerTests.RequirementsTransferrer;
 
 public class InitialLSPGenerator {
 
@@ -89,7 +81,7 @@ public class InitialLSPGenerator {
 		Resource collectionAdapter = collectionAdapterBuilder.build();
 				
 		Id<LogisticsSolutionElement> collectionElementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(collectionElementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 				
@@ -106,7 +98,7 @@ public class InitialLSPGenerator {
         Resource firstReloadingPointAdapter = firstReloadingPointBuilder.build();
         
         Id<LogisticsSolutionElement> firstReloadingElementId = Id.create("FirstReloadElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder firstReloadingElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(firstReloadingElementId);
+		LSPUtils.LogisticsSolutionElementBuilder firstReloadingElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(firstReloadingElementId );
 		firstReloadingElementBuilder.setResource(firstReloadingPointAdapter);
 		LogisticsSolutionElement firstReloadElement = firstReloadingElementBuilder.build();
 		
@@ -147,7 +139,7 @@ public class InitialLSPGenerator {
         Resource mainRunAdapter = mainRunAdapterBuilder.build();
 	
         Id<LogisticsSolutionElement> mainRunElementId = Id.create("MainRunElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder mainRunBuilder = LogisticsSolutionElementImpl.Builder.newInstance(mainRunElementId);
+		LSPUtils.LogisticsSolutionElementBuilder mainRunBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(mainRunElementId );
 		mainRunBuilder.setResource(mainRunAdapter);
 		LogisticsSolutionElement mainRunElement = mainRunBuilder.build();
 		
@@ -164,7 +156,7 @@ public class InitialLSPGenerator {
         Resource secondReloadingPointAdapter = secondReloadingPointBuilder.build();
         
         Id<LogisticsSolutionElement> secondReloadingElementId = Id.create("SecondReloadElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder secondReloadingElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(secondReloadingElementId);
+		LSPUtils.LogisticsSolutionElementBuilder secondReloadingElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(secondReloadingElementId );
 		secondReloadingElementBuilder.setResource(secondReloadingPointAdapter);
 		LogisticsSolutionElement secondReloadElement = secondReloadingElementBuilder.build();
 		
@@ -201,7 +193,7 @@ public class InitialLSPGenerator {
 		Resource distributionAdapter = distributionAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> distributionElementId = Id.create("DistributionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder distributionBuilder = LogisticsSolutionElementImpl.Builder.newInstance(distributionElementId);
+		LSPUtils.LogisticsSolutionElementBuilder distributionBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(distributionElementId );
 		distributionBuilder.setResource(distributionAdapter);
 		LogisticsSolutionElement distributionElement =    distributionBuilder.build();
 		

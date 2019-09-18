@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.shipment.ShipmentUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -34,7 +35,6 @@ import lsp.resources.Resource;
 import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.scoring.LSPScoringModuleImpl;
 import lsp.shipment.LSPShipment;
-import lsp.shipment.LSPShipmentImpl;
 import lsp.usecase.CollectionCarrierAdapter;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.DeterministicShipmentAssigner;
@@ -100,7 +100,7 @@ public class CascadingInfoTest {
 		
 		
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder collectionElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(elementId);
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
 		collectionElement = collectionElementBuilder.build();
 		
@@ -109,7 +109,7 @@ public class CascadingInfoTest {
 		collectionElement.getInfos().add(elementInfo);
 		
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
-		LogisticsSolutionImpl.Builder collectionSolutionBuilder = LogisticsSolutionImpl.Builder.newInstance(collectionSolutionId);
+		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
 		collectionSolutionBuilder.addSolutionElement(collectionElement);
 		collectionSolution = collectionSolutionBuilder.build();
 		
@@ -139,7 +139,7 @@ public class CascadingInfoTest {
 	        
 	    for(int i = 1; i < 11; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-        	LSPShipmentImpl.Builder builder = LSPShipmentImpl.Builder.newInstance(id);
+        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
         	Random random = new Random(1);
         	int capacityDemand = 1 + random.nextInt(4);
         	builder.setCapacityDemand(capacityDemand);

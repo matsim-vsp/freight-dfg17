@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import lsp.*;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -31,11 +32,6 @@ import demand.demandObject.DemandObjectImpl;
 import demand.offer.Offer;
 import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
-import lsp.LSP;
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionElementImpl;
-import lsp.SolutionScheduler;
 import lsp.resources.Resource;
 import lsp.shipment.Requirement;
 import lsp.usecase.CollectionCarrierAdapter;
@@ -79,7 +75,7 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		Resource redAdapter = redAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> redElementId = Id.create("RedElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder redElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(redElementId);
+		LSPUtils.LogisticsSolutionElementBuilder redElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(redElementId );
 		redElementBuilder.setResource(redAdapter);
 		LogisticsSolutionElement redElement = redElementBuilder.build();
 		
@@ -121,7 +117,7 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		Resource blueAdapter = blueAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> blueElementId = Id.create("BlueElement", LogisticsSolutionElement.class);
-		LogisticsSolutionElementImpl.Builder blueElementBuilder = LogisticsSolutionElementImpl.Builder.newInstance(blueElementId);
+		LSPUtils.LogisticsSolutionElementBuilder blueElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(blueElementId );
 		blueElementBuilder.setResource(blueAdapter);
 		LogisticsSolutionElement blueElement = blueElementBuilder.build();
 		
