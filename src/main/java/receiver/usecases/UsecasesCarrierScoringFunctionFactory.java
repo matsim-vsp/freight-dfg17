@@ -104,7 +104,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	            if(selectedPlan == null) return 0.;
 	            for(ScheduledTour tour : selectedPlan.getScheduledTours()){
 	                if(!tour.getTour().getTourElements().isEmpty()){
-	                    score += (-1)*tour.getVehicle().getVehicleType().getVehicleCostInformation().getFix();
+				    score += (-1)* tour.getVehicle().getVehicleType().getCostInformation().getFix();
 	                }
 	            }
 	            return score;
@@ -141,12 +141,12 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	        }
 
 	        private double getTimeParameter(CarrierVehicle vehicle) {
-	            return vehicle.getVehicleType().getVehicleCostInformation().getPerTimeUnit();
+			  return vehicle.getVehicleType().getCostInformation().getPerTimeUnit();
 	        }
 
 
 	        private double getDistanceParameter(CarrierVehicle vehicle) {
-	            return vehicle.getVehicleType().getVehicleCostInformation().getPerDistanceUnit();
+			  return vehicle.getVehicleType().getCostInformation().getPerDistanceUnit();
 	        }
 
 

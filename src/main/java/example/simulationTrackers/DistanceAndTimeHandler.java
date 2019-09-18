@@ -3,7 +3,6 @@ package example.simulationTrackers;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 
 import lsp.events.FreightLinkEnterEvent;
@@ -45,9 +44,9 @@ public class DistanceAndTimeHandler implements FreightLinkEnterEventHandler, Fre
 			if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
 			   (enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 				double linkDuration = leaveEvent.getTime() - enterEvent.getTime();
-				timeCosts = timeCosts + (linkDuration * enterEvent.getCarrierVehicle().getVehicleType().getVehicleCostInformation().getPerTimeUnit());
+				timeCosts = timeCosts + (linkDuration * enterEvent.getCarrierVehicle().getVehicleType().getCostInformation().getPerTimeUnit());
 				double linkLength = network.getLinks().get(enterEvent.getLinkId()).getLength();
-				distanceCosts = distanceCosts + (linkLength * enterEvent.getCarrierVehicle().getVehicleType().getVehicleCostInformation().getPerDistanceUnit());
+				distanceCosts = distanceCosts + (linkLength * enterEvent.getCarrierVehicle().getVehicleType().getCostInformation().getPerDistanceUnit());
 				events.remove(enterEvent);
 				break;
 			}		
@@ -61,9 +60,9 @@ public class DistanceAndTimeHandler implements FreightLinkEnterEventHandler, Fre
 			if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) &&
 			   (enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 				double linkDuration = leaveEvent.getTime() - enterEvent.getTime();
-				timeCosts = timeCosts + (linkDuration * enterEvent.getCarrierVehicle().getVehicleType().getVehicleCostInformation().getPerTimeUnit());
+				timeCosts = timeCosts + (linkDuration * enterEvent.getCarrierVehicle().getVehicleType().getCostInformation().getPerTimeUnit());
 				double linkLength = network.getLinks().get(enterEvent.getLinkId()).getLength();
-				distanceCosts = distanceCosts + (linkLength * enterEvent.getCarrierVehicle().getVehicleType().getVehicleCostInformation().getPerDistanceUnit());
+				distanceCosts = distanceCosts + (linkLength * enterEvent.getCarrierVehicle().getVehicleType().getCostInformation().getPerDistanceUnit());
 				events.remove(enterEvent);
 				break;
 			}

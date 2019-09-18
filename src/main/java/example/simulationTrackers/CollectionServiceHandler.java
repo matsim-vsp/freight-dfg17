@@ -57,7 +57,7 @@ public class CollectionServiceHandler implements ServiceStartEventHandler, Servi
 		for(ServiceTuple tuple : tuples) {
 			if(tuple.getService() == event.getService()) {
 				double serviceDuration = event.getTime() - tuple.getStartTime();
-				loadingCosts = serviceDuration * event.getVehicle().getVehicleType().getVehicleCostInformation().getPerTimeUnit();
+				loadingCosts = serviceDuration * event.getVehicle().getVehicleType().getCostInformation().getPerTimeUnit();
 				totalLoadingCosts = totalLoadingCosts + loadingCosts;
 				tuples.remove(tuple);
 				break;
