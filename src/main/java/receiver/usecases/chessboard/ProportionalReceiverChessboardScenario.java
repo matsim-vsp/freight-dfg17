@@ -133,7 +133,7 @@ class ProportionalReceiverChessboardScenario {
 
 		/* Heavy vehicle. */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
-		CarrierVehicleType typeHeavy = typeBuilderHeavy
+		org.matsim.vehicles.VehicleType typeHeavy = typeBuilderHeavy
 				.setCapacity(14000)
 				.setFixCost(2604)
 				.setCostPerDistanceUnit(7.34E-3)
@@ -149,7 +149,7 @@ class ProportionalReceiverChessboardScenario {
 
 		/* Light vehicle. */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderLight = CarrierVehicleType.Builder.newInstance(Id.create("light", VehicleType.class));
-		CarrierVehicleType typeLight = typeBuilderLight
+		org.matsim.vehicles.VehicleType typeLight = typeBuilderLight
 				.setCapacity(3000)
 				.setFixCost(1168)
 				.setCostPerDistanceUnit(4.22E-3)

@@ -503,7 +503,7 @@ public class CapeTownScenarioBuilder {
 
 		/* Heavy vehicle (28 tonnes). */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderHeavy = CarrierVehicleType.Builder.newInstance(Id.create("heavy", VehicleType.class));
-		CarrierVehicleType typeHeavy = typeBuilderHeavy
+		org.matsim.vehicles.VehicleType typeHeavy = typeBuilderHeavy
 				.setCapacity(26000)
 				.setFixCost(3500)
 				.setCostPerDistanceUnit(8.99E-3)
@@ -519,7 +519,7 @@ public class CapeTownScenarioBuilder {
 
 		/* Medium vehicle (14 tonnes). */		
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderMedium = CarrierVehicleType.Builder.newInstance(Id.create("medium", VehicleType.class));
-		CarrierVehicleType typeMedium = typeBuilderMedium
+		org.matsim.vehicles.VehicleType typeMedium = typeBuilderMedium
 				.setCapacity(14000)
 				.setFixCost(2893)
 				.setCostPerDistanceUnit(8.32E-3)
@@ -536,7 +536,7 @@ public class CapeTownScenarioBuilder {
 
 		/* Light vehicle (8 tonnes). */
 		org.matsim.contrib.freight.carrier.CarrierVehicleType.Builder typeBuilderLight = CarrierVehicleType.Builder.newInstance(Id.create("light", VehicleType.class));
-		CarrierVehicleType typeLight = typeBuilderLight
+		org.matsim.vehicles.VehicleType typeLight = typeBuilderLight
 				.setCapacity(8000)
 				.setFixCost(1887)
 				.setCostPerDistanceUnit(6.21E-3)

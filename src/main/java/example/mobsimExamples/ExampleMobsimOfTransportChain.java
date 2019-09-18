@@ -67,7 +67,7 @@ public static LSP createInitialLSP(Network network) {
 		vehicleTypeBuilder.setCostPerTimeUnit(0.38);
 		vehicleTypeBuilder.setFixCost(49);
 		vehicleTypeBuilder.setMaxVelocity(50/3.6);
-		CarrierVehicleType collectionType = vehicleTypeBuilder.build();
+		org.matsim.vehicles.VehicleType collectionType = vehicleTypeBuilder.build();
 		
 		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
 		Id<Vehicle> vollectionVehicleId = Id.createVehicleId("CollectionVehicle");
@@ -131,7 +131,7 @@ public static LSP createInitialLSP(Network network) {
 		mainRunVehicleTypeBuilder.setCostPerTimeUnit(0.38);
 		mainRunVehicleTypeBuilder.setFixCost(120);
 		mainRunVehicleTypeBuilder.setMaxVelocity(50/3.6);
-		CarrierVehicleType mainRunType = mainRunVehicleTypeBuilder.build();
+		org.matsim.vehicles.VehicleType mainRunType = mainRunVehicleTypeBuilder.build();
 				
 		
 		Id<Link> fromLinkId = Id.createLinkId("(4 2) (4 3)");
@@ -196,7 +196,7 @@ public static LSP createInitialLSP(Network network) {
 		dsitributionVehicleTypeBuilder.setCostPerTimeUnit(0.38);
 		dsitributionVehicleTypeBuilder.setFixCost(49);
 		dsitributionVehicleTypeBuilder.setMaxVelocity(50/3.6);
-		CarrierVehicleType distributionType = dsitributionVehicleTypeBuilder.build();
+		org.matsim.vehicles.VehicleType distributionType = dsitributionVehicleTypeBuilder.build();
 		
 		Id<Link> distributionLinkId = Id.createLinkId("(4 2) (4 3)");
 		Id<Vehicle> distributionVehicleId = Id.createVehicleId("DistributionVehicle");

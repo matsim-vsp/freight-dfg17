@@ -66,7 +66,7 @@ public class InitialLSPGenerator {
 		vehicleTypeBuilder.setCostPerTimeUnit(0.38);
 		vehicleTypeBuilder.setFixCost(49);
 		vehicleTypeBuilder.setMaxVelocity(50/3.6);
-		CarrierVehicleType collectionType = vehicleTypeBuilder.build();
+		org.matsim.vehicles.VehicleType collectionType = vehicleTypeBuilder.build();
 				
 		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
 		Id<Vehicle> collectionVehicleId = Id.createVehicleId("CollectionVehicle");
@@ -118,7 +118,7 @@ public class InitialLSPGenerator {
 		mainRunVehicleTypeBuilder.setCostPerTimeUnit(0.38);
 		mainRunVehicleTypeBuilder.setFixCost(120);
 		mainRunVehicleTypeBuilder.setMaxVelocity(50/3.6);
-		CarrierVehicleType mainRunType = mainRunVehicleTypeBuilder.build();
+		org.matsim.vehicles.VehicleType mainRunType = mainRunVehicleTypeBuilder.build();
 				
 		
 		Id<Link> fromLinkId = Id.createLinkId("(4 2) (4 3)");
@@ -177,7 +177,7 @@ public class InitialLSPGenerator {
 		dsitributionVehicleTypeBuilder.setCostPerTimeUnit(0.38);
 		dsitributionVehicleTypeBuilder.setFixCost(49);
 		dsitributionVehicleTypeBuilder.setMaxVelocity(50/3.6);
-		CarrierVehicleType distributionType = dsitributionVehicleTypeBuilder.build();
+		org.matsim.vehicles.VehicleType distributionType = dsitributionVehicleTypeBuilder.build();
 		
 		Id<Link> distributionLinkId = Id.createLinkId("(4 2) (4 3)");
 		Id<Vehicle> distributionVehicleId = Id.createVehicleId("CollectionVehicle");
