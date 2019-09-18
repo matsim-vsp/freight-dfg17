@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import lsp.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -39,16 +40,6 @@ import lsp.usecase.ReloadingPoint;
 import lsp.usecase.ReloadingPointEventHandler;
 import lsp.usecase.ReloadingPointScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
-import lsp.usecase.ReloadingPointEventHandler.ReloadingPointEventHandlerPair;
-import lsp.LSP;
-import lsp.LSPImpl;
-import lsp.LSPPlanImpl;
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionElementImpl;
-import lsp.LogisticsSolutionImpl;
-import lsp.ShipmentAssigner;
-import lsp.SolutionScheduler;
 import lsp.resources.Resource;
 import lsp.shipment.AbstractShipmentPlanElement;
 import lsp.shipment.AbstractShipmentPlanElementComparator;
@@ -59,7 +50,7 @@ public class FirstReloadLSPSchedulingTest {
 	private Network network;
 	private LogisticsSolution completeSolution;
 	private ShipmentAssigner assigner;
-	private LSPPlanImpl completePlan;
+	private LSPPlan completePlan;
 	private SolutionScheduler simpleScheduler;
 	private LSP lsp;	
 	private Resource firstReloadingPointAdapter;
@@ -141,11 +132,11 @@ public class FirstReloadLSPSchedulingTest {
 		completeSolution = completeSolutionBuilder.build();
 		
 		assigner = new DeterministicShipmentAssigner();
-		completePlan = new LSPPlanImpl();
+		completePlan = LSPUtils.createLSPPlan();
 		completePlan.setAssigner(assigner);
 		completePlan.addSolution(completeSolution);
 		
-		LSPImpl.Builder completeLSPBuilder = LSPImpl.Builder.getInstance();
+		LSPUtils.LSPBuilder completeLSPBuilder = LSPUtils.LSPBuilder.getInstance();
 		completeLSPBuilder.setInitialPlan(completePlan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		completeLSPBuilder.setId(collectionLSPId);

@@ -117,11 +117,11 @@ public class CollectionTrackerTest {
 		collectionSolution.addSimulationTracker(tracker);
 
 		ShipmentAssigner assigner = new DeterministicShipmentAssigner();
-		LSPPlanImpl collectionPlan = new LSPPlanImpl();
+		LSPPlan collectionPlan = LSPUtils.createLSPPlan();
 		collectionPlan.setAssigner(assigner);
 		collectionPlan.addSolution(collectionSolution);
 
-		LSPImpl.Builder collectionLSPBuilder = LSPImpl.Builder.getInstance();
+		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance();
 		collectionLSPBuilder.setInitialPlan(collectionPlan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		collectionLSPBuilder.setId(collectionLSPId);

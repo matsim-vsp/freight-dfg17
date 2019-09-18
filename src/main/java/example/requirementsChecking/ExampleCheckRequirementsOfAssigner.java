@@ -1,15 +1,6 @@
 package example.requirementsChecking;
 
-import lsp.LSP;
-import lsp.LSPImpl;
-import lsp.LSPPlan;
-import lsp.LSPPlanImpl;
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionElementImpl;
-import lsp.LogisticsSolutionImpl;
-import lsp.ShipmentAssigner;
-import lsp.SolutionScheduler;
+import lsp.*;
 import lsp.resources.Resource;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.LSPShipmentImpl;
@@ -125,13 +116,13 @@ public class ExampleCheckRequirementsOfAssigner {
 				
 		//Create the initial plan, add assigner that checks requirements of the shipments when assigning and add both solutions (red and blue) to the 
 		//plan.
-		LSPPlan plan = new LSPPlanImpl();
+		LSPPlan plan = LSPUtils.createLSPPlan();
 		ShipmentAssigner assigner = new example.requirementsChecking.RequirementsAssigner();
 		plan.setAssigner(assigner);
 		plan.addSolution(redSolution);
 		plan.addSolution(blueSolution);
 		
-		LSPImpl.Builder lspBuilder = LSPImpl.Builder.getInstance();
+		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance();
 		lspBuilder.setInitialPlan(plan);
 		Id<LSP> lspId = Id.create("CollectionLSP", LSP.class);
 		lspBuilder.setId(lspId);

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+import lsp.*;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -26,17 +27,6 @@ import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
 
-import lsp.LSP;
-import lsp.LSPImpl;
-import lsp.LSPPlan;
-import lsp.LSPPlanImpl;
-import lsp.LSPs;
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.LogisticsSolutionElementImpl;
-import lsp.LogisticsSolutionImpl;
-import lsp.ShipmentAssigner;
-import lsp.SolutionScheduler;
 import lsp.controler.LSPModule;
 import lsp.events.EventUtils;
 import lsp.replanning.LSPReplannerImpl;
@@ -102,12 +92,12 @@ public class ExampleLSPReplanning {
 				LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
 				
 				//The initial plan of the lsp is generated and the assigner and the solution from above are added
-				LSPPlanImpl collectionPlan = new LSPPlanImpl();
+				LSPPlan collectionPlan = LSPUtils.createLSPPlan();
 				ShipmentAssigner assigner = new DeterministicShipmentAssigner();
 				collectionPlan.setAssigner(assigner);
 				collectionPlan.addSolution(collectionSolution);
 				
-				LSPImpl.Builder collectionLSPBuilder = LSPImpl.Builder.getInstance();
+				LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance();
 				collectionLSPBuilder.setInitialPlan(collectionPlan);
 				Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 				collectionLSPBuilder.setId(collectionLSPId);
