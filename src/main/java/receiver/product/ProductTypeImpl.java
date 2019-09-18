@@ -78,7 +78,7 @@ class ProductTypeImpl implements ProductType{
 		this.reqCapacity = reqCapacity;
 	}
 	
-	@Override 
+
 	public String getDescription(){
 		return descr;
 	}

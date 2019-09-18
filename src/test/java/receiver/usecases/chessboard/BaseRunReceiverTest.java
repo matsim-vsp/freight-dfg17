@@ -25,10 +25,10 @@ public class BaseRunReceiverTest{
 		ReceiverUtils.setReplanInterval( 1, sc );
 		List<AbstractModule> abstractModules = new ArrayList<>() ;
 		abstractModules.add( new AbstractModule(){
-			@Override public void install(){
+			public void install(){
 				this.addControlerListenerBinding().toInstance( new IterationEndsListener(){
 					@Inject Scenario scenario ;
-					@Override public void notifyIterationEnds( IterationEndsEvent event ){
+					public void notifyIterationEnds( IterationEndsEvent event ){
 						Receivers receivers = ReceiverUtils.getReceivers( scenario );
 						for( Receiver receiver : receivers.getReceivers().values() ){
 							for( ReceiverPlan plan : receiver.getPlans() ){
