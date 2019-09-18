@@ -80,7 +80,7 @@ class MarginalScenarioBuilder {
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */		
-		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
+		URL algoConfigFileName = IOUtils.extendUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
 		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		

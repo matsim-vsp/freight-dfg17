@@ -56,7 +56,7 @@ public class VehicleTypeListener implements StartupListener, IterationEndsListen
 
 		
 		for(Carrier carrier : carriers.getCarriers().values()){
-			for(CarrierVehicleType type : carrier.getCarrierCapabilities().getVehicleTypes()){
+			for(VehicleType type : carrier.getCarrierCapabilities().getVehicleTypes()){
 				Id<VehicleType> typeId = type.getId();
 				if(!typeList.contains(typeId)){
 					typeList.add(typeId);				

@@ -106,7 +106,7 @@ public class ReceiverResponseCarrierReplanning implements IterationStartsListene
             VehicleRoutingProblem vrp = vrpBuilder.setRoutingCost(netBasedCosts).build();
 
             //read and create a pre-configured algorithms to solve the vrp
-            URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
+            URL algoConfigFileName = IOUtils.extendUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
             VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algoConfigFileName);
 
             //solve the problem

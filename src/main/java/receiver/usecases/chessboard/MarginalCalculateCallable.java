@@ -21,21 +21,17 @@
  */
 package receiver.usecases.chessboard;
 
+import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Id;
+import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.CarrierPlanXmlReader;
+import org.matsim.contrib.freight.carrier.Carriers;
+import receiver.Receiver;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierPlanXmlReaderV2;
-import org.matsim.contrib.freight.carrier.Carriers;
-
-import receiver.Receiver;
 
 /**
  * Executes a MATSim run for a given (freight) scenario, where the scenario
@@ -132,7 +128,7 @@ class MarginalCalculateCallable implements Callable<Double> {
 		
 		/* Calculate the marginal contribution. */
 		Carriers outputCarriers = new Carriers();
-		new CarrierPlanXmlReaderV2(outputCarriers).readFile(newfoldername + "output/output_carrierPlans.xml.gz");
+		new CarrierPlanXmlReader(outputCarriers).readFile(newfoldername + "output/output_carrierPlans.xml.gz" );
 
 		double coalitionCost = outputCarriers.getCarriers().get(Id.create("Carrier1", Carrier.class)).getSelectedPlan().getScore();
 		

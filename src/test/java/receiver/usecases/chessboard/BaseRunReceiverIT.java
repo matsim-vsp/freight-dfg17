@@ -67,7 +67,8 @@ public class BaseRunReceiverIT {
 
     @Test
     public void testZwo() {
-        int runId = 1000;
+        int runId = 10; // this should rather be something like 1000, but since it is not asserting anything at the end, there is no point in running it that
+	    // long.  kai, sep'19
         BaseRunReceiver runReceiver = new BaseRunReceiver();
         // ---
         Scenario sc = runReceiver.prepareScenario(runId, 3);
