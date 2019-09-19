@@ -1,0 +1,17 @@
+The repo cannot be made public because of DLR internal problems.  
+
+Note that two areas are affected:
+* code
+* data
+
+---
+
+We could move the repo (back) to tu-berlin gitlab.  We would lose git lfs.  Since there are large files in the repo, this is a problem.
+
+---
+
+We also cannot move these files to https in shared-svn, since the files are not public.  See above.
+
+===
+
+We might be able to move these files to a protected area in shared-svn; this would presumably be shared-svn/projects/freight.  We could then try to svn checkout these files for regression testing within tu-berlin gitlab.
