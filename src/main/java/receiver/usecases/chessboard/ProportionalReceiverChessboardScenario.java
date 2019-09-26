@@ -164,9 +164,9 @@ class ProportionalReceiverChessboardScenario {
 				.build();
 
 		/* Assign vehicles to carrier. */
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(heavy.getId(), heavy);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(light.getId(), light);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 
@@ -293,7 +293,7 @@ class ProportionalReceiverChessboardScenario {
 		 * FIXME We want the carrier's location to rather be an attribute of the
 		 * Carrier, but currently (Feb 19, JWJ) Carrier is not Attributable.
 		 */
-		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().iterator();
+		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().values().iterator();
 		if( !vehicles.hasNext() ) {
 			throw new RuntimeException("Must have vehicles to get origin link!");
 		}

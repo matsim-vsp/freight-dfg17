@@ -91,7 +91,7 @@ public class ReceiverResponseCarrierReplanning implements IterationStartsListene
                             // time windows.
                             .build();
                     if (newShipment.getSize() != 0) {
-                        receiverOrder.getCarrier().getShipments().add(newShipment );
+                        receiverOrder.getCarrier().getShipments().put(newShipment.getId(), newShipment );
                     }
                 }
             }

@@ -3,6 +3,7 @@ package receiver.usecases;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
@@ -25,6 +26,8 @@ import org.matsim.vehicles.Vehicle;
  * I just changed the penalty cost and time parameter, etc.
  */
 public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunctionFactory {
+
+	private static Logger log = Logger.getLogger(UsecasesCarrierScoringFunctionFactory.class);
 	
 	private Network network;
 	
@@ -151,12 +154,11 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 
 	        private CarrierVehicle getVehicle(Id<Vehicle> vehicleId) {
-	            for(CarrierVehicle cv : carrier.getCarrierCapabilities().getCarrierVehicles()){
-	                if(cv.getVehicleId().equals(vehicleId)){
-	                    return cv;
-	                }
-	            }
-	            return null;
+				if(carrier.getCarrierCapabilities().getCarrierVehicles().containsKey(vehicleId)){
+					return carrier.getCarrierCapabilities().getCarrierVehicles().get(vehicleId);
+				}
+				log.error("Vehicle with Id does not exists", new IllegalStateException("vehicle with id " + vehicleId + " is missing"));
+				return null;
 	        }
 
 	        @Override
