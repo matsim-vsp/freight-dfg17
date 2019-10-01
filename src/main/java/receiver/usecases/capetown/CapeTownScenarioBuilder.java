@@ -551,11 +551,11 @@ public class CapeTownScenarioBuilder {
 				.build();
 
 		/* Assign vehicles to carrier. */
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(heavy.getId(), heavy);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(medium);
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(medium.getId(), medium);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeMedium);		
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);	
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(light.getId(), light);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 

@@ -157,7 +157,7 @@ public class BaseReceiverChessboardScenario{
 		 * FIXME We want the carrier's location to rather be an attribute of the
 		 * Carrier, but currently (Feb 19, JWJ) Carrier is not Attributable.
 		 */
-		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().iterator();
+		Iterator<CarrierVehicle> vehicles = carrierOne.getCarrierCapabilities().getCarrierVehicles().values().iterator();
 		if( !vehicles.hasNext() ) {
 			throw new RuntimeException("Must have vehicles to get origin link!");
 		}
@@ -241,7 +241,7 @@ public class BaseReceiverChessboardScenario{
 					setServiceStartTimeWindow(receiverPlan.getTimeWindows().get(0)).
 					setServiceDuration(order.getServiceDuration()).
 					build();
-			carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().add(newService);
+			carriers.getCarriers().get(receiverOrder.getCarrierId()).getServices().put(newService.getId(), newService);
 		}
 	}
 
@@ -262,7 +262,7 @@ public class BaseReceiverChessboardScenario{
 			CarrierShipment shipment = shpBuilder.setDeliveryServiceTime(order.getServiceDuration())
 					.setDeliveryTimeWindow(receiverPlan.getTimeWindows().get(0))
 					.build();
-			carriers.getCarriers().get(receiverOrder.getCarrierId()).getShipments().add(shipment);
+			carriers.getCarriers().get(receiverOrder.getCarrierId()).getShipments().put(shipment.getId(), shipment);
 		}
 	}
 
@@ -345,9 +345,9 @@ public class BaseReceiverChessboardScenario{
 				.build();
 
 		/* Assign vehicles to carrier. */
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(heavy);
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(heavy.getId(), heavy);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeHeavy);
-		carrier.getCarrierCapabilities().getCarrierVehicles().add(light);
+		carrier.getCarrierCapabilities().getCarrierVehicles().put(light.getId(), light);
 		carrier.getCarrierCapabilities().getVehicleTypes().add(typeLight);
 		LOG.info("Added different vehicle types to the carrier.");
 
