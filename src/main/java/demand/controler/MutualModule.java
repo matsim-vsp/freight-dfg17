@@ -8,7 +8,7 @@ import demand.scoring.MutualScoringModule;
 import lsp.events.EventCreator;
 import lsp.mobsim.CarrierResourceTracker;
 import lsp.mobsim.FreightQSimFactory;
-import org.matsim.contrib.freight.CarrierConfigGroup;
+import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 
 import java.util.Collection;
@@ -19,7 +19,7 @@ public class MutualModule extends AbstractModule{
 	private DemandObjects demandObjects;
 	private MutualScoringModule mutualScoringModule;
 	private MutualReplanningModule replanningModule;	
-	private CarrierConfigGroup carrierConfig = new CarrierConfigGroup();
+	private FreightConfigGroup carrierConfig = new FreightConfigGroup();
 	private Collection<EventCreator> creators;
 	
 	public static class Builder{
@@ -75,7 +75,7 @@ public class MutualModule extends AbstractModule{
 	
 	@Override
 	public void install() {
-			bind(CarrierConfigGroup.class).toInstance(carrierConfig);
+			bind(FreightConfigGroup.class).toInstance(carrierConfig);
 			bind(LSPDecorators.class).toInstance(lsps);
 			bind(DemandObjects.class).toInstance(demandObjects);
 			
@@ -101,8 +101,4 @@ public class MutualModule extends AbstractModule{
         return mutualControlerListener.getCarrierResourceTracker();
     }
 
-    public void setPhysicallyEnforceTimeWindowBeginnings(boolean physicallyEnforceTimeWindowBeginnings) {
-        this.carrierConfig.setPhysicallyEnforceTimeWindowBeginnings(physicallyEnforceTimeWindowBeginnings);
-    }
-	
 }
