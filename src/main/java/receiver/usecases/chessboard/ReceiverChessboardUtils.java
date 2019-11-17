@@ -27,34 +27,30 @@ import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.google.inject.Inject;
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
-import org.jfree.util.Log;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.controler.CarrierModule;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
-import org.matsim.contrib.freight.replanning.CarrierPlanStrategyManagerFactory;
-import org.matsim.contrib.freight.scoring.CarrierScoringFunctionFactory;
+import org.matsim.contrib.freight.controler.CarrierPlanStrategyManagerFactory;
+import org.matsim.contrib.freight.controler.CarrierScoringFunctionFactory;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 
 import receiver.*;
-import receiver.replanning.*;
 import receiver.usecases.UsecasesCarrierScoringFunctionFactory;
 import receiver.usecases.UsecasesCarrierStrategyManagerFactory;
-import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
 
 /**
  *
@@ -76,8 +72,15 @@ public class ReceiverChessboardUtils {
 		final CarrierPlanStrategyManagerFactory cStratManFac = new UsecasesCarrierStrategyManagerFactory( CarrierVehicleTypes.getVehicleTypes( carriers ),
 			  controler.getScenario().getNetwork(), controler);
 
+		FreightConfigGroup freightConfig = ConfigUtils.addOrGetModule( controler.getScenario().getConfig(), FreightConfigGroup.class );
+		if ( true ){
+			freightConfig.setTimeWindowHandling( FreightConfigGroup.TimeWindowHandling.enforceBeginnings );
+		} else{
+			freightConfig.setTimeWindowHandling( FreightConfigGroup.TimeWindowHandling.ignore );
+		}
+
 		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
-		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
+//		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
 		controler.addOverridingModule(carrierControler);
 	}
 
