@@ -35,13 +35,13 @@ class ExperimentParameters {
 	
 	public static int STAT_INTERVAL = 1;
 	
-	public static int REPLAN_INTERVAL = 1;
+	public static int REPLAN_INTERVAL = 10;
 	
-	public static int NUMBER_OF_RECEIVERS = 1;
+	public static int NUMBER_OF_RECEIVERS = 5;
 	
 	public static int TIME_WINDOW_DURATION = 12;
 	
-	public static String SERVICE_TIME = "02:30:00";
+	public static String SERVICE_TIME = "02:00:00";
 	
 	public static int NUM_DELIVERIES = 5;
 	

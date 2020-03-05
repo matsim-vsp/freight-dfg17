@@ -60,7 +60,7 @@ import receiver.ReceiverModule;
 
 	public void run(int run, int numberOfThreads) {
 		LOG.info("Starting run " + run);
-		String outputFolder = String.format("./output/marg/serdur/run_%03d/", run);
+		String outputFolder = String.format("./output/marg/serdur2/run_%03d/", run);
 		new File(outputFolder).mkdirs();
 		
 		/* Before the main run starts, we need to calculate the marginal 

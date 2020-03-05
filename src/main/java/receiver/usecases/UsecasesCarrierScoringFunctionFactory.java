@@ -19,6 +19,7 @@ import org.matsim.contrib.freight.controler.FreightActivity;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.scoring.ScoringFunction;
 import org.matsim.core.scoring.SumScoringFunction;
+import org.matsim.core.utils.misc.OptionalTime;
 import org.matsim.vehicles.Vehicle;
 
 /*
@@ -67,14 +68,14 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	        @Override
 	        public void handleActivity(Activity act) {
 	            if(act instanceof FreightActivity) {
-	                double actStartTime = act.getStartTime();
+	                double actStartTime = act.getStartTime().seconds();
 	                TimeWindow tw = ((FreightActivity) act).getTimeWindow();
 	                if(actStartTime > tw.getEnd()){
 	                    double penalty_score = (-1)*(actStartTime - tw.getEnd())*missedTimeWindowPenalty;
 	                    assert penalty_score <= 0.0 : "penalty score must be negative";
 	                    score += penalty_score;
-	                }	                
-	                double actTimeCosts = (act.getEndTime()-actStartTime)*timeParameter;
+	                }	     
+	                double actTimeCosts = (act.getEndTime().seconds()-actStartTime)*timeParameter;
 	                assert actTimeCosts >= 0.0 : "actTimeCosts must be positive";
 	                score += actTimeCosts*(-1);
 	            }
