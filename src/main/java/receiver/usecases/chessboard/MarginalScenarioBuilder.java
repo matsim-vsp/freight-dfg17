@@ -65,8 +65,11 @@ class MarginalScenarioBuilder {
 	 */
 	public static Scenario createChessboardScenario( long seed, boolean write) {
 		Scenario sc = setupChessboardScenario(seed);
-		
-		ReceiverUtils.setReplanInterval(ExperimentParameters.REPLAN_INTERVAL, sc );
+
+        ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(ExperimentParameters.REPLAN_INTERVAL);
+
+        /* Create and add the carrier agent(s). */
+		createChessboardCarriers(sc);
 		
 		/* Create and add the carrier agent(s). */
 		createChessboardCarriers(sc);

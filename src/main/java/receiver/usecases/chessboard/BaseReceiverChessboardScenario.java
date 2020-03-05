@@ -84,9 +84,9 @@ public class BaseReceiverChessboardScenario{
 
 		createChessboardCarriersAndAddToScenario(sc);
 
-		ReceiverUtils.setReplanInterval( 1, sc );
+         ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(1);
 
-		/* Create the grand coalition receiver members and allocate orders. */
+         /* Create the grand coalition receiver members and allocate orders. */
 		createAndAddChessboardReceivers(sc, numberOfReceivers);
 
 		createReceiverOrders(sc);

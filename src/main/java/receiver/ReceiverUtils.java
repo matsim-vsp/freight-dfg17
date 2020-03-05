@@ -71,23 +71,8 @@ public class ReceiverUtils {
 	public static Coalition getCoalition( final Scenario sc ) {
 		return (Coalition) sc.getScenarioElement( COALITION_SCENARIO_ELEMENT );
 	}
-	
-	public static void setReplanInterval( final int interval, final Scenario sc ) {
-		Integer result = (Integer) sc.getScenarioElement( REPLAN_INTERVAL );
-		if ( result != null ) {
-			LOG.warn("replan interval was already set to " + result + "; now setting to " + interval ) ;
-			((MutableScenario)sc).removeScenarioElement( REPLAN_INTERVAL ) ;
-		}
-		sc.addScenarioElement( REPLAN_INTERVAL, interval );
-		// seems a bit overkill to do this as scenarioElement, but I can't think of a better solution right now.  Adding it into
-		// the config would make it very public API, which maybe we don't want at this point. kai, sep'18
-	}
-	
-	public static int getReplanInterval( final Scenario sc ) {
-		return (int) sc.getScenarioElement( REPLAN_INTERVAL );
-	}
-	
-	
+
+
 	public static void setCoalitionFromReceiverAttributes( Scenario scenario, Coalition coalition ){
 		for ( Receiver receiver : ReceiverUtils.getReceivers( scenario ).getReceivers().values()){
 			if(receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS )!=null){

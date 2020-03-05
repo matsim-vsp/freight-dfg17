@@ -8,12 +8,14 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.ShutdownEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 import receiver.Receiver;
+import receiver.ReceiverConfigGroup;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
 import receiver.product.Order;
@@ -32,7 +34,8 @@ public class BaseRunReceiverIT {
         // ---
         Scenario sc = runReceiver.prepareScenario(runId, 1);
         sc.getConfig().controler().setLastIteration(runId);
-        ReceiverUtils.setReplanInterval(1, sc);
+        ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(1);
+        ReceiverConfigGroup rcg = ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class);
 
         // ---
         List<AbstractModule> abstractModules = new ArrayList<>();
@@ -56,7 +59,6 @@ public class BaseRunReceiverIT {
                         for (Carrier carrier : ReceiverUtils.getCarriers(scenario).getCarriers().values()) {
                             Assert.assertEquals(-8692.92, carrier.getSelectedPlan().getScore(), 1.);
                         }
-
                     }
                 });
             }
@@ -73,7 +75,7 @@ public class BaseRunReceiverIT {
         // ---
         Scenario sc = runReceiver.prepareScenario(runId, 3);
         sc.getConfig().controler().setLastIteration(runId);
-        ReceiverUtils.setReplanInterval(1, sc);
+        ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(1);
 
         // ---
         List<AbstractModule> abstractModules = new ArrayList<>();

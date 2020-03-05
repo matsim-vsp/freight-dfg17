@@ -67,13 +67,7 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
-import receiver.ReceiversWriter;
-import receiver.SSReorderPolicy;
-import receiver.collaboration.Coalition;
+import receiver.*;
 import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -100,10 +94,10 @@ public class CapeTownScenarioBuilder {
 		Scenario sc = setupCapeTownScenario(seed, run);
 		createCapeTownCarriersAndAddToScenario(sc);
 
-		ReceiverUtils.setReplanInterval(CapeTownExperimentParameters.REPLAN_INTERVAL, sc );
+        ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(CapeTownExperimentParameters.REPLAN_INTERVAL);
 
 
-		/* To split up our "real" facilities into a study and control group, we
+        /* To split up our "real" facilities into a study and control group, we
 		 * have to do that PRIOR to creating the receivers. */
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {
 			//			if((boolean) facility.getAttributes().getAttribute("PnP") == true){
@@ -147,10 +141,10 @@ public class CapeTownScenarioBuilder {
 		Scenario sc = setupCapeTownScenarioWithPassengers(seed, run);
 		createCapeTownCarriersAndAddToScenario(sc);
 
-		ReceiverUtils.setReplanInterval(CapeTownExperimentParameters.REPLAN_INTERVAL, sc );
+        ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(CapeTownExperimentParameters.REPLAN_INTERVAL);
 
 
-		/* To split up our "real" facilities into a study and control group, we
+        /* To split up our "real" facilities into a study and control group, we
 		 * have to do that PRIOR to creating the receivers. */
 
 		for(ActivityFacility facility : sc.getActivityFacilities().getFacilities().values()) {

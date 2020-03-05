@@ -26,6 +26,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
@@ -35,10 +36,10 @@ import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.utils.io.IOUtils;
 import receiver.Receiver;
+import receiver.ReceiverConfigGroup;
 import receiver.ReceiverModule;
 import receiver.ReceiverUtils;
 import receiver.collaboration.CollaborationUtils;
-import receiver.replanning.ReceiverReplanningType;
 
 import java.io.File;
 import java.net.URL;
@@ -58,7 +59,7 @@ import java.net.URL;
 		}
 		
 		long seed = Long.parseLong(args[0]);
-		folder = args[1];
+		String folder = args[1];
 		folder += folder.endsWith("/") ? "" : "/";
 		String idString = args[2];
 		Id<Receiver> receiverId = Id.create(idString, Receiver.class);
@@ -67,11 +68,11 @@ import java.net.URL;
 		String inputNetwork = "input/network.xml";
 		Scenario sc = MarginalScenarioBuilder.setupChessboardScenario(seed);
 		sc.getConfig().controler().setLastIteration(ExperimentParameters.REPLAN_INTERVAL);
-		
-		ReceiverUtils.setReplanInterval(ExperimentParameters.REPLAN_INTERVAL, sc );
-		
-		MarginalScenarioBuilder.createChessboardCarriers(sc);
-		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
+
+        ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(ExperimentParameters.REPLAN_INTERVAL);
+
+        MarginalScenarioBuilder.createChessboardCarriers(sc);
+		ProportionalScenarioBuilder.createAndAddChessboardReceivers(sc );
 		MarginalScenarioBuilder.createAndAddControlGroupReceivers(sc);
 		MarginalScenarioBuilder.createReceiverOrders(sc);
 		/* This is the portion that is unique HERE: remove ONE receiver. */

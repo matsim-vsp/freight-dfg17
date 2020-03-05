@@ -23,7 +23,7 @@ import receiver.replanning.ReceiverReplanningType;
 
 import java.util.Map;
 
-final class ReceiverConfigGroup extends ReflectiveConfigGroup {
+public final class ReceiverConfigGroup extends ReflectiveConfigGroup {
 
     ReceiverConfigGroup(String name) { super(name); }
 
@@ -43,6 +43,7 @@ final class ReceiverConfigGroup extends ReflectiveConfigGroup {
     private String costSharing = "proportional";
     private boolean createPNG = true;
     private ReceiverReplanningType replanningType = ReceiverReplanningType.serviceTime;
+    private int receiverReplanningInterval = 1;
 
     @Override
     public Map<String, String> getComments() {
@@ -58,12 +59,12 @@ final class ReceiverConfigGroup extends ReflectiveConfigGroup {
         return comments;
     }
 
-    @StringGetter(RECEIVER_FILE)
+//    @StringGetter(RECEIVER_FILE)
     public String getReceiversFile() {
         return receiversFile;
     }
 
-    @StringSetter(RECEIVER_FILE)
+//    @StringSetter(RECEIVER_FILE)
     public void setReceiversFile(String receiversFile) {
         this.receiversFile = receiversFile;
     }
@@ -100,5 +101,13 @@ final class ReceiverConfigGroup extends ReflectiveConfigGroup {
     @StringSetter(REPLANNING_TYPE)
     public void setReplanningType(ReceiverReplanningType replanningType) {
         this.replanningType = replanningType;
+    }
+
+    public int getReceiverReplanningInterval() {
+        return receiverReplanningInterval;
+    }
+
+    public void setReceiverReplanningInterval(int receiverReplanningInterval) {
+        this.receiverReplanningInterval = receiverReplanningInterval;
     }
 }

@@ -28,6 +28,7 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.contrib.freight.carrier.Tour;
 import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
 import org.matsim.core.controler.events.ReplanningEvent;
 import org.matsim.core.controler.events.ScoringEvent;
@@ -87,7 +88,7 @@ class ReceiverControlerListener implements ScoringListener,
 
         for (Receiver receiver : ReceiverUtils.getReceivers(sc).getReceivers().values()) {
 
-            if ((event.getIteration() - 1) % ReceiverUtils.getReplanInterval(sc) == 0) {
+            if ((event.getIteration() - 1) % ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).getReceiverReplanningInterval() == 0) {
                 // (= one iteration after replanning)
 
                 receiver.setInitialCost(receiver.getSelectedPlan().getScore());
@@ -111,7 +112,7 @@ class ReceiverControlerListener implements ScoringListener,
             //		collaborationStratMan.addStrategy(strategy, null, 0.2);
             //		collaborationStratMan.addChangeRequest((int) Math.round((fsc.getScenario().getConfig().controler().getLastIteration())*0.8), strategy, null, 0.0);
 
-            if (event.getIteration() % ReceiverUtils.getReplanInterval(sc) != 0) {
+            if (event.getIteration() % ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).getReceiverReplanningInterval() != 0) {
                 // (= not in replanning iteration)
                 return;
             }
@@ -136,7 +137,7 @@ class ReceiverControlerListener implements ScoringListener,
         }
 
 //		if ((event.getIteration()+1) % ReceiverUtils.getReplanInterval( sc ) == 0) {
-        if ((event.getIteration() + 1) % ReceiverUtils.getReplanInterval(sc) == 0 && event.getIteration() > 0) {
+        if ((event.getIteration() + 1) % ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).getReceiverReplanningInterval() == 0 && event.getIteration() > 0) {
             // this is called in the iteration after the replanning iteration.
             this.tracker.scoreSelectedPlans();
         } else {

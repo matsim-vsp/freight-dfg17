@@ -31,13 +31,11 @@ import org.matsim.contrib.freight.carrier.CarrierShipment;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.utils.io.IOUtils;
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.ReceiverUtils;
-import receiver.ReceiversWriter;
+import receiver.*;
 import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ReceiverOrder;
@@ -56,7 +54,7 @@ public class ReceiverResponseCarrierReplanning implements IterationStartsListene
     @Override
     public void notifyIterationStarts(IterationStartsEvent event) {
         // replan only in replanning iteration:
-        if(event.getIteration() % ReceiverUtils.getReplanInterval( sc ) != 0) {
+        if(event.getIteration() % ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).getReceiverReplanningInterval() != 0) {
             return;
         }
 
