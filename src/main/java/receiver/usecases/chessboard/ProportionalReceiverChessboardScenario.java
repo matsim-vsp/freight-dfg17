@@ -56,12 +56,7 @@ import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
-import receiver.ReceiversWriter;
-import receiver.SSReorderPolicy;
+import receiver.*;
 import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -90,7 +85,7 @@ class ProportionalReceiverChessboardScenario {
 
 		createChessboardCarriersAndAddToScenario(sc);
 
-		ReceiverUtils.setReplanInterval( ExperimentParameters.REPLAN_INTERVAL, sc );
+		ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(ExperimentParameters.REPLAN_INTERVAL);
 
 		/* Create the grand coalition receiver members and allocate orders. */
 		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS);	
