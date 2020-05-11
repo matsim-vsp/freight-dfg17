@@ -56,12 +56,7 @@ import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
 
-import receiver.Receiver;
-import receiver.ReceiverPlan;
-import receiver.ReceiverUtils;
-import receiver.Receivers;
-import receiver.ReceiversWriter;
-import receiver.SSReorderPolicy;
+import receiver.*;
 import receiver.collaboration.CollaborationUtils;
 import receiver.product.Order;
 import receiver.product.ProductType;
@@ -90,7 +85,10 @@ class ProportionalReceiverChessboardScenario {
 
 		createChessboardCarriersAndAddToScenario(sc);
 
-		ReceiverUtils.setReplanInterval( ExperimentParameters.REPLAN_INTERVAL, sc );
+
+//		ReceiverUtils.setReplanInterval( ExperimentParameters.REPLAN_INTERVAL, sc );
+// 		This leads to a compile error since commit 3d2cab3. Replaced it by using the configGroup. Don't know if that will cause any problems later! KMT May20
+		ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(ExperimentParameters.REPLAN_INTERVAL);
 
 		/* Create the grand coalition receiver members and allocate orders. */
 		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS);	

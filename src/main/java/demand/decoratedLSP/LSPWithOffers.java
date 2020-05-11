@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.matsim.api.core.v01.Id;
 
 import demand.demandObject.DemandObject;
@@ -19,6 +20,7 @@ import lsp.resources.Resource;
 import lsp.scoring.LSPScorer;
 import lsp.shipment.LSPShipment;
 import org.matsim.core.controler.events.ReplanningEvent;
+import org.matsim.utils.objectattributes.attributable.Attributes;
 
 public class LSPWithOffers implements LSPDecorator {
 
@@ -31,7 +33,12 @@ public class LSPWithOffers implements LSPDecorator {
 	private LSPScorer scorer;
 	private LSPReplanner replanner;
 	private OfferUpdater offerUpdater;
-	
+
+	@Override
+	public Attributes getAttributes() {
+		throw new NotImplementedException();
+	}
+
 	public static class Builder{
 		private Id<LSP> id;
 		private SolutionScheduler solutionScheduler;

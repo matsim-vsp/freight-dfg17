@@ -80,7 +80,7 @@ class ProportionalScenarioBuilder {
 
 		/* Let jsprit do its magic and route the given receiver orders. */
 //		generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), "./scenarios/chessboard/vrpalgo/initialPlanAlgorithm.xml");
-		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
+		URL algoConfigFileName = IOUtils.extendUrl(sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
 		ReceiverChessboardUtils.generateCarrierPlan(ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		if(write) {
