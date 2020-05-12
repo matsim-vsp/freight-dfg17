@@ -25,7 +25,7 @@ import java.util.Map;
 
 public final class ReceiverConfigGroup extends ReflectiveConfigGroup {
 
-    ReceiverConfigGroup(String name) { super(name); }
+    public ReceiverConfigGroup() { super(NAME); }
 
     private static final Logger LOG = Logger.getLogger(ReceiverConfigGroup.class);
 

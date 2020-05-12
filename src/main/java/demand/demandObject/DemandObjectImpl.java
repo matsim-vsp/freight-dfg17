@@ -36,7 +36,8 @@ public class DemandObjectImpl implements DemandObject{
 	private OfferRequester offerRequester;
 	private DemandPlanGenerator generator;
 	private Collection<Info> infos;
-	
+	private Attributes attributes = new Attributes();
+
 	public static class Builder{
 		private DemandAgent shipper;
 		private DemandAgent recipient;
@@ -324,6 +325,6 @@ public class DemandObjectImpl implements DemandObject{
 
 	@Override
 	public Attributes getAttributes() {
-		throw new NotImplementedException();
+		return attributes;
 	}
 }
