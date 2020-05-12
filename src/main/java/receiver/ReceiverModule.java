@@ -38,10 +38,6 @@ public final class ReceiverModule extends AbstractModule {
     public void install() {
         /* ConfigGroup */
         ReceiverConfigGroup configGroup;
-        if (!this.getConfig().getModules().containsKey(ReceiverConfigGroup.NAME)) {
-            configGroup = new ReceiverConfigGroup(ReceiverConfigGroup.NAME);
-            this.getConfig().addModule(configGroup);
-        }
         configGroup = ConfigUtils.addOrGetModule(this.getConfig(), ReceiverConfigGroup.NAME, ReceiverConfigGroup.class);
 
         /* Carrier */

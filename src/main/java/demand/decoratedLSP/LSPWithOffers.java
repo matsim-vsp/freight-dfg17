@@ -33,10 +33,11 @@ public class LSPWithOffers implements LSPDecorator {
 	private LSPScorer scorer;
 	private LSPReplanner replanner;
 	private OfferUpdater offerUpdater;
+	private Attributes attributes = new Attributes();
 
 	@Override
 	public Attributes getAttributes() {
-		throw new NotImplementedException();
+		return attributes;
 	}
 
 	public static class Builder{
