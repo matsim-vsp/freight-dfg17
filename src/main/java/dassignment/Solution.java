@@ -114,6 +114,7 @@ public class Solution
 				{
 					s.rollback();
 				}
+				}
 			}
 			if (iter % MIDDLE_RESULT_OUTPUT_INTERVAL == 0)
 			{
