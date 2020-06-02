@@ -29,7 +29,7 @@ public class Solution
 	private static final int ITERATION_TIME = 1000000; //Number of iterations
 	private static final int UPDATE_CNT_PER_ITERATION = 1; //The number of S updates per iteration
 	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000; 
-	private static fianl double T0 = 27;
+	private static final double T0 = 27;
 
 	public void process() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
