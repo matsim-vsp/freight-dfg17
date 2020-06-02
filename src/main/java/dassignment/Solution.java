@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Lei Zhang.
  ******************************************************************************/
 
-package dassignment;
+package dsassignment;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -26,21 +26,22 @@ public class Solution
 	private static final int DISTANCE_INTERVAL = 2000; //Distance interval
 	private static final int DISTANCE_TYPE_CNT = 30; //Distance classification
 	private static final int INIT_TIME = 1000; //The number of initialization attempts. If the number of times is exceeded, the initialization will stop.
-	private static final int MAX_NUMBER_OF_ITERATION = 1000000; //Number of iterations
+	private static final int ITERATION_TIME = 200000; //Number of iterations
 	private static final int UPDATE_CNT_PER_ITERATION = 1; //The number of S updates per iteration
-	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000; 
+	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 1; 
+ 	private static final double T0 = 27;
 
 	public void process() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
-		String xlsFilename = "./scenarios/dassignment/in_ALL.xlsx";
+		String xlsFilename = "./input/in_all_with_labels.xlsx";
 		File xlsFile = new File(xlsFilename);
 		if (!xlsFile.exists())
 		{
-			System.out.println("Excel file does not exist: " + xlsFile.getAbsolutePath());
+			System.out.println("Excel file does not exist");
 			return;
 		}
 
-		String outputDirName = "./output/result";
+		String outputDirName = "./result";
 		File outputDir = new File(outputDirName);
 		if (!outputDir.exists())
 		{
@@ -80,14 +81,15 @@ public class Solution
 
 		Random random = new Random(4711);
 		double minRelativeEntropy = Double.MAX_VALUE;
-		for (int iter = 1; iter <= MAX_NUMBER_OF_ITERATION; ++iter)
+		double T = T0;
+		for (int iter = 1; iter <= ITERATION_TIME; ++iter)
 		{
 			HashSet<S> rollbackSet = new HashSet<>();
 			for (int i = 0; i < UPDATE_CNT_PER_ITERATION; ++i)
 			{
 				int index = random.nextInt(SList.size() - i);
 				S s = SList.get(index);
-				exchange(SList, index, SList.size() - 1 - i); //Maybe randomize also the second one (b), kai/KMT apr19
+				exchange(SList, index, SList.size() - 1 - i);
 				s.save();
 				s.updateSelect();
 				rollbackSet.add(s);
@@ -100,9 +102,18 @@ public class Solution
 			}
 			else
 			{
+   		    	double acceptProbability = Math.exp(-(relativeEntropy - minRelativeEntropy) / T);
+				T = random.nextDouble() * T;
+				if (random.nextDouble() < acceptProbability)
+				{
+					minRelativeEntropy = relativeEntropy;
+				}
+				else
+				{
 				for (S s : rollbackSet)
 				{
 					s.rollback();
+				}
 				}
 			}
 			if (iter % MIDDLE_RESULT_OUTPUT_INTERVAL == 0)
