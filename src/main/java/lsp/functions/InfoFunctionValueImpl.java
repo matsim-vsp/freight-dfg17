@@ -1,11 +1,11 @@
 package lsp.functions;
 
-public class InfoFunctionValueImpl<T> implements InfoFunctionValue<T> {
+class InfoFunctionValueImpl<T> implements InfoFunctionValue<T> {
 
 	private String name;
 	private T value;
 	
-	public InfoFunctionValueImpl (String name) {
+	InfoFunctionValueImpl( String name ) {
 		this.name = name;
 	}
 	

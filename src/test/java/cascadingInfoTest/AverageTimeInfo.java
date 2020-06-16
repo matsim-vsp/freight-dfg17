@@ -2,9 +2,7 @@ package cascadingInfoTest;
 
 import lsp.functions.Info;
 import lsp.functions.InfoFunction;
-import lsp.functions.InfoFunctionImpl;
 import lsp.functions.InfoFunctionValue;
-import lsp.functions.InfoFunctionValueImpl;
 
 public class AverageTimeInfo extends Info{
 

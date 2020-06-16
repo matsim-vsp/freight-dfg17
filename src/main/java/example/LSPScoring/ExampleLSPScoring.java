@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.functions.InfoFunctionUtils;
 import lsp.shipment.ShipmentUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -29,7 +30,6 @@ import org.matsim.vehicles.VehicleType;
 import lsp.controler.LSPModule;
 import lsp.events.EventUtils;
 import lsp.functions.InfoFunction;
-import lsp.functions.InfoFunctionImpl;
 import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModuleImpl;
@@ -120,7 +120,7 @@ public class ExampleLSPScoring {
 		TipEventHandler handler = new TipEventHandler();
 		
 		//Create Info for the SimulationTracker which the scorer needs
-		InfoFunction function = new InfoFunctionImpl();
+		InfoFunction function = InfoFunctionUtils.createDefaultInfoFunction();
 		TipInfo info = new TipInfo(function);
 		
 		//Create SimulationTracker for the information that the Scorer needs

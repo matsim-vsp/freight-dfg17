@@ -3,11 +3,11 @@ package lsp.functions;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class InfoFunctionImpl implements InfoFunction{
+class InfoFunctionImpl implements InfoFunction{
 
 	private Collection<InfoFunctionValue<?>> values;
 	
-	public InfoFunctionImpl() {
+	InfoFunctionImpl() {
 		this.values = new ArrayList<InfoFunctionValue<?>>();
 	}
 	
