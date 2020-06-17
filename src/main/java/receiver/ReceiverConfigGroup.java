@@ -27,6 +27,8 @@ public final class ReceiverConfigGroup extends ReflectiveConfigGroup {
 
     public ReceiverConfigGroup() { super(NAME); }
 
+    public ReceiverConfigGroup(){ this(NAME); }
+
     private static final Logger LOG = Logger.getLogger(ReceiverConfigGroup.class);
 
     public static final String NAME = "freightReceiver";

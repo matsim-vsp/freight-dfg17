@@ -30,6 +30,7 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -56,7 +57,7 @@ import static receiver.usecases.chessboard.BaseReceiverChessboardScenario.select
  * 
  * @author jwjoubert, wlbean
  */
-class MarginalScenarioBuilder {
+public class MarginalScenarioBuilder {
 	private final static Logger LOG = Logger.getLogger(MarginalScenarioBuilder.class);
 
 
@@ -71,9 +72,6 @@ class MarginalScenarioBuilder {
         /* Create and add the carrier agent(s). */
 		createChessboardCarriers(sc);
 		
-		/* Create and add the carrier agent(s). */
-		createChessboardCarriers(sc);
-
 		/* Create the grand coalition receiver members and allocate orders. */
 		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
 		
@@ -83,8 +81,8 @@ class MarginalScenarioBuilder {
 		createReceiverOrders(sc);
 
 		/* Let jsprit do its magic and route the given receiver orders. */		
-		URL algoConfigFileName = IOUtils.extendUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
+//		URL algoConfigFileName = IOUtils.extendUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
+//		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(), algoConfigFileName);
 		
 		
 		if(write) {
@@ -102,7 +100,7 @@ class MarginalScenarioBuilder {
 	 * FIXME Need to complete this. 
 	 * @return
 	 */
-	public static Scenario setupChessboardScenario(long seed) {
+	static Scenario setupChessboardScenario(long seed) {
 		URL context = ExamplesUtils.getTestScenarioURL( "freight-chessboard-9x9" );
 		Config config = ConfigUtils.createConfig();
 		config.controler().setFirstIteration(0);
@@ -122,7 +120,7 @@ class MarginalScenarioBuilder {
 	 * but NOT be allowed to join the grand coalition. This group represents receivers that are unwilling to 
 	 * collaborate in any circumstances.
 	 */
-	public static void createAndAddControlGroupReceivers( Scenario sc) {
+	static void createAndAddControlGroupReceivers( Scenario sc) {
 		Network network = sc.getNetwork();
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		
@@ -144,7 +142,7 @@ class MarginalScenarioBuilder {
 	 * Creates the product orders for the receiver agents in the simulation. Currently (28/08/18) all the receivers have the same orders 
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
 	 */
-	public static void createReceiverOrders( Scenario sc) {
+	static void createReceiverOrders( Scenario sc) {
 		Carriers carriers = ReceiverUtils.getCarriers( sc );
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
@@ -211,9 +209,9 @@ class MarginalScenarioBuilder {
 	 * @param sc
 	 * @return
 	 */
-	public static void createChessboardCarriers(Scenario sc) {
+	static void createChessboardCarriers(Scenario sc) {
 		Id<Carrier> carrierId = Id.create("Carrier1", Carrier.class);
-		Carrier carrier = CarrierImpl.newInstance(carrierId);
+		Carrier carrier = CarrierUtils.createCarrier(carrierId);
 		Id<Link> carrierLocation = selectRandomLink(sc.getNetwork() );
 
 		org.matsim.contrib.freight.carrier.CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
