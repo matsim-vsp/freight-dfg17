@@ -43,10 +43,17 @@ import receiver.ReceiverUtils;
 class ProportionalRunReceiver{
 	final private static Logger LOG = Logger.getLogger( ProportionalRunReceiver.class );
 	final private static long SEED_BASE = 20180816l;
+	final private static int DEFAULT_RUN_START = 0;
+	final private static int DEFAULT_RUN_END = 1;
 	private String outputfolder;
 	private Scenario sc;
 
 	public static void main(String[] args) {
+		if(args.length==0){
+			LOG.warn("No arguments found. Reverting to defaults.");
+			args = new String[]{String.valueOf(DEFAULT_RUN_START),
+					String.valueOf(DEFAULT_RUN_END)};
+		}
 		int startRun = Integer.parseInt(args[0]);
 		int endRun = Integer.parseInt(args[1]);
 		for(int i = startRun; i < endRun; i++) {
@@ -87,7 +94,7 @@ class ProportionalRunReceiver{
 	}
 
 	Scenario prepareScenario( int run, int numberOfReceivers ){
-		outputfolder = String.format("./output/prop/serdur/run_%03d/", run);
+		outputfolder = String.format("./output/prop/%s/run_%03d/", ExperimentParameters.REPLANNING_STRATEGY.toString(), run);
 		new File(outputfolder).mkdirs();
 		sc = ProportionalReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, true );
 		//		replanInt = mfs.getReplanInterval();

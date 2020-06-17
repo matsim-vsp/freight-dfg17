@@ -75,7 +75,7 @@ class MarginalScenarioBuilder {
 		createChessboardCarriers(sc);
 
 		/* Create the grand coalition receiver members and allocate orders. */
-		BaseReceiverChessboardScenario.createAndAddChessboardReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
+		BaseReceiverChessboardScenario.createAndAddChessboardExperimentalReceivers(sc, ExperimentParameters.NUMBER_OF_RECEIVERS );
 		
 		/* Create the control group (not in the grand coalition) receivers and allocate orders. */
 		createAndAddControlGroupReceivers(sc);

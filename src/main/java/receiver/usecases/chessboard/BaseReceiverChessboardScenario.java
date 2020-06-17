@@ -87,7 +87,7 @@ public class BaseReceiverChessboardScenario{
 		ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).setReceiverReplanningInterval(1);
 
          /* Create the grand coalition receiver members and allocate orders. */
-		createAndAddChessboardReceivers(sc, numberOfReceivers);
+		createAndAddChessboardExperimentalReceivers(sc, numberOfReceivers);
 
 		createReceiverOrders(sc);
 
@@ -273,7 +273,7 @@ public class BaseReceiverChessboardScenario{
 	 * Creates and adds the receivers that are part of the grand coalition. These receivers are allowed to replan
 	 * their orders as well as decided to join or leave the coalition.
 	 */
-	static void createAndAddChessboardReceivers( Scenario sc, int numberOfReceivers ) {
+	static void createAndAddChessboardExperimentalReceivers(Scenario sc, int numberOfReceivers ) {
 		Network network = sc.getNetwork();
 
 		Receivers receivers = new Receivers();
