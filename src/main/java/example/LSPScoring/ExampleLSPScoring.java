@@ -7,6 +7,7 @@ import java.util.Random;
 
 import lsp.*;
 import lsp.functions.InfoFunctionUtils;
+import lsp.replanning.LSPReplanningUtils;
 import lsp.shipment.ShipmentUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -30,7 +31,6 @@ import org.matsim.vehicles.VehicleType;
 import lsp.controler.LSPModule;
 import lsp.events.EventUtils;
 import lsp.functions.InfoFunction;
-import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModuleImpl;
 import lsp.shipment.LSPShipment;
@@ -201,7 +201,7 @@ public class ExampleLSPScoring {
         ArrayList<LSP> lspList = new ArrayList<LSP>();
 		lspList.add(lsp);
 		LSPs lsps = new LSPs(lspList);	
-		LSPModule module = new LSPModule(lsps, new LSPReplanningModuleImpl(lsps), new LSPScoringModuleImpl(lsps), EventUtils.getStandardEventCreators());
+		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), new LSPScoringModuleImpl(lsps), EventUtils.getStandardEventCreators());
 
 	  //Start the Mobsim one iteration is sufficient for scoring
 		Controler controler = new Controler(config);

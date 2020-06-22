@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.replanning.LSPReplanningUtils;
 import lsp.shipment.*;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -28,7 +29,6 @@ import org.matsim.vehicles.VehicleType;
 
 import lsp.controler.LSPModule;
 import lsp.events.EventUtils;
-import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModuleImpl;
 import lsp.usecase.CollectionCarrierAdapter;
@@ -172,7 +172,7 @@ public static LSP createInitialLSP(Network network) {
 		ArrayList<LSP> lspList = new ArrayList<LSP>();
 		lspList.add(lsp);
 		LSPs lsps = new LSPs(lspList);
-		LSPModule module = new LSPModule(lsps, new LSPReplanningModuleImpl(lsps), new LSPScoringModuleImpl(lsps), EventUtils.getStandardEventCreators());
+		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), new LSPScoringModuleImpl(lsps), EventUtils.getStandardEventCreators());
 		
 		Controler controler = new Controler(config);
 		controler.addOverridingModule(module);

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import lsp.*;
+import lsp.replanning.LSPReplanningUtils;
 import lsp.shipment.ShipmentUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -30,7 +31,6 @@ import lsp.controler.LSPModule;
 import lsp.events.EventUtils;
 import lsp.functions.Info;
 import lsp.functions.InfoFunctionValue;
-import lsp.replanning.LSPReplanningModuleImpl;
 import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModuleImpl;
 import lsp.shipment.LSPShipment;
@@ -183,7 +183,7 @@ public static LSP createLSPWithTracker(Network network) {
         ArrayList<LSP> lspList = new ArrayList<LSP>();
 		lspList.add(lsp);
 		LSPs lsps = new LSPs(lspList);	
-		LSPModule module = new LSPModule(lsps, new LSPReplanningModuleImpl(lsps), new LSPScoringModuleImpl(lsps), EventUtils.getStandardEventCreators());
+		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), new LSPScoringModuleImpl(lsps), EventUtils.getStandardEventCreators());
 
 	  //Start the Mobsim one iteration is sufficient for tracking
 		Controler controler = new Controler(config);
