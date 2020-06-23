@@ -10,7 +10,7 @@ import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.contrib.freight.carrier.Tour;
 import org.matsim.contrib.freight.carrier.Tour.End;
 
-public class TourEndEvent extends Event{
+public final class TourEndEvent extends Event{
 
 	public static final String EVENT_TYPE = "freight tour ended";
 	public static final String ATTRIBUTE_VEHICLE = "vehicle";

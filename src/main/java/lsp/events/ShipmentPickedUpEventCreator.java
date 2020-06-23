@@ -11,7 +11,7 @@ import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.contrib.freight.carrier.Tour.Pickup;
 import org.matsim.contrib.freight.events.ShipmentPickedUpEvent;
 
-public class ShipmentPickedUpEventCreator implements EventCreator{
+public final class ShipmentPickedUpEventCreator implements EventCreator{
 
 	@Override
 	public Event createEvent(Event event, Carrier carrier, Activity activity, ScheduledTour scheduledTour,

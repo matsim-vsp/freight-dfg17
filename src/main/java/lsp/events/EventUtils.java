@@ -3,7 +3,7 @@ package lsp.events;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class EventUtils {
+public final class EventUtils {
 
 	public static Collection<EventCreator> getStandardEventCreators(){
 		ArrayList<EventCreator> creators = new ArrayList<>();

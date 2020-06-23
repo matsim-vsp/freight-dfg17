@@ -15,7 +15,7 @@ import org.matsim.vehicles.Vehicle;
 //Achtung: Das darf nicht von LinkEnterEvent erben, weil sonst im CarrierResourceTracker immer wenn ein ein solches event hergestellt wird, der CarrierResourceAgent +
 //denkt ein neues LinkEnterEvent waere geworfen worden -> Endlosschleife
 
-public class FreightLinkEnterEvent extends Event{
+public final class FreightLinkEnterEvent extends Event{
 
 	public static final String EVENT_TYPE = "freight vehicle entered link";
 	public static final String ATTRIBUTE_VEHICLE = "vehicle";

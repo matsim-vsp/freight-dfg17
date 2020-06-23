@@ -11,7 +11,7 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.vehicles.Vehicle;
 
-public class FreightVehicleLeavesTrafficEvent extends Event{
+public final class FreightVehicleLeavesTrafficEvent extends Event{
 
 	public static final String EVENT_TYPE = "freight vehicle leaves traffic";
 	public static final String ATTRIBUTE_VEHICLE = "vehicle";

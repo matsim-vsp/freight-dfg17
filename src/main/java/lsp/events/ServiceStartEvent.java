@@ -8,7 +8,7 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierService;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 
-public class ServiceStartEvent extends Event{
+public final class ServiceStartEvent extends Event{
 
 	public static final String ATTRIBUTE_PERSON = "driver";
 	public static final String EVENT_TYPE = "service ends";
