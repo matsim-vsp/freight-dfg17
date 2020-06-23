@@ -6,7 +6,7 @@ import lsp.LSP;
 import lsp.ShipmentAssigner;
 import lsp.shipment.LSPShipment;
 
-public class TomorrowAssigner implements ShipmentAssigner{
+/*package-private*/ class TomorrowAssigner implements ShipmentAssigner{
 
 	private LSP lsp;
 	private Random random;

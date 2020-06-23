@@ -13,15 +13,15 @@ import lsp.LSPPlan;
 import lsp.ShipmentAssigner;
 import lsp.shipment.LSPShipment;
 
-public class TomorrowShipmentAssignerStrategyFactory  {
+/*package-private*/ class TomorrowShipmentAssignerStrategyFactory  {
 	
 	private ShipmentAssigner assigner;
-	
-	public TomorrowShipmentAssignerStrategyFactory(ShipmentAssigner assigner) {
+
+	/*package-private*/ TomorrowShipmentAssignerStrategyFactory(ShipmentAssigner assigner) {
 		this.assigner = assigner;
 	}
-	
-	public GenericPlanStrategy<LSPPlan, LSP> createStrategy(){
+
+	/*package-private*/ GenericPlanStrategy<LSPPlan, LSP> createStrategy(){
 		GenericPlanStrategyImpl<LSPPlan, LSP> strategy = new GenericPlanStrategyImpl<LSPPlan, LSP>( new BestPlanSelector<LSPPlan, LSP>());
 		
 		GenericPlanStrategyModule<LSPPlan> tomorrowModule = new GenericPlanStrategyModule<LSPPlan>() {
