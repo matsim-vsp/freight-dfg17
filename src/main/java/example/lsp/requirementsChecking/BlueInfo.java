@@ -2,11 +2,11 @@ package example.lsp.requirementsChecking;
 
 import lsp.functions.*;
 
-public class BlueInfo extends Info{
+/*package-private*/ class BlueInfo extends Info{
 
 private InfoFunction blueInfoFunction;
-	
-	public BlueInfo() {
+
+	/*package-private*/ BlueInfo() {
 		blueInfoFunction = InfoFunctionUtils.createDefaultInfoFunction();
 		InfoFunctionValue<String> value = InfoFunctionUtils.createInfoFunctionValue("blue" );
 		value.setValue("blue");

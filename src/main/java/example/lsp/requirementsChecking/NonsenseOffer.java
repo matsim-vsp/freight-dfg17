@@ -5,7 +5,7 @@ import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.offer.Offer;
 import demand.offer.OfferVisitor;
 
-public class NonsenseOffer implements Offer{
+/*package-private*/ class NonsenseOffer implements Offer{
 
 	private LSPDecorator lsp;
 	private LogisticsSolutionDecorator solution;

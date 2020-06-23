@@ -4,7 +4,7 @@ import lsp.functions.Info;
 import lsp.LogisticsSolution;
 import lsp.shipment.Requirement;
 
-public class BlueRequirement implements Requirement{
+/*package-private*/ class BlueRequirement implements Requirement{
 
 	@Override
 	public boolean checkRequirement(LogisticsSolution solution) {
