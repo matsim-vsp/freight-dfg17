@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import lsp.*;
 import lsp.shipment.*;
+import lsp.usecase.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -32,23 +33,6 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
-import lsp.usecase.CollectionCarrierAdapter;
-import lsp.usecase.CollectionCarrierScheduler;
-import lsp.usecase.CollectionServiceEventHandler;
-import lsp.usecase.CollectionTourEndEventHandler;
-import lsp.usecase.DeterministicShipmentAssigner;
-import lsp.usecase.DistributionCarrierAdapter;
-import lsp.usecase.DistributionCarrierScheduler;
-import lsp.usecase.DistributionServiceEventHandler;
-import lsp.usecase.DistributionStartEventHandler;
-import lsp.usecase.MainRunCarrierAdapter;
-import lsp.usecase.MainRunCarrierScheduler;
-import lsp.usecase.MainRunEndEventHandler;
-import lsp.usecase.MainRunStartEventHandler;
-import lsp.usecase.ReloadingPoint;
-import lsp.usecase.ReloadingPointEventHandler;
-import lsp.usecase.ReloadingPointScheduler;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 import lsp.resources.Resource;
 
 public class CompleteLSPSchedulingTest {
@@ -105,7 +89,7 @@ public class CompleteLSPSchedulingTest {
 		
 		
 		Id<Resource> collectionAdapterId = Id.create("CollectionCarrierAdapter", Resource.class);
-		CollectionCarrierAdapter.Builder collectionAdapterBuilder = CollectionCarrierAdapter.Builder.newInstance(collectionAdapterId, network);
+		UsecaseUtils.CollectionCarrierAdapterBuilder collectionAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(collectionAdapterId, network);
 		collectionAdapterBuilder.setCollectionScheduler(collectionScheduler);
 		collectionAdapterBuilder.setCarrier(collectionCarrier);
 		collectionAdapterBuilder.setLocationLinkId(collectionLinkId);
@@ -321,10 +305,10 @@ public class CompleteLSPSchedulingTest {
 	public void testCompletedLSPScheduling() {
 		
 		for(LSPShipment shipment : lsp.getShipments()) {
-			ArrayList<AbstractShipmentPlanElement> elementList = new ArrayList<AbstractShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
-			Collections.sort(elementList, new AbstractShipmentPlanElementComparator());
+			ArrayList<ShipmentPlanElement> elementList = new ArrayList<ShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
+			Collections.sort(elementList, new ShipmentPlanElementComparator());
 			System.out.println();
-			for(AbstractShipmentPlanElement element : elementList) {
+			for(ShipmentPlanElement element : elementList) {
 				System.out.println(element.getSolutionElement().getId() + "\t\t" + element.getResourceId() + "\t\t" + element.getElementType() + "\t\t" + element.getStartTime() + "\t\t" + element.getEndTime());	
 			}			
 			System.out.println();
@@ -335,8 +319,8 @@ public class CompleteLSPSchedulingTest {
 		
 		for(LSPShipment shipment : lsp.getShipments()){
 			assertTrue(shipment.getSchedule().getPlanElements().size() == 11);
-			ArrayList<AbstractShipmentPlanElement> planElements = new ArrayList<>(shipment.getSchedule().getPlanElements().values());
-			Collections.sort(planElements, new AbstractShipmentPlanElementComparator());
+			ArrayList<ShipmentPlanElement> planElements = new ArrayList<>(shipment.getSchedule().getPlanElements().values());
+			Collections.sort(planElements, new ShipmentPlanElementComparator());
 			
 			assertTrue(planElements.get(10).getElementType() == "UNLOAD");
 			assertTrue(planElements.get(10).getEndTime() >= (0));
@@ -513,8 +497,8 @@ public class CompleteLSPSchedulingTest {
 		for(LSPShipment shipment : lsp.getShipments()) {
 			assertTrue(shipment.getEventHandlers().size() == 6);
 			eventHandlers = new ArrayList<EventHandler>(shipment.getEventHandlers());
-			ArrayList<AbstractShipmentPlanElement> planElements = new ArrayList<AbstractShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
-			Collections.sort(planElements, new AbstractShipmentPlanElementComparator());
+			ArrayList<ShipmentPlanElement> planElements = new ArrayList<ShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
+			Collections.sort(planElements, new ShipmentPlanElementComparator());
 				
 			assertTrue(eventHandlers.get(0) instanceof CollectionTourEndEventHandler);
 			CollectionTourEndEventHandler endHandler = (CollectionTourEndEventHandler) eventHandlers.get(0);

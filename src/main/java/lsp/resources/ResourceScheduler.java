@@ -5,8 +5,6 @@ import java.util.Collections;
 
 import lsp.LogisticsSolutionElement;
 import lsp.ShipmentTuple;
-import lsp.shipment.AbstractShipmentPlanElement;
-import lsp.shipment.AbstractShipmentPlanElementComparator;
 import lsp.shipment.ShipmentComparator;
 
 public abstract class ResourceScheduler {

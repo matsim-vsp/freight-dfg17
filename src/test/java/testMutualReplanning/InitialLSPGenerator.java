@@ -3,6 +3,7 @@ package testMutualReplanning;
 import java.util.ArrayList;
 
 import lsp.*;
+import lsp.usecase.*;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -28,15 +29,6 @@ import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import lsp.resources.Resource;
-import lsp.usecase.CollectionCarrierAdapter;
-import lsp.usecase.CollectionCarrierScheduler;
-import lsp.usecase.DistributionCarrierAdapter;
-import lsp.usecase.DistributionCarrierScheduler;
-import lsp.usecase.MainRunCarrierAdapter;
-import lsp.usecase.MainRunCarrierScheduler;
-import lsp.usecase.ReloadingPoint;
-import lsp.usecase.ReloadingPointScheduler;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 
 public class InitialLSPGenerator {
 
@@ -74,7 +66,7 @@ public class InitialLSPGenerator {
 		collectionCarrier.setCarrierCapabilities(collectionCapabilities);
 						
 		Id<Resource> collectionAdapterId = Id.create("CollectionCarrierAdapter", Resource.class);
-		CollectionCarrierAdapter.Builder collectionAdapterBuilder = CollectionCarrierAdapter.Builder.newInstance(collectionAdapterId, network);
+		UsecaseUtils.CollectionCarrierAdapterBuilder collectionAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(collectionAdapterId, network);
 		collectionAdapterBuilder.setCollectionScheduler(collectionScheduler);
 		collectionAdapterBuilder.setCarrier(collectionCarrier);
 		collectionAdapterBuilder.setLocationLinkId(collectionLinkId);

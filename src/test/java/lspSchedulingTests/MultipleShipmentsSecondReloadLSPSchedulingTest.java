@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import lsp.*;
 import lsp.shipment.*;
+import lsp.usecase.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -32,19 +33,6 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
-import lsp.usecase.CollectionCarrierAdapter;
-import lsp.usecase.CollectionCarrierScheduler;
-import lsp.usecase.CollectionServiceEventHandler;
-import lsp.usecase.CollectionTourEndEventHandler;
-import lsp.usecase.DeterministicShipmentAssigner;
-import lsp.usecase.MainRunCarrierAdapter;
-import lsp.usecase.MainRunCarrierScheduler;
-import lsp.usecase.MainRunEndEventHandler;
-import lsp.usecase.MainRunStartEventHandler;
-import lsp.usecase.ReloadingPoint;
-import lsp.usecase.ReloadingPointEventHandler;
-import lsp.usecase.ReloadingPointScheduler;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 import lsp.resources.Resource;
 
 public class MultipleShipmentsSecondReloadLSPSchedulingTest {
@@ -99,7 +87,7 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 		
 		
 		Id<Resource> collectionAdapterId = Id.create("CollectionCarrierAdapter", Resource.class);
-		CollectionCarrierAdapter.Builder collectionAdapterBuilder = CollectionCarrierAdapter.Builder.newInstance(collectionAdapterId, network);
+		UsecaseUtils.CollectionCarrierAdapterBuilder collectionAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(collectionAdapterId, network);
 		collectionAdapterBuilder.setCollectionScheduler(collectionScheduler);
 		collectionAdapterBuilder.setCarrier(collectionCarrier);
 		collectionAdapterBuilder.setLocationLinkId(collectionLinkId);
@@ -287,8 +275,8 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 	
 		for(LSPShipment shipment : lsp.getShipments()){
 			assertTrue(shipment.getSchedule().getPlanElements().size() == 8);
-			ArrayList<AbstractShipmentPlanElement> planElements = new ArrayList<>(shipment.getSchedule().getPlanElements().values());
-			Collections.sort(planElements, new AbstractShipmentPlanElementComparator());
+			ArrayList<ShipmentPlanElement> planElements = new ArrayList<>(shipment.getSchedule().getPlanElements().values());
+			Collections.sort(planElements, new ShipmentPlanElementComparator());
 			
 			assertTrue(planElements.get(7).getElementType() == "HANDLE");
 			assertTrue(planElements.get(7).getEndTime() >= (0));
@@ -432,8 +420,8 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 		for(LSPShipment shipment : lsp.getShipments()) {
 			assertTrue(shipment.getEventHandlers().size() == 4);
 			eventHandlers = new ArrayList<EventHandler>(shipment.getEventHandlers());
-			ArrayList<AbstractShipmentPlanElement> planElements = new ArrayList<AbstractShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
-			Collections.sort(planElements, new AbstractShipmentPlanElementComparator());
+			ArrayList<ShipmentPlanElement> planElements = new ArrayList<ShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
+			Collections.sort(planElements, new ShipmentPlanElementComparator());
 			ArrayList<LogisticsSolutionElement> solutionElements = new ArrayList<>(lsp.getSelectedPlan().getSolutions().iterator().next().getSolutionElements());
 			ArrayList<Resource> resources = new ArrayList<>(lsp.getResources());
 	

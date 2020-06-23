@@ -8,6 +8,7 @@ import java.util.Random;
 
 import lsp.*;
 import lsp.shipment.*;
+import lsp.usecase.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -28,12 +29,6 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
-import lsp.usecase.CollectionCarrierAdapter;
-import lsp.usecase.CollectionCarrierScheduler;
-import lsp.usecase.CollectionServiceEventHandler;
-import lsp.usecase.CollectionTourEndEventHandler;
-import lsp.usecase.DeterministicShipmentAssigner;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 import lsp.resources.Resource;
 
 public class MultipleShipmentsCollectionLSPSchedulingTest {
@@ -79,7 +74,7 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 		
 		
 		Id<Resource> adapterId = Id.create("CollectionCarrierAdapter", Resource.class);
-		CollectionCarrierAdapter.Builder adapterBuilder = CollectionCarrierAdapter.Builder.newInstance(adapterId, network);
+		UsecaseUtils.CollectionCarrierAdapterBuilder adapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(adapterId, network);
 		adapterBuilder.setCollectionScheduler(scheduler);
 		adapterBuilder.setCarrier(carrier);
 		adapterBuilder.setLocationLinkId(collectionLinkId);
@@ -152,8 +147,8 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 	public void testCollectionLSPScheduling() {
 		
 		for(LSPShipment shipment : collectionLSP.getShipments()) {
-			ArrayList<AbstractShipmentPlanElement> scheduleElements = new ArrayList<AbstractShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
-			Collections.sort(scheduleElements, new AbstractShipmentPlanElementComparator());
+			ArrayList<ShipmentPlanElement> scheduleElements = new ArrayList<ShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
+			Collections.sort(scheduleElements, new ShipmentPlanElementComparator());
 			
 			System.out.println();
 			for(int i = 0; i < shipment.getSchedule().getPlanElements().size(); i++) {
@@ -164,7 +159,7 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 				
 		for(LSPShipment shipment : collectionLSP.getShipments()) {
 			assertTrue(shipment.getSchedule().getPlanElements().size() == 3);
-			ArrayList<AbstractShipmentPlanElement> planElements = new ArrayList<AbstractShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
+			ArrayList<ShipmentPlanElement> planElements = new ArrayList<ShipmentPlanElement>(shipment.getSchedule().getPlanElements().values());
 			assertTrue(planElements.get(2).getElementType() == "UNLOAD");
 			assertTrue(planElements.get(2).getEndTime() >= (0));
 			assertTrue(planElements.get(2).getEndTime() <= (24*3600));

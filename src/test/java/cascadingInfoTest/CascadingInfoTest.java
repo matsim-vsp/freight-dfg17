@@ -10,6 +10,7 @@ import lsp.*;
 import lsp.replanning.LSPReplanningUtils;
 import lsp.scoring.LSPScoringModulsUtils;
 import lsp.shipment.ShipmentUtils;
+import lsp.usecase.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -35,11 +36,6 @@ import lsp.controler.LSPModule;
 import lsp.events.EventUtils;
 import lsp.resources.Resource;
 import lsp.shipment.LSPShipment;
-import lsp.usecase.CollectionCarrierAdapter;
-import lsp.usecase.CollectionCarrierScheduler;
-import lsp.usecase.DeterministicShipmentAssigner;
-import lsp.usecase.SimpleForwardSolutionScheduler;
-
 
 
 public class CascadingInfoTest {
@@ -90,7 +86,7 @@ public class CascadingInfoTest {
 		
 		
 		Id<Resource> adapterId = Id.create("CollectionCarrierAdapter", Resource.class);
-		CollectionCarrierAdapter.Builder adapterBuilder = CollectionCarrierAdapter.Builder.newInstance(adapterId, network);
+		UsecaseUtils.CollectionCarrierAdapterBuilder adapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(adapterId, network);
 		adapterBuilder.setCollectionScheduler(scheduler);
 		adapterBuilder.setCarrier(carrier);
 		adapterBuilder.setLocationLinkId(collectionLinkId);
