@@ -1,4 +1,4 @@
-package example.lsp.LSPScoring;
+package example.lsp.lspScoring;
 
 import java.util.ArrayList;
 import java.util.Collection;

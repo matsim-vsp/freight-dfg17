@@ -1,4 +1,4 @@
-package example.lsp.LSPScoring;
+package example.lsp.lspScoring;
 
 import lsp.functions.Info;
 import lsp.functions.InfoFunction;

@@ -1,4 +1,4 @@
-package example.lsp.LSPReplanning;
+package example.lsp.lspReplanning;
 
 import org.matsim.core.replanning.GenericStrategyManager;
 
