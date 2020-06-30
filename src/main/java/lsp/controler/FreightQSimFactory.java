@@ -26,12 +26,11 @@
  * ${type_declaration}
  */
 
-package lsp.mobsim;
+package lsp.controler;
 
 import com.google.inject.Provider;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.Freight;
 import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.contrib.freight.FreightConfigGroup.TimeWindowHandling;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -43,17 +42,17 @@ import org.matsim.core.mobsim.qsim.agents.DefaultAgentFactory;
 import javax.inject.Inject;
 import java.util.Collection;
 
-
-public class FreightQSimFactory implements Provider<Mobsim> {
+@Deprecated public // replace by something that just adds the necessary elements to the default mobsim, rather than replacing the mobsim.  kai/kai, jun'20
+class FreightQSimFactory implements Provider<Mobsim> {
 	private static final Logger log = Logger.getLogger( FreightQSimFactory.class ) ;
 
 	private final Scenario scenario;
-	private EventsManager eventsManager;
-	private CarrierResourceTracker carrierResourceTracker;
-	private FreightConfigGroup carrierConfig;
+	private final EventsManager eventsManager;
+	private final CarrierResourceTracker carrierResourceTracker;
+	private final FreightConfigGroup carrierConfig;
 
 	@Inject
-	public FreightQSimFactory( Scenario scenario, EventsManager eventsManager, CarrierResourceTracker carrierResourceTracker, FreightConfigGroup carrierConfig ) {
+	FreightQSimFactory( Scenario scenario, EventsManager eventsManager, CarrierResourceTracker carrierResourceTracker, FreightConfigGroup carrierConfig ) {
 		this.scenario = scenario;
 		this.eventsManager = eventsManager;
 		this.carrierResourceTracker = carrierResourceTracker;

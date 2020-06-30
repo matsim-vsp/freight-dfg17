@@ -1,4 +1,4 @@
-package lsp.mobsim;
+package lsp.controler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,17 +30,14 @@ import org.matsim.api.core.v01.events.handler.VehicleLeavesTrafficEventHandler;
 import org.matsim.api.core.v01.events.handler.VehicleEntersTrafficEventHandler;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
-import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.api.core.v01.population.Route;
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.core.events.algorithms.Vehicle2DriverEventHandler;
-import lsp.controler.FreightControlerListener;
 import lsp.events.EventCreator;
-import lsp.events.FreightLinkEnterEvent;
-import lsp.mobsim.CarrierResourceAgent.CarrierDriverAgent;
+import lsp.controler.CarrierResourceAgent.CarrierDriverAgent;
 
 
 
@@ -53,13 +50,13 @@ public final class CarrierResourceTracker implements ActivityStartEventHandler, 
 	
 	private final Carriers carriers;
 
-	private Vehicle2DriverEventHandler delegate = new Vehicle2DriverEventHandler();
+	private final Vehicle2DriverEventHandler delegate = new Vehicle2DriverEventHandler();
 
 	private final Collection<CarrierResourceAgent> carrierResourceAgents = new ArrayList<CarrierResourceAgent>();
 	
-	private Map<Id<Person>, CarrierResourceAgent> driverAgentMap = new HashMap<Id<Person>, CarrierResourceAgent>();
+	private final Map<Id<Person>, CarrierResourceAgent> driverAgentMap = new HashMap<Id<Person>, CarrierResourceAgent>();
 
-	private Collection<EventCreator> eventCreators;
+	private final Collection<EventCreator> eventCreators;
 	
 	public CarrierResourceTracker(Carriers carriers, Network network,  FreightControlerListener listener, Collection<EventCreator> creators) {
 		this.carriers = carriers;
@@ -79,10 +76,10 @@ public final class CarrierResourceTracker implements ActivityStartEventHandler, 
 	 * Returns the entire set of selected carrier plans.
 	 * 
 	 * @return collection of plans
-	 * @see Plan, CarrierPlan
+	 * @see Plan , CarrierPlan
 	 */
 	public Collection<MobSimVehicleRoute> createPlans() {
-		List<MobSimVehicleRoute> vehicleRoutes = new ArrayList<MobSimVehicleRoute>();
+		List<MobSimVehicleRoute> vehicleRoutes = new ArrayList<>();
 		for (CarrierResourceAgent carrierResourceAgent : carrierResourceAgents) {
 			List<MobSimVehicleRoute> plansForCarrier = carrierResourceAgent.createFreightDriverPlans();
 			vehicleRoutes.addAll(plansForCarrier);

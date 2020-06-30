@@ -9,7 +9,7 @@ import lsp.ShipmentAssigner;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.Requirement;
 
-public class RequirementsAssigner implements  ShipmentAssigner {
+class RequirementsAssigner implements  ShipmentAssigner {
 
 	private LSP lsp;
 	private Collection<LogisticsSolution> feasibleSolutions;

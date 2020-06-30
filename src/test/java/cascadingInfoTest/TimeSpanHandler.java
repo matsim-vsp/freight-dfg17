@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import lsp.events.ServiceStartEvent;
-import lsp.events.ServiceStartEventHandler;
+import lsp.eventhandlers.ServiceStartEventHandler;
 import lsp.events.TourStartEvent;
-import lsp.events.TourStartEventHandler;
+import lsp.eventhandlers.TourStartEventHandler;
 
 
 

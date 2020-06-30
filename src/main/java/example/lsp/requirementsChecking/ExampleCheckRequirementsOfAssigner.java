@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
-public class ExampleCheckRequirementsOfAssigner {
+class ExampleCheckRequirementsOfAssigner {
 
 	public static LSP createLSPWithProperties(Network network) {
 		
@@ -112,12 +112,12 @@ public class ExampleCheckRequirementsOfAssigner {
 		LogisticsSolution blueSolution = blueSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		blueSolution.getInfos().add(new example.lsp.requirementsChecking.BlueInfo());
+		blueSolution.getInfos().add(new BlueInfo());
 				
 		//Create the initial plan, add assigner that checks requirements of the shipments when assigning and add both solutions (red and blue) to the 
 		//plan.
 		LSPPlan plan = LSPUtils.createLSPPlan();
-		ShipmentAssigner assigner = new example.lsp.requirementsChecking.RequirementsAssigner();
+		ShipmentAssigner assigner = new RequirementsAssigner();
 		plan.setAssigner(assigner);
 		plan.addSolution(redSolution);
 		plan.addSolution(blueSolution);
@@ -170,10 +170,10 @@ public class ExampleCheckRequirementsOfAssigner {
         	builder.setServiceTime(capacityDemand * 60);
         	boolean blue = rand.nextBoolean();
         	if (blue == true) {
-        		builder.addRequirement(new example.lsp.requirementsChecking.BlueRequirement());
+        		builder.addRequirement(new BlueRequirement());
         	}
         	else {
-        		builder.addRequirement(new example.lsp.requirementsChecking.RedRequirement());
+        		builder.addRequirement(new RedRequirement());
         	}
         	
         	shipmentList.add(builder.build());
@@ -203,7 +203,7 @@ public class ExampleCheckRequirementsOfAssigner {
         for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
         	if(solution.getId().toString() == "RedSolution") {
         		for(LSPShipment shipment : solution.getShipments()) {
-        			if(!(shipment.getRequirements().iterator().next() instanceof example.lsp.requirementsChecking.RedRequirement)) {
+        			if(!(shipment.getRequirements().iterator().next() instanceof RedRequirement)) {
         				break;
         			}
         		}
@@ -211,7 +211,7 @@ public class ExampleCheckRequirementsOfAssigner {
         	}
         	if(solution.getId().toString() == "BlueSolution") {
         		for(LSPShipment shipment : solution.getShipments()) {
-        			if(!(shipment.getRequirements().iterator().next() instanceof example.lsp.requirementsChecking.BlueRequirement)) {
+        			if(!(shipment.getRequirements().iterator().next() instanceof BlueRequirement)) {
         				break;
         			}
         		}

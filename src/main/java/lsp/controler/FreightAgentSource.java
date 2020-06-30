@@ -26,7 +26,7 @@
  * ${type_declaration}
  */
 
-package lsp.mobsim;
+package lsp.controler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,7 +59,7 @@ class FreightAgentSource implements AgentSource {
 
 	private QSim qsim;
 
-	FreightAgentSource(Collection<MobSimVehicleRoute> vehicleRoutes, AgentFactory agentFactory, QSim qsim) {
+	FreightAgentSource( Collection<MobSimVehicleRoute> vehicleRoutes, AgentFactory agentFactory, QSim qsim ) {
 		this.vehicleRoutes = vehicleRoutes;
 		this.agentFactory = agentFactory;
 		this.qsim = qsim;
@@ -68,7 +68,7 @@ class FreightAgentSource implements AgentSource {
 
 	@Override
 	public void insertAgentsIntoMobsim() {
-		for (MobSimVehicleRoute vRoute : vehicleRoutes) {
+		for ( MobSimVehicleRoute vRoute : vehicleRoutes) {
 			MobsimAgent agent = this.agentFactory.createMobsimAgentFromPerson(vRoute.getPlan().getPerson());
 			Vehicle vehicle = null;
 			if(vRoute.getVehicle() == null){

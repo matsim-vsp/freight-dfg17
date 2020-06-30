@@ -14,13 +14,13 @@ import demand.offer.OfferTransferrer;
 import lsp.LogisticsSolution;
 import lsp.shipment.Requirement;
 
-public class RequirementsTransferrer implements OfferTransferrer{
+class RequirementsTransferrer implements OfferTransferrer{
 
 	private LSPDecorator lsp;
 	private Collection<LogisticsSolutionWithOffers> feasibleSolutions;
 	
 	public RequirementsTransferrer() {
-		this.feasibleSolutions = new ArrayList<LogisticsSolutionWithOffers>();
+		this.feasibleSolutions = new ArrayList<>();
 	}
 	
 	

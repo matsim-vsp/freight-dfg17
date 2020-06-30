@@ -1,7 +1,7 @@
 package testLSPWithCostTracker;
 
 import lsp.events.TourStartEvent;
-import lsp.events.TourStartEventHandler;
+import lsp.eventhandlers.TourStartEventHandler;
 
 public class TourStartHandler implements TourStartEventHandler{
 

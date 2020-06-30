@@ -38,7 +38,7 @@ import lsp.shipment.Requirement;
 import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
 
-public class ExampleCheckRequirementsOfOfferTransferrer {
+class ExampleCheckRequirementsOfOfferTransferrer {
 
 	public static LSPDecorator createLSPWithProperties(Network network) {
 		
@@ -90,7 +90,7 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		//Add OfferFactory that gives some nonsense offer, as in this case only the work of the transferrer i.e. the solution from which the offer
 		//comes is relevant
 		OfferFactoryImpl redOfferFactory = new OfferFactoryImpl(redOfferSolution);
-		redOfferFactory.addOffer(new example.lsp.requirementsChecking.NonsenseOffer());
+		redOfferFactory.addOffer(new NonsenseOffer());
 		redOfferSolution.setOfferFactory(redOfferFactory);
 		
 
@@ -127,12 +127,12 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		LogisticsSolutionDecorator blueOfferSolution = blueOfferSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		blueOfferSolution.getInfos().add(new example.lsp.requirementsChecking.BlueInfo());
+		blueOfferSolution.getInfos().add(new BlueInfo());
 		
 		//Add OfferFactory that gives some nonsense offer, as in this case only the work of the transferrer i.e. the solution from which the offer
 		//comes is relevant
 		OfferFactoryImpl blueOfferFactory = new OfferFactoryImpl(blueOfferSolution);
-		blueOfferFactory.addOffer(new example.lsp.requirementsChecking.NonsenseOffer());
+		blueOfferFactory.addOffer(new NonsenseOffer());
 		blueOfferSolution.setOfferFactory(blueOfferFactory);
 		
 		//Create PlanDecorator (i.e. Plan that has an OfferTransferrer) and add solutions
@@ -141,7 +141,7 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		plan.addSolution(blueOfferSolution);
 		
 		//Create OfferTransferrer that only gives the offer of the suitable solution with the right color to the outside
-		OfferTransferrer transferrer = new example.lsp.requirementsChecking.RequirementsTransferrer();
+		OfferTransferrer transferrer = new RequirementsTransferrer();
 		plan.setOfferTransferrer(transferrer);
 		
 		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.getInstance();
@@ -172,10 +172,10 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
         	
         	boolean blue = rand.nextBoolean();
         	if (blue == true) {
-        		builder.addRequirement(new example.lsp.requirementsChecking.BlueRequirement());
+        		builder.addRequirement(new BlueRequirement());
         	}
         	else {
-        		builder.addRequirement(new example.lsp.requirementsChecking.RedRequirement());
+        		builder.addRequirement(new RedRequirement());
         	}
         	
         	DemandObject demandObject = builder.build();
@@ -201,10 +201,10 @@ public class ExampleCheckRequirementsOfOfferTransferrer {
 		for(DemandObject demandObject : demandObjects) {
     		Offer offer = lsp.getOffer(demandObject, "nonsense", null);
     		for(Requirement requirement : demandObject.getRequirements()) {
-    			if((requirement instanceof example.lsp.requirementsChecking.RedRequirement) && (offer.getSolution().getId().toString() == "RedSolution")) {
+    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString() == "RedSolution")) {
     				System.out.println(demandObject.getId()  +" is red and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
-    			else if((requirement instanceof example.lsp.requirementsChecking.BlueRequirement) && (offer.getSolution().getId().toString() == "BlueSolution")){
+    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString() == "BlueSolution")){
     				System.out.println(demandObject.getId()  +" is blue and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
     			else {

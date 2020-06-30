@@ -6,8 +6,8 @@ import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
 import lsp.events.EventCreator;
-import lsp.mobsim.CarrierResourceTracker;
-import lsp.mobsim.FreightQSimFactory;
+import lsp.controler.CarrierResourceTracker;
+import lsp.controler.FreightQSimFactory;
 import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 
