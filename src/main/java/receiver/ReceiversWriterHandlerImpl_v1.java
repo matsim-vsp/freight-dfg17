@@ -25,6 +25,7 @@ package receiver;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Locale;
 
 import org.matsim.contrib.freight.carrier.TimeWindow;
 import receiver.product.ProductType;
@@ -101,7 +102,7 @@ import receiver.product.Order;
 		out.write("\t\t<product id=\"");
 		out.write(product.getProductType().getId().toString());
 		out.write("\" onHand=\"");
-		out.write(String.format("%.2f", product.getStockOnHand()));
+		out.write(String.format(Locale.US, "%.2f", product.getStockOnHand()));
 		out.write("\">\n");
 	}
 
