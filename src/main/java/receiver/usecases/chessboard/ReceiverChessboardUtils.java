@@ -102,6 +102,7 @@ public class ReceiverChessboardUtils {
 		//read and create a pre-configured algorithms to solve the vrp
 		VehicleRoutingAlgorithm vra = VehicleRoutingAlgorithms.readAndCreateAlgorithm(vrp, algorithmFile);
 
+
 		//solve the problem
 		Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
 

@@ -35,7 +35,11 @@ public class ReceiverUtils {
 		
 		return new ReceiverImpl(id);
 	}
-	
+
+	/**
+	 * This can now be replaced with {@link org.matsim.contrib.freight.utils.FreightUtils#getCarriers(Scenario)}
+	 */
+	@Deprecated
 	public static Carriers getCarriers( final Scenario sc ) {
 		return (Carriers) sc.getScenarioElement( CARRIERS_SCENARIO_ELEMENT );
 	}
