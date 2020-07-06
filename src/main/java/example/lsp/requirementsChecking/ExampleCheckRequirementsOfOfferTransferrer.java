@@ -35,7 +35,6 @@ import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import lsp.resources.Resource;
 import lsp.shipment.Requirement;
-import lsp.usecase.CollectionCarrierScheduler;
 import lsp.usecase.SimpleForwardSolutionScheduler;
 
 class ExampleCheckRequirementsOfOfferTransferrer {
@@ -43,7 +42,6 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 	public static LSPDecorator createLSPWithProperties(Network network) {
 		
 		//Create red LogisticsSolution which has the corresponding info
-		CollectionCarrierScheduler redScheduler = new CollectionCarrierScheduler();
 		Id<Carrier> redCarrierId = Id.create("RedCarrier", Carrier.class);
 		Id<VehicleType> vehicleTypeId = Id.create("CollectionCarrierVehicleType", VehicleType.class);
 		CarrierVehicleType.Builder vehicleTypeBuilder = CarrierVehicleType.Builder.newInstance(vehicleTypeId);
@@ -69,7 +67,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 				
 		Id<Resource> redAdapterId = Id.create("RedCarrierAdapter", Resource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder redAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(redAdapterId, network);
-		redAdapterBuilder.setCollectionScheduler(redScheduler);
+		redAdapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		redAdapterBuilder.setCarrier(redCarrier);
 		redAdapterBuilder.setLocationLinkId(collectionLinkId);
 		Resource redAdapter = redAdapterBuilder.build();
@@ -95,7 +93,6 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		
 
 		//Create blue LogisticsSolution which has the corresponding info
-		CollectionCarrierScheduler blueScheduler = new CollectionCarrierScheduler();
 		Id<Carrier> blueCarrierId = Id.create("BlueCarrier", Carrier.class);
 		Id<Vehicle> blueVehicleId = Id.createVehicleId("BlueVehicle");
 		CarrierVehicle blueVehicle = CarrierVehicle.newInstance(blueVehicleId, collectionLinkId);
@@ -111,7 +108,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 				
 		Id<Resource> blueAdapterId = Id.create("BlueCarrierAdapter", Resource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder blueAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(blueAdapterId, network);
-		blueAdapterBuilder.setCollectionScheduler(blueScheduler);
+		blueAdapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		blueAdapterBuilder.setCarrier(blueCarrier);
 		blueAdapterBuilder.setLocationLinkId(collectionLinkId);
 		Resource blueAdapter = blueAdapterBuilder.build();
