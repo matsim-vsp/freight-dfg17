@@ -137,11 +137,10 @@ public class MultipleShipmentsMainRunLSPSchedulingTest {
 		CarrierCapabilities mainRunCapabilities = mainRunCapabilitiesBuilder.build();
 		Carrier mainRunCarrier = CarrierImpl.newInstance(mainRunCarrierId);
 		mainRunCarrier.setCarrierCapabilities(mainRunCapabilities);
-        
-		MainRunCarrierScheduler mainRunScheduler = new MainRunCarrierScheduler();
-        Id<Resource> mainRunId = Id.create("MainRunAdapter", Resource.class);
+
+		Id<Resource> mainRunId = Id.create("MainRunAdapter", Resource.class);
         UsecaseUtils.MainRunCarrierAdapterBuilder mainRunAdapterBuilder = UsecaseUtils.MainRunCarrierAdapterBuilder.newInstance(mainRunId, network);
-        mainRunAdapterBuilder.setMainRunCarrierScheduler(mainRunScheduler);
+        mainRunAdapterBuilder.setMainRunCarrierScheduler(UsecaseUtils.createDefaultMainRunCarrierScheduler());
         mainRunAdapterBuilder.setFromLinkId(fromLinkId);
         mainRunAdapterBuilder.setToLinkId(toLinkId);
         mainRunAdapterBuilder.setCarrier(mainRunCarrier);
