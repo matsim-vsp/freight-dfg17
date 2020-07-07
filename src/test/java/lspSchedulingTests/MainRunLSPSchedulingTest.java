@@ -177,7 +177,7 @@ public class MainRunLSPSchedulingTest {
 		resourcesList.add(firstReloadingPointAdapter);
 		resourcesList.add(mainRunAdapter);
 
-		simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		simpleScheduler.setBufferTime(300);
 		completeLSPBuilder.setSolutionScheduler(simpleScheduler);
 		lsp = completeLSPBuilder.build();

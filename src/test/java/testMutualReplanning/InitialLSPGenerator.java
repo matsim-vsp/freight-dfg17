@@ -224,7 +224,7 @@ public class InitialLSPGenerator {
 		resourcesList.add(secondReloadingPointAdapter);
 		resourcesList.add(distributionAdapter);
 					
-		SolutionScheduler simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		offerLSPBuilder.setSolutionScheduler(simpleScheduler);
 		return offerLSPBuilder.build();
 	}

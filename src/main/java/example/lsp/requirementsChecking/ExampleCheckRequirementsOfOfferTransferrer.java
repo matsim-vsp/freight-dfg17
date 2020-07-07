@@ -35,7 +35,6 @@ import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import lsp.resources.Resource;
 import lsp.shipment.Requirement;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 
 class ExampleCheckRequirementsOfOfferTransferrer {
 
@@ -149,7 +148,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
-		SolutionScheduler simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		offerLSPBuilder.setSolutionScheduler(simpleScheduler);
 		return offerLSPBuilder.build();
 

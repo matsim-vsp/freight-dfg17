@@ -244,7 +244,7 @@ public class MultipleShipmentsCompleteLSPSchedulingTest {
 		resourcesList.add(distributionAdapter);
 
 
-		simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		simpleScheduler.setBufferTime(300);
 		completeLSPBuilder.setSolutionScheduler(simpleScheduler);
 		lsp = completeLSPBuilder.build();

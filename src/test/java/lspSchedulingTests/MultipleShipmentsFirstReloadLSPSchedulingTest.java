@@ -133,7 +133,7 @@ public class MultipleShipmentsFirstReloadLSPSchedulingTest {
 		resourcesList.add(firstReloadingPointAdapter);
 		
 
-		simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		simpleScheduler.setBufferTime(300);
 		completeLSPBuilder.setSolutionScheduler(simpleScheduler);
 		lsp = completeLSPBuilder.build();

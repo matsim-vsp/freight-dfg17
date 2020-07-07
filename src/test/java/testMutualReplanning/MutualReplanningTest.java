@@ -59,7 +59,6 @@ import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
 import lsp.events.EventUtils;
 import lsp.resources.Resource;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 import testLSPWithCostTracker.CollectionServiceHandler;
 import testLSPWithCostTracker.DistanceAndTimeHandler;
 import testLSPWithCostTracker.LinearCostTracker;
@@ -145,7 +144,7 @@ public class MutualReplanningTest {
 		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
 		resourcesList.add(collectionAdapter);
 		
-		SolutionScheduler simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		offerLSPBuilder.setSolutionScheduler(simpleScheduler);
 		lsp = offerLSPBuilder.build();
 		

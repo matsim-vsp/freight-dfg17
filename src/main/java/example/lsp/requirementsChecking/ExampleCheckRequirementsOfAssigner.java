@@ -4,7 +4,6 @@ import lsp.*;
 import lsp.resources.Resource;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.ShipmentUtils;
-import lsp.usecase.SimpleForwardSolutionScheduler;
 import lsp.usecase.UsecaseUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -127,7 +126,7 @@ class ExampleCheckRequirementsOfAssigner {
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
-		SolutionScheduler simpleScheduler = new SimpleForwardSolutionScheduler(resourcesList);
+		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		lspBuilder.setSolutionScheduler(simpleScheduler);
 		return lspBuilder.build();
 	}
