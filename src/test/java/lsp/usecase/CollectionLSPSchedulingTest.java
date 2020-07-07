@@ -1,4 +1,4 @@
-package lspSchedulingTests;
+package lsp.usecase;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +31,7 @@ import org.matsim.vehicles.VehicleType;
 
 import lsp.resources.Resource;
 
-public class MultipleShipmentsCollectionLSPSchedulingTest {
+public class CollectionLSPSchedulingTest {
 	
 	private Network network;
 	private LSP collectionLSP;	
@@ -102,7 +102,6 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 		resourcesList.add(collectionAdapter);
 		
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
-		simpleScheduler.setBufferTime(300);
 		collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
 		collectionLSP = collectionLSPBuilder.build();
 	
@@ -110,7 +109,7 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 	    Id<Link> toLinkId = collectionLinkId;
 	
 	        
-	    for(int i = 1; i < 100; i++) {
+	    for(int i = 1; i < 2; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
         	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
         	Random random = new Random(1);
@@ -212,9 +211,10 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 			assertTrue(serviceHandler.getLspShipment() == shipment);
 			assertTrue(serviceHandler.getResourceId() == planElements.get(1).getResourceId());
 			assertTrue(serviceHandler.getResourceId()  == collectionLSP.getResources().iterator().next().getId());
-		}
-		
+		}		
+	
 		for(LogisticsSolution solution : collectionLSP.getSelectedPlan().getSolutions()) {
+			assertTrue(solution.getShipments().size() == 1);
 			for(LogisticsSolutionElement element : solution.getSolutionElements()) {
 				assertTrue(element.getIncomingShipments().getShipments().isEmpty());
 				if(element.getNextElement() != null) {
@@ -225,5 +225,6 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 				}
 			}
 		}
+		
 	}
 }
