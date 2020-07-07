@@ -201,8 +201,8 @@ public class MultipleShipmentsCollectionLSPSchedulingTest {
 			assertTrue(endHandler.getResourceId() == planElements.get(2).getResourceId());
 			assertTrue(endHandler.getResourceId()  == collectionLSP.getResources().iterator().next().getId());
 		
-			assertTrue(eventHandlers.get(1) instanceof CollectionServiceEventHandler);
-			CollectionServiceEventHandler serviceHandler = (CollectionServiceEventHandler) eventHandlers.get(1);
+			assertTrue(eventHandlers.get(1) instanceof CollectionServiceEndEventHandler);
+			CollectionServiceEndEventHandler serviceHandler = (CollectionServiceEndEventHandler) eventHandlers.get(1);
 			assertTrue(serviceHandler.getCarrierService().getLocationLinkId() == shipment.getFromLinkId());
 			assertTrue(serviceHandler.getCarrierService().getCapacityDemand() == shipment.getCapacityDemand());
 			assertTrue(serviceHandler.getCarrierService().getServiceDuration() == shipment.getServiceTime());

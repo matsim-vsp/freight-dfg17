@@ -364,12 +364,12 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 	
 		assertTrue(firstReloadingPointAdapter.getEventHandlers().size() ==1);
 		ArrayList<EventHandler> eventHandlers = new ArrayList<EventHandler>(firstReloadingPointAdapter.getEventHandlers());
-		assertTrue(eventHandlers.iterator().next() instanceof ReloadingPointEventHandler);
-		ReloadingPointEventHandler reloadEventHandler = (ReloadingPointEventHandler) eventHandlers.iterator().next();
-		Iterator<Entry<CarrierService,ReloadingPointEventHandler.ReloadingPointEventHandlerPair>>  iter = reloadEventHandler.getServicesWaitedFor().entrySet().iterator();
+		assertTrue(eventHandlers.iterator().next() instanceof ReloadingPointTourEndEventHandler);
+		ReloadingPointTourEndEventHandler reloadEventHandler = (ReloadingPointTourEndEventHandler) eventHandlers.iterator().next();
+		Iterator<Entry<CarrierService, ReloadingPointTourEndEventHandler.ReloadingPointEventHandlerPair>>  iter = reloadEventHandler.getServicesWaitedFor().entrySet().iterator();
 		
 		while(iter.hasNext()) {
-			Entry<CarrierService,ReloadingPointEventHandler.ReloadingPointEventHandlerPair> entry =  iter.next();
+			Entry<CarrierService, ReloadingPointTourEndEventHandler.ReloadingPointEventHandlerPair> entry =  iter.next();
 			CarrierService service = entry.getKey();
 			LSPShipment shipment = entry.getValue().shipment;
 			LogisticsSolutionElement element = entry.getValue().element;
@@ -390,12 +390,12 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 	
 		assertTrue(secondReloadingPointAdapter.getEventHandlers().size() ==1);
 		eventHandlers = new ArrayList<EventHandler>(secondReloadingPointAdapter.getEventHandlers());
-		assertTrue(eventHandlers.iterator().next() instanceof ReloadingPointEventHandler);
-		reloadEventHandler = (ReloadingPointEventHandler) eventHandlers.iterator().next();
+		assertTrue(eventHandlers.iterator().next() instanceof ReloadingPointTourEndEventHandler);
+		reloadEventHandler = (ReloadingPointTourEndEventHandler) eventHandlers.iterator().next();
 		iter = reloadEventHandler.getServicesWaitedFor().entrySet().iterator();
 		
 		while(iter.hasNext()) {
-			Entry<CarrierService,ReloadingPointEventHandler.ReloadingPointEventHandlerPair> entry =  iter.next();
+			Entry<CarrierService, ReloadingPointTourEndEventHandler.ReloadingPointEventHandlerPair> entry =  iter.next();
 			CarrierService service = entry.getKey();
 			LSPShipment shipment = entry.getValue().shipment;
 			LogisticsSolutionElement element = entry.getValue().element;
@@ -438,8 +438,8 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 			assertTrue(collectionEndHandler.getResourceId() == planElements.get(2).getResourceId());
 			assertTrue(collectionEndHandler.getResourceId()  == resources.get(0).getId());
 			
-			assertTrue(eventHandlers.get(1) instanceof CollectionServiceEventHandler);
-			CollectionServiceEventHandler collectionServiceHandler = (CollectionServiceEventHandler) eventHandlers.get(1);
+			assertTrue(eventHandlers.get(1) instanceof CollectionServiceEndEventHandler);
+			CollectionServiceEndEventHandler collectionServiceHandler = (CollectionServiceEndEventHandler) eventHandlers.get(1);
 			assertTrue(collectionServiceHandler.getCarrierService().getLocationLinkId() == shipment.getFromLinkId());
 			assertTrue(collectionServiceHandler.getCarrierService().getCapacityDemand() == shipment.getCapacityDemand());
 			assertTrue(collectionServiceHandler.getCarrierService().getServiceDuration() == shipment.getServiceTime());
@@ -454,8 +454,8 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 			assertTrue(collectionServiceHandler.getResourceId() == planElements.get(2).getResourceId());
 			assertTrue(collectionServiceHandler.getResourceId()  == resources.get(0).getId());
 			
-			assertTrue(eventHandlers.get(2) instanceof MainRunStartEventHandler);
-			MainRunStartEventHandler mainRunStartHandler = (MainRunStartEventHandler) eventHandlers.get(2);
+			assertTrue(eventHandlers.get(2) instanceof MainRunTourStartEventHandler);
+			MainRunTourStartEventHandler mainRunStartHandler = (MainRunTourStartEventHandler) eventHandlers.get(2);
 			assertTrue(mainRunStartHandler.getCarrierService().getLocationLinkId() == toLinkId);
 			assertTrue(mainRunStartHandler.getCarrierService().getServiceDuration() == shipment.getServiceTime());
 			assertTrue(mainRunStartHandler.getCarrierService().getCapacityDemand() == shipment.getCapacityDemand());
@@ -471,8 +471,8 @@ public class MultipleShipmentsSecondReloadLSPSchedulingTest {
 			assertTrue(mainRunStartHandler.getResource().getId() == planElements.get(6).getResourceId());
 			assertTrue(mainRunStartHandler.getResource().getId()  == resources.get(2).getId());
 			
-			assertTrue(eventHandlers.get(3) instanceof MainRunEndEventHandler);
-			MainRunEndEventHandler mainRunEndHandler = (MainRunEndEventHandler) eventHandlers.get(3);
+			assertTrue(eventHandlers.get(3) instanceof MainRunTourEndEventHandler);
+			MainRunTourEndEventHandler mainRunEndHandler = (MainRunTourEndEventHandler) eventHandlers.get(3);
 			assertTrue(mainRunEndHandler.getCarrierService().getLocationLinkId() == toLinkId);
 			assertTrue(mainRunEndHandler.getCarrierService().getServiceDuration() == shipment.getServiceTime());
 			assertTrue(mainRunEndHandler.getCarrierService().getCapacityDemand() == shipment.getCapacityDemand());
