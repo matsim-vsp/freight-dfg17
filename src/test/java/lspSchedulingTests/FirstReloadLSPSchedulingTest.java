@@ -119,7 +119,7 @@ public class FirstReloadLSPSchedulingTest {
 		completeSolutionBuilder.addSolutionElement(firstReloadElement);
 		completeSolution = completeSolutionBuilder.build();
 		
-		assigner = new DeterministicShipmentAssigner();
+		assigner = UsecaseUtils.createDeterministicShipmentAssigner();
 		completePlan = LSPUtils.createLSPPlan();
 		completePlan.setAssigner(assigner);
 		completePlan.addSolution(completeSolution);

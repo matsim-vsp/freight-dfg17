@@ -112,7 +112,7 @@ public class CascadingInfoTest {
 		solutionInfo.addPredecessorInfo(collectionElement.getInfos().iterator().next());
 		collectionElement.getInfos().add(solutionInfo);
 		
-		ShipmentAssigner assigner = new DeterministicShipmentAssigner();
+		ShipmentAssigner assigner = UsecaseUtils.createDeterministicShipmentAssigner();
 		LSPPlan collectionPlan = LSPUtils.createLSPPlan();
 		collectionPlan.setAssigner(assigner);
 		collectionPlan.addSolution(collectionSolution);
