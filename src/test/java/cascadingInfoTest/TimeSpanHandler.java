@@ -3,22 +3,22 @@ package cascadingInfoTest;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lsp.events.ServiceStartEvent;
-import lsp.eventhandlers.ServiceStartEventHandler;
-import lsp.events.TourStartEvent;
-import lsp.eventhandlers.TourStartEventHandler;
+import lsp.events.LSPServiceStartEvent;
+import lsp.eventhandlers.LSPServiceStartEventHandler;
+import lsp.events.LSPTourStartEvent;
+import lsp.eventhandlers.LSPTourStartEventHandler;
 
 
 
-public class TimeSpanHandler implements TourStartEventHandler, ServiceStartEventHandler{
+public class TimeSpanHandler implements LSPTourStartEventHandler, LSPServiceStartEventHandler {
 
 	private int numberOfStops;
 	private double totalTime;
 	
-	private Collection<TourStartEvent> startEvents;
+	private Collection<LSPTourStartEvent> startEvents;
 	
 	public TimeSpanHandler() {
-		startEvents = new ArrayList<TourStartEvent>();
+		startEvents = new ArrayList<LSPTourStartEvent>();
 	}
 	
 	@Override
@@ -28,9 +28,9 @@ public class TimeSpanHandler implements TourStartEventHandler, ServiceStartEvent
 	}
 
 	@Override
-	public void handleEvent(ServiceStartEvent event) {
+	public void handleEvent(LSPServiceStartEvent event) {
 		numberOfStops++;
-		for(TourStartEvent startEvent : startEvents) {
+		for(LSPTourStartEvent startEvent : startEvents) {
 			if(startEvent.getDriverId() == event.getDriverId()) {
 				double startTime = startEvent.getTime();
 				double serviceTime = event.getTime();
@@ -41,7 +41,7 @@ public class TimeSpanHandler implements TourStartEventHandler, ServiceStartEvent
 	}
 
 	@Override
-	public void handleEvent(TourStartEvent event) {
+	public void handleEvent(LSPTourStartEvent event) {
 		startEvents.add(event);
 	}
 

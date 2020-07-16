@@ -11,19 +11,19 @@ import java.util.Collection;
 
 public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehicleLeavesTrafficEventHandler, LSPLinkLeaveEventHandler{
 
-	private Collection<FreightLinkEnterEvent> events;
+	private Collection<LSPFreightLinkEnterEvent> events;
 	private double distanceCosts;
 	private double timeCosts;
 	private Network network;
 	
 	public DistanceAndTimeHandler(Network network) {
 		this.network = network;
-		this.events = new ArrayList<FreightLinkEnterEvent>();
+		this.events = new ArrayList<LSPFreightLinkEnterEvent>();
 	}
 	
 	
 	@Override
-	public void handleEvent(FreightLinkEnterEvent event) {
+	public void handleEvent(LSPFreightLinkEnterEvent event) {
 		events.add(event);
 		
 	}
@@ -37,8 +37,8 @@ public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehi
 
 
 	@Override
-	public void handleEvent(FreightVehicleLeavesTrafficEvent leaveEvent) {
-		for(FreightLinkEnterEvent enterEvent : events) {
+	public void handleEvent(LSPFreightVehicleLeavesTrafficEvent leaveEvent) {
+		for(LSPFreightLinkEnterEvent enterEvent : events) {
 			if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
 			   (enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 				double linkDuration = leaveEvent.getTime() - enterEvent.getTime();
@@ -53,8 +53,8 @@ public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehi
 
 
 	@Override
-	public void handleEvent(FreightLinkLeaveEvent leaveEvent) {
-		for(FreightLinkEnterEvent enterEvent : events) {
+	public void handleEvent(LSPFreightLinkLeaveEvent leaveEvent) {
+		for(LSPFreightLinkEnterEvent enterEvent : events) {
 			if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
 			   (enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 				double linkDuration = leaveEvent.getTime() - enterEvent.getTime();

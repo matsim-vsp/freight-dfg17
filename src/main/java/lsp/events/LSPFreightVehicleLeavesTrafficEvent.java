@@ -11,7 +11,7 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 import org.matsim.vehicles.Vehicle;
 
-public final class FreightVehicleLeavesTrafficEvent extends Event{
+public final class LSPFreightVehicleLeavesTrafficEvent extends Event{
 
 	public static final String EVENT_TYPE = "freight vehicle leaves traffic";
 	public static final String ATTRIBUTE_VEHICLE = "vehicle";
@@ -30,7 +30,7 @@ public final class FreightVehicleLeavesTrafficEvent extends Event{
 	private Id<Carrier> carrierId;
 	private VehicleLeavesTrafficEvent event;
 	
-	public FreightVehicleLeavesTrafficEvent(VehicleLeavesTrafficEvent event, Id<Carrier> carrierId, double time, Id<Person> driverId, Id<Link> linkId, Id<Vehicle> vehicleId, CarrierVehicle carrierVehicle) {
+	public LSPFreightVehicleLeavesTrafficEvent(VehicleLeavesTrafficEvent event, Id<Carrier> carrierId, double time, Id<Person> driverId, Id<Link> linkId, Id<Vehicle> vehicleId, CarrierVehicle carrierVehicle) {
 		super(time);
 		this.driverId = driverId;
 		this.linkId = linkId;

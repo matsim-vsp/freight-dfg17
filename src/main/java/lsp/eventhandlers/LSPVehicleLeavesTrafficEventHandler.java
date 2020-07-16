@@ -1,8 +1,8 @@
 package lsp.eventhandlers;
 
-import lsp.events.FreightVehicleLeavesTrafficEvent;
+import lsp.events.LSPFreightVehicleLeavesTrafficEvent;
 
 public interface LSPVehicleLeavesTrafficEventHandler{
 	
-	public void handleEvent( FreightVehicleLeavesTrafficEvent event );
+	public void handleEvent( LSPFreightVehicleLeavesTrafficEvent event );
 }

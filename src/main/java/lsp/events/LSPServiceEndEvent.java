@@ -10,7 +10,7 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierService;
 import org.matsim.contrib.freight.carrier.CarrierVehicle;
 
-public final class ServiceEndEvent extends Event {
+public final class LSPServiceEndEvent extends Event {
 
 	public static final String ATTRIBUTE_PERSON = "driver";
 	public static final String EVENT_TYPE = "service ends";
@@ -26,7 +26,7 @@ public final class ServiceEndEvent extends Event {
 	private CarrierVehicle vehicle;
 	private ActivityEndEvent event;
 	
-	public ServiceEndEvent(ActivityEndEvent event, Id<Carrier> carrierId, Id<Person> driverId, CarrierService service, double time, CarrierVehicle vehicle) {
+	public LSPServiceEndEvent(ActivityEndEvent event, Id<Carrier> carrierId, Id<Person> driverId, CarrierService service, double time, CarrierVehicle vehicle) {
 		super(time);
 		this.service = service;
 		this.driverId = driverId;

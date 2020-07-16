@@ -4,7 +4,7 @@ import com.google.inject.Provides;
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
-import lsp.events.EventCreator;
+import lsp.events.LSPEventCreator;
 import lsp.controler.LSPCarrierTracker;
 import lsp.controler.LSPQSimFactory;
 import org.matsim.contrib.freight.FreightConfigGroup;
@@ -19,7 +19,7 @@ public class MutualModule extends AbstractModule{
 	private MutualScoringModule mutualScoringModule;
 	private MutualReplanningModule replanningModule;	
 	private FreightConfigGroup carrierConfig = new FreightConfigGroup();
-	private Collection<EventCreator> creators;
+	private Collection<LSPEventCreator> creators;
 	
 	public static class Builder{
 		
@@ -27,7 +27,7 @@ public class MutualModule extends AbstractModule{
 		private DemandObjects demandObjects;
 		private MutualScoringModule mutualScoringModule;
 		private MutualReplanningModule replanningModule;
-		private Collection<EventCreator> creators;
+		private Collection<LSPEventCreator> creators;
 		
 		public static Builder newInstance() {
 			return new Builder();
@@ -53,7 +53,7 @@ public class MutualModule extends AbstractModule{
 			return this;
 		}
 		
-		public Builder setEventCreators(Collection<EventCreator> creators) {
+		public Builder setEventCreators(Collection<LSPEventCreator> creators) {
 			this.creators = creators;
 			return this;
 		}
@@ -91,7 +91,7 @@ public class MutualModule extends AbstractModule{
 	}
 
 	@Provides
-	Collection<EventCreator> provideEventCreators(){
+	Collection<LSPEventCreator> provideEventCreators(){
 		return this.creators;
 	}
 	

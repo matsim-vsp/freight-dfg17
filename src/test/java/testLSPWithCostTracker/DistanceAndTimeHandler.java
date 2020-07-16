@@ -5,29 +5,29 @@ import java.util.Collection;
 
 import org.matsim.api.core.v01.network.Network;
 
-import lsp.events.FreightLinkEnterEvent;
-import lsp.events.FreightLinkLeaveEvent;
+import lsp.events.LSPFreightLinkEnterEvent;
+import lsp.events.LSPFreightLinkLeaveEvent;
 import lsp.eventhandlers.LSPLinkLeaveEventHandler;
-import lsp.events.FreightVehicleLeavesTrafficEvent;
+import lsp.events.LSPFreightVehicleLeavesTrafficEvent;
 import lsp.eventhandlers.LSPVehicleLeavesTrafficEventHandler;
 import lsp.eventhandlers.LSPLinkEnterEventHandler;
 
 
 public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehicleLeavesTrafficEventHandler, LSPLinkLeaveEventHandler{
 
-	private Collection<FreightLinkEnterEvent> events;
+	private Collection<LSPFreightLinkEnterEvent> events;
 	private double distanceCosts;
 	private double timeCosts;
 	private Network network;
 	
 	public DistanceAndTimeHandler(Network network) {
 		this.network = network;
-		this.events = new ArrayList<FreightLinkEnterEvent>();
+		this.events = new ArrayList<LSPFreightLinkEnterEvent>();
 	}
 	
 	
 	@Override
-	public void handleEvent(FreightLinkEnterEvent event) {
+	public void handleEvent(LSPFreightLinkEnterEvent event) {
 		events.add(event);
 	}
 
@@ -38,8 +38,8 @@ public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehi
 
 
 	@Override
-	public void handleEvent(FreightVehicleLeavesTrafficEvent leaveEvent) {
-		for(FreightLinkEnterEvent enterEvent : events) {
+	public void handleEvent(LSPFreightVehicleLeavesTrafficEvent leaveEvent) {
+		for(LSPFreightLinkEnterEvent enterEvent : events) {
 			if(enterEvent != null) {
 				if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
 						(enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
@@ -56,9 +56,9 @@ public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehi
 	
 
 	@Override
-	public void handleEvent(FreightLinkLeaveEvent leaveEvent) {
+	public void handleEvent(LSPFreightLinkLeaveEvent leaveEvent) {
 		if(events.size() > 0) {
-			for(FreightLinkEnterEvent enterEvent : events) {
+			for(LSPFreightLinkEnterEvent enterEvent : events) {
 				if((enterEvent.getLinkId() == leaveEvent.getLinkId()) && (enterEvent.getVehicleId() == leaveEvent.getVehicleId()) && 
 						(enterEvent.getCarrierId() == leaveEvent.getCarrierId())   &&  (enterEvent.getDriverId() == leaveEvent.getDriverId())) {
 					double linkDuration = leaveEvent.getTime() - enterEvent.getTime();

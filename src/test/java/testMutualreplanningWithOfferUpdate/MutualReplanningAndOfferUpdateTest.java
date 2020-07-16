@@ -55,7 +55,7 @@ import demand.offer.OfferUpdaterImpl;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
 import lsp.functions.Info;
-import lsp.events.EventUtils;
+import lsp.events.LSPEventUtils;
 import lsp.resources.Resource;
 import testMutualReplanning.FortyTwoDemandScorer;
 import testMutualReplanning.HalfLotSizeDemandPlanGenerator;
@@ -228,7 +228,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		moduleBuilder.setLsps(DemandControlerUtils.createLSPDecorators(lspList));
 		moduleBuilder.setMutualReplanningModule(mutReplanModule);
 		moduleBuilder.setMutualScoringModule(mutScoreModule);
-		moduleBuilder.setEventCreators(EventUtils.getStandardEventCreators());
+		moduleBuilder.setEventCreators(LSPEventUtils.getStandardEventCreators());
 		MutualModule mutualModule = moduleBuilder.build();
 
 		controler.addOverridingModule(mutualModule);

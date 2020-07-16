@@ -1,9 +1,9 @@
 package testLSPWithCostTracker;
 
-import lsp.events.TourStartEvent;
-import lsp.eventhandlers.TourStartEventHandler;
+import lsp.events.LSPTourStartEvent;
+import lsp.eventhandlers.LSPTourStartEventHandler;
 
-public class TourStartHandler implements TourStartEventHandler{
+public class TourStartHandler implements LSPTourStartEventHandler {
 
 	private double vehicleFixedCosts;
 		
@@ -13,7 +13,7 @@ public class TourStartHandler implements TourStartEventHandler{
 	}
 
 	@Override
-	public void handleEvent(TourStartEvent event) {
+	public void handleEvent(LSPTourStartEvent event) {
 		vehicleFixedCosts = vehicleFixedCosts + event.getVehicle().getVehicleType().getCostInformation().getFix();
 	}
 

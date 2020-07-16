@@ -34,7 +34,7 @@ import lsp.LSPPlan;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.controler.LSPFreightControlerListener;
-import lsp.events.EventCreator;
+import lsp.events.LSPEventCreator;
 import lsp.functions.Info;
 import lsp.controler.LSPCarrierTracker;
 import lsp.resources.CarrierResource;
@@ -50,7 +50,7 @@ import lsp.controler.LSPSimulationTracker;
 	private DemandObjects demandObjects;
 	private MutualScoringModule mutualScoringModule;
 	private MutualReplanningModule replanningModule;
-	private Collection<EventCreator> creators;
+	private Collection<LSPEventCreator> creators;
 	private ArrayList<EventHandler> registeredHandlers;
 
 	@Inject	EventsManager eventsManager;
@@ -58,7 +58,7 @@ import lsp.controler.LSPSimulationTracker;
 
 	@Inject
 	protected MutualControlerListener(LSPDecorators lsps, DemandObjects demandObjects,
-			MutualScoringModule demandScoringModule, MutualReplanningModule replanningModule, Collection<EventCreator> creators) {
+			MutualScoringModule demandScoringModule, MutualReplanningModule replanningModule, Collection<LSPEventCreator> creators) {
 		this.lsps = lsps;
 		this.demandObjects = demandObjects;
 		this.mutualScoringModule = demandScoringModule;

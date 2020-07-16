@@ -9,14 +9,14 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.FreightConstants;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
 
-public final class TourStartEventCreator implements EventCreator{
+public final class LSPTourStartEventCreator implements LSPEventCreator {
 
 	@Override
 	public Event createEvent(Event event, Carrier carrier, Activity activity, ScheduledTour scheduledTour, Id<Person> driverId, int activityCounter) {
 		if((event instanceof ActivityEndEvent)) {
 			ActivityEndEvent endEvent = (ActivityEndEvent) event;
 			if(endEvent.getActType().equals(FreightConstants.START)) {
-				return new TourStartEvent(carrier.getId(), driverId, scheduledTour.getTour(), event.getTime(), scheduledTour.getVehicle());
+				return new LSPTourStartEvent(carrier.getId(), driverId, scheduledTour.getTour(), event.getTime(), scheduledTour.getVehicle());
 			}	
 		}
 		return null;	
