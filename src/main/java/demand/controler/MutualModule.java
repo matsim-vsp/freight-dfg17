@@ -4,7 +4,7 @@ import com.google.inject.Provides;
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
-import org.matsim.contrib.freight.events.LSPEventCreator;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreator;
 import org.matsim.contrib.freight.controler.LSPCarrierTracker;
 import lsp.controler.LSPQSimFactory;
 import org.matsim.contrib.freight.FreightConfigGroup;

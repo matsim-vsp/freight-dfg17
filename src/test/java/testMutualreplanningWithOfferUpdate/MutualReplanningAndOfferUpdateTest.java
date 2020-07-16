@@ -55,7 +55,7 @@ import demand.offer.OfferUpdaterImpl;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
 import lsp.functions.LSPInfo;
-import org.matsim.contrib.freight.events.LSPEventUtils;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
 import lsp.resources.LSPResource;
 import testMutualReplanning.FortyTwoDemandScorer;
 import testMutualReplanning.HalfLotSizeDemandPlanGenerator;
@@ -228,7 +228,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		moduleBuilder.setLsps(DemandControlerUtils.createLSPDecorators(lspList));
 		moduleBuilder.setMutualReplanningModule(mutReplanModule);
 		moduleBuilder.setMutualScoringModule(mutScoreModule);
-		moduleBuilder.setEventCreators(LSPEventUtils.getStandardEventCreators());
+		moduleBuilder.setEventCreators(LSPEventCreatorUtils.getStandardEventCreators());
 		MutualModule mutualModule = moduleBuilder.build();
 
 		controler.addOverridingModule(mutualModule);

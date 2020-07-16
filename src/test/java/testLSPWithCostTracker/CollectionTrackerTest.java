@@ -2,7 +2,7 @@ package testLSPWithCostTracker;
 
 import lsp.*;
 import lsp.controler.LSPModule;
-import org.matsim.contrib.freight.events.LSPEventUtils;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
 import lsp.functions.LSPInfo;
 import lsp.functions.LSPInfoFunctionValue;
 import lsp.replanning.LSPReplanningUtils;
@@ -170,7 +170,7 @@ public class CollectionTrackerTest {
 
 		Controler controler = new Controler(config);
 
-		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), LSPScoringModulsUtils.createDefaultLSPScoringModule(lsps), LSPEventUtils.getStandardEventCreators());
+		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), LSPScoringModulsUtils.createDefaultLSPScoringModule(lsps), LSPEventCreatorUtils.getStandardEventCreators());
 
 		controler.addOverridingModule(module);
 		config.controler().setFirstIteration(0);
