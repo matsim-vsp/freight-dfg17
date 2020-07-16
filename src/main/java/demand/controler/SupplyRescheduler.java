@@ -3,11 +3,11 @@ package demand.controler;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
 import org.matsim.core.controler.listener.BeforeMobsimListener;
 
-import demand.decoratedLSP.LSPDecorators;
+
 import lsp.LSP;
 
 
-/*package-private*/ class SupplyRescheduler implements BeforeMobsimListener{
+class SupplyRescheduler implements BeforeMobsimListener{
 
 	private LSPDecorators lsps;
 	

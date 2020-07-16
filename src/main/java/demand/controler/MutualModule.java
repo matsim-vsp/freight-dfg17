@@ -1,7 +1,6 @@
 package demand.controler;
 
 import com.google.inject.Provides;
-import demand.decoratedLSP.LSPDecorators;
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;

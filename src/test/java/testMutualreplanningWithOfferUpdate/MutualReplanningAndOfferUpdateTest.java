@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import demand.controler.DemandControlerUtils;
 import demand.decoratedLSP.*;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
@@ -113,7 +114,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		Resource collectionAdapter = collectionAdapterBuilder.build();
 				
 		Id<LogisticsSolutionElement> collectionElementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId );
+		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId);
 		collectionElementBuilder.setResource(collectionAdapter);
 		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 				
@@ -224,7 +225,7 @@ public class MutualReplanningAndOfferUpdateTest {
 			
 		MutualModule.Builder moduleBuilder = MutualModule.Builder.newInstance();
 		moduleBuilder.setDemandObjects(new DemandObjects(demandObjects));
-		moduleBuilder.setLsps(new LSPDecorators(lspList));
+		moduleBuilder.setLsps(DemandControlerUtils.createLSPDecorators(lspList));
 		moduleBuilder.setMutualReplanningModule(mutReplanModule);
 		moduleBuilder.setMutualScoringModule(mutScoreModule);
 		moduleBuilder.setEventCreators(EventUtils.getStandardEventCreators());

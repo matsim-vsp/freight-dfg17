@@ -8,7 +8,6 @@ import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
 
 import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPDecorators;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjects;
 import demand.demandObject.DemandPlan;

@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+import demand.controler.DemandControlerUtils;
 import demand.decoratedLSP.*;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
@@ -200,7 +201,7 @@ public class MutualReplanningTest {
 		
 		MutualModule.Builder moduleBuilder = MutualModule.Builder.newInstance();
 		moduleBuilder.setDemandObjects(new DemandObjects(demandObjects));
-		moduleBuilder.setLsps(new LSPDecorators(lsps));
+		moduleBuilder.setLsps(DemandControlerUtils.createLSPDecorators(lsps));
 		moduleBuilder.setMutualReplanningModule(mutReplanModule);
 		moduleBuilder.setMutualScoringModule(mutScoreModule);
 		moduleBuilder.setEventCreators(EventUtils.getStandardEventCreators());
