@@ -4,11 +4,11 @@ import lsp.LSP;
 import lsp.ShipmentAssigner;
 import lsp.shipment.LSPShipment;
 
-public class DefaultAssigner implements ShipmentAssigner{
+/*package-private*/ class DefaultAssigner implements ShipmentAssigner{
 
 	private LSP lsp;
 
-	public DefaultAssigner (LSP lsp) {
+	DefaultAssigner (LSP lsp) {
 		this.lsp = lsp;
 	}
 	

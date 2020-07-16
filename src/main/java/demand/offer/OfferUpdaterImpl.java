@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import lsp.LogisticsSolution;
 
 public class OfferUpdaterImpl implements OfferUpdater{

@@ -7,7 +7,6 @@ import org.matsim.api.core.v01.Id;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.demandObject.DemandObject;
 import demand.offer.Offer;
 import demand.offer.OfferTransferrer;
@@ -17,7 +16,7 @@ import lsp.shipment.Requirement;
 class RequirementsTransferrer implements OfferTransferrer{
 
 	private LSPDecorator lsp;
-	private Collection<LogisticsSolutionWithOffers> feasibleSolutions;
+	private Collection<LogisticsSolutionDecorator> feasibleSolutions;
 	
 	public RequirementsTransferrer() {
 		this.feasibleSolutions = new ArrayList<>();
@@ -29,7 +28,7 @@ class RequirementsTransferrer implements OfferTransferrer{
 		feasibleSolutions.clear();		
 		label:			
 			for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
-					LogisticsSolutionWithOffers solutionWithOffers = (LogisticsSolutionWithOffers) solution;
+					LogisticsSolutionDecorator solutionWithOffers = (LogisticsSolutionDecorator) solution;
 					for(Requirement requirement : object.getRequirements()) {
 						if(requirement.checkRequirement(solutionWithOffers) == false) {
 							continue label;

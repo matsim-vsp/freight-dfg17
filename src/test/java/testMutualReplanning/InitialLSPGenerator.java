@@ -2,6 +2,7 @@ package testMutualReplanning;
 
 import java.util.ArrayList;
 
+import demand.decoratedLSP.*;
 import lsp.*;
 import lsp.usecase.*;
 import org.matsim.api.core.v01.Id;
@@ -20,12 +21,6 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
-import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPPlanDecorator;
-import demand.decoratedLSP.LSPPlanWithOfferTransferrer;
-import demand.decoratedLSP.LSPWithOffers;
-import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import lsp.resources.Resource;
@@ -195,7 +190,7 @@ public class InitialLSPGenerator {
 		distributionElement.setPreviousElement(secondReloadElement);
 				
 		Id<LogisticsSolution> solutionId = Id.create("Solution", LogisticsSolution.class);
-		LogisticsSolutionWithOffers.Builder solutionBuilder = LogisticsSolutionWithOffers.Builder.newInstance(solutionId);
+		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder solutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionId);
 		solutionBuilder.addSolutionElement(collectionElement);
 		solutionBuilder.addSolutionElement(firstReloadElement);
 		solutionBuilder.addSolutionElement(mainRunElement);

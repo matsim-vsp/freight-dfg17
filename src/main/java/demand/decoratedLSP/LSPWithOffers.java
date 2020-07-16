@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.matsim.api.core.v01.Id;
 
 import demand.demandObject.DemandObject;
@@ -148,8 +147,8 @@ public class LSPWithOffers implements LSPDecorator {
 		for(LSPPlan plan : plans) {
 			plan.setLSP(this);
 			for(LogisticsSolution solution : plan.getSolutions()) {
-				if(solution instanceof LogisticsSolutionWithOffers) {
-					LogisticsSolutionWithOffers solutionWithOffers = (LogisticsSolutionWithOffers) solution;
+				if(solution instanceof LogisticsSolutionDecoratorImpl_wOffers) {
+					LogisticsSolutionDecoratorImpl_wOffers solutionWithOffers = (LogisticsSolutionDecoratorImpl_wOffers) solution;
 					solutionWithOffers.setLSP(this);
 					solutionWithOffers.getOfferFactory().setLSP(this);
 					for(Offer offer : solutionWithOffers.getOfferFactory().getOffers()) {
@@ -170,8 +169,8 @@ public class LSPWithOffers implements LSPDecorator {
 	public LSPPlanDecorator getSelectedPlan() {
 		selectedPlan.setLSP(this);
 		for(LogisticsSolution solution : selectedPlan.getSolutions()) {
-			if(solution instanceof LogisticsSolutionWithOffers) {
-				LogisticsSolutionWithOffers solutionWithOffers = (LogisticsSolutionWithOffers) solution;
+			if(solution instanceof LogisticsSolutionDecoratorImpl_wOffers) {
+				LogisticsSolutionDecoratorImpl_wOffers solutionWithOffers = (LogisticsSolutionDecoratorImpl_wOffers) solution;
 				solutionWithOffers.setLSP(this);
 				solutionWithOffers.getOfferFactory().setLSP(this);
 			}
@@ -185,8 +184,8 @@ public class LSPWithOffers implements LSPDecorator {
 			plan.setLSP(this);
 			this.selectedPlan = (LSPPlanDecorator) plan;
 			for(LogisticsSolution solution : selectedPlan.getSolutions()) {
-				if(solution instanceof LogisticsSolutionWithOffers) {
-					LogisticsSolutionWithOffers solutionWithOffers = (LogisticsSolutionWithOffers) solution;
+				if(solution instanceof LogisticsSolutionDecoratorImpl_wOffers) {
+					LogisticsSolutionDecoratorImpl_wOffers solutionWithOffers = (LogisticsSolutionDecoratorImpl_wOffers) solution;
 					solutionWithOffers.setLSP(this);
 					solutionWithOffers.getOfferFactory().setLSP(this);
 				}
@@ -307,7 +306,7 @@ public class LSPWithOffers implements LSPDecorator {
 		List<LogisticsSolutionDecorator> copiedSolutions = new ArrayList<LogisticsSolutionDecorator>();
 		for (LogisticsSolution solution : plan2copy.getSolutions()) {
 				LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
-				LogisticsSolutionDecorator copiedSolution = LogisticsSolutionWithOffers.Builder.newInstance(solutionDecorator.getId()).build();
+				LogisticsSolutionDecorator copiedSolution = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionDecorator.getId()).build();
 				copiedSolution.getSolutionElements().addAll(solutionDecorator.getSolutionElements());		
 				copiedSolution.setOfferFactory(solutionDecorator.getOfferFactory());
 				copiedSolutions.add(copiedSolution);

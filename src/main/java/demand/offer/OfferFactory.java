@@ -2,13 +2,9 @@ package demand.offer;
 
 import java.util.Collection;
 
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPWithOffers;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.demandObject.DemandObject;
-import lsp.LSP;
-import lsp.LogisticsSolution;
 
 public interface OfferFactory {
 

@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+import demand.decoratedLSP.*;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
 import org.junit.Before;
@@ -33,13 +34,6 @@ import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
 import demand.controler.MutualModule;
-import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPPlanDecorator;
-import demand.decoratedLSP.LSPPlanWithOfferTransferrer;
-import demand.decoratedLSP.LSPWithOffers;
-import demand.decoratedLSP.LSPDecorators;
-import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.demandAgent.DemandAgent;
 import demand.demandAgent.DemandAgentImpl;
 import demand.demandObject.DemandObject;
@@ -116,7 +110,7 @@ public class MutualReplanningTest {
 		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 		
 		Id<LogisticsSolution> solutionId = Id.create("Solution", LogisticsSolution.class);
-		LogisticsSolutionWithOffers.Builder solutionBuilder = LogisticsSolutionWithOffers.Builder.newInstance(solutionId);
+		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder solutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionId);
 		solutionBuilder.addSolutionElement(collectionElement);
 		LogisticsSolutionDecorator solution = solutionBuilder.build();
 		

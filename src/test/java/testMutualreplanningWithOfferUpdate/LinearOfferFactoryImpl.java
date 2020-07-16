@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPWithOffers;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.demandObject.DemandObject;
 import demand.offer.DefaultOfferImpl;
 import demand.offer.Offer;
 import demand.offer.OfferFactory;
-import lsp.LSP;
-import lsp.LogisticsSolution;
 
 public class LinearOfferFactoryImpl implements OfferFactory{
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import demand.decoratedLSP.*;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
 import org.matsim.api.core.v01.Id;
@@ -22,12 +23,6 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
-import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPPlanDecorator;
-import demand.decoratedLSP.LSPPlanWithOfferTransferrer;
-import demand.decoratedLSP.LSPWithOffers;
-import demand.decoratedLSP.LogisticsSolutionDecorator;
-import demand.decoratedLSP.LogisticsSolutionWithOffers;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjectImpl;
 import demand.offer.Offer;
@@ -77,7 +72,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		LogisticsSolutionElement redElement = redElementBuilder.build();
 		
 		Id<LogisticsSolution> redSolutionId = Id.create("RedSolution", LogisticsSolution.class);
-		LogisticsSolutionWithOffers.Builder redOfferSolutionBuilder = LogisticsSolutionWithOffers.Builder.newInstance(redSolutionId);
+		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder redOfferSolutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(redSolutionId);
 		redOfferSolutionBuilder.addSolutionElement(redElement);
 		LogisticsSolutionDecorator redOfferSolution = redOfferSolutionBuilder.build();
 		
@@ -118,7 +113,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		LogisticsSolutionElement blueElement = blueElementBuilder.build();
 		
 		Id<LogisticsSolution> blueSolutionId = Id.create("BlueSolution", LogisticsSolution.class);
-		LogisticsSolutionWithOffers.Builder blueOfferSolutionBuilder = LogisticsSolutionWithOffers.Builder.newInstance(blueSolutionId);
+		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder blueOfferSolutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(blueSolutionId);
 		blueOfferSolutionBuilder.addSolutionElement(blueElement);
 		LogisticsSolutionDecorator blueOfferSolution = blueOfferSolutionBuilder.build();
 		
