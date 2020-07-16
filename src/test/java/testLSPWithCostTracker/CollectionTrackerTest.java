@@ -2,7 +2,7 @@ package testLSPWithCostTracker;
 
 import lsp.*;
 import lsp.controler.LSPModule;
-import lsp.events.LSPEventUtils;
+import org.matsim.contrib.freight.controler.LSPEventUtils;
 import lsp.functions.LSPInfo;
 import lsp.functions.LSPInfoFunctionValue;
 import lsp.replanning.LSPReplanningUtils;

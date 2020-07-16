@@ -2,7 +2,7 @@ package lsp.eventhandlers;
 
 import org.matsim.core.events.handler.EventHandler;
 
-import lsp.events.LSPFreightLinkEnterEvent;
+import org.matsim.contrib.freight.controler.LSPFreightLinkEnterEvent;
 
 public interface LSPLinkEnterEventHandler extends EventHandler{
 

@@ -2,9 +2,11 @@ package testMutualreplanningWithOfferUpdate;
 
 import lsp.eventhandlers.LSPLinkLeaveEventHandler;
 import lsp.eventhandlers.LSPVehicleLeavesTrafficEventHandler;
-import lsp.events.*;
 import lsp.eventhandlers.LSPLinkEnterEventHandler;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.controler.LSPFreightLinkEnterEvent;
+import org.matsim.contrib.freight.controler.LSPFreightLinkLeaveEvent;
+import org.matsim.contrib.freight.controler.LSPFreightVehicleLeavesTrafficEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;

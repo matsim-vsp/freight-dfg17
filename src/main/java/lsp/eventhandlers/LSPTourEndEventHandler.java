@@ -1,6 +1,6 @@
 package lsp.eventhandlers;
 
-import lsp.events.LSPTourEndEvent;
+import org.matsim.contrib.freight.controler.LSPTourEndEvent;
 import org.matsim.core.events.handler.EventHandler;
 
 

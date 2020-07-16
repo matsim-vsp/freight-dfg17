@@ -3,9 +3,9 @@ package cascadingInfoTest;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lsp.events.LSPServiceStartEvent;
+import org.matsim.contrib.freight.controler.LSPServiceStartEvent;
 import lsp.eventhandlers.LSPServiceStartEventHandler;
-import lsp.events.LSPTourStartEvent;
+import org.matsim.contrib.freight.controler.LSPTourStartEvent;
 import lsp.eventhandlers.LSPTourStartEventHandler;
 
 
