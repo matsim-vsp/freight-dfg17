@@ -1,12 +1,12 @@
 package cascadingInfoTest;
 
-import lsp.functions.Info;
-import lsp.functions.InfoFunction;
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfo;
+import lsp.functions.LSPInfoFunction;
+import lsp.functions.LSPInfoFunctionValue;
 
-public class AverageTimeInfo extends Info{
+public class AverageTimeInfo extends LSPInfo {
 
-	private InfoFunction function;
+	private LSPInfoFunction function;
 	private String name = "averageTime";
 		
 	public AverageTimeInfo() {
@@ -19,7 +19,7 @@ public class AverageTimeInfo extends Info{
 	}
 
 	@Override
-	public InfoFunction getFunction() {
+	public LSPInfoFunction getFunction() {
 		return function;
 	}
 
@@ -35,9 +35,9 @@ public class AverageTimeInfo extends Info{
 
 	@Override
 	public void update() {
-		Info  preInfo = predecessorInfos.iterator().next();
+		LSPInfo preInfo = predecessorInfos.iterator().next();
 		AverageTimeInfo avgInfo = (AverageTimeInfo)preInfo;
-		InfoFunctionValue<?> infoVal  = avgInfo.getFunction().getValues().iterator().next();
+		LSPInfoFunctionValue<?> infoVal  = avgInfo.getFunction().getValues().iterator().next();
 		if( infoVal.getValue() instanceof Double) {
 			if(function.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue) {
 				AverageTimeInfoFunctionValue avgVal = (AverageTimeInfoFunctionValue) function.getValues().iterator().next();

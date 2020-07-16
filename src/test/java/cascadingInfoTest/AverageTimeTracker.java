@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.matsim.core.controler.events.AfterMobsimEvent;
 import org.matsim.core.events.handler.EventHandler;
 
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.controler.LSPSimulationTracker;
 
 
@@ -14,7 +14,7 @@ import lsp.controler.LSPSimulationTracker;
 public class AverageTimeTracker implements LSPSimulationTracker{
 
 	private Collection<EventHandler> handlers;
-	private Collection<Info> infos;
+	private Collection<LSPInfo> infos;
 	private AverageTimeInfo timeInfo;
 	private TimeSpanHandler handler;
 	
@@ -22,7 +22,7 @@ public class AverageTimeTracker implements LSPSimulationTracker{
 		handlers = new ArrayList<EventHandler>();
 		handler = new TimeSpanHandler();
 		handlers.add(handler);
-		infos = new ArrayList<Info>();
+		infos = new ArrayList<LSPInfo>();
 		timeInfo = new AverageTimeInfo();
 		infos.add(timeInfo);
 	}
@@ -34,7 +34,7 @@ public class AverageTimeTracker implements LSPSimulationTracker{
 	}
 
 	@Override
-	public Collection<Info> getInfos() {
+	public Collection<LSPInfo> getInfos() {
 		return infos;
 	}
 

@@ -53,7 +53,7 @@ import demand.offer.OfferTransferrer;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
 import lsp.events.LSPEventUtils;
-import lsp.resources.Resource;
+import lsp.resources.LSPResource;
 import testLSPWithCostTracker.CollectionServiceHandler;
 import testLSPWithCostTracker.DistanceAndTimeHandler;
 import testLSPWithCostTracker.LinearCostTracker;
@@ -98,12 +98,12 @@ public class MutualReplanningTest {
 		Carrier collectionCarrier = CarrierImpl.newInstance(collectionCarrierId);
 		collectionCarrier.setCarrierCapabilities(collectionCapabilities);
 		
-		Id<Resource> collectionAdapterId = Id.create("CollectionCarrierAdapter", Resource.class);
+		Id<LSPResource> collectionAdapterId = Id.create("CollectionCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder collectionAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(collectionAdapterId, network);
 		collectionAdapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		collectionAdapterBuilder.setCarrier(collectionCarrier);
 		collectionAdapterBuilder.setLocationLinkId(collectionLinkId);
-		Resource collectionAdapter = collectionAdapterBuilder.build();
+		LSPResource collectionAdapter = collectionAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> collectionElementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId );
@@ -136,7 +136,7 @@ public class MutualReplanningTest {
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);
-		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(collectionAdapter);
 		
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);

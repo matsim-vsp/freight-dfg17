@@ -1,8 +1,8 @@
 package testLSPWithCostTracker;
 
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfoFunctionValue;
 
-public class FixedCostFunctionValue implements InfoFunctionValue<Double> {
+public class FixedCostFunctionValue implements LSPInfoFunctionValue<Double> {
 
 	private double value;
 

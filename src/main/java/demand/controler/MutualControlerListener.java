@@ -35,9 +35,9 @@ import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.controler.LSPFreightControlerListener;
 import lsp.events.LSPEventCreator;
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.controler.LSPCarrierTracker;
-import lsp.resources.CarrierResource;
+import lsp.resources.LSPCarrierResource;
 import lsp.shipment.LSPShipment;
 import lsp.controler.LSPSimulationTracker;
 
@@ -149,11 +149,11 @@ import lsp.controler.LSPSimulationTracker;
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {
-					for (Info info : element.getInfos()) {
+					for (LSPInfo info : element.getInfos()) {
 						info.update();
 					}
 				}
-				for (Info info : solution.getInfos()) {
+				for (LSPInfo info : solution.getInfos()) {
 					info.update();
 				}
 			}
@@ -172,9 +172,9 @@ import lsp.controler.LSPSimulationTracker;
 			LSPPlan selectedPlan = lsp.getSelectedPlan();
 			for (LogisticsSolution solution : selectedPlan.getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {
-					if (element.getResource() instanceof CarrierResource) {
+					if (element.getResource() instanceof LSPCarrierResource) {
 
-						CarrierResource carrierResource = (CarrierResource) element.getResource();
+						LSPCarrierResource carrierResource = (LSPCarrierResource) element.getResource();
 						Carrier carrier = carrierResource.getCarrier();
 						if (!carriers.getCarriers().containsKey(carrier.getId())) {
 							carriers.addCarrier(carrier);

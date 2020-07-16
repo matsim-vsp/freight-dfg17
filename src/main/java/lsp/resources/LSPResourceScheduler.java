@@ -7,13 +7,13 @@ import lsp.LogisticsSolutionElement;
 import lsp.ShipmentTuple;
 import lsp.shipment.ShipmentComparator;
 
-public abstract class ResourceScheduler {
+public abstract class LSPResourceScheduler {
 
-	protected Resource resource;
+	protected LSPResource resource;
 	protected ArrayList<ShipmentTuple>shipments;
 	
 	
-	public final void scheduleShipments(Resource resource, int bufferTime) {
+	public final void scheduleShipments(LSPResource resource, int bufferTime) {
 		this.resource = resource;
 		this.shipments = new ArrayList<ShipmentTuple>();
 		initializeValues(resource);
@@ -24,7 +24,7 @@ public abstract class ResourceScheduler {
 		shipments.clear();	
 	}		
 	
-	protected abstract void initializeValues(Resource resource);
+	protected abstract void initializeValues(LSPResource resource);
 	
 	protected abstract void scheduleResource();
 	

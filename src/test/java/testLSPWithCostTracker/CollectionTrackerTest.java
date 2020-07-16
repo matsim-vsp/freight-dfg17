@@ -3,10 +3,10 @@ package testLSPWithCostTracker;
 import lsp.*;
 import lsp.controler.LSPModule;
 import lsp.events.LSPEventUtils;
-import lsp.functions.Info;
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfo;
+import lsp.functions.LSPInfoFunctionValue;
 import lsp.replanning.LSPReplanningUtils;
-import lsp.resources.Resource;
+import lsp.resources.LSPResource;
 import lsp.scoring.LSPScoringModulsUtils;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.ShipmentUtils;
@@ -47,7 +47,7 @@ public class CollectionTrackerTest {
 	private Network network;
 	private LSP collectionLSP;	
 	private Carrier carrier;
-	private Resource collectionAdapter;
+	private LSPResource collectionAdapter;
 	private LogisticsSolutionElement collectionElement;
 	private LogisticsSolution collectionSolution;
 	private double shareOfFixedCosts;
@@ -87,7 +87,7 @@ public class CollectionTrackerTest {
 		carrier.setCarrierCapabilities(capabilities);
 
 
-		Id<Resource> adapterId = Id.create("CollectionCarrierAdapter", Resource.class);
+		Id<LSPResource> adapterId = Id.create("CollectionCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder adapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(adapterId, network);
 		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		adapterBuilder.setCarrier(carrier);
@@ -121,7 +121,7 @@ public class CollectionTrackerTest {
 		collectionLSPBuilder.setInitialPlan(collectionPlan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		collectionLSPBuilder.setId(collectionLSPId);
-		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(collectionAdapter);
 
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
@@ -279,13 +279,13 @@ public class CollectionTrackerTest {
 		assertEquals(fixedScheduledCostsPerShipment, fixedTrackedCostsPerShipment, Math.max(fixedTrackedCostsPerShipment, fixedScheduledCostsPerShipment)*0.01);
 
 		assertTrue(collectionSolution.getInfos().size() == 1);
-		Info info = collectionSolution.getInfos().iterator().next();
+		LSPInfo info = collectionSolution.getInfos().iterator().next();
 		assertTrue(info instanceof CostInfo);
 		CostInfo costInfo = (CostInfo) info;
 		assertTrue(costInfo.getFunction() instanceof CostInfoFunction);
 		CostInfoFunction function = (CostInfoFunction) costInfo.getFunction();
-		ArrayList<InfoFunctionValue<?>> values = new ArrayList<InfoFunctionValue<?>>(function.getValues());
-		for(InfoFunctionValue<?> value : values) {
+		ArrayList<LSPInfoFunctionValue<?>> values = new ArrayList<LSPInfoFunctionValue<?>>(function.getValues());
+		for(LSPInfoFunctionValue<?> value : values) {
 			if(value instanceof LinearCostFunctionValue) {
 				LinearCostFunctionValue linearValue = (LinearCostFunctionValue) value;
 				assertEquals(linearValue.getValue(),linearTrackedCostsPerShipment, Math.max(linearTrackedCostsPerShipment,linearValue.getValue()) * 0.01 );

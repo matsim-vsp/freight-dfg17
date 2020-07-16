@@ -34,7 +34,7 @@ import org.matsim.vehicles.VehicleType;
 
 import lsp.controler.LSPModule;
 import lsp.events.LSPEventUtils;
-import lsp.resources.Resource;
+import lsp.resources.LSPResource;
 import lsp.shipment.LSPShipment;
 
 
@@ -42,7 +42,7 @@ public class CascadingInfoTest {
 	private Network network;
 	private LSP collectionLSP;	
 	private Carrier carrier;
-	private Resource collectionAdapter;
+	private LSPResource collectionAdapter;
 	private LogisticsSolutionElement collectionElement;
 	private LogisticsSolution collectionSolution;
 	private AverageTimeInfo elementInfo;
@@ -84,7 +84,7 @@ public class CascadingInfoTest {
 		carrier.setCarrierCapabilities(capabilities);
 		
 		
-		Id<Resource> adapterId = Id.create("CollectionCarrierAdapter", Resource.class);
+		Id<LSPResource> adapterId = Id.create("CollectionCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder adapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(adapterId, network);
 		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		adapterBuilder.setCarrier(carrier);
@@ -121,7 +121,7 @@ public class CascadingInfoTest {
 		collectionLSPBuilder.setInitialPlan(collectionPlan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		collectionLSPBuilder.setId(collectionLSPId);
-		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(collectionAdapter);
 		
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);

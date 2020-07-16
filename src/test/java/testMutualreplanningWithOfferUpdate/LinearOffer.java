@@ -6,8 +6,8 @@ import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.offer.Offer;
 import demand.offer.OfferVisitor;
-import lsp.functions.Info;
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfo;
+import lsp.functions.LSPInfoFunctionValue;
 
 
 public class LinearOffer implements Offer{
@@ -65,13 +65,13 @@ public class LinearOffer implements Offer{
 
 	@Override
 	public void update() {
-		for(Info info : solution.getInfos()) {
+		for(LSPInfo info : solution.getInfos()) {
 			if(info instanceof CostInfo) {
 				CostInfo costInfo = (CostInfo) info;
 				CostInfoFunction costFunction = (CostInfoFunction) costInfo.getFunction();
 				FixedCostFunctionValue fixedValue;
 				LinearCostFunctionValue linearValue;
-				for(InfoFunctionValue value : costFunction.getValues()) {
+				for(LSPInfoFunctionValue value : costFunction.getValues()) {
 					if(value instanceof FixedCostFunctionValue) {
 						fixedValue = (FixedCostFunctionValue) value;
 						this.fix = fixedValue.getValue();

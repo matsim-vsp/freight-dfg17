@@ -3,22 +3,22 @@ package cascadingInfoTest;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lsp.functions.InfoFunction;
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfoFunction;
+import lsp.functions.LSPInfoFunctionValue;
 
 
 
-public class AverageTimeInfoFunction implements InfoFunction{
+public class AverageTimeInfoFunction implements LSPInfoFunction {
 
-	private Collection<InfoFunctionValue<?>> values;
+	private Collection<LSPInfoFunctionValue<?>> values;
 	
 	public AverageTimeInfoFunction() {
-		values = new ArrayList<InfoFunctionValue<?>>();
+		values = new ArrayList<LSPInfoFunctionValue<?>>();
 		values.add(new AverageTimeInfoFunctionValue());
 	}
 		
 	@Override
-	public Collection<InfoFunctionValue<?>> getValues() {
+	public Collection<LSPInfoFunctionValue<?>> getValues() {
 		return values;
 	}
 

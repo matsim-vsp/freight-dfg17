@@ -11,7 +11,7 @@ import demand.DemandAgent;
 import demand.mutualReplanning.DemandReplanner;
 import demand.scoring.DemandScorer;
 import demand.UtilityFunction;
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.shipment.Requirement;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 
@@ -31,7 +31,7 @@ public class DemandObjectImpl implements DemandObject{
 	private Collection<Requirement> requirements;
 	private OfferRequester offerRequester;
 	private DemandPlanGenerator generator;
-	private Collection<Info> infos;
+	private Collection<LSPInfo> infos;
 	private Attributes attributes = new Attributes();
 
 	public static class Builder{
@@ -48,7 +48,7 @@ public class DemandObjectImpl implements DemandObject{
 		private Collection<Requirement> requirements;
 		private OfferRequester offerRequester;
 		private DemandPlanGenerator generator;
-		private Collection<Info> infos;
+		private Collection<LSPInfo> infos;
 		
 		public static Builder newInstance() {
 			return new Builder();
@@ -57,7 +57,7 @@ public class DemandObjectImpl implements DemandObject{
 	private Builder() {
 		this.requirements = new ArrayList<Requirement>();
 		this.utilityFunctions = new ArrayList<UtilityFunction>();
-		this.infos = new ArrayList<Info>();
+		this.infos = new ArrayList<LSPInfo>();
 	}
 	
 	public Builder setShipper(DemandAgent shipper) {
@@ -115,7 +115,7 @@ public class DemandObjectImpl implements DemandObject{
 		return this;
 	}
 	
-	public Builder addInfo(Info info) {
+	public Builder addInfo(LSPInfo info) {
 		this.infos.add(info);
 		return this;
 	}
@@ -315,7 +315,7 @@ public class DemandObjectImpl implements DemandObject{
 	}
 
 	@Override
-	public Collection<Info> getInfos() {
+	public Collection<LSPInfo> getInfos() {
 		return infos;
 	}
 

@@ -1,8 +1,8 @@
 package cascadingInfoTest;
 
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfoFunctionValue;
 
-public class AverageTimeInfoFunctionValue implements InfoFunctionValue<Double>{
+public class AverageTimeInfoFunctionValue implements LSPInfoFunctionValue<Double> {
 
 	private Double value;
 	

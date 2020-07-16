@@ -1,9 +1,9 @@
 package testMutualreplanningWithOfferUpdate;
 
-import lsp.functions.Info;
-import lsp.functions.InfoFunction;
+import lsp.functions.LSPInfo;
+import lsp.functions.LSPInfoFunction;
 
-public class CostInfo extends Info {
+public class CostInfo extends LSPInfo {
 
 	private CostInfoFunction costFunction;
 	
@@ -18,7 +18,7 @@ public class CostInfo extends Info {
 	}
 
 	@Override
-	public InfoFunction getFunction() {
+	public LSPInfoFunction getFunction() {
 		return costFunction;
 	}
 
