@@ -1,15 +1,15 @@
 package testMutualreplanningWithOfferUpdate;
 
-import lsp.eventhandlers.FreightLinkLeaveEventHandler;
-import lsp.eventhandlers.FreightVehicleLeavesTrafficEventHandler;
+import lsp.eventhandlers.LSPLinkLeaveEventHandler;
+import lsp.eventhandlers.LSPVehicleLeavesTrafficEventHandler;
 import lsp.events.*;
-import lsp.eventhandlers.FreightLinkEnterEventHandler;
+import lsp.eventhandlers.LSPLinkEnterEventHandler;
 import org.matsim.api.core.v01.network.Network;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class DistanceAndTimeHandler implements FreightLinkEnterEventHandler, FreightVehicleLeavesTrafficEventHandler, FreightLinkLeaveEventHandler{
+public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehicleLeavesTrafficEventHandler, LSPLinkLeaveEventHandler{
 
 	private Collection<FreightLinkEnterEvent> events;
 	private double distanceCosts;

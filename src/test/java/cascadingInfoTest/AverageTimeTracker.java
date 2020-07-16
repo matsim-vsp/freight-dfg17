@@ -7,11 +7,11 @@ import org.matsim.core.controler.events.AfterMobsimEvent;
 import org.matsim.core.events.handler.EventHandler;
 
 import lsp.functions.Info;
-import lsp.controler.SimulationTracker;
+import lsp.controler.LSPSimulationTracker;
 
 
 
-public class AverageTimeTracker implements SimulationTracker {
+public class AverageTimeTracker implements LSPSimulationTracker{
 
 	private Collection<EventHandler> handlers;
 	private Collection<Info> infos;

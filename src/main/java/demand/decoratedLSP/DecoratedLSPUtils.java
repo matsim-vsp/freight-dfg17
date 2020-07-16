@@ -3,7 +3,7 @@ package demand.decoratedLSP;
 import demand.offer.OfferFactory;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
-import lsp.controler.SimulationTracker;
+import lsp.controler.LSPSimulationTracker;
 import lsp.functions.Info;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.events.handler.EventHandler;
@@ -18,7 +18,7 @@ public class DecoratedLSPUtils {
 		private Collection<LogisticsSolutionElement> elements;
 		private Collection<Info> solutionInfos;
 		private Collection<EventHandler> eventHandlers;
-		private Collection<SimulationTracker>trackers;
+		private Collection<LSPSimulationTracker>trackers;
 		private OfferFactory offerFactory;
 
 		public static LogisticsSolutionDecoratorImpl_wOffersBuilder newInstance(Id<LogisticsSolution>id){
@@ -29,7 +29,7 @@ public class DecoratedLSPUtils {
 			this.elements = new ArrayList<LogisticsSolutionElement>();
 			this.solutionInfos = new ArrayList<Info>();
 			this.eventHandlers = new ArrayList<EventHandler>();
-			this.trackers = new ArrayList<SimulationTracker>();
+			this.trackers = new ArrayList<LSPSimulationTracker>();
 			this.id = id;
 		}
 
@@ -48,7 +48,7 @@ public class DecoratedLSPUtils {
 			return this;
 		}
 
-		public LogisticsSolutionDecoratorImpl_wOffersBuilder addTracker(SimulationTracker tracker) {
+		public LogisticsSolutionDecoratorImpl_wOffersBuilder addTracker( LSPSimulationTracker tracker ) {
 			trackers.add(tracker);
 			return this;
 		}
@@ -80,7 +80,7 @@ public class DecoratedLSPUtils {
 			return eventHandlers;
 		}
 
-		Collection<SimulationTracker> getTrackers() {
+		Collection<LSPSimulationTracker> getTrackers() {
 			return trackers;
 		}
 

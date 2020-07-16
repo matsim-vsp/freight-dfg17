@@ -10,7 +10,7 @@ import lsp.resources.Resource;
 import lsp.scoring.LSPScoringModulsUtils;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.ShipmentUtils;
-import lsp.controler.SimulationTracker;
+import lsp.controler.LSPSimulationTracker;
 import lsp.usecase.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -183,7 +183,7 @@ public class CollectionTrackerTest {
 	@Test
 	public void testCollectionTracker() {
 		assertTrue(collectionSolution.getSimulationTrackers().size() == 1);
-		SimulationTracker tracker = collectionSolution.getSimulationTrackers().iterator().next();
+		LSPSimulationTracker tracker = collectionSolution.getSimulationTrackers().iterator().next();
 		assertTrue(tracker instanceof LinearCostTracker);
 		LinearCostTracker linearTracker = (LinearCostTracker) tracker;
 		double totalScheduledCosts = 0;

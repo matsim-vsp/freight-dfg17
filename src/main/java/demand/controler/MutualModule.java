@@ -5,8 +5,8 @@ import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
 import lsp.events.EventCreator;
-import lsp.controler.CarrierResourceTracker;
-import lsp.controler.FreightQSimFactory;
+import lsp.controler.LSPCarrierTracker;
+import lsp.controler.LSPQSimFactory;
 import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 
@@ -86,7 +86,7 @@ public class MutualModule extends AbstractModule{
 			}
 			bind(MutualControlerListener.class).asEagerSingleton();
 	        addControlerListenerBinding().to(MutualControlerListener.class);
-	        bindMobsim().toProvider(FreightQSimFactory.class);
+	        bindMobsim().toProvider( LSPQSimFactory.class );
 		
 	}
 
@@ -96,7 +96,7 @@ public class MutualModule extends AbstractModule{
 	}
 	
 	@Provides
-    CarrierResourceTracker provideCarrierResourceTracker(MutualControlerListener mutualControlerListener) {
+	LSPCarrierTracker provideCarrierResourceTracker( MutualControlerListener mutualControlerListener ) {
         return mutualControlerListener.getCarrierResourceTracker();
     }
 
