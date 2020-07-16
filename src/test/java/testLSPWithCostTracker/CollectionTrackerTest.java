@@ -197,7 +197,7 @@ public class CollectionTrackerTest {
 				TourStartHandler startHandler = (TourStartHandler) handler;
 				double scheduledCosts = 0;
 				for(ScheduledTour scheduledTour : carrier.getSelectedPlan().getScheduledTours()) {
-					scheduledCosts += scheduledTour.getVehicle().getVehicleType().getCostInformation().getFix();
+					scheduledCosts += ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getFix();
 					totalScheduledCosts += scheduledCosts;
 				}
 				double trackedCosts = startHandler.getVehicleFixedCosts();
@@ -214,7 +214,7 @@ public class CollectionTrackerTest {
 					for(TourElement element : tour.getTourElements()) {
 						if(element instanceof ServiceActivity){
 							ServiceActivity activity = (ServiceActivity) element;
-							scheduledCosts += activity.getService().getServiceDuration() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerTimeUnit();
+							scheduledCosts += activity.getService().getServiceDuration() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerTimeUnit();
 							totalScheduledCosts += scheduledCosts;
 							totalScheduledWeight += activity.getService().getCapacityDemand();
 							totalNumberOfScheduledShipments++;
@@ -235,7 +235,7 @@ public class CollectionTrackerTest {
 					for(TourElement element : tour.getTourElements() ) {
 						if(element instanceof Leg) {
 							Leg leg = (Leg) element;
-							scheduledTimeCosts += leg.getExpectedTransportTime() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerTimeUnit();
+							scheduledTimeCosts += leg.getExpectedTransportTime() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerTimeUnit();
 						}
 					}
 				}
@@ -246,19 +246,19 @@ public class CollectionTrackerTest {
 				double trackedDistanceCosts = distanceHandler.getDistanceCosts();
 				totalTrackedCosts += trackedDistanceCosts;
 				for(ScheduledTour scheduledTour : carrier.getSelectedPlan().getScheduledTours()) {
-					scheduledDistanceCosts += network.getLinks().get(scheduledTour.getTour().getEndLinkId()).getLength() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerDistanceUnit();
+					scheduledDistanceCosts += network.getLinks().get(scheduledTour.getTour().getEndLinkId()).getLength() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerDistanceUnit();
 					for(TourElement element : scheduledTour.getTour().getTourElements()) {
 						System.out.println(element);
 						if(element instanceof Leg) {
 							Leg leg = (Leg) element;
 							NetworkRoute linkRoute = (NetworkRoute) leg.getRoute();
 							for(Id<Link> linkId: linkRoute.getLinkIds()) {
-								scheduledDistanceCosts  += network.getLinks().get(linkId).getLength() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerDistanceUnit();
+								scheduledDistanceCosts  += network.getLinks().get(linkId).getLength() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerDistanceUnit();
 							}
 						}
 						if(element instanceof ServiceActivity) {
 							ServiceActivity activity = (ServiceActivity) element;
-							scheduledDistanceCosts  += network.getLinks().get(activity.getLocation()).getLength() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerDistanceUnit();
+							scheduledDistanceCosts  += network.getLinks().get(activity.getLocation()).getLength() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerDistanceUnit();
 						}
 					}
 				}

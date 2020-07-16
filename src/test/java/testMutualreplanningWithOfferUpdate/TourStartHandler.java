@@ -2,6 +2,7 @@ package testMutualreplanningWithOfferUpdate;
 
 import org.matsim.contrib.freight.events.LSPTourStartEvent;
 import org.matsim.contrib.freight.events.eventhandler.LSPTourStartEventHandler;
+import org.matsim.vehicles.Vehicle;
 
 public class TourStartHandler implements LSPTourStartEventHandler {
 
@@ -14,7 +15,7 @@ public class TourStartHandler implements LSPTourStartEventHandler {
 
 	@Override
 	public void handleEvent(LSPTourStartEvent event) {
-		vehicleFixedCosts = vehicleFixedCosts + event.getVehicle().getVehicleType().getCostInformation().getFix();
+		vehicleFixedCosts = vehicleFixedCosts + ((Vehicle) event.getVehicle()).getType().getCostInformation().getFix();
 	}
 
 	public double getVehicleFixedCosts() {
