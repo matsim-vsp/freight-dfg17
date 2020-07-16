@@ -55,7 +55,7 @@ import demand.offer.OfferUpdaterImpl;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
 import lsp.functions.LSPInfo;
-import org.matsim.contrib.freight.controler.LSPEventUtils;
+import org.matsim.contrib.freight.events.LSPEventUtils;
 import lsp.resources.LSPResource;
 import testMutualReplanning.FortyTwoDemandScorer;
 import testMutualReplanning.HalfLotSizeDemandPlanGenerator;

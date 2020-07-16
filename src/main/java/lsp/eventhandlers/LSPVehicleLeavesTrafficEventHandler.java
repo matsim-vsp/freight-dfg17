@@ -1,6 +1,6 @@
 package lsp.eventhandlers;
 
-import org.matsim.contrib.freight.controler.LSPFreightVehicleLeavesTrafficEvent;
+import org.matsim.contrib.freight.events.LSPFreightVehicleLeavesTrafficEvent;
 
 public interface LSPVehicleLeavesTrafficEventHandler{
 	

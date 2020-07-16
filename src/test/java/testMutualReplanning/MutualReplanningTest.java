@@ -52,7 +52,7 @@ import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
-import org.matsim.contrib.freight.controler.LSPEventUtils;
+import org.matsim.contrib.freight.events.LSPEventUtils;
 import lsp.resources.LSPResource;
 import testLSPWithCostTracker.CollectionServiceHandler;
 import testLSPWithCostTracker.DistanceAndTimeHandler;

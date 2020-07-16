@@ -1,6 +1,6 @@
 package testMutualreplanningWithOfferUpdate;
 
-import org.matsim.contrib.freight.controler.LSPTourStartEvent;
+import org.matsim.contrib.freight.events.LSPTourStartEvent;
 import lsp.eventhandlers.LSPTourStartEventHandler;
 
 public class TourStartHandler implements LSPTourStartEventHandler {

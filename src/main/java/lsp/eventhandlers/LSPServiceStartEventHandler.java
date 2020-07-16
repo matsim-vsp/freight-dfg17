@@ -1,6 +1,6 @@
 package lsp.eventhandlers;
 
-import org.matsim.contrib.freight.controler.LSPServiceStartEvent;
+import org.matsim.contrib.freight.events.LSPServiceStartEvent;
 import org.matsim.core.events.handler.EventHandler;
 
 

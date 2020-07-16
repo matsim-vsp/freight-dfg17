@@ -34,7 +34,7 @@ import lsp.LSPPlan;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import org.matsim.contrib.freight.controler.LSPFreightControlerListener;
-import org.matsim.contrib.freight.controler.LSPEventCreator;
+import org.matsim.contrib.freight.events.LSPEventCreator;
 import lsp.functions.LSPInfo;
 import org.matsim.contrib.freight.controler.LSPCarrierTracker;
 import lsp.resources.LSPCarrierResource;
