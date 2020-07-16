@@ -1,8 +1,8 @@
 package testMutualreplanningWithOfferUpdate;
 
-import org.matsim.contrib.freight.eventhandler.LSPLinkLeaveEventHandler;
-import org.matsim.contrib.freight.eventhandler.LSPVehicleLeavesTrafficEventHandler;
-import org.matsim.contrib.freight.eventhandler.LSPLinkEnterEventHandler;
+import org.matsim.contrib.freight.events.eventhandler.LSPLinkLeaveEventHandler;
+import org.matsim.contrib.freight.events.eventhandler.LSPVehicleLeavesTrafficEventHandler;
+import org.matsim.contrib.freight.events.eventhandler.LSPLinkEnterEventHandler;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.events.LSPFreightLinkEnterEvent;
 import org.matsim.contrib.freight.events.LSPFreightLinkLeaveEvent;

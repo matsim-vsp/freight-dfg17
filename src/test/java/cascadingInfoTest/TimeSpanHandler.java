@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.matsim.contrib.freight.events.LSPServiceStartEvent;
-import org.matsim.contrib.freight.eventhandler.LSPServiceStartEventHandler;
+import org.matsim.contrib.freight.events.eventhandler.LSPServiceStartEventHandler;
 import org.matsim.contrib.freight.events.LSPTourStartEvent;
-import org.matsim.contrib.freight.eventhandler.LSPTourStartEventHandler;
+import org.matsim.contrib.freight.events.eventhandler.LSPTourStartEventHandler;
 
 
 
