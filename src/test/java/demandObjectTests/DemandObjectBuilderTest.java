@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+import demand.DemandUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.matsim.api.core.v01.Id;
@@ -16,13 +17,11 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.config.Config;
 import org.matsim.core.network.io.MatsimNetworkReader;
-import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import org.matsim.core.replanning.selectors.BestPlanSelector;
 import org.matsim.core.scenario.ScenarioUtils;
 
 import demand.decoratedLSP.LSPDecorator;
-import demand.demandAgent.DemandAgent;
-import demand.demandAgent.DemandAgentImpl;
+import demand.DemandAgent;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjectImpl;
 import demand.demandObject.DemandPlan;
@@ -62,10 +61,10 @@ public class DemandObjectBuilderTest {
         for(int i = 1; i < 11 ; i++) {
         	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
         	builder.setId(Id.create("DemandObject_" + i, DemandObject.class));
-        	DemandAgentImpl.Builder shipperBuilder = DemandAgentImpl.Builder.newInstance();
+			DemandUtils.DemandAgentImplBuilder shipperBuilder = DemandUtils.DemandAgentImplBuilder.newInstance();
         	shipperBuilder.setId(Id.create("DemandObject_" + i+ "_Shipper", DemandAgent.class));
         	builder.setShipper(shipperBuilder.build());
-        	DemandAgentImpl.Builder recipientBuilder = DemandAgentImpl.Builder.newInstance();
+			DemandUtils.DemandAgentImplBuilder recipientBuilder = DemandUtils.DemandAgentImplBuilder.newInstance();
         	recipientBuilder.setId(Id.create("DemandObject_" + i+ "_Recipient", DemandAgent.class));
         	builder.setRecipient(recipientBuilder.build());
         	double shipmentSize= 5 + random.nextDouble()*5;

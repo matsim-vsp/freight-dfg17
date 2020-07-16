@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+import demand.DemandUtils;
 import demand.controler.DemandControlerUtils;
 import demand.decoratedLSP.*;
 import lsp.*;
@@ -35,8 +36,7 @@ import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
 import demand.controler.MutualModule;
-import demand.demandAgent.DemandAgent;
-import demand.demandAgent.DemandAgentImpl;
+import demand.DemandAgent;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjectImpl;
 import demand.demandObject.DemandObjects;
@@ -147,10 +147,10 @@ public class MutualReplanningTest {
 		for(int i = 1; i < 11 ; i++) {
 			DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
 			builder.setId(Id.create("DemandObject_" + i, DemandObject.class));
-			DemandAgentImpl.Builder shipperBuilder = DemandAgentImpl.Builder.newInstance();
+			DemandUtils.DemandAgentImplBuilder shipperBuilder = DemandUtils.DemandAgentImplBuilder.newInstance();
 			shipperBuilder.setId(Id.create("DemandObject_" + i+ "_Shipper", DemandAgent.class));
 			builder.setShipper(shipperBuilder.build());
-			DemandAgentImpl.Builder recipientBuilder = DemandAgentImpl.Builder.newInstance();
+			DemandUtils.DemandAgentImplBuilder recipientBuilder = DemandUtils.DemandAgentImplBuilder.newInstance();
 			recipientBuilder.setId(Id.create("DemandObject_" + i+ "_Recipient", DemandAgent.class));
 			builder.setRecipient(recipientBuilder.build());
 			double shipmentSize= 5 + random.nextDouble()*5;

@@ -7,10 +7,8 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.HasPlansAndId;
 
-import demand.demandAgent.DemandAgent;
 import demand.mutualReplanning.DemandReplanner;
 import demand.scoring.DemandScorer;
-import demand.utilityFunctions.UtilityFunction;
 import lsp.functions.Info;
 import lsp.shipment.Requirement;
 

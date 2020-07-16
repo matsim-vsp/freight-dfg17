@@ -4,17 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.core.replanning.GenericStrategyManager;
 
-import demand.decoratedLSP.LSPWithOffers;
-import demand.demandAgent.DemandAgent;
+import demand.DemandAgent;
 import demand.mutualReplanning.DemandReplanner;
-import demand.offer.Offer;
 import demand.scoring.DemandScorer;
-import demand.utilityFunctions.UtilityFunction;
+import demand.UtilityFunction;
 import lsp.functions.Info;
 import lsp.shipment.Requirement;
 import org.matsim.utils.objectattributes.attributable.Attributes;
