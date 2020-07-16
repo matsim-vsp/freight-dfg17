@@ -42,7 +42,7 @@ import lsp.resources.CarrierResource;
 import lsp.shipment.LSPShipment;
 import lsp.controler.SimulationTracker;
 
-public class MutualControlerListener implements FreightControlerListener, BeforeMobsimListener, AfterMobsimListener,
+/*package-private*/ class MutualControlerListener implements FreightControlerListener, BeforeMobsimListener, AfterMobsimListener,
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
 	private CarrierResourceTracker carrierResourceTracker;

@@ -16,12 +16,12 @@ import demand.offer.Offer;
 import lsp.functions.Info;
 import lsp.shipment.LSPShipment;
 
-public class InitialDemandAssigner implements StartupListener{
+/*package-private*/ class InitialDemandAssigner implements StartupListener{
 
 	private DemandObjects demandObjects;
 	private LSPDecorators lsps;
 	
-	public InitialDemandAssigner(DemandObjects demandObjects, LSPDecorators lsps) {
+	InitialDemandAssigner(DemandObjects demandObjects, LSPDecorators lsps) {
 		this.demandObjects = demandObjects;
 		this.lsps = lsps;
 	}

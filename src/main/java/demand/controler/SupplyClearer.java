@@ -9,11 +9,11 @@ import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.shipment.LSPShipment;
 
-public class SupplyClearer implements IterationEndsListener{
+/*package-private*/ class SupplyClearer implements IterationEndsListener{
 	
 	private LSPDecorators lsps;
 	
-	public SupplyClearer(LSPDecorators lsps) {
+	SupplyClearer(LSPDecorators lsps) {
 		this.lsps = lsps;
 	}
 					

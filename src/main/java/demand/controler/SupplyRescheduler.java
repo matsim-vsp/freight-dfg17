@@ -7,11 +7,11 @@ import demand.decoratedLSP.LSPDecorators;
 import lsp.LSP;
 
 
-public class SupplyRescheduler implements BeforeMobsimListener{
+/*package-private*/ class SupplyRescheduler implements BeforeMobsimListener{
 
 	private LSPDecorators lsps;
 	
-	public SupplyRescheduler(LSPDecorators  lsps) {
+	SupplyRescheduler(LSPDecorators  lsps) {
 		this.lsps = lsps;
 	}
 	
