@@ -7,8 +7,8 @@ public abstract class LSPInfo {
 
 	protected Set<LSPInfo> predecessorInfos;
 	
-	public LSPInfo() {
-		this.predecessorInfos = new HashSet<LSPInfo>();
+	protected LSPInfo() {
+		this.predecessorInfos = new HashSet<>();
 	}
 	
 	
@@ -16,11 +16,11 @@ public abstract class LSPInfo {
 		predecessorInfos.add(info);
 	}
 	
-	public void removePredecessorInfo(LSPInfo info) {
-		if(predecessorInfos.contains(info)) {
-			predecessorInfos.remove(info);
-		}
-	}
+//	public void removePredecessorInfo(LSPInfo info) {
+//		if(predecessorInfos.contains(info)) {
+//			predecessorInfos.remove(info);
+//		}
+//	}
 	
 	public Set<LSPInfo> getPredecessorInfos() {
 		return predecessorInfos;
