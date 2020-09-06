@@ -9,6 +9,7 @@ import org.matsim.api.core.v01.events.Event;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.controler.CarrierAgentTracker;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.events.AfterMobsimEvent;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
@@ -36,7 +37,6 @@ import lsp.LogisticsSolutionElement;
 import org.matsim.contrib.freight.controler.LSPFreightControlerListener;
 import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreator;
 import lsp.functions.LSPInfo;
-import org.matsim.contrib.freight.controler.LSPCarrierTracker;
 import lsp.resources.LSPCarrierResource;
 import lsp.shipment.LSPShipment;
 import lsp.controler.LSPSimulationTracker;
@@ -44,7 +44,7 @@ import lsp.controler.LSPSimulationTracker;
 /*package-private*/ class MutualControlerListener implements LSPFreightControlerListener, BeforeMobsimListener, AfterMobsimListener,
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
-	private LSPCarrierTracker carrierResourceTracker;
+	private CarrierAgentTracker carrierResourceTracker;
 	private Carriers carriers;
 	private LSPDecorators lsps;
 	private DemandObjects demandObjects;
@@ -74,7 +74,7 @@ import lsp.controler.LSPSimulationTracker;
 		SupplyRescheduler rescheduler = new SupplyRescheduler(lsps);
 		rescheduler.notifyBeforeMobsim(event);
 		
-		carrierResourceTracker = new LSPCarrierTracker(carriers, network, this, creators);
+		carrierResourceTracker = new CarrierAgentTracker(carriers, this, creators);
 		eventsManager.addHandler(carrierResourceTracker);
 		registeredHandlers = new ArrayList<EventHandler>();
 
@@ -192,7 +192,7 @@ import lsp.controler.LSPSimulationTracker;
 		initialAssigner.notifyStartup(event);
 	}
 
-	public LSPCarrierTracker getCarrierResourceTracker() {
+	public CarrierAgentTracker getCarrierResourceTracker() {
 		return carrierResourceTracker;
 	}
 

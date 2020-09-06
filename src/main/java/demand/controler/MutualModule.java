@@ -5,7 +5,7 @@ import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
 import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreator;
-import org.matsim.contrib.freight.controler.LSPCarrierTracker;
+import org.matsim.contrib.freight.controler.CarrierAgentTracker;
 import lsp.controler.LSPQSimFactory;
 import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.core.controler.AbstractModule;
@@ -96,7 +96,7 @@ public class MutualModule extends AbstractModule{
 	}
 	
 	@Provides
-	LSPCarrierTracker provideCarrierResourceTracker( MutualControlerListener mutualControlerListener ) {
+	CarrierAgentTracker provideCarrierResourceTracker( MutualControlerListener mutualControlerListener ) {
         return mutualControlerListener.getCarrierResourceTracker();
     }
 

@@ -31,7 +31,6 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.NetworkWriter;
 import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
-import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
@@ -292,7 +291,7 @@ public class BaseReceiverChessboardScenario{
 	 */
 	private static void createChessboardCarriersAndAddToScenario( Scenario sc ) {
 		Id<Carrier> carrierId = Id.create("Carrier1", Carrier.class);
-		Carrier carrier = CarrierImpl.newInstance(carrierId);
+		Carrier carrier = CarrierUtils.createCarrier( carrierId );
 		Id<Link> carrierLocation = selectRandomLink(sc.getNetwork());
 
 		CarrierCapabilities.Builder capBuilder = CarrierCapabilities.Builder.newInstance();
