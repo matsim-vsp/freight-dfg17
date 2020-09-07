@@ -1,32 +1,5 @@
 package demand.controler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.inject.Inject;
-
-import org.matsim.api.core.v01.events.Event;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.contrib.freight.controler.CarrierAgentTracker;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.controler.events.AfterMobsimEvent;
-import org.matsim.core.controler.events.BeforeMobsimEvent;
-import org.matsim.core.controler.events.IterationEndsEvent;
-import org.matsim.core.controler.events.IterationStartsEvent;
-import org.matsim.core.controler.events.ReplanningEvent;
-import org.matsim.core.controler.events.ScoringEvent;
-import org.matsim.core.controler.events.StartupEvent;
-import org.matsim.core.controler.listener.AfterMobsimListener;
-import org.matsim.core.controler.listener.BeforeMobsimListener;
-import org.matsim.core.controler.listener.IterationEndsListener;
-import org.matsim.core.controler.listener.IterationStartsListener;
-import org.matsim.core.controler.listener.ReplanningListener;
-import org.matsim.core.controler.listener.ScoringListener;
-import org.matsim.core.controler.listener.StartupListener;
-import org.matsim.core.events.handler.EventHandler;
-
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
@@ -34,14 +7,26 @@ import lsp.LSP;
 import lsp.LSPPlan;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
-import org.matsim.contrib.freight.controler.LSPFreightControlerListener;
-import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreator;
+import lsp.controler.LSPSimulationTracker;
 import lsp.functions.LSPInfo;
 import lsp.resources.LSPCarrierResource;
 import lsp.shipment.LSPShipment;
-import lsp.controler.LSPSimulationTracker;
+import org.matsim.api.core.v01.events.Event;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.controler.CarrierAgentTracker;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreator;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.controler.events.*;
+import org.matsim.core.controler.listener.*;
+import org.matsim.core.events.handler.EventHandler;
 
-/*package-private*/ class MutualControlerListener implements LSPFreightControlerListener, BeforeMobsimListener, AfterMobsimListener,
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collection;
+
+/*package-private*/ class MutualControlerListener implements BeforeMobsimListener, AfterMobsimListener,
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
 	private CarrierAgentTracker carrierResourceTracker;
@@ -54,7 +39,6 @@ import lsp.controler.LSPSimulationTracker;
 	private ArrayList<EventHandler> registeredHandlers;
 
 	@Inject	EventsManager eventsManager;
-	@Inject	Network network;
 
 	@Inject
 	protected MutualControlerListener(LSPDecorators lsps, DemandObjects demandObjects,
@@ -74,7 +58,7 @@ import lsp.controler.LSPSimulationTracker;
 		SupplyRescheduler rescheduler = new SupplyRescheduler(lsps);
 		rescheduler.notifyBeforeMobsim(event);
 		
-		carrierResourceTracker = new CarrierAgentTracker(carriers, this, creators);
+		carrierResourceTracker = new CarrierAgentTracker(carriers, creators, eventsManager );
 		eventsManager.addHandler(carrierResourceTracker);
 		registeredHandlers = new ArrayList<EventHandler>();
 
