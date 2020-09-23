@@ -2,13 +2,13 @@ package example.lsp.requirementsChecking;
 
 import lsp.functions.*;
 
-/*package-private*/ class BlueInfo extends Info{
+/*package-private*/ class BlueInfo extends LSPInfo {
 
-private InfoFunction blueInfoFunction;
+private LSPInfoFunction blueInfoFunction;
 
 	/*package-private*/ BlueInfo() {
-		blueInfoFunction = InfoFunctionUtils.createDefaultInfoFunction();
-		InfoFunctionValue<String> value = InfoFunctionUtils.createInfoFunctionValue("blue" );
+		blueInfoFunction = LSPInfoFunctionUtils.createDefaultInfoFunction();
+		LSPInfoFunctionValue<String> value = LSPInfoFunctionUtils.createInfoFunctionValue("blue" );
 		value.setValue("blue");
 		blueInfoFunction.getValues().add(value);
 	}
@@ -19,7 +19,7 @@ private InfoFunction blueInfoFunction;
 	}
 
 	@Override
-	public InfoFunction getFunction() {
+	public LSPInfoFunction getFunction() {
 		return blueInfoFunction;
 	}
 

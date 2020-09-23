@@ -2,15 +2,15 @@ package testLSPWithCostTracker;
 
 import lsp.*;
 import lsp.controler.LSPModule;
-import lsp.events.EventUtils;
-import lsp.functions.Info;
-import lsp.functions.InfoFunctionValue;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
+import lsp.functions.LSPInfo;
+import lsp.functions.LSPInfoFunctionValue;
 import lsp.replanning.LSPReplanningUtils;
-import lsp.resources.Resource;
-import lsp.scoring.LSPScoringModulsUtils;
+import lsp.resources.LSPResource;
+import lsp.scoring.LSPScoringUtils;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.ShipmentUtils;
-import lsp.controler.SimulationTracker;
+import lsp.controler.LSPSimulationTracker;
 import lsp.usecase.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class CollectionTrackerTest {
 	private Network network;
 	private LSP collectionLSP;	
 	private Carrier carrier;
-	private Resource collectionAdapter;
+	private LSPResource collectionAdapter;
 	private LogisticsSolutionElement collectionElement;
 	private LogisticsSolution collectionSolution;
 	private double shareOfFixedCosts;
@@ -76,18 +76,18 @@ public class CollectionTrackerTest {
 
 		Id<Vehicle> vollectionVehicleId = Id.createVehicleId("CollectionVehicle");
 		CarrierVehicle carrierVehicle = CarrierVehicle.newInstance(vollectionVehicleId, collectionLink.getId());
-		carrierVehicle.setVehicleType(collectionType);
+		carrierVehicle.setType( collectionType );
 
 		CarrierCapabilities.Builder capabilitiesBuilder = CarrierCapabilities.Builder.newInstance();
 		capabilitiesBuilder.addType(collectionType);
 		capabilitiesBuilder.addVehicle(carrierVehicle);
 		capabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
 		CarrierCapabilities capabilities = capabilitiesBuilder.build();
-		carrier = CarrierImpl.newInstance(carrierId);
+		carrier = CarrierUtils.createCarrier( carrierId );
 		carrier.setCarrierCapabilities(capabilities);
 
 
-		Id<Resource> adapterId = Id.create("CollectionCarrierAdapter", Resource.class);
+		Id<LSPResource> adapterId = Id.create("CollectionCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder adapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(adapterId, network);
 		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		adapterBuilder.setCarrier(carrier);
@@ -121,7 +121,7 @@ public class CollectionTrackerTest {
 		collectionLSPBuilder.setInitialPlan(collectionPlan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		collectionLSPBuilder.setId(collectionLSPId);
-		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(collectionAdapter);
 
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
@@ -170,7 +170,7 @@ public class CollectionTrackerTest {
 
 		Controler controler = new Controler(config);
 
-		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), LSPScoringModulsUtils.createDefaultLSPScoringModule(lsps), EventUtils.getStandardEventCreators());
+		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), LSPScoringUtils.createDefaultLSPScoringModule(lsps ), LSPEventCreatorUtils.getStandardEventCreators());
 
 		controler.addOverridingModule(module);
 		config.controler().setFirstIteration(0);
@@ -183,7 +183,7 @@ public class CollectionTrackerTest {
 	@Test
 	public void testCollectionTracker() {
 		assertTrue(collectionSolution.getSimulationTrackers().size() == 1);
-		SimulationTracker tracker = collectionSolution.getSimulationTrackers().iterator().next();
+		LSPSimulationTracker tracker = collectionSolution.getSimulationTrackers().iterator().next();
 		assertTrue(tracker instanceof LinearCostTracker);
 		LinearCostTracker linearTracker = (LinearCostTracker) tracker;
 		double totalScheduledCosts = 0;
@@ -197,7 +197,7 @@ public class CollectionTrackerTest {
 				TourStartHandler startHandler = (TourStartHandler) handler;
 				double scheduledCosts = 0;
 				for(ScheduledTour scheduledTour : carrier.getSelectedPlan().getScheduledTours()) {
-					scheduledCosts += scheduledTour.getVehicle().getVehicleType().getCostInformation().getFix();
+					scheduledCosts += ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getFix();
 					totalScheduledCosts += scheduledCosts;
 				}
 				double trackedCosts = startHandler.getVehicleFixedCosts();
@@ -214,7 +214,7 @@ public class CollectionTrackerTest {
 					for(TourElement element : tour.getTourElements()) {
 						if(element instanceof ServiceActivity){
 							ServiceActivity activity = (ServiceActivity) element;
-							scheduledCosts += activity.getService().getServiceDuration() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerTimeUnit();
+							scheduledCosts += activity.getService().getServiceDuration() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerTimeUnit();
 							totalScheduledCosts += scheduledCosts;
 							totalScheduledWeight += activity.getService().getCapacityDemand();
 							totalNumberOfScheduledShipments++;
@@ -235,7 +235,7 @@ public class CollectionTrackerTest {
 					for(TourElement element : tour.getTourElements() ) {
 						if(element instanceof Leg) {
 							Leg leg = (Leg) element;
-							scheduledTimeCosts += leg.getExpectedTransportTime() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerTimeUnit();
+							scheduledTimeCosts += leg.getExpectedTransportTime() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerTimeUnit();
 						}
 					}
 				}
@@ -246,19 +246,19 @@ public class CollectionTrackerTest {
 				double trackedDistanceCosts = distanceHandler.getDistanceCosts();
 				totalTrackedCosts += trackedDistanceCosts;
 				for(ScheduledTour scheduledTour : carrier.getSelectedPlan().getScheduledTours()) {
-					scheduledDistanceCosts += network.getLinks().get(scheduledTour.getTour().getEndLinkId()).getLength() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerDistanceUnit();
+					scheduledDistanceCosts += network.getLinks().get(scheduledTour.getTour().getEndLinkId()).getLength() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerDistanceUnit();
 					for(TourElement element : scheduledTour.getTour().getTourElements()) {
 						System.out.println(element);
 						if(element instanceof Leg) {
 							Leg leg = (Leg) element;
 							NetworkRoute linkRoute = (NetworkRoute) leg.getRoute();
 							for(Id<Link> linkId: linkRoute.getLinkIds()) {
-								scheduledDistanceCosts  += network.getLinks().get(linkId).getLength() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerDistanceUnit();
+								scheduledDistanceCosts  += network.getLinks().get(linkId).getLength() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerDistanceUnit();
 							}
 						}
 						if(element instanceof ServiceActivity) {
 							ServiceActivity activity = (ServiceActivity) element;
-							scheduledDistanceCosts  += network.getLinks().get(activity.getLocation()).getLength() * scheduledTour.getVehicle().getVehicleType().getCostInformation().getPerDistanceUnit();
+							scheduledDistanceCosts  += network.getLinks().get(activity.getLocation()).getLength() * ((Vehicle) scheduledTour.getVehicle()).getType().getCostInformation().getPerDistanceUnit();
 						}
 					}
 				}
@@ -279,13 +279,13 @@ public class CollectionTrackerTest {
 		assertEquals(fixedScheduledCostsPerShipment, fixedTrackedCostsPerShipment, Math.max(fixedTrackedCostsPerShipment, fixedScheduledCostsPerShipment)*0.01);
 
 		assertTrue(collectionSolution.getInfos().size() == 1);
-		Info info = collectionSolution.getInfos().iterator().next();
+		LSPInfo info = collectionSolution.getInfos().iterator().next();
 		assertTrue(info instanceof CostInfo);
 		CostInfo costInfo = (CostInfo) info;
 		assertTrue(costInfo.getFunction() instanceof CostInfoFunction);
 		CostInfoFunction function = (CostInfoFunction) costInfo.getFunction();
-		ArrayList<InfoFunctionValue<?>> values = new ArrayList<InfoFunctionValue<?>>(function.getValues());
-		for(InfoFunctionValue<?> value : values) {
+		ArrayList<LSPInfoFunctionValue<?>> values = new ArrayList<LSPInfoFunctionValue<?>>(function.getValues());
+		for(LSPInfoFunctionValue<?> value : values) {
 			if(value instanceof LinearCostFunctionValue) {
 				LinearCostFunctionValue linearValue = (LinearCostFunctionValue) value;
 				assertEquals(linearValue.getValue(),linearTrackedCostsPerShipment, Math.max(linearTrackedCostsPerShipment,linearValue.getValue()) * 0.01 );

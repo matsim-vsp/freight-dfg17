@@ -20,11 +20,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierCapabilities;
-import org.matsim.contrib.freight.carrier.CarrierImpl;
-import org.matsim.contrib.freight.carrier.CarrierVehicle;
-import org.matsim.contrib.freight.carrier.CarrierVehicleType;
+import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.core.config.Config;
 import org.matsim.core.controler.Controler;
@@ -52,8 +48,8 @@ import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import demand.scoring.MutualScoringModule;
 import demand.scoring.MutualScoringModuleImpl;
-import lsp.events.EventUtils;
-import lsp.resources.Resource;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
+import lsp.resources.LSPResource;
 import testLSPWithCostTracker.CollectionServiceHandler;
 import testLSPWithCostTracker.DistanceAndTimeHandler;
 import testLSPWithCostTracker.LinearCostTracker;
@@ -88,22 +84,22 @@ public class MutualReplanningTest {
 		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
 		Id<Vehicle> collectionVehicleId = Id.createVehicleId("CollectionVehicle");
 		CarrierVehicle collectionVehicle = CarrierVehicle.newInstance(collectionVehicleId, collectionLinkId);
-		collectionVehicle.setVehicleType(collectionType);
-		
+		collectionVehicle.setType( collectionType );
+
 		CarrierCapabilities.Builder collectionCapabilitiesBuilder = CarrierCapabilities.Builder.newInstance();
 		collectionCapabilitiesBuilder.addType(collectionType);
 		collectionCapabilitiesBuilder.addVehicle(collectionVehicle);
 		collectionCapabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
 		CarrierCapabilities collectionCapabilities = collectionCapabilitiesBuilder.build();
-		Carrier collectionCarrier = CarrierImpl.newInstance(collectionCarrierId);
+		Carrier collectionCarrier = CarrierUtils.createCarrier( collectionCarrierId );
 		collectionCarrier.setCarrierCapabilities(collectionCapabilities);
 		
-		Id<Resource> collectionAdapterId = Id.create("CollectionCarrierAdapter", Resource.class);
+		Id<LSPResource> collectionAdapterId = Id.create("CollectionCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder collectionAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(collectionAdapterId, network);
 		collectionAdapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		collectionAdapterBuilder.setCarrier(collectionCarrier);
 		collectionAdapterBuilder.setLocationLinkId(collectionLinkId);
-		Resource collectionAdapter = collectionAdapterBuilder.build();
+		LSPResource collectionAdapter = collectionAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> collectionElementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(collectionElementId );
@@ -136,7 +132,7 @@ public class MutualReplanningTest {
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);
-		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(collectionAdapter);
 		
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
@@ -204,7 +200,7 @@ public class MutualReplanningTest {
 		moduleBuilder.setLsps(DemandControlerUtils.createLSPDecorators(lsps));
 		moduleBuilder.setMutualReplanningModule(mutReplanModule);
 		moduleBuilder.setMutualScoringModule(mutScoreModule);
-		moduleBuilder.setEventCreators(EventUtils.getStandardEventCreators());
+		moduleBuilder.setEventCreators(LSPEventCreatorUtils.getStandardEventCreators());
 		MutualModule mutualModule = moduleBuilder.build();
 		
 		Controler controler = new Controler(config);

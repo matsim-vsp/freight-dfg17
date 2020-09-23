@@ -3,8 +3,8 @@ package demand.decoratedLSP;
 import demand.offer.OfferFactory;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
-import lsp.controler.SimulationTracker;
-import lsp.functions.Info;
+import lsp.controler.LSPSimulationTracker;
+import lsp.functions.LSPInfo;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.events.handler.EventHandler;
 
@@ -16,9 +16,9 @@ public class DecoratedLSPUtils {
 	public static class LogisticsSolutionDecoratorImpl_wOffersBuilder {
 		private Id<LogisticsSolution> id;
 		private Collection<LogisticsSolutionElement> elements;
-		private Collection<Info> solutionInfos;
+		private Collection<LSPInfo> solutionInfos;
 		private Collection<EventHandler> eventHandlers;
-		private Collection<SimulationTracker>trackers;
+		private Collection<LSPSimulationTracker>trackers;
 		private OfferFactory offerFactory;
 
 		public static LogisticsSolutionDecoratorImpl_wOffersBuilder newInstance(Id<LogisticsSolution>id){
@@ -27,9 +27,9 @@ public class DecoratedLSPUtils {
 
 		private LogisticsSolutionDecoratorImpl_wOffersBuilder(Id<LogisticsSolution> id){
 			this.elements = new ArrayList<LogisticsSolutionElement>();
-			this.solutionInfos = new ArrayList<Info>();
+			this.solutionInfos = new ArrayList<LSPInfo>();
 			this.eventHandlers = new ArrayList<EventHandler>();
-			this.trackers = new ArrayList<SimulationTracker>();
+			this.trackers = new ArrayList<LSPSimulationTracker>();
 			this.id = id;
 		}
 
@@ -38,7 +38,7 @@ public class DecoratedLSPUtils {
 			return this;
 		}
 
-		public LogisticsSolutionDecoratorImpl_wOffersBuilder addInfo(Info info) {
+		public LogisticsSolutionDecoratorImpl_wOffersBuilder addInfo(LSPInfo info) {
 			solutionInfos.add(info);
 			return this;
 		}
@@ -48,7 +48,7 @@ public class DecoratedLSPUtils {
 			return this;
 		}
 
-		public LogisticsSolutionDecoratorImpl_wOffersBuilder addTracker(SimulationTracker tracker) {
+		public LogisticsSolutionDecoratorImpl_wOffersBuilder addTracker( LSPSimulationTracker tracker ) {
 			trackers.add(tracker);
 			return this;
 		}
@@ -72,7 +72,7 @@ public class DecoratedLSPUtils {
 			return elements;
 		}
 
-		Collection<Info> getSolutionInfos() {
+		Collection<LSPInfo> getSolutionInfos() {
 			return solutionInfos;
 		}
 
@@ -80,7 +80,7 @@ public class DecoratedLSPUtils {
 			return eventHandlers;
 		}
 
-		Collection<SimulationTracker> getTrackers() {
+		Collection<LSPSimulationTracker> getTrackers() {
 			return trackers;
 		}
 

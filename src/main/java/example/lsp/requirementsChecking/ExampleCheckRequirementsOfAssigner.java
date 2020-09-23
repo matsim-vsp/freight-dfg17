@@ -1,7 +1,7 @@
 package example.lsp.requirementsChecking;
 
 import lsp.*;
-import lsp.resources.Resource;
+import lsp.resources.LSPResource;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.ShipmentUtils;
 import lsp.usecase.UsecaseUtils;
@@ -9,13 +9,8 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierCapabilities;
+import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
-import org.matsim.contrib.freight.carrier.CarrierImpl;
-import org.matsim.contrib.freight.carrier.CarrierVehicle;
-import org.matsim.contrib.freight.carrier.CarrierVehicleType;
-import org.matsim.contrib.freight.carrier.TimeWindow;
 import org.matsim.core.config.Config;
 import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -45,22 +40,22 @@ class ExampleCheckRequirementsOfAssigner {
 		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
 		Id<Vehicle> redVehicleId = Id.createVehicleId("RedVehicle");
 		CarrierVehicle redVehicle = CarrierVehicle.newInstance(redVehicleId, collectionLinkId);
-		redVehicle.setVehicleType(collectionType);
-		
+		redVehicle.setType( collectionType );
+
 		CarrierCapabilities.Builder redCapabilitiesBuilder = CarrierCapabilities.Builder.newInstance();
 		redCapabilitiesBuilder.addType(collectionType);
 		redCapabilitiesBuilder.addVehicle(redVehicle);
 		redCapabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
 		CarrierCapabilities redCapabilities = redCapabilitiesBuilder.build();
-		Carrier redCarrier = CarrierImpl.newInstance(redCarrierId);
+		Carrier redCarrier = CarrierUtils.createCarrier( redCarrierId );
 		redCarrier.setCarrierCapabilities(redCapabilities);
 				
-		Id<Resource> redAdapterId = Id.create("RedCarrierAdapter", Resource.class);
+		Id<LSPResource> redAdapterId = Id.create("RedCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder redAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(redAdapterId, network);
 		redAdapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		redAdapterBuilder.setCarrier(redCarrier);
 		redAdapterBuilder.setLocationLinkId(collectionLinkId);
-		Resource redAdapter = redAdapterBuilder.build();
+		LSPResource redAdapter = redAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> redElementId = Id.create("RedElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder redElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(redElementId );
@@ -80,22 +75,22 @@ class ExampleCheckRequirementsOfAssigner {
 		Id<Carrier> blueCarrierId = Id.create("BlueCarrier", Carrier.class);
 		Id<Vehicle> blueVehicleId = Id.createVehicleId("BlueVehicle");
 		CarrierVehicle blueVehicle = CarrierVehicle.newInstance(blueVehicleId, collectionLinkId);
-		blueVehicle.setVehicleType(collectionType);
-		
+		blueVehicle.setType( collectionType );
+
 		CarrierCapabilities.Builder blueCapabilitiesBuilder = CarrierCapabilities.Builder.newInstance();
 		blueCapabilitiesBuilder.addType(collectionType);
 		blueCapabilitiesBuilder.addVehicle(blueVehicle);
 		blueCapabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
 		CarrierCapabilities blueCapabilities = blueCapabilitiesBuilder.build();
-		Carrier blueCarrier = CarrierImpl.newInstance(blueCarrierId);
+		Carrier blueCarrier = CarrierUtils.createCarrier( blueCarrierId );
 		blueCarrier.setCarrierCapabilities(blueCapabilities);
 				
-		Id<Resource> blueAdapterId = Id.create("BlueCarrierAdapter", Resource.class);
+		Id<LSPResource> blueAdapterId = Id.create("BlueCarrierAdapter", LSPResource.class);
 		UsecaseUtils.CollectionCarrierAdapterBuilder blueAdapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(blueAdapterId, network);
 		blueAdapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		blueAdapterBuilder.setCarrier(blueCarrier);
 		blueAdapterBuilder.setLocationLinkId(collectionLinkId);
-		Resource blueAdapter = blueAdapterBuilder.build();
+		LSPResource blueAdapter = blueAdapterBuilder.build();
 		
 		Id<LogisticsSolutionElement> blueElementId = Id.create("BlueCElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder blueElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(blueElementId );
@@ -122,7 +117,7 @@ class ExampleCheckRequirementsOfAssigner {
 		lspBuilder.setInitialPlan(plan);
 		Id<LSP> lspId = Id.create("CollectionLSP", LSP.class);
 		lspBuilder.setId(lspId);
-		ArrayList<Resource> resourcesList = new ArrayList<Resource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			

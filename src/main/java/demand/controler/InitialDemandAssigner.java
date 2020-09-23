@@ -12,7 +12,7 @@ import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjects;
 import demand.demandObject.DemandPlan;
 import demand.offer.Offer;
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.shipment.LSPShipment;
 
 /*package-private*/ class InitialDemandAssigner implements StartupListener{
@@ -54,7 +54,7 @@ import lsp.shipment.LSPShipment;
 		builder.setServiceTime(demandObject.getSelectedPlan().getShipment().getServiceTime());
 		builder.setStartTimeWindow(demandObject.getSelectedPlan().getShipment().getStartTimeWindow());
 		builder.setEndTimeWindow(demandObject.getSelectedPlan().getShipment().getEndTimeWindow());
-		for(Info info : demandObject.getInfos()) {
+		for(LSPInfo info : demandObject.getInfos()) {
 			builder.addInfo(info);
 		}
 		LSPShipment lspShipment = builder.build();

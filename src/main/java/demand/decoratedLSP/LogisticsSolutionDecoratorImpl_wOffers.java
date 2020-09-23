@@ -10,12 +10,12 @@ import org.matsim.core.events.handler.EventHandler;
 import demand.demandObject.DemandObject;
 import demand.offer.Offer;
 import demand.offer.OfferFactory;
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.LSP;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.shipment.LSPShipment;
-import lsp.controler.SimulationTracker;
+import lsp.controler.LSPSimulationTracker;
 
 /*package-private*/ class LogisticsSolutionDecoratorImpl_wOffers implements LogisticsSolutionDecorator {
 
@@ -23,9 +23,9 @@ import lsp.controler.SimulationTracker;
 	private LSPWithOffers lsp;
 	private Collection<LogisticsSolutionElement> solutionElements; 
 	private Collection<LSPShipment> shipments;
-	private Collection<Info> solutionInfos;
+	private Collection<LSPInfo> solutionInfos;
 	private Collection<EventHandler> eventHandlers;
-	private Collection<SimulationTracker>trackers;
+	private Collection<LSPSimulationTracker>trackers;
 	private EventsManager eventsManager;
 	private OfferFactory offerFactory;
 
@@ -96,7 +96,7 @@ import lsp.controler.SimulationTracker;
 	}
 
 	@Override
-	public Collection<Info> getInfos() {
+	public Collection<LSPInfo> getInfos() {
 		return solutionInfos;
 	}
 
@@ -106,14 +106,14 @@ import lsp.controler.SimulationTracker;
 	}
 
 	@Override
-	public void addSimulationTracker(SimulationTracker tracker) {
+	public void addSimulationTracker( LSPSimulationTracker tracker ) {
 		this.trackers.add(tracker);
 		this.eventHandlers.addAll(tracker.getEventHandlers());
 		this.solutionInfos.addAll(tracker.getInfos());
 	}
 
 	@Override
-	public Collection<SimulationTracker> getSimulationTrackers() {
+	public Collection<LSPSimulationTracker> getSimulationTrackers() {
 		return trackers;
 	}
 	

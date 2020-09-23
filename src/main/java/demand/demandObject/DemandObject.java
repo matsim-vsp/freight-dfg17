@@ -9,7 +9,7 @@ import org.matsim.api.core.v01.population.HasPlansAndId;
 
 import demand.mutualReplanning.DemandReplanner;
 import demand.scoring.DemandScorer;
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.shipment.Requirement;
 
 
@@ -163,5 +163,5 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public Collection<Info> getInfos();
+	public Collection<LSPInfo> getInfos();
 }

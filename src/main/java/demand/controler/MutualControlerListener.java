@@ -1,31 +1,5 @@
 package demand.controler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.inject.Inject;
-
-import org.matsim.api.core.v01.events.Event;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.controler.events.AfterMobsimEvent;
-import org.matsim.core.controler.events.BeforeMobsimEvent;
-import org.matsim.core.controler.events.IterationEndsEvent;
-import org.matsim.core.controler.events.IterationStartsEvent;
-import org.matsim.core.controler.events.ReplanningEvent;
-import org.matsim.core.controler.events.ScoringEvent;
-import org.matsim.core.controler.events.StartupEvent;
-import org.matsim.core.controler.listener.AfterMobsimListener;
-import org.matsim.core.controler.listener.BeforeMobsimListener;
-import org.matsim.core.controler.listener.IterationEndsListener;
-import org.matsim.core.controler.listener.IterationStartsListener;
-import org.matsim.core.controler.listener.ReplanningListener;
-import org.matsim.core.controler.listener.ScoringListener;
-import org.matsim.core.controler.listener.StartupListener;
-import org.matsim.core.events.handler.EventHandler;
-
 import demand.demandObject.DemandObjects;
 import demand.mutualReplanning.MutualReplanningModule;
 import demand.scoring.MutualScoringModule;
@@ -33,32 +7,42 @@ import lsp.LSP;
 import lsp.LSPPlan;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
-import lsp.controler.FreightControlerListener;
-import lsp.events.EventCreator;
-import lsp.functions.Info;
-import lsp.controler.CarrierResourceTracker;
-import lsp.resources.CarrierResource;
+import lsp.controler.LSPSimulationTracker;
+import lsp.functions.LSPInfo;
+import lsp.resources.LSPCarrierResource;
 import lsp.shipment.LSPShipment;
-import lsp.controler.SimulationTracker;
+import org.matsim.api.core.v01.events.Event;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.controler.CarrierAgentTracker;
+import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreator;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.controler.events.*;
+import org.matsim.core.controler.listener.*;
+import org.matsim.core.events.handler.EventHandler;
 
-/*package-private*/ class MutualControlerListener implements FreightControlerListener, BeforeMobsimListener, AfterMobsimListener,
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collection;
+
+/*package-private*/ class MutualControlerListener implements BeforeMobsimListener, AfterMobsimListener,
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
-	private CarrierResourceTracker carrierResourceTracker;
+	private CarrierAgentTracker carrierResourceTracker;
 	private Carriers carriers;
 	private LSPDecorators lsps;
 	private DemandObjects demandObjects;
 	private MutualScoringModule mutualScoringModule;
 	private MutualReplanningModule replanningModule;
-	private Collection<EventCreator> creators;
+	private Collection<LSPEventCreator> creators;
 	private ArrayList<EventHandler> registeredHandlers;
 
 	@Inject	EventsManager eventsManager;
-	@Inject	Network network;
 
 	@Inject
 	protected MutualControlerListener(LSPDecorators lsps, DemandObjects demandObjects,
-			MutualScoringModule demandScoringModule, MutualReplanningModule replanningModule, Collection<EventCreator> creators) {
+			MutualScoringModule demandScoringModule, MutualReplanningModule replanningModule, Collection<LSPEventCreator> creators) {
 		this.lsps = lsps;
 		this.demandObjects = demandObjects;
 		this.mutualScoringModule = demandScoringModule;
@@ -74,7 +58,7 @@ import lsp.controler.SimulationTracker;
 		SupplyRescheduler rescheduler = new SupplyRescheduler(lsps);
 		rescheduler.notifyBeforeMobsim(event);
 		
-		carrierResourceTracker = new CarrierResourceTracker(carriers, network, this, creators);
+		carrierResourceTracker = new CarrierAgentTracker(carriers, creators, eventsManager );
 		eventsManager.addHandler(carrierResourceTracker);
 		registeredHandlers = new ArrayList<EventHandler>();
 
@@ -126,21 +110,21 @@ import lsp.controler.SimulationTracker;
 	public void notifyAfterMobsim(AfterMobsimEvent event) {
 		eventsManager.removeHandler(carrierResourceTracker);
 
-		ArrayList<SimulationTracker> alreadyUpdatedTrackers = new ArrayList<SimulationTracker>();
+		ArrayList<LSPSimulationTracker> alreadyUpdatedTrackers = new ArrayList<LSPSimulationTracker>();
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {
-					for (SimulationTracker tracker : element.getResource().getSimulationTrackers()) {
+					for ( LSPSimulationTracker tracker : element.getResource().getSimulationTrackers()) {
 						if (!alreadyUpdatedTrackers.contains(tracker)) {
 							tracker.notifyAfterMobsim(event);
 							alreadyUpdatedTrackers.add(tracker);
 						}
 					}
-					for (SimulationTracker tracker : element.getSimulationTrackers()) {
+					for ( LSPSimulationTracker tracker : element.getSimulationTrackers()) {
 						tracker.notifyAfterMobsim(event);
 					}
 				}
-				for (SimulationTracker tracker : solution.getSimulationTrackers()) {
+				for ( LSPSimulationTracker tracker : solution.getSimulationTrackers()) {
 					tracker.notifyAfterMobsim(event);
 				}
 			}
@@ -149,11 +133,11 @@ import lsp.controler.SimulationTracker;
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {
-					for (Info info : element.getInfos()) {
+					for (LSPInfo info : element.getInfos()) {
 						info.update();
 					}
 				}
-				for (Info info : solution.getInfos()) {
+				for (LSPInfo info : solution.getInfos()) {
 					info.update();
 				}
 			}
@@ -172,9 +156,9 @@ import lsp.controler.SimulationTracker;
 			LSPPlan selectedPlan = lsp.getSelectedPlan();
 			for (LogisticsSolution solution : selectedPlan.getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {
-					if (element.getResource() instanceof CarrierResource) {
+					if (element.getResource() instanceof LSPCarrierResource) {
 
-						CarrierResource carrierResource = (CarrierResource) element.getResource();
+						LSPCarrierResource carrierResource = (LSPCarrierResource) element.getResource();
 						Carrier carrier = carrierResource.getCarrier();
 						if (!carriers.getCarriers().containsKey(carrier.getId())) {
 							carriers.addCarrier(carrier);
@@ -192,7 +176,7 @@ import lsp.controler.SimulationTracker;
 		initialAssigner.notifyStartup(event);
 	}
 
-	public CarrierResourceTracker getCarrierResourceTracker() {
+	public CarrierAgentTracker getCarrierResourceTracker() {
 		return carrierResourceTracker;
 	}
 
@@ -212,20 +196,20 @@ import lsp.controler.SimulationTracker;
 					for(EventHandler handler : solution.getEventHandlers()) {
 						handler.reset(event.getIteration());
 					}
-					for(SimulationTracker tracker : solution.getSimulationTrackers()) {
+					for( LSPSimulationTracker tracker : solution.getSimulationTrackers()) {
 						tracker.reset();
 					}			
 					for(LogisticsSolutionElement element : solution.getSolutionElements()) {
 						for(EventHandler handler : element.getEventHandlers()) {
 							handler.reset(event.getIteration());
 						}
-						for(SimulationTracker tracker : element.getSimulationTrackers()) {
+						for( LSPSimulationTracker tracker : element.getSimulationTrackers()) {
 							tracker.reset();
 						}
 						for(EventHandler handler : element.getResource().getEventHandlers()) {
 							handler.reset(event.getIteration());
 						}		
-						for(SimulationTracker tracker : element.getResource().getSimulationTrackers()) {
+						for( LSPSimulationTracker tracker : element.getResource().getSimulationTrackers()) {
 							tracker.reset();
 						}
 					}			

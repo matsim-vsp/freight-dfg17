@@ -16,7 +16,6 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierVehicleType;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.core.controler.events.IterationEndsEvent;
@@ -24,6 +23,7 @@ import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.StartupListener;
 import org.matsim.core.utils.io.IOUtils;
+import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
 import receiver.ReceiverUtils;
@@ -76,7 +76,7 @@ public class VehicleTypeListener implements StartupListener, IterationEndsListen
         for(Carrier c : this.carriers.getCarriers().values()){
         	CarrierPlan cPlan = c.getSelectedPlan();
         	for(ScheduledTour tour : cPlan.getScheduledTours()){
-        		Id<VehicleType> id = tour.getVehicle().getVehicleType().getId();  		
+				Id<VehicleType> id = ((Vehicle) tour.getVehicle()).getType().getId();
         		if(!typeMap.containsKey(id)){
         			typeMap.put(id, 1);
         		} else{

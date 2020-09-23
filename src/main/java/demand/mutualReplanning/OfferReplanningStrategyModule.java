@@ -10,7 +10,7 @@ import demand.decoratedLSP.LSPDecorator;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandPlan;
 import demand.offer.Offer;
-import lsp.functions.Info;
+import lsp.functions.LSPInfo;
 import lsp.shipment.LSPShipment;
 
 public abstract class OfferReplanningStrategyModule implements GenericPlanStrategyModule<DemandPlan>{
@@ -48,7 +48,7 @@ public abstract class OfferReplanningStrategyModule implements GenericPlanStrate
 		builder.setServiceTime(plan.getShipment().getServiceTime());
 		builder.setStartTimeWindow(plan.getShipment().getStartTimeWindow());
 		builder.setEndTimeWindow(plan.getShipment().getEndTimeWindow());
-		for(Info info : demandObject.getInfos()) {
+		for(LSPInfo info : demandObject.getInfos()) {
 			builder.addInfo(info);
 		}
 		LSPShipment lspShipment = builder.build();

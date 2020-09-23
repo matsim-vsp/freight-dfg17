@@ -1,8 +1,8 @@
 package testMutualreplanningWithOfferUpdate;
 
-import lsp.functions.InfoFunctionValue;
+import lsp.functions.LSPInfoFunctionValue;
 
-public class LinearCostFunctionValue implements InfoFunctionValue<Double> {
+public class LinearCostFunctionValue implements LSPInfoFunctionValue<Double> {
 
 	private Double value;
 	

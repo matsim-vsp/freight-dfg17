@@ -15,7 +15,7 @@ import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.SolutionScheduler;
 import lsp.replanning.LSPReplanner;
-import lsp.resources.Resource;
+import lsp.resources.LSPResource;
 import lsp.scoring.LSPScorer;
 import lsp.shipment.LSPShipment;
 import org.matsim.core.controler.events.ReplanningEvent;
@@ -28,7 +28,7 @@ public class LSPWithOffers implements LSPDecorator {
 	private ArrayList<LSPPlan> plans; 
 	private SolutionScheduler solutionScheduler;
 	private LSPPlanDecorator selectedPlan;
-	private Collection<Resource> resources;
+	private Collection<LSPResource> resources;
 	private LSPScorer scorer;
 	private LSPReplanner replanner;
 	private OfferUpdater offerUpdater;
@@ -43,7 +43,7 @@ public class LSPWithOffers implements LSPDecorator {
 		private Id<LSP> id;
 		private SolutionScheduler solutionScheduler;
 		private LSPPlanDecorator initialPlan;
-		private Collection<Resource> resources;
+		private Collection<LSPResource> resources;
 		private LSPScorer scorer;
 		private LSPReplanner replanner;
 		private OfferUpdater offerUpdater;
@@ -54,7 +54,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 		
 	private Builder(){
-		this.resources = new ArrayList<Resource>();
+		this.resources = new ArrayList<LSPResource>();
 
 	}
 	
@@ -161,7 +161,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 
 	@Override
-	public Collection<Resource> getResources() {
+	public Collection<LSPResource> getResources() {
 		return resources;
 	}
 
