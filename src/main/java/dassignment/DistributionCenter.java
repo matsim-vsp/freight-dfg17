@@ -6,9 +6,9 @@ package dassignment;
 
 import java.util.HashSet;
 
-public class D
+class DistributionCenter
 {
-	public D(String id, double x, double y, String labelO, String labelH, String labelP, double capacity)
+	public DistributionCenter( String id, double x, double y, String labelO, String labelH, String labelP, double capacity )
 	{
 		super();
 		this.id = id;
@@ -28,11 +28,11 @@ public class D
 	private String labelP;
 	private double capacity;
 	private double usedCapacity;
-	private HashSet<S> includedS = new HashSet<>();
+	private HashSet<Store> includedS = new HashSet<>();
 
 	
 	//Whether it is possible to add S according to capacity
-	public boolean canAddS(S s)
+	public boolean canAddS( Store s )
 	{
 		if (s == null)
 		{
@@ -47,7 +47,7 @@ public class D
 	}
 
 	
-	public boolean addS(S s)
+	public boolean addS( Store s )
 	{
 		if (!canAddS(s))
 		{
@@ -59,7 +59,7 @@ public class D
 	}
 
 	
-	public boolean removeS(S s)
+	public boolean removeS( Store s )
 	{
 		if (s == null)
 		{

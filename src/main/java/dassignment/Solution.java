@@ -21,17 +21,31 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-public class Solution
+/**
+ * This class reads xlsFilename.  It expects sheets with the following names:<ul>
+ * <li> "S" (= stores; they order goods) </li>
+ * <li> "D" (= distribution centers; they send the good) </li>
+ * <li> "Observation_distribution", which contains the distance distribution for the shipments</li>
+ */
+class Solution
 {
-	private static final int DISTANCE_INTERVAL = 2000; //Distance interval
+	/**
+	 * The bins in which the distances are registered.  Presumably needs to be the same as in the "Observation_distribution".
+	 */
+	private static final int DISTANCE_INTERVAL = 2000;
+	/**
+	 * The number of bins.
+	 */
 	private static final int DISTANCE_TYPE_CNT = 30; //Distance classification
+
+
 	private static final int INIT_TIME = 1000; //The number of initialization attempts. If the number of times is exceeded, the initialization will stop.
 	private static final int ITERATION_TIME = 1000000; //Number of iterations
 	private static final int UPDATE_CNT_PER_ITERATION = 1; //The number of S updates per iteration
 	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000; 
 	private static final double T0 = 27;
 
-	public void process() throws EncryptedDocumentException, InvalidFormatException, IOException
+	void process() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
 		String xlsFilename = "./scenarios/dassignment/in_all_with_labels.xlsx";
 		File xlsFile = new File(xlsFilename);
@@ -61,10 +75,10 @@ public class Solution
 		}
 
 		HashMap<Integer, ArrayList<Integer>> observeMap = createObserveMap(sheetObserver);
-		ArrayList<S> SList = createSList(sheetS);
-		ArrayList<D> DList = createDList(sheetD);
+		ArrayList<Store> sList = createSList(sheetS );
+		ArrayList<DistributionCenter> dList = createDList(sheetD );
 	
-		if (init(SList, DList))
+		if (init(sList, dList))
 		{
 			System.out.println("Initialization successful");
 		}
@@ -84,17 +98,17 @@ public class Solution
 		double T = T0;
 		for (int iter = 1; iter <= ITERATION_TIME; ++iter)
 		{
-			HashSet<S> rollbackSet = new HashSet<>();
+			HashSet<Store> rollbackSet = new HashSet<>();
 			for (int i = 0; i < UPDATE_CNT_PER_ITERATION; ++i)
 			{
-				int index = random.nextInt(SList.size() - i);
-				S s = SList.get(index);
-				exchange(SList, index, SList.size() - 1 - i); //Maybe randomize also the second one (b), kai/KMT apr19
+				int index = random.nextInt(sList.size() - i);
+				Store s = sList.get(index );
+				exchange(sList, index, sList.size() - 1 - i); //Maybe randomize also the second one (b), kai/KMT apr19
 				s.save();
 				s.updateSelect();
 				rollbackSet.add(s);
 			}
-			HashMap<Integer, ArrayList<Integer>> map = createMapFromSList(SList);
+			HashMap<Integer, ArrayList<Integer>> map = createMapFromSList(sList);
 			double relativeEntropy = relativeEntropy(map, observeMap);
 			if (relativeEntropy <= minRelativeEntropy)
 			{
@@ -110,7 +124,7 @@ public class Solution
 				}
 				else
 				{
-				for (S s : rollbackSet)
+				for ( Store s : rollbackSet)
 				{
 					s.rollback();
 				}
@@ -119,16 +133,16 @@ public class Solution
 			if (iter % MIDDLE_RESULT_OUTPUT_INTERVAL == 0)
 			{
 				System.out.println("Iterated" + iter + "rounds");
-				saveFile(SList, minRelativeEntropy, "./result/middle/" + iter + ".csv");
+				saveFile(sList, minRelativeEntropy, "./result/middle/" + iter + ".csv");
 			}
 		}
-		saveFile(SList, minRelativeEntropy, "./result/FinalResult.csv");
+		saveFile(sList, minRelativeEntropy, "./result/FinalResult.csv");
 	}
 
-	private void exchange(ArrayList<S> list, int a, int b)
+	private void exchange( ArrayList<Store> list, int a, int b )
 	{
-		S sa = list.get(a);
-		S sb = list.get(b);
+		Store sa = list.get(a );
+		Store sb = list.get(b );
 		list.set(a, sb);
 		list.set(b, sa);
 	}
@@ -172,9 +186,9 @@ public class Solution
 		return array;
 	}
 
-	private ArrayList<S> createSList(Sheet sheet)
+	private ArrayList<Store> createSList( Sheet sheet )
 	{
-		ArrayList<S> list = new ArrayList<>();
+		ArrayList<Store> list = new ArrayList<>();
 
 		//Get the number of rows
 		int rowCount = sheet.getLastRowNum() + 1;
@@ -192,16 +206,16 @@ public class Solution
 			String labelH = row.get(index++);
 			String labelP = row.get(index++);
 			double demand = Double.parseDouble(row.get(index++));
-			S s = new S(id, x, y, labelA, labelO, labelH, labelP, demand);
+			Store s = new Store(id, x, y, labelA, labelO, labelH, labelP, demand);
 			list.add(s);
 		}
 
 		return list;
 	}
 
-	private ArrayList<D> createDList(Sheet sheet)
+	private ArrayList<DistributionCenter> createDList( Sheet sheet )
 	{
-		ArrayList<D> list = new ArrayList<>();
+		ArrayList<DistributionCenter> list = new ArrayList<>();
 
 		
 		int rowCount = sheet.getLastRowNum() + 1;
@@ -218,7 +232,7 @@ public class Solution
 			String labelH = row.get(index++);
 			String labelP = row.get(index++);
 			double capacity = Double.parseDouble(row.get(index++));
-			D d = new D(id, x, y, labelO, labelH, labelP, capacity);
+			DistributionCenter d = new DistributionCenter(id, x, y, labelO, labelH, labelP, capacity);
 			list.add(d);
 		}
 
@@ -256,34 +270,27 @@ public class Solution
 		return map;
 	}
 
-	private HashMap<Integer, ArrayList<Integer>> createMapFromSList(ArrayList<S> list)
+	private HashMap<Integer, ArrayList<Integer>> createMapFromSList(ArrayList<Store> list )
 	{
 		HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
-		for (int i = 0; i < list.size(); ++i)
-		{
-			S s = list.get(i);
-			int a = Integer.parseInt(s.getLabelA());
+		for( Store s : list ) {
+			int a = Integer.parseInt( s.getLabelA() );
 			ArrayList<Integer> frequencyList = null;
-			if (!map.containsKey(a))
-			{
+			if( !map.containsKey( a ) ){
 				frequencyList = new ArrayList<>();
-				for (int cnt = 0; cnt < DISTANCE_TYPE_CNT; ++cnt)
-				{
-					frequencyList.add(0);
+				for( int cnt = 0 ; cnt < DISTANCE_TYPE_CNT ; ++cnt ){
+					frequencyList.add( 0 );
 				}
-				map.put(a, frequencyList);
+				map.put( a, frequencyList );
+			} else{
+				frequencyList = map.get( a );
 			}
-			else
-			{
-				frequencyList = map.get(a);
-			}
-			double dis = s.distanceTo(s.getSelectedD());
+			double dis = s.distanceTo( s.getSelectedD() );
 			int index = (int) (dis / DISTANCE_INTERVAL);
-			if (index >= DISTANCE_TYPE_CNT)
-			{
+			if( index >= DISTANCE_TYPE_CNT ){
 				index = DISTANCE_TYPE_CNT - 1;
 			}
-			frequencyList.set(index, frequencyList.get(index) + 1);
+			frequencyList.set( index, frequencyList.get( index ) + 1 );
 		}
 		return map;
 	}
@@ -293,9 +300,8 @@ public class Solution
 	private ArrayList<Double> frequency2Probability(ArrayList<Integer> list)
 	{
 		int total = 0;
-		for (int i = 0; i < list.size(); ++i)
-		{
-			total += list.get(i);
+		for( Integer integer : list ) {
+			total += integer;
 		}
 		return frequency2Probability(list, total);
 	}
@@ -303,10 +309,8 @@ public class Solution
 	private ArrayList<Double> frequency2Probability(ArrayList<Integer> list, int total)
 	{
 		ArrayList<Double> res = new ArrayList<>();
-		for (int i = 0; i < list.size(); ++i)
-		{
-			int frequency = list.get(i);
-			res.add(1.0 * frequency / total);
+		for( int frequency : list ){
+			res.add( 1.0 * frequency / total );
 		}
 		return res;
 	}
@@ -347,42 +351,35 @@ public class Solution
 		return res;
 	}
 
-	private boolean init(ArrayList<S> SList, ArrayList<D> DList)
-	{
-		
-		for (int i = 0; i < SList.size(); ++i)
-		{
-			SList.get(i).configMatchList(DList);
+	private boolean init( ArrayList<Store> sList, ArrayList<DistributionCenter> dList ) {
+
+		for( Store stores : sList ){
+			stores.configMatchList( dList );
 		}
-		for (int t = 0; t < INIT_TIME; ++t)
-		{
-			for (int i = 0; i < SList.size(); ++i)
-			{
-				SList.get(i).clearSelect();
+		for (int t = 0; t < INIT_TIME; ++t) {
+			for( Store stores : sList ){
+				stores.clearSelect();
 			}
 			boolean initSuccess = true;
-			for (int i = 0; i < SList.size(); ++i)
-			{
-				initSuccess = SList.get(i).init();
-				if (!initSuccess)
-				{
+			for( Store stores : sList ){
+				initSuccess = stores.init();
+				if( !initSuccess ){
 					break;
 				}
 			}
-			if (initSuccess)
-			{
+			if (initSuccess) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	void saveFile(ArrayList<S> list, double re, String filename) throws IOException
+	void saveFile( ArrayList<Store> list, double re, String filename ) throws IOException
 	{
-		list.sort(new Comparator<S>()
+		list.sort(new Comparator<Store>()
 		{
 			@Override
-			public int compare(S o1, S o2)
+			public int compare( Store o1, Store o2 )
 			{
 				return o1.getId().compareTo(o2.getId());
 			}
@@ -396,16 +393,13 @@ public class Solution
 		}
 
 		FileWriter writer = null;
-		try
-		{
+		try {
 			writer = new FileWriter(file);
 			writer.write("relative entropy," + re + "\n");
 			writer.write("SID, DID\n");
-			for (int i = 0; i < list.size(); ++i)
-			{
-				S s = list.get(i);
-				D d = s.getSelectedD();
-				writer.write(s.getId() + "," + d.getId() + "\n");
+			for( Store s : list ){
+				DistributionCenter d = s.getSelectedD();
+				writer.write( s.getId() + "," + d.getId() + "\n" );
 			}
 		}
 		finally

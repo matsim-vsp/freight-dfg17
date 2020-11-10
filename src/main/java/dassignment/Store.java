@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-public class S
+class Store
 {
-	public S(String id, double x, double y, String labelA, String labelO, String labelH, String labelP, double demand)
+	public Store( String id, double x, double y, String labelA, String labelO, String labelH, String labelP, double demand )
 	{
 		super();
 		this.id = id;
@@ -23,7 +23,7 @@ public class S
 		this.demand = demand;
 	}
 
-	public S()
+	public Store()
 	{
 
 	}
@@ -36,11 +36,11 @@ public class S
 	private String labelH;
 	private String labelP;
 	private double demand;
-	private ArrayList<D> highPriorityMatchList = new ArrayList<>();
-	private ArrayList<D> lowPriorityMatchList = new ArrayList<>();
-	private D selectedD = null;
+	private ArrayList<DistributionCenter> highPriorityMatchList = new ArrayList<>();
+	private ArrayList<DistributionCenter> lowPriorityMatchList = new ArrayList<>();
+	private DistributionCenter selectedD = null;
 
-	public D getSelectedD()
+	public DistributionCenter getSelectedD()
 	{
 		return selectedD;
 	}
@@ -125,16 +125,16 @@ public class S
 		this.demand = demand;
 	}
 
-	public double distanceTo(D d)
+	public double distanceTo( DistributionCenter d )
 	{
 		double dx = this.getX() - d.getX();
 		double dy = this.getY() - d.getY();
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 
-	public void configMatchList(ArrayList<D> DList)
+	public void configMatchList(ArrayList<DistributionCenter> DList )
 	{
-		for (D d : DList)
+		for ( DistributionCenter d : DList)
 		{
 			boolean oFlag = this.getLabelO().equals(d.getLabelO());
 			if (!oFlag)
@@ -161,40 +161,40 @@ public class S
 		DComparator comparator = new DComparator();
 	}
 
-	
-	//Randomly re-assignment a matching D
-    public boolean updateSelect()
-    {
-            Random random = new Random();
-            ArrayList<D> highPriorityPendingList = new ArrayList<>();
-            for (D d : this.highPriorityMatchList)
-            {
-                    if (d.canAddS(this))
-                    {
-                            highPriorityPendingList.add(d);
-                    }
-            }
-            boolean hasHighPriorityMatch = !highPriorityPendingList.isEmpty();
-            boolean hasLowPriorityMatch = !lowPriorityMatchList.isEmpty();
-            if (hasHighPriorityMatch)
-            {
-                    int index = random.nextInt(highPriorityPendingList.size());
-                    return select(highPriorityPendingList.get(index));
-            }
-            else if (hasLowPriorityMatch)
-            {
-                    int index = random.nextInt(lowPriorityMatchList.size());
-                    return select(lowPriorityMatchList.get(index));
-            }
-            else
-            {
-                    return false;
-            }
-    }
 
-	
-    //Select or reselect a D
-	public boolean select(D d)
+	//Randomly re-assignment a matching D
+	public boolean updateSelect()
+	{
+		Random random = new Random();
+		ArrayList<DistributionCenter> highPriorityPendingList = new ArrayList<>();
+		for ( DistributionCenter d : this.highPriorityMatchList)
+		{
+			if (d.canAddS(this))
+			{
+				highPriorityPendingList.add(d);
+			}
+		}
+		boolean hasHighPriorityMatch = !highPriorityPendingList.isEmpty();
+		boolean hasLowPriorityMatch = !lowPriorityMatchList.isEmpty();
+		if (hasHighPriorityMatch)
+		{
+			int index = random.nextInt(highPriorityPendingList.size());
+			return select(highPriorityPendingList.get(index));
+		}
+		else if (hasLowPriorityMatch)
+		{
+			int index = random.nextInt(lowPriorityMatchList.size());
+			return select(lowPriorityMatchList.get(index));
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
+	//Select or reselect a D
+	public boolean select( DistributionCenter d )
 	{
 		if (d == null)
 		{
@@ -222,7 +222,7 @@ public class S
 		}
 	}
 
-	
+
 	public void clearSelect()
 	{
 		if (selectedD != null)
@@ -232,17 +232,16 @@ public class S
 		}
 	}
 
-	
+
 	//Initialize selection
 	public boolean init()
 	{
-		if (highPriorityMatchList.isEmpty() && lowPriorityMatchList.isEmpty())
-		{
+		if (highPriorityMatchList.isEmpty() && lowPriorityMatchList.isEmpty()) {
 			return false;
 		}
 
-		D nearestD = null;
-		for (D d : this.highPriorityMatchList)
+		DistributionCenter nearestD = null;
+		for ( DistributionCenter d : this.highPriorityMatchList)
 		{
 			if (d.canAddS(this))
 			{
@@ -259,7 +258,7 @@ public class S
 		}
 
 		nearestD = null;
-		for (D d : this.lowPriorityMatchList)
+		for ( DistributionCenter d : this.lowPriorityMatchList)
 		{
 			if (d.canAddS(this))
 			{
@@ -278,35 +277,36 @@ public class S
 		return false;
 	}
 
-	private D originalSelectedIndex = null;
+	private DistributionCenter originalSelectedIndex = null;
 
-	
+
 	public void save()
 	{
 		originalSelectedIndex = selectedD;
 	}
 
-	
+
 	public void rollback()
 	{
 		select(originalSelectedIndex);
 	}
-}
 
-class DComparator implements Comparator<D>
-{
-	@Override
-	public int compare(D o1, D o2)
+	static class DComparator implements Comparator<DistributionCenter>
 	{
-		double res = o1.remainingCapacity() - o2.remainingCapacity();
-		if (res < 0.0)
+		@Override
+		public int compare( DistributionCenter o1, DistributionCenter o2 )
 		{
-			return -1;
+			double res = o1.remainingCapacity() - o2.remainingCapacity();
+			if (res < 0.0)
+			{
+				return -1;
+			}
+			else if (res > 0.0)
+			{
+				return 1;
+			}
+			return 0;
 		}
-		else if (res > 0.0)
-		{
-			return 1;
-		}
-		return 0;
 	}
+
 }
