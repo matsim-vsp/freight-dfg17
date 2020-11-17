@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import demand.offer.OfferTransferrer;
-import demand.offer.OfferUpdater;
 import lsp.LSP;
-import lsp.LSPPlan;
 import lsp.LogisticsSolution;
 import lsp.ShipmentAssigner;
 
@@ -20,7 +18,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 	
 	public LSPPlanWithOfferTransferrer() {
 		this.solutions = new ArrayList<LogisticsSolutionDecorator>();
-		this.assigner = new DefaultAssigner(this.lsp);
+		this.assigner = new DefaultAssigner();
 	}
 	
 	@Override

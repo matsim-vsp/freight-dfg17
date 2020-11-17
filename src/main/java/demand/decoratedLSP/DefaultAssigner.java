@@ -6,11 +6,11 @@ import lsp.shipment.LSPShipment;
 
 /*package-private*/ class DefaultAssigner implements ShipmentAssigner{
 
-	private LSP lsp;
+//	private LSP lsp;
 
-	DefaultAssigner (LSP lsp) {
-		this.lsp = lsp;
-	}
+//	DefaultAssigner() {
+//		this.lsp = lsp;
+//	}
 	
 	@Override
 	public void assignShipment(LSPShipment shipment) {
@@ -20,13 +20,13 @@ import lsp.shipment.LSPShipment;
 
 	@Override
 	public void setLSP(LSP lsp) {
-		this.lsp = lsp;
+//		this.lsp = lsp;
 		
 	}
 
-	@Override
-	public LSP getLSP() {
-		return lsp;
-	}
+//	@Override
+//	public LSP getLSP() {
+//		return lsp;
+//	}
 
 }
