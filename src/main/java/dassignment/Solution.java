@@ -50,11 +50,13 @@ class Solution
 	private static final int UPDATE_CNT_PER_ITERATION = 1; //The number of S updates per iteration
 
 	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000;
+
 	private static final double T0 = 27;
 
 	void process() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
-		String xlsFilename = "./scenarios/dassignment/in_all_with_labels.xlsx";
+//		String xlsFilename = "./scenarios/dassignment/in_all_with_labels.xlsx";
+		String xlsFilename = "./dsassignment/input/in_all_with_labels.xlsx";
 		File xlsFile = new File(xlsFilename);
 		if (!xlsFile.exists())
 		{
