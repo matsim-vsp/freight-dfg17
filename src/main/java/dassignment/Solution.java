@@ -33,16 +33,23 @@ class Solution
 	 * The bins in which the distances are registered.  Presumably needs to be the same as in the "Observation_distribution".
 	 */
 	private static final int DISTANCE_INTERVAL = 2000;
+
 	/**
-	 * The number of bins.
+	 * The number of bins for the distance distribution.
 	 */
 	private static final int DISTANCE_TYPE_CNT = 30; //Distance classification
 
-
 	private static final int INIT_TIME = 1000; //The number of initialization attempts. If the number of times is exceeded, the initialization will stop.
+
 	private static final int ITERATION_TIME = 1000000; //Number of iterations
+
+	/**
+	 * This is the "k" from the paper.  Number of stores that are simultaneously selected for change.  "1" works best since otherwise it does not
+	 * find improvements any more.  (Maybe this was taking some intuition from k-opt.)
+	 */
 	private static final int UPDATE_CNT_PER_ITERATION = 1; //The number of S updates per iteration
-	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000; 
+
+	private static final int MIDDLE_RESULT_OUTPUT_INTERVAL = 10000;
 	private static final double T0 = 27;
 
 	void process() throws EncryptedDocumentException, InvalidFormatException, IOException
@@ -285,7 +292,7 @@ class Solution
 			} else{
 				frequencyList = map.get( a );
 			}
-			double dis = s.distanceTo( s.getSelectedD() );
+			double dis = s.distanceTo( s.getSelectedDistributionCenter() );
 			int index = (int) (dis / DISTANCE_INTERVAL);
 			if( index >= DISTANCE_TYPE_CNT ){
 				index = DISTANCE_TYPE_CNT - 1;
@@ -358,7 +365,7 @@ class Solution
 		}
 		for (int t = 0; t < INIT_TIME; ++t) {
 			for( Store stores : sList ){
-				stores.clearSelect();
+				stores.clearSelectedDistributionCenter();
 			}
 			boolean initSuccess = true;
 			for( Store stores : sList ){
@@ -398,7 +405,7 @@ class Solution
 			writer.write("relative entropy," + re + "\n");
 			writer.write("SID, DID\n");
 			for( Store s : list ){
-				DistributionCenter d = s.getSelectedD();
+				DistributionCenter d = s.getSelectedDistributionCenter();
 				writer.write( s.getId() + "," + d.getId() + "\n" );
 			}
 		}
