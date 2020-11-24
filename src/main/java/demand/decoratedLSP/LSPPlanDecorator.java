@@ -16,5 +16,5 @@ public interface LSPPlanDecorator extends LSPPlan{
 	public Collection<LogisticsSolutionDecorator> getSolutionDecorators();
 	public void addSolution (LogisticsSolutionDecorator solution);
 	public void setLSP(LSPDecorator lsp);
-	public LSPDecorator getLsp();
+	@Override public LSPDecorator getLsp();
 }
