@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import demand.offer.OfferTransferrer;
-import demand.offer.OfferUpdater;
 import lsp.LSP;
-import lsp.LSPPlan;
 import lsp.LogisticsSolution;
 import lsp.ShipmentAssigner;
 
@@ -20,11 +18,11 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 	
 	public LSPPlanWithOfferTransferrer() {
 		this.solutions = new ArrayList<LogisticsSolutionDecorator>();
-		this.assigner = new DefaultAssigner(this.lsp);
+		this.assigner = new DefaultAssigner();
 	}
 	
 	@Override
-	public void addSolution(LogisticsSolution solution) {
+	public LSPPlanDecorator addSolution(LogisticsSolution solution) {
 		try {
 			LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 			this.solutions.add(solutionDecorator);
@@ -34,6 +32,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 			System.out.println("The class " + this.toString() + " expects an LogisticsSolutionDecorator and not any other implementation of LogisticsSolution");
 			System.exit(1);
 		}
+		return this;
 	}
 
 	@Override
@@ -52,12 +51,13 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 	}
 
 	@Override
-	public void setAssigner(ShipmentAssigner assigner) {
-		//Has to be empty, DefaultAssigner is already in place. 
+	public LSPPlanDecorator setAssigner(ShipmentAssigner assigner) {
+		//Has to be empty, DefaultAssigner is already in place.
+		return this;
 	}
 
 	@Override
-	public void setLSP(LSP lsp) {
+	public LSPPlanDecorator setLSP(LSP lsp) {
 		try {
 			this.lsp = (LSPDecorator) lsp;
 		}
@@ -65,6 +65,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 			System.out.println("The class " + this.toString() + " expects an LSPDecorator and not any other implementation of LSP");
 			System.exit(1);
 		}
+		return this;
 	}
 
 	@Override
