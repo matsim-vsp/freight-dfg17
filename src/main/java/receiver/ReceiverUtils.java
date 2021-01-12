@@ -20,7 +20,7 @@ public class ReceiverUtils {
 	public static final String ATTR_RECEIVER_SCORE = "score" ;
 	public static final String ATTR_RECEIVER_TW_COST = "twCost" ;
 
-	private static final String CARRIERS_SCENARIO_ELEMENT = "Carriers";
+	private static final String CARRIERS_SCENARIO_ELEMENT = "carriers";
 	private static final String RECEIVERS_SCENARIO_ELEMENT = "Receivers" ;
 	private static final String COALITION_SCENARIO_ELEMENT = "Coalition" ;
 

@@ -63,7 +63,7 @@ public class ReceiverChessboardUtils {
 	final public static int STATISTICS_INTERVAL = 50;
 	
 	public static void setupCarriers(Controler controler) {
-		Carriers carriers = FreightUtils.getOrCreateCarriers(controler.getScenario());;
+		Carriers carriers = FreightUtils.getCarriers(controler.getScenario());;
 
 		BaseRunReceiver.setupCarrierReplanning(controler );
 
