@@ -26,6 +26,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
@@ -33,7 +34,6 @@ import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.utils.io.IOUtils;
 
 import receiver.ReceiverModule;
-import receiver.ReceiverUtils;
 
 /**
  * Specific example for my (wlbean) thesis chapters 5 and 6.
@@ -107,7 +107,7 @@ class ProportionalRunReceiver{
 	 */
 	@Deprecated
 	static void prepareFreightOutputDataAndStats( MatsimServices controler) {
-		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+		CarrierScoreStats scoreStats = new CarrierScoreStats(FreightUtils.getCarriers(controler.getScenario()), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 		controler.addControlerListener(scoreStats);
 	}
 }

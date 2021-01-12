@@ -34,7 +34,6 @@ import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.examples.ExamplesUtils;
 import org.matsim.vehicles.VehicleType;
@@ -90,7 +89,7 @@ public class MarginalScenarioBuilder {
 		}
 		
 		/* Link the carriers to the receivers. */
-		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
+		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers(FreightUtils.getCarriers(sc));
 		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 		return sc;
 	}
@@ -143,7 +142,7 @@ public class MarginalScenarioBuilder {
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver. 
 	 */
 	static void createReceiverOrders( Scenario sc) {
-		Carriers carriers = ReceiverUtils.getCarriers( sc );
+		Carriers carriers = FreightUtils.getCarriers(sc);
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
@@ -268,10 +267,8 @@ public class MarginalScenarioBuilder {
 		types.getVehicleTypes().put(typeLight.getId(), typeLight);
 		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);
 
-		Carriers carriers = new Carriers();
+		Carriers carriers = FreightUtils.getOrCreateCarriers(sc);
 		carriers.addCarrier(carrier);
-		
-		ReceiverUtils.setCarriers(carriers, sc);
 	}
 
 

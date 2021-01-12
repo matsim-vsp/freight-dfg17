@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.ShutdownEvent;
@@ -94,7 +95,7 @@ final class ReceiverScoreStats implements StartupListener, IterationEndsListener
         /* Write the carrier and receiver plans at specific iterations */
         if((event.getIteration() + 1) % (ConfigUtils.addOrGetModule(sc.getConfig(), ReceiverConfigGroup.class).getReceiverReplanningInterval()) != 0) return;
         String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
-        new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(dir + "/" + event.getIteration() + CARRIER_PLANS_XML);
+		new CarrierPlanXmlWriterV2(FreightUtils.getCarriers(sc)).write(dir + "/" + event.getIteration() + CARRIER_PLANS_XML);
         new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(dir + "/" + event.getIteration() + RECEIVER_PLANS_XML);
     }
 

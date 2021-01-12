@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carriers;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.MutableScenario;
@@ -20,7 +21,10 @@ public class ReceiverUtils {
 	public static final String ATTR_RECEIVER_SCORE = "score" ;
 	public static final String ATTR_RECEIVER_TW_COST = "twCost" ;
 
-	private static final String CARRIERS_SCENARIO_ELEMENT = "carriers";
+	//Now using the MATSim-infrastructure to avoid problems if this element is named differently beetween (MATSim) FreightUtils and here.
+	// I also replaced the usage here by the current MATSim syntax KMT'jan21
+//	private static final String CARRIERS_SCENARIO_ELEMENT = "carriers";
+
 	private static final String RECEIVERS_SCENARIO_ELEMENT = "Receivers" ;
 	private static final String COALITION_SCENARIO_ELEMENT = "Coalition" ;
 
@@ -36,14 +40,14 @@ public class ReceiverUtils {
 		return new ReceiverImpl(id);
 	}
 
-	/**
-	 * This can now be replaced with {@link org.matsim.contrib.freight.utils.FreightUtils#getCarriers(Scenario)}
-	 */
-	@Deprecated
-	public static Carriers getCarriers( final Scenario sc ) {
-		return (Carriers) sc.getScenarioElement( CARRIERS_SCENARIO_ELEMENT );
-	}
-	
+//	/**
+//	 * This can now be replaced with {@link org.matsim.contrib.freight.utils.FreightUtils#getCarriers(Scenario)}
+//	 */
+//	@Deprecated
+//	public static Carriers getCarriers( final Scenario sc ) {
+//		return (Carriers) sc.getScenarioElement( CARRIERS_SCENARIO_ELEMENT );
+//	}
+
 	public static void setReceivers( final Receivers receivers, final Scenario sc ) {
 		sc.addScenarioElement( RECEIVERS_SCENARIO_ELEMENT, receivers );
 	}
@@ -63,10 +67,14 @@ public class ReceiverUtils {
 		}
 		return receivers;
 	}
-	
-	public static void setCarriers( final Carriers carriers, final Scenario sc ) {
-		sc.addScenarioElement( CARRIERS_SCENARIO_ELEMENT, carriers );
-	}
+
+	//Can be replaced by:
+	// 	Carriers carriers = FreightUtils.getOrCreateCarriers(sc);
+	//	carriers.addCarrier(carrier);
+	// KMT, Jan'21
+//	public static void setCarriers( final Carriers carriers, final Scenario sc ) {
+//		sc.addScenarioElement( CARRIERS_SCENARIO_ELEMENT, carriers );
+//	}
 	
 	public static void setCoalition( final Coalition coalition, final Scenario sc ) {
 		sc.addScenarioElement( COALITION_SCENARIO_ELEMENT, coalition );

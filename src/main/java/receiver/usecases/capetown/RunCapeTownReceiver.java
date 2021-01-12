@@ -28,14 +28,12 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
-import org.matsim.core.config.ConfigUtils;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 
 import org.matsim.core.utils.io.IOUtils;
-import receiver.ReceiverConfigGroup;
-import receiver.ReceiverUtils;
 import receiver.usecases.chessboard.ReceiverChessboardUtils;
 
 /**
@@ -161,7 +159,7 @@ public class RunCapeTownReceiver {
 
 	static void prepareFreightOutputDataAndStats( MatsimServices controler, int run ) {
 
-		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+		CarrierScoreStats scoreStats = new CarrierScoreStats(FreightUtils.getCarriers(controler.getScenario()), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 
 		controler.addControlerListener(scoreStats);
 		controler.addControlerListener(new VehicleTypeListener(controler.getScenario(), run));

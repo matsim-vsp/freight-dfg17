@@ -8,6 +8,7 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.events.IterationEndsEvent;
@@ -56,7 +57,7 @@ public class BaseRunReceiverIT {
                                 }
                             }
                         }
-                        for (Carrier carrier : ReceiverUtils.getCarriers(scenario).getCarriers().values()) {
+                        for (Carrier carrier : FreightUtils.getCarriers(scenario).getCarriers().values()) {
                             Assert.assertEquals(-8692.92, carrier.getSelectedPlan().getScore(), 1.);
                         }
                     }
@@ -133,7 +134,7 @@ public class BaseRunReceiverIT {
                 }
             }
             log.warn("");
-            for (Carrier carrier : ReceiverUtils.getCarriers(scenario).getCarriers().values()) {
+            for (Carrier carrier : FreightUtils.getCarriers(scenario).getCarriers().values()) {
                 for (CarrierPlan plan : carrier.getPlans()) {
                     StringBuilder strb = new StringBuilder();
                     strb.append("carrierId=").append(plan.getCarrier().getId());

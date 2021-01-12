@@ -18,6 +18,7 @@ import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
@@ -25,8 +26,6 @@ import org.matsim.core.controler.listener.StartupListener;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
-
-import receiver.ReceiverUtils;
 
 
 /**
@@ -46,7 +45,7 @@ public class VehicleTypeListener implements StartupListener, IterationEndsListen
 
 	
 	public VehicleTypeListener(Scenario sc, int run) {
-		this.carriers = ReceiverUtils.getCarriers(sc);
+		this.carriers = FreightUtils.getCarriers(sc);
 		this.run = run;
 //		this.tw = tw;
 //		this.delFreq = delFreq;

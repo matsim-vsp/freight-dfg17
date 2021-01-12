@@ -27,6 +27,7 @@ import org.matsim.api.core.v01.population.HasPlansAndId;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.ScheduledTour;
 import org.matsim.contrib.freight.carrier.Tour;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.events.BeforeMobsimEvent;
@@ -43,7 +44,6 @@ import org.matsim.core.utils.misc.Time;
 import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -187,7 +187,7 @@ class ReceiverControlerListener implements ScoringListener,
             bw.write("receiverId,twStart,twEnd,twDuration,positionInTour,product,deliveryStart,deliveryEnd");
             bw.newLine();
 
-            for (Carrier carrier : ReceiverUtils.getCarriers(this.sc).getCarriers().values()) {
+			for (Carrier carrier : FreightUtils.getCarriers(this.sc).getCarriers().values()) {
                 Collection<ScheduledTour> scheduledTours = carrier.getSelectedPlan().getScheduledTours();
                 for (ScheduledTour tour : scheduledTours) {
                     for (int i = 0; i < tour.getTour().getTourElements().size(); i++) {

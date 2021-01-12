@@ -38,6 +38,7 @@ import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
@@ -117,7 +118,7 @@ public class CapeTownScenarioBuilder {
 		}
 
 		/* Link the carriers to the receivers. */
-		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
+		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers(FreightUtils.getCarriers(sc));
 		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers(sc);
 		return sc;
 	}
@@ -161,7 +162,7 @@ public class CapeTownScenarioBuilder {
 		}
 
 		/* Link the carriers to the receivers. */
-		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
+		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers(FreightUtils.getCarriers(sc));
 
 		/* Set coalition settings */
 		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
@@ -259,13 +260,13 @@ public class CapeTownScenarioBuilder {
 		new File(outputFolder).mkdirs();
 
 		new ConfigWriter(sc.getConfig()).write(outputFolder + "config.xml");
-		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(outputFolder + "carriers.xml");
+		new CarrierPlanXmlWriterV2(FreightUtils.getCarriers(sc)).write(outputFolder + "carriers.xml");
 		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
 
 		/* Write the vehicle types. FIXME This will have to change so that vehicle
 		 * types lie at the Carriers level, and not per Carrier. In this scenario 
 		 * there luckily is only a single Carrier. */
-		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
+		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes(FreightUtils.getCarriers(sc))).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
 	/**
@@ -274,7 +275,7 @@ public class CapeTownScenarioBuilder {
 	 * @param sc
 	 */
 	public static void generateCarrierPlan(Scenario sc ) {
-		Carrier carrier = ReceiverUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class)); 
+		Carrier carrier = FreightUtils.getCarriers(sc).getCarriers().get(Id.create("Carrier1", Carrier.class));
 
 		VehicleRoutingProblem.Builder vrpBuilder = MatsimJspritFactory.createRoutingProblemBuilder(carrier, sc.getNetwork());
 
@@ -314,7 +315,7 @@ public class CapeTownScenarioBuilder {
 	 * @param sc
 	 */
 	public static void createReceiverOrders( Scenario sc ) {
-		Carriers carriers = ReceiverUtils.getCarriers( sc );
+		Carriers carriers = FreightUtils.getCarriers(sc);
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 		/* This we added to facilitate the shipments */
@@ -545,9 +546,8 @@ public class CapeTownScenarioBuilder {
 		types.getVehicleTypes().put(typeMedium.getId(), typeMedium);
 		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);
 
-		Carriers carriers = new Carriers();
+		Carriers carriers = FreightUtils.getOrCreateCarriers(sc);
 		carriers.addCarrier(carrier);
-		ReceiverUtils.setCarriers(carriers, sc);
 	}
 
 
