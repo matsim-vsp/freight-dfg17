@@ -31,6 +31,7 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.NetworkWriter;
 import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
@@ -91,7 +92,7 @@ public class BaseReceiverChessboardScenario{
 		}
 
 		/* Link the carriers to the receivers. */
-		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
+		 ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers(FreightUtils.getCarriers(sc));
 		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 		return sc;
 	}
@@ -125,14 +126,14 @@ public class BaseReceiverChessboardScenario{
 
 		new NetworkWriter(sc.getNetwork()).write(outputFolder + "network.xml");
 		new ConfigWriter(sc.getConfig()).write(outputFolder + "config.xml");
-		new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(outputFolder + "carriers.xml");
+		new CarrierPlanXmlWriterV2(FreightUtils.getCarriers(sc)).write(outputFolder + "carriers.xml");
 //		new CarrierPlanWriter(ReceiverUtils.getCarriers( sc ).getCarriers().values()).write(outputFolder + "carriers.xml");
 		new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(outputFolder + "receivers.xml");
 
 		/* Write the vehicle types. FIXME This will have to change so that vehicle
 		 * types lie at the Carriers level, and not per Carrier. In this scenario
 		 * there luckily is only a single Carrier. */
-		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes( ReceiverUtils.getCarriers( sc ) )).write(outputFolder + "carrierVehicleTypes.xml");
+		new CarrierVehicleTypeWriter(CarrierVehicleTypes.getVehicleTypes(FreightUtils.getCarriers(sc))).write(outputFolder + "carrierVehicleTypes.xml");
 	}
 
 
@@ -141,7 +142,7 @@ public class BaseReceiverChessboardScenario{
 	 * for experiments, but this must be adapted in the future to accept other parameters as inputs to enable different orders per receiver.
 	 */
 	private static void createReceiverOrders( Scenario sc ) {
-		Carriers carriers = ReceiverUtils.getCarriers( sc );
+		Carriers carriers = FreightUtils.getCarriers(sc);
 		Receivers receivers = ReceiverUtils.getReceivers( sc );
 		Carrier carrierOne = carriers.getCarriers().get(Id.create("Carrier1", Carrier.class));
 
@@ -347,9 +348,9 @@ public class BaseReceiverChessboardScenario{
 		types.getVehicleTypes().put(typeLight.getId(), typeLight);
 		types.getVehicleTypes().put(typeHeavy.getId(), typeHeavy);
 
-		Carriers carriers = new Carriers();
+		Carriers carriers = FreightUtils.getOrCreateCarriers(sc);
 		carriers.addCarrier(carrier);
-		ReceiverUtils.setCarriers(carriers, sc);
+
 	}
 
 

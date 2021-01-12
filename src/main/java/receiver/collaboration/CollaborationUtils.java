@@ -2,6 +2,7 @@ package receiver.collaboration;
 
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 
@@ -32,7 +33,7 @@ public class CollaborationUtils{
 		/* Add carrier and receivers to coalition */
 		Coalition coalition = CollaborationUtils.createCoalition();
 
-		for (Carrier carrier : ReceiverUtils.getCarriers( sc ).getCarriers().values()){
+		for (Carrier carrier : FreightUtils.getCarriers(sc).getCarriers().values()){
 			if (!coalition.getCarrierCoalitionMembers().contains(carrier)){
 				coalition.addCarrierCoalitionMember(carrier);
 			}

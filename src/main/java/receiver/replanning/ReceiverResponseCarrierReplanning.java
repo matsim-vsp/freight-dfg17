@@ -24,13 +24,11 @@ import com.graphhopper.jsprit.core.util.Solutions;
 import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carrier;
-import org.matsim.contrib.freight.carrier.CarrierPlan;
-import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
-import org.matsim.contrib.freight.carrier.CarrierShipment;
+import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.jsprit.MatsimJspritFactory;
 import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
@@ -62,7 +60,7 @@ public class ReceiverResponseCarrierReplanning implements IterationStartsListene
         CollaborationUtils.setCoalitionFromReceiverAttributes( sc );
 
         // clean out plans, services, shipments from carriers:
-        Map<Id<Carrier>, Carrier> carriers = ReceiverUtils.getCarriers( sc ).getCarriers();
+		Map<Id<Carrier>, Carrier> carriers = FreightUtils.getCarriers(sc).getCarriers();
         for( Carrier carrier : carriers.values() ){
             carrier.clearPlans();
             carrier.getShipments().clear();
@@ -121,7 +119,7 @@ public class ReceiverResponseCarrierReplanning implements IterationStartsListene
 
         }
 
-        new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( sc ) ).write(sc.getConfig().controler().getOutputDirectory() + "carriers.xml");
+		new CarrierPlanXmlWriterV2(FreightUtils.getCarriers(sc)).write(sc.getConfig().controler().getOutputDirectory() + "carriers.xml");
         new ReceiversWriter( ReceiverUtils.getReceivers( sc ) ).write(sc.getConfig().controler().getOutputDirectory() + "receivers.xml");
 
     }

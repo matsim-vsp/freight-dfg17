@@ -26,6 +26,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlWriterV2;
 import org.matsim.contrib.freight.usecases.analysis.CarrierScoreStats;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.MatsimServices;
@@ -84,12 +85,12 @@ import java.net.URL;
 //		MarginalScenarioBuilder.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  "input/algorithm.xml");
 //		URL algoConfigFileName = IOUtils.newUrl( sc.getConfig().getContext(), "algorithm.xml" );
 		URL algoConfigFileName = IOUtils.extendUrl( sc.getConfig().getContext(), "initialPlanAlgorithm.xml" );
-		ReceiverChessboardUtils.generateCarrierPlan( ReceiverUtils.getCarriers( sc ), sc.getNetwork(),  algoConfigFileName);
+		ReceiverChessboardUtils.generateCarrierPlan(FreightUtils.getCarriers(sc), sc.getNetwork(),  algoConfigFileName);
 		
 		BaseReceiverChessboardScenario.writeFreightScenario(sc );
 		
 		/* Link the carriers to the receivers. */
-		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( sc ) );
+		ReceiverUtils.getReceivers( sc ).linkReceiverOrdersToCarriers(FreightUtils.getCarriers(sc));
 		
 		CollaborationUtils.createCoalitionWithCarriersAndAddCollaboratingReceivers( sc );
 
@@ -117,7 +118,7 @@ import java.net.URL;
 		 */
 //		final int statInterval = ReceiverUtils.getReplanInterval( controler.getScenario() );
 		final int statInterval = ExperimentParameters.STAT_INTERVAL;
-		CarrierScoreStats scoreStats = new CarrierScoreStats( ReceiverUtils.getCarriers( controler.getScenario() ), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
+		CarrierScoreStats scoreStats = new CarrierScoreStats(FreightUtils.getCarriers(controler.getScenario()), controler.getScenario().getConfig().controler().getOutputDirectory() + "/carrier_scores", true);
 
 		controler.addControlerListener(scoreStats);
 
@@ -127,7 +128,7 @@ import java.net.URL;
 				String dir = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 				if((event.getIteration() + 1) % (statInterval) != 0) return;
 				//write plans
-				new CarrierPlanXmlWriterV2( ReceiverUtils.getCarriers( controler.getScenario() ) ).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
+				new CarrierPlanXmlWriterV2(FreightUtils.getCarriers(controler.getScenario())).write(dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
 				LOG.info("Writing carrier plans to: " + dir + "/" + event.getIteration() + ".carrierPlans.xml.gz");
 			}
 		});

@@ -22,15 +22,13 @@
 package receiver.usecases.capetown;
 
 import org.apache.log4j.Logger;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.controler.Controler;
 import receiver.ReceiverModule;
-import receiver.ReceiverScoringFunctionFactory;
 import receiver.ReceiverUtils;
 import receiver.Receivers;
 import receiver.collaboration.Coalition;
-import receiver.replanning.ReceiverOrderStrategyManagerFactory;
 import receiver.replanning.ReceiverReplanningType;
-import receiver.usecases.UsecasesReceiverScoringFunctionFactory;
 
 /**
  *
@@ -45,7 +43,7 @@ public class CapeTownReceiverUtils {
 
 		Receivers finalReceivers = ReceiverUtils.getReceivers( controler.getScenario() );
 
-		finalReceivers.linkReceiverOrdersToCarriers( ReceiverUtils.getCarriers( controler.getScenario() ) );
+		finalReceivers.linkReceiverOrdersToCarriers(FreightUtils.getCarriers(controler.getScenario()));
 		// (presumably done twice, just to be sure)
 
 		Coalition coalition = ReceiverUtils.getCoalition( controler.getScenario() );

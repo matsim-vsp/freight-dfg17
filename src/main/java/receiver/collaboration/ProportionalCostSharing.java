@@ -29,6 +29,7 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.TimeWindow;
 
+import org.matsim.contrib.freight.utils.FreightUtils;
 import receiver.Receiver;
 import receiver.ReceiverPlan;
 import receiver.ReceiverUtils;
@@ -96,7 +97,7 @@ public final class ProportionalCostSharing implements ReceiverCarrierCostAllocat
 			// (go through the carriers one by one)
 
 			Id<Carrier> carrierId = entry.getKey() ;
-			Carrier carrier = ReceiverUtils.getCarriers( sc ).getCarriers().get(carrierId);
+			Carrier carrier = FreightUtils.getCarriers(sc).getCarriers().get(carrierId);
 			final List<Receiver> receiverList = entry.getValue();
 
 			double fixedFeeVolume = 0.0;
