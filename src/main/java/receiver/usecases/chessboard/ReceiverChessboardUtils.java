@@ -34,6 +34,7 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.freight.Freight;
 import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
@@ -45,6 +46,7 @@ import org.matsim.contrib.freight.jsprit.NetworkBasedTransportCosts;
 import org.matsim.contrib.freight.jsprit.NetworkRouter;
 import org.matsim.contrib.freight.controler.CarrierPlanStrategyManagerFactory;
 import org.matsim.contrib.freight.controler.CarrierScoringFunctionFactory;
+import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 
@@ -61,7 +63,7 @@ public class ReceiverChessboardUtils {
 	final public static int STATISTICS_INTERVAL = 50;
 	
 	public static void setupCarriers(Controler controler) {
-		Carriers carriers = ReceiverUtils.getCarriers( controler.getScenario() );;
+		Carriers carriers = FreightUtils.getOrCreateCarriers(controler.getScenario());;
 
 		BaseRunReceiver.setupCarrierReplanning(controler );
 
@@ -73,14 +75,9 @@ public class ReceiverChessboardUtils {
 			  controler.getScenario().getNetwork(), controler);
 
 		FreightConfigGroup freightConfig = ConfigUtils.addOrGetModule( controler.getScenario().getConfig(), FreightConfigGroup.class );
-		if ( true ){
-			freightConfig.setTimeWindowHandling( FreightConfigGroup.TimeWindowHandling.enforceBeginnings );
-		} else{
-			freightConfig.setTimeWindowHandling( FreightConfigGroup.TimeWindowHandling.ignore );
-		}
+		freightConfig.setTimeWindowHandling( FreightConfigGroup.TimeWindowHandling.enforceBeginnings );
 
-		CarrierModule carrierControler = new CarrierModule(carriers, cStratManFac, cScorFuncFac);
-//		carrierControler.setPhysicallyEnforceTimeWindowBeginnings(true);
+		CarrierModule carrierControler = new CarrierModule(cStratManFac, cScorFuncFac);
 		controler.addOverridingModule(carrierControler);
 	}
 
