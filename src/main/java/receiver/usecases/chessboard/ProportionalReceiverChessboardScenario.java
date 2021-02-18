@@ -60,6 +60,8 @@ import receiver.product.ReceiverProduct;
 class ProportionalReceiverChessboardScenario {
 	private final static Logger LOG = Logger.getLogger(ProportionalReceiverChessboardScenario.class);
 	public static final String ATTR_HEIGHT = "height";
+	public static final String ATTR_WIDTH = "width";
+	public static final String ATTR_DEPTH = "depth";
 //	private final static int NUMBER_OF_RECEIVERS = 60;
 	
 
@@ -299,7 +301,21 @@ class ProportionalReceiverChessboardScenario {
 		ProductType productTypeTwo = receivers.createAndAddProductType(Id.create("P2", ProductType.class), carrierOriginLinkId);
 		productTypeTwo.setDescription("Product 2");
 		productTypeTwo.setRequiredCapacity(2);
-		
+		productTypeTwo.getAttributes().putAttribute(ATTR_HEIGHT, 10.0);
+		productTypeTwo.getAttributes().putAttribute(ATTR_WIDTH, 10.0);
+		productTypeTwo.getAttributes().putAttribute(ATTR_DEPTH, 10.0);
+
+		double heightOfOne = (double) productTypeOne.getAttributes().getAttribute(ProportionalReceiverChessboardScenario.ATTR_HEIGHT);
+		double width = Double.parseDouble( productTypeOne.getAttributes().getAttribute(ProportionalReceiverChessboardScenario.ATTR_WIDTH).toString() );
+		Double depth;
+		Object oDepth  = productTypeOne.getAttributes().getAttribute(ProportionalReceiverChessboardScenario.ATTR_DEPTH);
+		if(oDepth instanceof Double){
+			depth = (Double) oDepth;
+		} else{
+			LOG.error("Oops, the depth is not of type 'double'.");
+			depth = 100.0;
+		}
+
 		for ( int r = 1 ; r < ReceiverUtils.getReceivers( sc ).getReceivers().size()+1 ; r++){
 			
 			int tw = ExperimentParameters.TIME_WINDOW_DURATION;
