@@ -29,7 +29,7 @@ import lsp.shipment.LSPShipment;
 				}	
 			
 				for(LSPShipment shipment : lsp.getShipments()) {
-					shipment.getSchedule().clear();
+					shipment.getShipmentPlan().clear();
 					shipment.getLog().clear();
 					lsp.getSelectedPlan().getAssigner().assignShipment(shipment); //Can also be left out, as the DefaultAssigner does nothing.
 				}
