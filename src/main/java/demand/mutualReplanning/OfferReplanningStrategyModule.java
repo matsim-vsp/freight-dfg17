@@ -45,7 +45,7 @@ public abstract class OfferReplanningStrategyModule implements GenericPlanStrate
 		builder.setFromLinkId(demandObject.getFromLinkId());
 		builder.setToLinkId(demandObject.getToLinkId());
 		builder.setCapacityDemand((int)plan.getShipment().getShipmentSize());
-		builder.setServiceTime(plan.getShipment().getServiceTime());
+		builder.setDeliveryServiceTime(plan.getShipment().getServiceTime() );
 		builder.setStartTimeWindow(plan.getShipment().getStartTimeWindow());
 		builder.setEndTimeWindow(plan.getShipment().getEndTimeWindow());
 		for(LSPInfo info : demandObject.getInfos()) {
