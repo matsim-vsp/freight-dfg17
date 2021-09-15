@@ -51,7 +51,7 @@ import lsp.shipment.LSPShipment;
 		builder.setFromLinkId(demandObject.getFromLinkId());
 		builder.setToLinkId(demandObject.getToLinkId());
 		builder.setCapacityDemand((int)demandObject.getSelectedPlan().getShipment().getShipmentSize());
-		builder.setServiceTime(demandObject.getSelectedPlan().getShipment().getServiceTime());
+		builder.setDeliveryServiceTime(demandObject.getSelectedPlan().getShipment().getServiceTime() );
 		builder.setStartTimeWindow(demandObject.getSelectedPlan().getShipment().getStartTimeWindow());
 		builder.setEndTimeWindow(demandObject.getSelectedPlan().getShipment().getEndTimeWindow());
 		for(LSPInfo info : demandObject.getInfos()) {

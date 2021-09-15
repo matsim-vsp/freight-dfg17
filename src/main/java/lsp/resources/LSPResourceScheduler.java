@@ -1,7 +1,6 @@
 package lsp.resources;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import lsp.LogisticsSolutionElement;
 import lsp.ShipmentWithTime;
@@ -40,13 +39,13 @@ public abstract class LSPResourceScheduler {
 	
 	
 	public final void switchHandeledShipments(int bufferTime){
-		for( ShipmentWithTime tuple : shipments) {
-			double endOfTransportTime = tuple.getShipment().getSchedule().getMostRecentEntry().getEndTime() + bufferTime;
-			ShipmentWithTime outgoingTuple = new ShipmentWithTime(endOfTransportTime,tuple.getShipment());
+		for( ShipmentWithTime shipment : shipments) {
+			double endOfTransportTime = shipment.getShipment().getShipmentPlan().getMostRecentEntry().getEndTime() + bufferTime;
+			ShipmentWithTime outgoingTuple = new ShipmentWithTime(endOfTransportTime,shipment.getShipment());
 			for(LogisticsSolutionElement element : resource.getClientElements()){
-				if(element.getIncomingShipments().getShipments().contains(tuple)){
+				if(element.getIncomingShipments().getShipments().contains(shipment)){
 					element.getOutgoingShipments().getShipments().add(outgoingTuple);
-					element.getIncomingShipments().getShipments().remove(tuple);
+					element.getIncomingShipments().getShipments().remove(shipment);
 					if(element.getNextElement() != null) {
 						element.getNextElement().getIncomingShipments().getShipments().add(outgoingTuple);
 						element.getOutgoingShipments().getShipments().remove(outgoingTuple);
