@@ -19,7 +19,7 @@ class SupplyRescheduler implements BeforeMobsimListener{
 	public void notifyBeforeMobsim(BeforeMobsimEvent arg0) {
 		if(arg0.getIteration() !=  0) {
 			for(LSP lsp : lsps.getLSPs().values()){
-				lsp.scheduleSoultions();
+				lsp.scheduleSolutions();
 			}		
 		}	
 	}

@@ -35,7 +35,7 @@ import lsp.shipment.LSPShipment;
 		}
 
 		for(LSPDecorator lsp : lsps.getLSPs().values()) {
-			lsp.scheduleSoultions();
+			lsp.scheduleSolutions();
 		}
 	}
 

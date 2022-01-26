@@ -138,7 +138,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 
 	@Override
-	public void scheduleSoultions() {
+	public void scheduleSolutions() {
 		solutionScheduler.scheduleSolutions();
 	}
 

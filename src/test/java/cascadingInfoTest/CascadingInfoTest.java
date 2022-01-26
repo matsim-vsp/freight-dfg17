@@ -162,7 +162,7 @@ public class CascadingInfoTest {
 			collectionLSP.assignShipmentToLSP(shipment);
 		}
 
-		collectionLSP.scheduleSoultions();
+		collectionLSP.scheduleSolutions();
 
 		ArrayList<LSP> lspList = new ArrayList<LSP>();
 		lspList.add(collectionLSP);
