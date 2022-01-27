@@ -84,16 +84,7 @@ import lsp.controler.LSPSimulationTracker;
 	public void assignShipment(LSPShipment shipment) {
 		shipments.add(shipment);			
 	}
-	
-	private LogisticsSolutionElement getFirstElement(){
-		for(LogisticsSolutionElement element : solutionElements){
-			if(element.getPreviousElement() == null){
-				return element;
-			}
-			
-		}
-		return null;
-	}
+
 
 	@Override
 	public Collection<LSPInfo> getInfos() {
