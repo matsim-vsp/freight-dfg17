@@ -72,7 +72,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 			
 			/* Count the number of grand coalition receiver members. */			
 			boolean status = (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_GRANDCOALITION_MEMBER );
-			if (status == true){
+			if (status){
 				counter += 1;
 			}
 		}
@@ -110,7 +110,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 				String coalitionDesc = "C(N|{" ;
 				
 				for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-					if ((boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) == false){
+					if (!((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS))){
 						coalitionDesc =  coalitionDesc + receiver.getId().toString();
 					}
 				}
@@ -151,7 +151,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 			 */
 //			if ( !ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
 //			double total = 0.0;
-			if((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
+			if((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS)){
 				double subScore = 0;
 				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N|{" + receiver.getId().toString() + "})")){
 					subScore = (double) ReceiverUtils.getCoalition( sc )

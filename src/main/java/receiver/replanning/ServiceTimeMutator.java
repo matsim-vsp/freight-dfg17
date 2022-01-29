@@ -76,7 +76,7 @@ public final class ServiceTimeMutator implements GenericPlanStrategyModule<Recei
 
 				double duration = order.getServiceDuration();
 				
-				if (increase == true){
+				if (increase){
 					if ( duration + time <= range){
 						duration = duration + time;		
 					} else duration = range;

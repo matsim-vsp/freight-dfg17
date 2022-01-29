@@ -39,8 +39,8 @@ public CollaborationStatusMutator(){
 		boolean status = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS );
 		
 
-		if (grandMember == true){
-			if (status == true){
+		if (grandMember){
+			if (status){
 				newstatus = false;
 			} else {
 				newstatus = true;

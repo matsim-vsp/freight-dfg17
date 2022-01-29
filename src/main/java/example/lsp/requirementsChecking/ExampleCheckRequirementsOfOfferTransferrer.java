@@ -158,7 +158,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
         	builder.setId(id);
         	
         	boolean blue = rand.nextBoolean();
-        	if (blue == true) {
+        	if (blue) {
         		builder.addRequirement(new BlueRequirement());
         	}
         	else {

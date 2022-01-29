@@ -158,7 +158,7 @@ class ExampleCheckRequirementsOfAssigner {
         	builder.setStartTimeWindow(startTimeWindow);
         	builder.setDeliveryServiceTime(capacityDemand * 60 );
         	boolean blue = rand.nextBoolean();
-        	if (blue == true) {
+        	if (blue) {
         		builder.addRequirement(new BlueRequirement());
         	}
         	else {

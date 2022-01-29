@@ -25,7 +25,7 @@ class RequirementsAssigner implements  ShipmentAssigner {
 		label:
 		for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
 			for(Requirement requirement : shipment.getRequirements()) {
-				if(requirement.checkRequirement(solution) == false) {
+				if(!requirement.checkRequirement(solution)) {
 					
 					continue label;
 				}

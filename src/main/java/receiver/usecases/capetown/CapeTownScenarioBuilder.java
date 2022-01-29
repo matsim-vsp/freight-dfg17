@@ -347,7 +347,7 @@ public class CapeTownScenarioBuilder {
 //			ReceiverProduct receiverProductTwo;
 //			ReceiverProduct receiverProductThree;
 
-			if((boolean) receiver.getAttributes().getAttribute("corporate") == true){
+			if((boolean) receiver.getAttributes().getAttribute("corporate")){
 				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 9000);
 //				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 750, 4500);
 //				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 1000, 6000);
@@ -379,7 +379,7 @@ public class CapeTownScenarioBuilder {
 //			rOrders.add(rOrder3);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
-			if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS ) == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS)){
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
