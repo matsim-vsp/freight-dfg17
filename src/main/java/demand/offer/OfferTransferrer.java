@@ -8,7 +8,7 @@ import lsp.LogisticsSolution;
 
 public interface OfferTransferrer {
 
-	public Offer transferOffer(DemandObject object, String type, Id<LogisticsSolution> solutionId);
-	public void setLSP(LSPDecorator lsp);
-	public LSPDecorator getLSP();
+	Offer transferOffer(DemandObject object, String type, Id<LogisticsSolution> solutionId);
+	void setLSP(LSPDecorator lsp);
+	LSPDecorator getLSP();
 }

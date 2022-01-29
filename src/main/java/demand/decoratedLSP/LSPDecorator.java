@@ -11,9 +11,9 @@ import lsp.shipment.LSPShipment;
 
 public interface LSPDecorator extends LSP {
 
-	public Offer getOffer(DemandObject object, String type, Id<LogisticsSolution> solutionId);
-	public void assignShipmentToSolution(LSPShipment shipment, Id<LogisticsSolution> id);
-	public OfferUpdater getOfferUpdater();
-	public void setOfferUpdater(OfferUpdater offerUpdater);
-	public LSPPlanDecorator getSelectedPlan();
+	Offer getOffer(DemandObject object, String type, Id<LogisticsSolution> solutionId);
+	void assignShipmentToSolution(LSPShipment shipment, Id<LogisticsSolution> id);
+	OfferUpdater getOfferUpdater();
+	void setOfferUpdater(OfferUpdater offerUpdater);
+	LSPPlanDecorator getSelectedPlan();
 }

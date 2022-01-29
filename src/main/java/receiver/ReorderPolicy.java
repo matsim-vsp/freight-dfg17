@@ -32,12 +32,12 @@ import org.matsim.utils.objectattributes.attributable.Attributable;
  */
 public interface ReorderPolicy extends Attributable {
 
-	public String getPolicyName();
+	String getPolicyName();
 	
 	/**
 	 * This method assumes that the stock on hand, and the reordering policy's
 	 * quantities are expressed in the same unit-of-measure. 
 	 */
-	public double calculateOrderQuantity(double onHand);
+	double calculateOrderQuantity(double onHand);
 
 }

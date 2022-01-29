@@ -40,7 +40,7 @@ public interface ReceiverCarrierCostAllocation
 	 * is then returned with the (possibly adjusted) costs.
 	 *  
 	 */
-	public void allocateCoalitionCosts();
+	void allocateCoalitionCosts();
 	
 //	public String getDescription();
 	// I don't think that this is helpful at this point.  kai, jan'19

@@ -8,8 +8,8 @@ import demand.decoratedLSP.LSPDecorator;
 import demand.demandObject.DemandObject;
 
 public interface DemandReplanner {
-	public void replan(Collection<LSPDecorator> lsps, ReplanningEvent event);
-	public void addStrategy(DemandPlanStrategyImpl strategy);
-	public void setDemandObject(DemandObject demandObject);
-	public DemandObject getDemandObject();
+	void replan(Collection<LSPDecorator> lsps, ReplanningEvent event);
+	void addStrategy(DemandPlanStrategyImpl strategy);
+	void setDemandObject(DemandObject demandObject);
+	DemandObject getDemandObject();
 }

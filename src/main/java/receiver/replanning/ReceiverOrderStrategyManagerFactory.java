@@ -32,6 +32,6 @@ import receiver.ReceiverPlan;
  */
 public interface ReceiverOrderStrategyManagerFactory {
 
-	public GenericStrategyManager<ReceiverPlan, Receiver> createReceiverStrategyManager();
+	GenericStrategyManager<ReceiverPlan, Receiver> createReceiverStrategyManager();
 
 }
