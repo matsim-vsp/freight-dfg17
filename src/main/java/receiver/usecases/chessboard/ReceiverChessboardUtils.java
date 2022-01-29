@@ -104,10 +104,8 @@ public class ReceiverChessboardUtils {
 		//get best (here, there is only one)
 		VehicleRoutingProblemSolution solution = null;
 
-		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-		while(iterator.hasNext()){
-			solution = iterator.next();
+		for (VehicleRoutingProblemSolution vehicleRoutingProblemSolution : solutions) {
+			solution = vehicleRoutingProblemSolution;
 		}
 
 		//create a carrierPlan from the solution
