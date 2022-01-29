@@ -17,8 +17,6 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 
 public class DemandObjectImpl implements DemandObject{
 
-	private final DemandAgent shipper;
-	private final DemandAgent recipient;
 	private final Id<DemandObject> id;
 	private final ArrayList<DemandPlan> plans;
 	private final double strengthOfFlow;
@@ -139,13 +137,13 @@ public class DemandObjectImpl implements DemandObject{
 	private DemandObjectImpl(Builder builder) {
 		this.plans = new ArrayList<DemandPlan>();
 //		this.utilityFunctions = new ArrayList<UtilityFunction>();
-		this.shipper = builder.shipper;
-		if(this.shipper != null) {
-			this.shipper.getDemandObjects().add(this);
+		DemandAgent shipper = builder.shipper;
+		if(shipper != null) {
+			shipper.getDemandObjects().add(this);
 		}
-		this.recipient = builder.recipient;
-		if(this.recipient != null) {
-			this.recipient.getDemandObjects().add(this);
+		DemandAgent recipient = builder.recipient;
+		if(recipient != null) {
+			recipient.getDemandObjects().add(this);
 		}
 		this.id = builder.id;
 		this.strengthOfFlow = builder.strengthOfFlow;

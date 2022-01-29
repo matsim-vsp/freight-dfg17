@@ -91,7 +91,6 @@ import receiver.product.ReceiverProduct;
 	private Id<Carrier> currentOrderCarrierId = null;
 	private List<Order> currentOrders = null;
 	private ReceiverPlan.Builder currentPlanBuilder = null;
-	private Boolean currentPlanSelected = null;
 	private ReceiverProduct.Builder currentProductBuilder = null;
 
 	private final Receivers receivers;
@@ -248,6 +247,7 @@ import receiver.product.ReceiverProduct;
 		}
 		
 		String selected = atts.getValue(ATTR_PLAN_SELECTED);
+		Boolean currentPlanSelected = null;
 		if(selected.equalsIgnoreCase("yes")) {
 			currentPlanSelected = true;
 		} else if (selected.equalsIgnoreCase("no")) {

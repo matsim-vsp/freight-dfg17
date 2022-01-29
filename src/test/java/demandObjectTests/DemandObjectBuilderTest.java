@@ -37,21 +37,17 @@ import demand.offer.Offer;
 
 public class DemandObjectBuilderTest {
 
-	private Network network;
 	private ArrayList<DemandObject> demandObjects;
 	private OfferRequester offerRequester;
 	private LSPDecorator lsp;
-	private DemandReplannerImpl replanner;
-	private DemandPlanStrategyImpl planStrategy;
-	private OfferReplanningStrategyModule offerModule ;
-	
+
 	@Before
 	public void initialize() {
 		Config config = new Config();
         config.addCoreModules();
         Scenario scenario = ScenarioUtils.createScenario(config);
         new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
-        this.network = scenario.getNetwork();
+		Network network = scenario.getNetwork();
         ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
         this.demandObjects = new ArrayList<DemandObject>();
         Random random = new Random(1);
@@ -106,9 +102,9 @@ public class DemandObjectBuilderTest {
         	planBuilder.setLogisticsSolutionId(lsp.getSelectedPlan().getSolutions().iterator().next().getId());
         	builder.setInitialPlan(planBuilder.build());
         	builder.setScorer(new FortyTwoDemandScorer());
-        	replanner = new DemandReplannerImpl();
-        	planStrategy = new DemandPlanStrategyImpl(new BestPlanSelector());
-        	offerModule = new OfferReplanningStrategyModuleImpl();
+			DemandReplannerImpl replanner = new DemandReplannerImpl();
+			DemandPlanStrategyImpl planStrategy = new DemandPlanStrategyImpl(new BestPlanSelector());
+			OfferReplanningStrategyModule offerModule = new OfferReplanningStrategyModuleImpl();
         	planStrategy.addStrategyModule(offerModule);
         	replanner.addStrategy(planStrategy);
         	builder.setReplanner(replanner);

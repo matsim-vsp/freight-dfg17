@@ -38,12 +38,6 @@ import lsp.shipment.LSPShipment;
 public class CascadingInfoTest {
 	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
 
-	private Network network;
-	private LSP collectionLSP;
-	private Carrier carrier;
-	private LSPResource collectionAdapter;
-	private LogisticsSolutionElement collectionElement;
-	private LogisticsSolution collectionSolution;
 	private AverageTimeInfo elementInfo;
 	private AverageTimeInfo solutionInfo;
 	private AverageTimeTracker timeTracker;
@@ -57,7 +51,7 @@ public class CascadingInfoTest {
 		config.controler().setOutputDirectory( utils.getOutputDirectory() );
 		Scenario scenario = ScenarioUtils.createScenario(config);
 		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
-		this.network = scenario.getNetwork();
+		Network network = scenario.getNetwork();
 
 		Id<Carrier> carrierId = Id.create("CollectionCarrier", Carrier.class);
 		Id<VehicleType> vehicleTypeId = Id.create("CollectionCarrierVehicleType", VehicleType.class);
@@ -81,7 +75,7 @@ public class CascadingInfoTest {
 		capabilitiesBuilder.addVehicle(carrierVehicle);
 		capabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
 		CarrierCapabilities capabilities = capabilitiesBuilder.build();
-		carrier = CarrierUtils.createCarrier( carrierId );
+		Carrier carrier = CarrierUtils.createCarrier(carrierId);
 		carrier.setCarrierCapabilities(capabilities);
 
 
@@ -90,7 +84,7 @@ public class CascadingInfoTest {
 		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		adapterBuilder.setCarrier(carrier);
 		adapterBuilder.setLocationLinkId(collectionLinkId);
-		collectionAdapter = adapterBuilder.build();
+		LSPResource collectionAdapter = adapterBuilder.build();
 		timeTracker = new AverageTimeTracker();
 		collectionAdapter.addSimulationTracker(timeTracker);
 
@@ -98,7 +92,7 @@ public class CascadingInfoTest {
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
-		collectionElement = collectionElementBuilder.build();
+		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 
 		elementInfo = new AverageTimeInfo();
 		elementInfo.addPredecessorInfo(collectionAdapter.getInfos().iterator().next());
@@ -107,7 +101,7 @@ public class CascadingInfoTest {
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
 		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
 		collectionSolutionBuilder.addSolutionElement(collectionElement);
-		collectionSolution = collectionSolutionBuilder.build();
+		LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
 
 		solutionInfo = new AverageTimeInfo();
 		solutionInfo.addPredecessorInfo(collectionElement.getInfos().iterator().next());
@@ -125,7 +119,7 @@ public class CascadingInfoTest {
 
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
-		collectionLSP = collectionLSPBuilder.build();
+		LSP collectionLSP = collectionLSPBuilder.build();
 
 		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
 		Id<Link> toLinkId = collectionLinkId;

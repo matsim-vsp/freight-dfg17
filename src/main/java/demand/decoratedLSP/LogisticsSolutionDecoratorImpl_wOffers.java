@@ -26,7 +26,6 @@ import lsp.controler.LSPSimulationTracker;
 	private final Collection<LSPInfo> solutionInfos;
 	private final Collection<EventHandler> eventHandlers;
 	private final Collection<LSPSimulationTracker>trackers;
-	private EventsManager eventsManager;
 	private OfferFactory offerFactory;
 
 
@@ -110,7 +109,6 @@ import lsp.controler.LSPSimulationTracker;
 	
 	@Override
 	public void setEventsManager(EventsManager eventsManager) {
-		this.eventsManager = eventsManager;
 	}
 
 	@Override

@@ -64,7 +64,6 @@ public class MutualReplanningAndOfferUpdateTest {
 	private LSPDecorator lsp;
 	private OfferFactoryImpl offerFactory;
 	private LinearCostTracker tracker;
-	private LinearOfferVisitor linearVisitor;
 	private LogisticsSolutionDecorator  solution;
 	private double initialFixed;
 	private double initialVariable;
@@ -156,7 +155,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		OfferUpdater updater = new OfferUpdaterImpl();
 		lsp.setOfferUpdater(updater);
 		replanner.setOfferUpdater(updater);
-		linearVisitor = new LinearOfferVisitor(solution);
+		LinearOfferVisitor linearVisitor = new LinearOfferVisitor(solution);
 		updater.getOfferVisitors().add(linearVisitor);
 
 		

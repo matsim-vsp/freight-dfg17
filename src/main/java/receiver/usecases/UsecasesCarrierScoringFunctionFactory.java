@@ -40,12 +40,9 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	        private double score;
 
-//	        private double timeParameter = 0.0889;
-	        private final double timeParameter = 1.0000;
-	        // yyyyyy I have set the time parameter to a relatively high value.
+// yyyyyy I have set the time parameter to a relatively high value.
 
-	        private final double missedTimeWindowPenalty = 0.01667;
-//	        private double missedTimeWindowPenalty = 1.000;
+		   //	        private double missedTimeWindowPenalty = 1.000;
 
 	        public DriversActivityScoring() {
 	            super();
@@ -71,11 +68,14 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	                double actStartTime = act.getStartTime().seconds();
 	                TimeWindow tw = ((FreightActivity) act).getTimeWindow();
 	                if(actStartTime > tw.getEnd()){
-	                    double penalty_score = (-1)*(actStartTime - tw.getEnd())*missedTimeWindowPenalty;
+						double missedTimeWindowPenalty = 0.01667;
+						double penalty_score = (-1)*(actStartTime - tw.getEnd())* missedTimeWindowPenalty;
 	                    assert penalty_score <= 0.0 : "penalty score must be negative";
 	                    score += penalty_score;
-	                }	     
-	                double actTimeCosts = (act.getEndTime().seconds()-actStartTime)*timeParameter;
+	                }
+					//	        private double timeParameter = 0.0889;
+					double timeParameter = 1.0000;
+					double actTimeCosts = (act.getEndTime().seconds()-actStartTime)* timeParameter;
 	                assert actTimeCosts >= 0.0 : "actTimeCosts must be positive";
 	                score += actTimeCosts*(-1);
 	            }

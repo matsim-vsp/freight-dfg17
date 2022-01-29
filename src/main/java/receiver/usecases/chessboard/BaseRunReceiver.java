@@ -41,7 +41,6 @@ import java.util.Collection;
 class BaseRunReceiver{
 	final private static Logger LOG = Logger.getLogger( BaseRunReceiver.class );
 	final private static long SEED_BASE = 20180816l;
-	private String outputfolder;
 	private Scenario sc;
 
 	public static void main(String[] args) {
@@ -81,7 +80,7 @@ class BaseRunReceiver{
 	}
 
 	Scenario prepareScenario( int run, int numberOfReceivers ){
-		outputfolder = String.format("./output/base/serdur/run_%03d/", run);
+		String outputfolder = String.format("./output/base/serdur/run_%03d/", run);
 		new File(outputfolder).mkdirs();
 		sc = BaseReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, run, numberOfReceivers, true );
 		//		replanInt = mfs.getReplanInterval();

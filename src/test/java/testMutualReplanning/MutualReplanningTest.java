@@ -54,8 +54,7 @@ import testLSPWithCostTracker.LinearCostTracker;
 import testLSPWithCostTracker.TourStartHandler;
 
 public class MutualReplanningTest {
-	
-	private LSPDecorator lsp;
+
 	private Collection<DemandObject> demandObjects;
 	
 	
@@ -135,7 +134,7 @@ public class MutualReplanningTest {
 		
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		offerLSPBuilder.setSolutionScheduler(simpleScheduler);
-		lsp = offerLSPBuilder.build();
+		LSPDecorator lsp = offerLSPBuilder.build();
 		
 		demandObjects = new ArrayList<>();
 		for(int i = 1; i < 11 ; i++) {
