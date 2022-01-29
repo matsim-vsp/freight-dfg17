@@ -4,7 +4,7 @@ import lsp.functions.*;
 
 /*package-private*/ class RedInfo extends LSPInfo {
 
-private LSPInfoFunction redInfoFunction;
+private final LSPInfoFunction redInfoFunction;
 
 	/*package-private*/ RedInfo() {
 		redInfoFunction = LSPInfoFunctionUtils.createDefaultInfoFunction();

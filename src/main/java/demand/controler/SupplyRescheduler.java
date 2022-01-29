@@ -9,7 +9,7 @@ import lsp.LSP;
 
 class SupplyRescheduler implements BeforeMobsimListener{
 
-	private LSPDecorators lsps;
+	private final LSPDecorators lsps;
 	
 	SupplyRescheduler(LSPDecorators  lsps) {
 		this.lsps = lsps;

@@ -41,7 +41,7 @@ import receiver.collaboration.MarginalCostSharing;
 
  final class ReceiverTracker implements EventHandler {
 //	@Inject Scenario sc;
-	private Scenario sc;
+	private final Scenario sc;
 	
 	//private final Receivers receivers;
 	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();

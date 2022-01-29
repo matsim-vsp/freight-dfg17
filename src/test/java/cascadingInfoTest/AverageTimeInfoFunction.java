@@ -10,7 +10,7 @@ import lsp.functions.LSPInfoFunctionValue;
 
 public class AverageTimeInfoFunction implements LSPInfoFunction {
 
-	private Collection<LSPInfoFunctionValue<?>> values;
+	private final Collection<LSPInfoFunctionValue<?>> values;
 	
 	public AverageTimeInfoFunction() {
 		values = new ArrayList<LSPInfoFunctionValue<?>>();

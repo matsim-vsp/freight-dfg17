@@ -19,13 +19,13 @@ import lsp.controler.LSPSimulationTracker;
 
 /*package-private*/ class LogisticsSolutionDecoratorImpl_wOffers implements LogisticsSolutionDecorator {
 
-	private Id<LogisticsSolution> id;
+	private final Id<LogisticsSolution> id;
 	private LSPWithOffers lsp;
-	private Collection<LogisticsSolutionElement> solutionElements; 
-	private Collection<LSPShipment> shipments;
-	private Collection<LSPInfo> solutionInfos;
-	private Collection<EventHandler> eventHandlers;
-	private Collection<LSPSimulationTracker>trackers;
+	private final Collection<LogisticsSolutionElement> solutionElements;
+	private final Collection<LSPShipment> shipments;
+	private final Collection<LSPInfo> solutionInfos;
+	private final Collection<EventHandler> eventHandlers;
+	private final Collection<LSPSimulationTracker>trackers;
 	private EventsManager eventsManager;
 	private OfferFactory offerFactory;
 

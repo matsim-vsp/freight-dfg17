@@ -12,7 +12,7 @@ public class LinearOffer implements Offer{
 
 	private LSPDecorator  lsp;
 	private LogisticsSolutionDecorator solution;
-	private String type;
+	private final String type;
 	private double fix;
 	private double linear;
 	

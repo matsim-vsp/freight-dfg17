@@ -34,10 +34,10 @@ import receiver.SSReorderPolicy;
  */
 public class ReceiverProduct {
 	
-	private ReorderPolicy policy;
-	private double stockOnHand;
+	private final ReorderPolicy policy;
+	private final double stockOnHand;
 
-	private ProductType productType;
+	private final ProductType productType;
 	
 
 	private ReceiverProduct(Builder builder){

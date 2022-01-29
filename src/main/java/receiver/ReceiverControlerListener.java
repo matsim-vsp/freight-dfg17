@@ -60,8 +60,8 @@ class ReceiverControlerListener implements ScoringListener,
         ReplanningListener, BeforeMobsimListener, ShutdownListener {
 
     final private static Logger LOG = Logger.getLogger(ReceiverControlerListener.class);
-    private ReceiverOrderStrategyManagerFactory stratManFac;
-    private ReceiverScoringFunctionFactory scorFuncFac;
+    private final ReceiverOrderStrategyManagerFactory stratManFac;
+    private final ReceiverScoringFunctionFactory scorFuncFac;
     private ReceiverTracker tracker;
     @Inject
     EventsManager eMan;

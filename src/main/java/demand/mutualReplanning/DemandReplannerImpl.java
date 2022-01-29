@@ -14,7 +14,7 @@ import demand.demandObject.DemandPlan;
 public class DemandReplannerImpl implements DemandReplanner{
 
 	private DemandObject demandObject;
-	private GenericStrategyManager<DemandPlan, DemandObject> strategyManager;
+	private final GenericStrategyManager<DemandPlan, DemandObject> strategyManager;
 	
 	
 	public DemandReplannerImpl(DemandObject demandObject) {

@@ -9,9 +9,9 @@ import lsp.LogisticsSolution;
 public class DemandPlanImpl implements DemandPlan{
 
 	private double score;
-	private ShipperShipment shipment;
-	private LSPDecorator lsp;
-	private Id<LogisticsSolution> solutionId;
+	private final ShipperShipment shipment;
+	private final LSPDecorator lsp;
+	private final Id<LogisticsSolution> solutionId;
 	private DemandObject demandObject;
 	
 	public static class Builder{

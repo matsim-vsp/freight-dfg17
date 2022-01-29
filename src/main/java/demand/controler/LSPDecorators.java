@@ -11,7 +11,7 @@ import lsp.LSP;
 
 /*package-private*/ class LSPDecorators {
 
-	private Map<Id<LSP>, LSPDecorator> lsps = new HashMap<>();
+	private final Map<Id<LSP>, LSPDecorator> lsps = new HashMap<>();
 
 	LSPDecorators(Collection<LSPDecorator> lsps) {
 		makeMap(lsps);

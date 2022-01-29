@@ -34,9 +34,9 @@ import receiver.product.ReceiverOrder;
 public final class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
 	private static final Logger log = Logger.getLogger( ServiceTimeMutator.class ) ;
 
-	private double time;
-	private double range;
-	private boolean increase;
+	private final double time;
+	private final double range;
+	private final boolean increase;
 	
 	/**
 	 * This class changes the service time of a receivers' orders with the 

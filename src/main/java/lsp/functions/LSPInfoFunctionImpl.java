@@ -5,7 +5,7 @@ import java.util.Collection;
 
 class LSPInfoFunctionImpl implements LSPInfoFunction {
 
-	private Collection<LSPInfoFunctionValue<?>> values;
+	private final Collection<LSPInfoFunctionValue<?>> values;
 	
 	LSPInfoFunctionImpl() {
 		this.values = new ArrayList<LSPInfoFunctionValue<?>>();

@@ -30,8 +30,8 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
 //	private Attributes attributes = new Attributes();
 //	private String descr = "Marginal sharing of costs between carrier(s) and receiver(s)";
-	private double fee;
-	private Scenario sc;
+	private final double fee;
+	private final Scenario sc;
 
 	/**
 	 * Create a new marginal cost sharing instance where a fixed fee per tonne (as specified) is 

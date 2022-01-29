@@ -2,7 +2,7 @@ package lsp.functions;
 
 class LSPInfoFunctionValueImpl<T> implements LSPInfoFunctionValue<T> {
 
-	private String name;
+	private final String name;
 	private T value;
 	
 	LSPInfoFunctionValueImpl(String name ) {

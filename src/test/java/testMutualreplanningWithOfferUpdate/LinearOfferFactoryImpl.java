@@ -13,7 +13,7 @@ import demand.offer.OfferFactory;
 public class LinearOfferFactoryImpl implements OfferFactory{
 
 	
-	private ArrayList<Offer> offerList;
+	private final ArrayList<Offer> offerList;
 	private LogisticsSolutionDecorator solution;
 	private LSPDecorator lsp;
 	

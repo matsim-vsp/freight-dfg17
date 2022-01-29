@@ -10,7 +10,7 @@ import lsp.LogisticsSolution;
 public class OfferUpdaterImpl implements OfferUpdater{
 
 	private LSPDecorator  lsp;
-	private Collection <OfferVisitor> visitors;
+	private final Collection <OfferVisitor> visitors;
 	
 	public OfferUpdaterImpl() {
 		this.visitors = new ArrayList<OfferVisitor>();

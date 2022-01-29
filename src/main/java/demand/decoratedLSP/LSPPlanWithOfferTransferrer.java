@@ -12,8 +12,8 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	private LSPDecorator lsp;
 	private double score;
-	private Collection<LogisticsSolutionDecorator> solutions;
-	private ShipmentAssigner assigner; 
+	private final Collection<LogisticsSolutionDecorator> solutions;
+	private final ShipmentAssigner assigner;
 	private OfferTransferrer transferrer;
 	
 	public LSPPlanWithOfferTransferrer() {

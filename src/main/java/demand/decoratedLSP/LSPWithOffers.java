@@ -23,16 +23,16 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 
 public class LSPWithOffers implements LSPDecorator {
 
-	private Id<LSP> id;
-	private Collection<LSPShipment> shipments;
-	private ArrayList<LSPPlan> plans; 
-	private SolutionScheduler solutionScheduler;
+	private final Id<LSP> id;
+	private final Collection<LSPShipment> shipments;
+	private final ArrayList<LSPPlan> plans;
+	private final SolutionScheduler solutionScheduler;
 	private LSPPlanDecorator selectedPlan;
-	private Collection<LSPResource> resources;
+	private final Collection<LSPResource> resources;
 	private LSPScorer scorer;
 	private LSPReplanner replanner;
 	private OfferUpdater offerUpdater;
-	private Attributes attributes = new Attributes();
+	private final Attributes attributes = new Attributes();
 
 	@Override
 	public Attributes getAttributes() {
@@ -43,7 +43,7 @@ public class LSPWithOffers implements LSPDecorator {
 		private Id<LSP> id;
 		private SolutionScheduler solutionScheduler;
 		private LSPPlanDecorator initialPlan;
-		private Collection<LSPResource> resources;
+		private final Collection<LSPResource> resources;
 		private LSPScorer scorer;
 		private LSPReplanner replanner;
 		private OfferUpdater offerUpdater;

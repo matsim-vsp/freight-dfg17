@@ -7,7 +7,7 @@ import lsp.LogisticsSolution;
 
 public class LinearOfferVisitor implements OfferVisitor {
 
-	private LogisticsSolutionDecorator solution;
+	private final LogisticsSolutionDecorator solution;
 	
 	public LinearOfferVisitor(LogisticsSolutionDecorator solution) {
 		this.solution = solution;

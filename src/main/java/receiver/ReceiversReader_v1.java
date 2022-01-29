@@ -96,7 +96,7 @@ import receiver.product.ReceiverProduct;
 
 	private final Receivers receivers;
 	
-	private Counter counter = new Counter("   receiver # ");
+	private final Counter counter = new Counter("   receiver # ");
 
 	public ReceiversReader_v1(final Receivers receivers) {
 		this.receivers = receivers;

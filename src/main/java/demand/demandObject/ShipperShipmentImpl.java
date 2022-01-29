@@ -7,11 +7,11 @@ import lsp.shipment.LSPShipment;
 
 public class ShipperShipmentImpl implements ShipperShipment{
 
-	private Id<ShipperShipment> id;
-	private double shipmentSize;
+	private final Id<ShipperShipment> id;
+	private final double shipmentSize;
 	private TimeWindow startTimeWindow;
 	private TimeWindow endTimeWindow;
-	private double serviceTime;
+	private final double serviceTime;
 	private LSPShipment lspShipment;
 	private DemandObject demandObject;
 	

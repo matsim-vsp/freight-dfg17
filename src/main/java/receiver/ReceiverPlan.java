@@ -51,7 +51,7 @@ import receiver.product.ReceiverOrder;
  */
 public final class ReceiverPlan implements BasicPlan, Attributable {
 	private final Logger log = Logger.getLogger(ReceiverPlan.class);
-	private Attributes attributes;
+	private final Attributes attributes;
 	private Receiver receiver = null;
 	private Double score;
 	private Map<Id<Carrier>, ReceiverOrder> orderMap;
@@ -217,11 +217,11 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	 */
 	public static class Builder{
 		private Receiver receiver = null;
-		private Map<Id<Carrier>, ReceiverOrder> map = new HashMap<>();
+		private final Map<Id<Carrier>, ReceiverOrder> map = new HashMap<>();
 		private boolean selected = false;
 		private Double score = null;
-		private List<TimeWindow> timeWindows = new ArrayList<>();
-		private boolean status;
+		private final List<TimeWindow> timeWindows = new ArrayList<>();
+		private final boolean status;
 		
 		private Builder(Receiver receiver, boolean status) {
 			this.receiver = receiver;

@@ -43,9 +43,9 @@ import receiver.ReorderPolicy;
 public final class Order {
 	final private Logger log = Logger.getLogger(Order.class);
 
-	private Id<Order> orderId;
-	private Receiver receiver;
-	private ReceiverProduct receiverProduct;	
+	private final Id<Order> orderId;
+	private final Receiver receiver;
+	private final ReceiverProduct receiverProduct;
 	private Double orderQuantity;
 	private Double dailyOrderQuantity;
 	private Double serviceTime;
@@ -193,9 +193,9 @@ public final class Order {
 		}
 		
 	
-		private Receiver receiver;
-		private Id<Order> orderId;
-		private ReceiverProduct receiverProduct;
+		private final Receiver receiver;
+		private final Id<Order> orderId;
+		private final ReceiverProduct receiverProduct;
 		private Double serviceTime = null;
 		private Double orderQuantity = null;
 		private Double dOrderQuantity = null;

@@ -28,9 +28,9 @@ import org.matsim.vehicles.Vehicle;
  */
 public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunctionFactory {
 
-	private static Logger log = Logger.getLogger(UsecasesCarrierScoringFunctionFactory.class);
+	private static final Logger log = Logger.getLogger(UsecasesCarrierScoringFunctionFactory.class);
 	
-	private Network network;
+	private final Network network;
 	
 	public UsecasesCarrierScoringFunctionFactory( Network network ) {
 		this.network = network;
@@ -41,10 +41,10 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	        private double score;
 
 //	        private double timeParameter = 0.0889;
-	        private double timeParameter = 1.0000;
+	        private final double timeParameter = 1.0000;
 	        // yyyyyy I have set the time parameter to a relatively high value.
 
-	        private double missedTimeWindowPenalty = 0.01667;
+	        private final double missedTimeWindowPenalty = 0.01667;
 //	        private double missedTimeWindowPenalty = 1.000;
 
 	        public DriversActivityScoring() {
@@ -90,7 +90,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	    static class VehicleEmploymentScoring implements SumScoringFunction.BasicScoring {
 
-	        private Carrier carrier;
+	        private final Carrier carrier;
 
 	        public VehicleEmploymentScoring(Carrier carrier) {
 	            this.carrier = carrier;
@@ -124,7 +124,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	        private final Carrier carrier;
 
-	        private Set<CarrierVehicle> employedVehicles;
+	        private final Set<CarrierVehicle> employedVehicles;
 
 	        public DriversLegScoring(Carrier carrier, Network network) {
 	            this.network = network;

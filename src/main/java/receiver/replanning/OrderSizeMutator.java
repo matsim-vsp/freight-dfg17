@@ -36,7 +36,7 @@ import receiver.product.ReceiverOrder;
  */
 
 public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
-	private boolean increase;
+	private final boolean increase;
 
 	/**
 	 * This class changes the delivery frequency of a receiver by either

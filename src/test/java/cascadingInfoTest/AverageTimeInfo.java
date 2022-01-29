@@ -6,7 +6,7 @@ import lsp.functions.LSPInfoFunctionValue;
 
 public class AverageTimeInfo extends LSPInfo {
 
-	private LSPInfoFunction function;
+	private final LSPInfoFunction function;
 	private String name = "averageTime";
 		
 	public AverageTimeInfo() {

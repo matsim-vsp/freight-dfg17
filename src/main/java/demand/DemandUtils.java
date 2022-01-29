@@ -9,7 +9,7 @@ public class DemandUtils {
 	public static class DemandAgentImplBuilder {
 
 		private Id<DemandAgent> id;
-		private ArrayList<UtilityFunction> utilityFunctions;
+		private final ArrayList<UtilityFunction> utilityFunctions;
 
 		public static DemandAgentImplBuilder newInstance() {
 			return new DemandAgentImplBuilder();

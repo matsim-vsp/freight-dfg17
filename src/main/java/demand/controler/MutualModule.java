@@ -21,12 +21,12 @@ import java.util.List;
 public class MutualModule extends AbstractModule{
 	private static final Logger log = Logger.getLogger( MutualModule.class );
 
-	private LSPDecorators lsps;
-	private DemandObjects demandObjects;
-	private MutualScoringModule mutualScoringModule;
-	private MutualReplanningModule replanningModule;
-	private FreightConfigGroup carrierConfig = new FreightConfigGroup();
-	private Collection<LSPEventCreator> creators;
+	private final LSPDecorators lsps;
+	private final DemandObjects demandObjects;
+	private final MutualScoringModule mutualScoringModule;
+	private final MutualReplanningModule replanningModule;
+	private final FreightConfigGroup carrierConfig = new FreightConfigGroup();
+	private final Collection<LSPEventCreator> creators;
 
 	public static class Builder{
 

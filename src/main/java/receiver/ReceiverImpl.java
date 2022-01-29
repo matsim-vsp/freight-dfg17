@@ -43,7 +43,7 @@ import receiver.product.ReceiverProduct;
 class ReceiverImpl implements Receiver {
 	final private Logger log = Logger.getLogger(Receiver.class);
 	
-	private Attributes attributes = new Attributes();
+	private final Attributes attributes = new Attributes();
 	private Id<Link> location;
 	//private List<TimeWindow> timeWindows = new ArrayList<>();
 	
@@ -52,7 +52,7 @@ class ReceiverImpl implements Receiver {
 	private final List<ReceiverPlan> plans;
 	private final List<ReceiverProduct> products;
 	private ReceiverPlan selectedPlan;
-	private boolean status = false;
+	private final boolean status = false;
 	private double cost = 0.0;
 
 	ReceiverImpl(final Id<Receiver> id){

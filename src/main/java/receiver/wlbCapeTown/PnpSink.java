@@ -49,12 +49,12 @@ import org.openstreetmap.osmosis.core.task.v0_6.Sink;
  */
 public class PnpSink implements Sink {
 	final private Logger log = Logger.getLogger(PnpSink.class);
-	private Counter counter = new Counter("   entity # ");
-	private Map<Long, NodeContainer> nodeMap = new TreeMap<>();
-	private Map<Long, WayContainer> wayMap = new TreeMap<>();
-	private Map<Long, RelationContainer> relationMap = new TreeMap<>();
-	private Map<Long, Coord> pnpMap = new TreeMap<>();
-	private Map<Long, String> nameMap = new TreeMap<>();
+	private final Counter counter = new Counter("   entity # ");
+	private final Map<Long, NodeContainer> nodeMap = new TreeMap<>();
+	private final Map<Long, WayContainer> wayMap = new TreeMap<>();
+	private final Map<Long, RelationContainer> relationMap = new TreeMap<>();
+	private final Map<Long, Coord> pnpMap = new TreeMap<>();
+	private final Map<Long, String> nameMap = new TreeMap<>();
 	private int pnpCounter = 0;
 
 

@@ -17,22 +17,22 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 
 public class DemandObjectImpl implements DemandObject{
 
-	private DemandAgent shipper;
-	private DemandAgent recipient;
-	private Id<DemandObject> id;
-	private ArrayList<DemandPlan> plans;
-	private double strengthOfFlow;
-	private Id<Link> fromLinkId;
-	private Id<Link> toLinkId;
+	private final DemandAgent shipper;
+	private final DemandAgent recipient;
+	private final Id<DemandObject> id;
+	private final ArrayList<DemandPlan> plans;
+	private final double strengthOfFlow;
+	private final Id<Link> fromLinkId;
+	private final Id<Link> toLinkId;
 //	private ArrayList <UtilityFunction> utilityFunctions;
 	private DemandPlan selectedPlan;
 	private DemandScorer scorer;
-	private DemandReplanner replanner;
-	private Collection<Requirement> requirements;
-	private OfferRequester offerRequester;
-	private DemandPlanGenerator generator;
-	private Collection<LSPInfo> infos;
-	private Attributes attributes = new Attributes();
+	private final DemandReplanner replanner;
+	private final Collection<Requirement> requirements;
+	private final OfferRequester offerRequester;
+	private final DemandPlanGenerator generator;
+	private final Collection<LSPInfo> infos;
+	private final Attributes attributes = new Attributes();
 
 	public static class Builder{
 		private DemandAgent shipper;
@@ -41,14 +41,14 @@ public class DemandObjectImpl implements DemandObject{
 		private double strengthOfFlow;
 		private Id<Link> fromLinkId;
 		private Id<Link> toLinkId;
-		private ArrayList <UtilityFunction> utilityFunctions;
+		private final ArrayList <UtilityFunction> utilityFunctions;
 		private DemandPlan initialPlan;
 		private DemandScorer scorer;
 		private DemandReplanner replanner;
-		private Collection<Requirement> requirements;
+		private final Collection<Requirement> requirements;
 		private OfferRequester offerRequester;
 		private DemandPlanGenerator generator;
-		private Collection<LSPInfo> infos;
+		private final Collection<LSPInfo> infos;
 		
 		public static Builder newInstance() {
 			return new Builder();

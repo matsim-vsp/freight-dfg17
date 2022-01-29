@@ -29,12 +29,12 @@ import java.util.Collection;
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
 	private CarrierAgentTracker carrierResourceTracker;
-	private Carriers carriers;
-	private LSPDecorators lsps;
-	private DemandObjects demandObjects;
-	private MutualScoringModule mutualScoringModule;
-	private MutualReplanningModule replanningModule;
-	private Collection<LSPEventCreator> creators;
+	private final Carriers carriers;
+	private final LSPDecorators lsps;
+	private final DemandObjects demandObjects;
+	private final MutualScoringModule mutualScoringModule;
+	private final MutualReplanningModule replanningModule;
+	private final Collection<LSPEventCreator> creators;
 	private ArrayList<EventHandler> registeredHandlers;
 
 	@Inject	EventsManager eventsManager;
