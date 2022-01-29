@@ -16,7 +16,7 @@ public class CollectionServiceHandler implements LSPServiceStartEventHandler, LS
 
 	
 	
-	private class ServiceTuple {
+	private static class ServiceTuple {
 		private final CarrierService service;
 		private final double startTime;
 		
