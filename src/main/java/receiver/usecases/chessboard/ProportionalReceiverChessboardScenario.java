@@ -320,7 +320,7 @@ class ProportionalReceiverChessboardScenario {
 			/* Generate and collate orders for the different receiver/order combination. */
 			Collection<Order> rOrders = new ArrayList<Order>();
 			{
-				Order rOrder1 = createProductOrder( Id.create( "Order" + Integer.toString( r ) + "1", Order.class ), receiver,
+				Order rOrder1 = createProductOrder( Id.create( "Order" + r + "1", Order.class ), receiver,
 					  receiverProductOne, Time.parseTime( serdur ) );
 				rOrder1.setNumberOfWeeklyDeliveries( numDel );
 				rOrder1.setDailyOrderQuantity(rOrder1.getOrderQuantity()/rOrder1.getNumberOfWeeklyDeliveries());

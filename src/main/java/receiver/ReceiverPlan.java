@@ -155,7 +155,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			strb.append( "[carrierId=" ).append( entry.getKey() ).append( "; order=" ).append( entry.getValue() ).append( "]" ) ;
 		}
 
-		return strb.toString() + "]" ;
+		return strb + "]" ;
 	}
 	
 	public final Collection<ReceiverOrder> getReceiverOrders(){
@@ -230,8 +230,8 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			
 		public static Builder newInstance(Receiver receiver, boolean status) {
 			return new Builder(receiver, status);
-		};
-		
+		}
+
 
 		public Builder addReceiverOrder(ReceiverOrder ro) {
 			this.map.put(ro.getCarrierId(), ro);

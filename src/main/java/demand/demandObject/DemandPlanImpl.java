@@ -1,10 +1,8 @@
 package demand.demandObject;
 
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.population.BasicPlan;
 
 import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPWithOffers;
 import lsp.LogisticsSolution;
 
 

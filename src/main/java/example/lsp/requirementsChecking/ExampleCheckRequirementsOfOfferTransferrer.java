@@ -153,7 +153,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 	    Random rand = new Random(1); 
 	    
 	    for(int i = 1; i < 11; i++) {
-        	Id<DemandObject> id = Id.create(("DemandObject_" + Integer.toString(i)), DemandObject.class);
+        	Id<DemandObject> id = Id.create(("DemandObject_" + i), DemandObject.class);
         	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
         	builder.setId(id);
         	

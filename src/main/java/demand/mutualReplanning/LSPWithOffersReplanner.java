@@ -66,7 +66,7 @@ public class LSPWithOffersReplanner implements LSPReplanner{
 			}
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPWithOffers and not any other implementation of LSP");
+			System.out.println("The class " + this + " expects an LSPWithOffers and not any other implementation of LSP");
 			System.exit(1);
 		}
 	}

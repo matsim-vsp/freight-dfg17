@@ -3,11 +3,8 @@ package receiver;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.freight.carrier.Carriers;
-import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.scenario.MutableScenario;
 import receiver.collaboration.Coalition;
 
 public class ReceiverUtils {
@@ -97,7 +94,7 @@ public class ReceiverUtils {
 		}
 		LOG.info("Current number of receiver coalition members: " + coalition.getReceiverCoalitionMembers().size());
 		LOG.info("Current number of carrier coalition members: " + coalition.getCarrierCoalitionMembers().size());
-		LOG.info("Total number of receiver agents: " + Integer.toString( ReceiverUtils.getReceivers( scenario ).getReceivers().size() ) );
+		LOG.info("Total number of receiver agents: " + ReceiverUtils.getReceivers(scenario).getReceivers().size());
 	}
 
 	public ReceiverConfigGroup getConfigGroup(Config config){

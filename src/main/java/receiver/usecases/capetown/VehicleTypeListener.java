@@ -115,7 +115,7 @@ public class VehicleTypeListener implements StartupListener, IterationEndsListen
         //String dir2 = String.format("OutputTimeWindows/Vehicles.%02d.tw/", tw);  
 //        String dir2 = String.format(directory + "/output/OutputTimeWindows/Vehicles.%s.serdur/", Float.toString(serDur));
         //String dir2 = String.format("OutputTimeWindows/Vehicles.%d.freq/", Math.round(delFreq));
-        bw = IOUtils.getAppendingBufferedWriter(directory + "vehicleTypeCounts" + Integer.toString(run) + ".csv");
+        bw = IOUtils.getAppendingBufferedWriter(directory + "vehicleTypeCounts" + run + ".csv");
         //bw = IOUtils.getAppendingBufferedWriter(dir + "vehicleTypeCounts.csv");
         try{
         	bw.write(String.valueOf(event.getIteration()));
@@ -160,7 +160,7 @@ public class VehicleTypeListener implements StartupListener, IterationEndsListen
             }
         }
 		
-        BufferedWriter bw = IOUtils.getBufferedWriter(dir + "/vehicleTypeCounts" + Integer.toString(run) + ".csv");
+        BufferedWriter bw = IOUtils.getBufferedWriter(dir + "/vehicleTypeCounts" + run + ".csv");
         try{
         	bw.write("iteration");
         	for(Id<VehicleType> id : typeList){

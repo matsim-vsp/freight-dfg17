@@ -17,22 +17,9 @@
  * *********************************************************************** */
 package receiver.usecases.chessboard.marginalv2;
 
-import com.graphhopper.jsprit.core.algorithm.SearchStrategy;
-import com.graphhopper.jsprit.core.algorithm.SearchStrategyManager;
 import com.graphhopper.jsprit.core.algorithm.VehicleRoutingAlgorithm;
-import com.graphhopper.jsprit.core.algorithm.acceptor.AcceptNewRemoveFirst;
-import com.graphhopper.jsprit.core.algorithm.acceptor.SolutionAcceptor;
 import com.graphhopper.jsprit.core.algorithm.box.Jsprit;
-import com.graphhopper.jsprit.core.algorithm.module.RuinAndRecreateModule;
-import com.graphhopper.jsprit.core.algorithm.ruin.RandomRuinStrategyFactory;
-import com.graphhopper.jsprit.core.algorithm.selector.SelectBest;
-import com.graphhopper.jsprit.core.algorithm.selector.SolutionSelector;
 import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
-import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
-import com.graphhopper.jsprit.io.algorithm.AlgorithmConfig;
-import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
-
-import java.util.Collection;
 
 /**
  * Class to build a VRP algorithm config file.

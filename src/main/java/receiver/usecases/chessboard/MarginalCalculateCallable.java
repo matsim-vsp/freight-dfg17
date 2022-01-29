@@ -90,7 +90,7 @@ class MarginalCalculateCallable implements Callable<Double> {
 		final Process zipProcess = zipBuilder.start();
 		int zipExitCode = zipProcess.waitFor();
 		if(zipExitCode != 0) {
-			log.error("Could not unzip release for receiver '" + receiverId.toString() + "'. Exit status '" + zipExitCode + "'");
+			log.error("Could not unzip release for receiver '" + receiverId + "'. Exit status '" + zipExitCode + "'");
 		}
 
 		String newfoldername = foldername + "/freight-dfg17-0.0.1-SNAPSHOT/";
@@ -112,7 +112,7 @@ class MarginalCalculateCallable implements Callable<Double> {
 //		runBuilder.directory(folder);
 		runBuilder.redirectErrorStream(true);
 		final Process equilProcess = runBuilder.start();
-		log.info("Process started for receiver '" + receiverId.toString() + "'...");
+		log.info("Process started for receiver '" + receiverId + "'...");
 		log.info(" in folder " + folder.getAbsolutePath());
 		BufferedReader br = new BufferedReader(new InputStreamReader(equilProcess.getInputStream()));
 		String line;
@@ -121,9 +121,9 @@ class MarginalCalculateCallable implements Callable<Double> {
 			log.info(line);
 		}
 		int equilExitCode = equilProcess.waitFor();
-		log.info("Process ended for receiver '" + receiverId.toString() + ". Exit status '" + equilExitCode + "'");
+		log.info("Process ended for receiver '" + receiverId + ". Exit status '" + equilExitCode + "'");
 		if(equilExitCode != 0) {
-			log.error("Could not complete run for receiver '" + receiverId.toString() + "'");
+			log.error("Could not complete run for receiver '" + receiverId + "'");
 		}
 		
 		/* Calculate the marginal contribution. */

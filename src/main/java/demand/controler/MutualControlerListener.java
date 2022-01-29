@@ -12,7 +12,6 @@ import lsp.functions.LSPInfo;
 import lsp.resources.LSPCarrierResource;
 import lsp.shipment.LSPShipment;
 import org.matsim.api.core.v01.events.Event;
-import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.controler.CarrierAgentTracker;

@@ -29,7 +29,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 			solution.setLSP(this.lsp);	
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LogisticsSolutionDecorator and not any other implementation of LogisticsSolution");
+			System.out.println("The class " + this + " expects an LogisticsSolutionDecorator and not any other implementation of LogisticsSolution");
 			System.exit(1);
 		}
 		return this;
@@ -62,7 +62,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 			this.lsp = (LSPDecorator) lsp;
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPDecorator and not any other implementation of LSP");
+			System.out.println("The class " + this + " expects an LSPDecorator and not any other implementation of LSP");
 			System.exit(1);
 		}
 		return this;

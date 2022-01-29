@@ -364,7 +364,7 @@ public class CapeTownScenarioBuilder {
 			}
 
 			/* Generate and collate orders for the different receiver/order combination. */
-			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
+			Order rOrder1 = createProductOrder(Id.create("Order"+ r +"1",  Order.class), receiver,
 					receiverProductOne, Time.parseTime(serdur));
 			rOrder1.setNumberOfWeeklyDeliveries(numDel);
 //			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 

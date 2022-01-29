@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import demand.decoratedLSP.LSPDecorator;
-import demand.decoratedLSP.LSPWithOffers;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.demandObject.DemandObject;
 import demand.demandObject.OfferRequester;

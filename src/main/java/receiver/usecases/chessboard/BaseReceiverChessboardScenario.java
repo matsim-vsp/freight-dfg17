@@ -182,13 +182,13 @@ public class BaseReceiverChessboardScenario{
 			/* Generate and collate orders for the different receiver/order combination. */
 			Collection<Order> rOrders = new ArrayList<Order>();
 			{
-				Order rOrder1 = createProductOrder( Id.create( "Order" + Integer.toString( r ) + "1", Order.class ), receiver,
+				Order rOrder1 = createProductOrder( Id.create( "Order" + r + "1", Order.class ), receiver,
 					  receiverProductOne, Time.parseTime( serdur ) );
 				rOrder1.setNumberOfWeeklyDeliveries( numDel );
 				rOrders.add( rOrder1 );
 			}
 			{
-				Order rOrder2 = createProductOrder( Id.create( "Order" + Integer.toString( r ) + "2", Order.class ), receiver,
+				Order rOrder2 = createProductOrder( Id.create( "Order" + r + "2", Order.class ), receiver,
 					  receiverProductTwo, Time.parseTime( serdur ) );
 				rOrder2.setNumberOfWeeklyDeliveries( numDel );
 				rOrders.add( rOrder2 );

@@ -195,7 +195,7 @@ public class LSPWithOffers implements LSPDecorator {
 			}
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
+			System.out.println("The class " + this + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
 			System.exit(1);
 		}
 	}
@@ -243,7 +243,7 @@ public class LSPWithOffers implements LSPDecorator {
 			return plans.add(plan);
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
+			System.out.println("The class " + this + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
 			System.exit(1);
 		}	
 		return false;

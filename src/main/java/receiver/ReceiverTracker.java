@@ -30,7 +30,6 @@ import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
 
 import receiver.collaboration.MarginalCostSharing;
-import receiver.collaboration.ProportionalCostSharing;
 
 /**
  * This keeps track of all receiver agents during simulation.

@@ -6,7 +6,6 @@ import org.matsim.core.controler.events.ScoringEvent;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.demandObject.DemandObject;
-import demand.demandObject.DemandObjects;
 
 
 public class MutualScoringModuleImpl implements MutualScoringModule{
