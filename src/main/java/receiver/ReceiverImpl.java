@@ -111,12 +111,11 @@ class ReceiverImpl implements Receiver {
 		return plans;
 	}
 	@Override
-	public Receiver addProduct( ReceiverProduct product ) {
+	public void addProduct(ReceiverProduct product ) {
 		if ( products.contains( product ) ) {
 			throw new IllegalArgumentException( "receiver already has product " + product + "; not adding it a second time." ) ;
 		}
 		products.add( product ) ;
-		return this ;
 	}
 
 	/*

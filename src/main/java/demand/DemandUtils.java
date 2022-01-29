@@ -19,9 +19,8 @@ public class DemandUtils {
 			this.utilityFunctions = new ArrayList<UtilityFunction>();
 		}
 
-		public DemandAgentImplBuilder setId(Id<DemandAgent> id) {
+		public void setId(Id<DemandAgent> id) {
 			this.id = id;
-			return this;
 		}
 
 //		public Builder addUtilityFunction(UtilityFunction utilityFunction) {

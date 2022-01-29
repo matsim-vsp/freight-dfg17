@@ -54,7 +54,7 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	@Override
 	public abstract List<ReceiverPlan> getPlans();
 
-	Receiver addProduct( ReceiverProduct product );
+	void addProduct(ReceiverProduct product );
 
 	/**
 	 * Gets a collection of receiver products.

@@ -40,29 +40,24 @@ public class MutualModule extends AbstractModule{
 			return new Builder();
 		}
 
-		public Builder setLsps(LSPDecorators lsps) {
+		public void setLsps(LSPDecorators lsps) {
 			this.lsps = lsps;
-			return this;
 		}
 
-		public Builder setMutualScoringModule(MutualScoringModule demandScoringModule) {
+		public void setMutualScoringModule(MutualScoringModule demandScoringModule) {
 			this.mutualScoringModule = demandScoringModule;
-			return this;
 		}
 
-		public Builder setMutualReplanningModule(MutualReplanningModule replanningModule) {
+		public void setMutualReplanningModule(MutualReplanningModule replanningModule) {
 			this.replanningModule = replanningModule;
-			return this;
 		}
 
-		public Builder setDemandObjects(DemandObjects demandObjects) {
+		public void setDemandObjects(DemandObjects demandObjects) {
 			this.demandObjects = demandObjects;
-			return this;
 		}
 
-		public Builder setEventCreators(Collection<LSPEventCreator> creators) {
+		public void setEventCreators(Collection<LSPEventCreator> creators) {
 			this.creators = creators;
-			return this;
 		}
 
 		public MutualModule build() {

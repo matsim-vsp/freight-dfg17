@@ -417,16 +417,17 @@ class Solution
 		}
 	}
 
-	private static boolean deleteFile(File dirFile)
+	private static void deleteFile(File dirFile)
 	{
 		if (!dirFile.exists())
 		{
-			return false;
+			return;
 		}
 
 		if (dirFile.isFile())
 		{
-			return dirFile.delete();
+			dirFile.delete();
+			return;
 		}
 		else
 		{
@@ -437,6 +438,6 @@ class Solution
 			}
 		}
 
-		return dirFile.delete();
+		dirFile.delete();
 	}
 }

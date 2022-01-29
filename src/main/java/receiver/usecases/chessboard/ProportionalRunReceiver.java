@@ -86,7 +86,7 @@ class ProportionalRunReceiver{
 		IOUtils.deleteDirectoryRecursively(itersFolder.toPath());
 	}
 
-	Scenario prepareScenario( int run, int numberOfReceivers ){
+	void prepareScenario(int run, int numberOfReceivers ){
 		outputfolder = String.format("./output/prop/serdur/run_%03d/", run);
 		new File(outputfolder).mkdirs();
 		sc = ProportionalReceiverChessboardScenario.createChessboardScenario(SEED_BASE*run, true );
@@ -94,7 +94,6 @@ class ProportionalRunReceiver{
 		sc.getConfig().controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles );
 		sc.getConfig().controler().setOutputDirectory(outputfolder);
 
-		return sc;
 	}
 
 //	static void setupCarrierReplanning( MatsimServices controler ) {

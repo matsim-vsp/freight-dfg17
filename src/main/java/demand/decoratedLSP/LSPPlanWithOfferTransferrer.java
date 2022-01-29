@@ -57,7 +57,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 	}
 
 	@Override
-	public LSPPlanDecorator setLSP(LSP lsp) {
+	public void setLSP(LSP lsp) {
 		try {
 			this.lsp = (LSPDecorator) lsp;
 		}
@@ -65,7 +65,6 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 			System.out.println("The class " + this + " expects an LSPDecorator and not any other implementation of LSP");
 			System.exit(1);
 		}
-		return this;
 	}
 
 	@Override

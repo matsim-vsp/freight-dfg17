@@ -114,11 +114,9 @@ public class ReceiverProduct {
 		/**
 		 * Set the current (opening) inventory for the product at the receiver. Defaults to 0 units on hand.
 		 * @param onHand
-		 * @return
 		 */
-		public Builder setStockOnHand(double onHand) {
+		public void setStockOnHand(double onHand) {
 			this.onHand = onHand;
-			return this;
 		}
 		
 		

@@ -58,49 +58,40 @@ public class DemandObjectImpl implements DemandObject{
 		this.infos = new ArrayList<LSPInfo>();
 	}
 	
-	public Builder setShipper(DemandAgent shipper) {
+	public void setShipper(DemandAgent shipper) {
 		this.shipper = shipper;
-		return this;
 	}
 	
-	public Builder setRecipient(DemandAgent recipient) {
+	public void setRecipient(DemandAgent recipient) {
 		this.recipient = recipient;
-		return this;
 	}
 	
-	public Builder setId(Id<DemandObject> id) {
+	public void setId(Id<DemandObject> id) {
 		this.id = id;
-		return this;
 	}
 	
-	public Builder setInitialPlan(DemandPlan plan){
+	public void setInitialPlan(DemandPlan plan){
 		this.initialPlan = plan;
-		return this;
 	}
 	
-	public Builder setStrengthOfFlow(double strength){
+	public void setStrengthOfFlow(double strength){
 		this.strengthOfFlow = strength;
-		return this;
 	}
 	
-	public Builder setFromLinkId(Id<Link> fromLinkId){
+	public void setFromLinkId(Id<Link> fromLinkId){
 		this.fromLinkId = fromLinkId;
-		return this;
 	}
 	
-	public Builder setToLinkId(Id<Link> toLinkId){
+	public void setToLinkId(Id<Link> toLinkId){
 		this.toLinkId = toLinkId;
-		return this;
 	}
 	
-	public Builder setOfferRequester(OfferRequester offerRequester){
+	public void setOfferRequester(OfferRequester offerRequester){
 		this.offerRequester = offerRequester;
-		return this;
 	}
 	
-	public Builder setDemandPlanGenerator(DemandPlanGenerator generator){
+	public void setDemandPlanGenerator(DemandPlanGenerator generator){
 		this.generator = generator;
-		return this;
 	}
 
 	public Builder addUtilityFunction(UtilityFunction utilityFunction) {
@@ -108,9 +99,8 @@ public class DemandObjectImpl implements DemandObject{
 		return this;
 	}
 	
-	public Builder addRequirement(Requirement requirement) {
+	public void addRequirement(Requirement requirement) {
 		this.requirements.add(requirement);
-		return this;
 	}
 	
 	public Builder addInfo(LSPInfo info) {
@@ -118,14 +108,12 @@ public class DemandObjectImpl implements DemandObject{
 		return this;
 	}
 	
-	public Builder setScorer(DemandScorer scorer) {
+	public void setScorer(DemandScorer scorer) {
 		this.scorer = scorer;
-		return this;
 	}
 	
-	public Builder setReplanner(DemandReplanner replanner) {
+	public void setReplanner(DemandReplanner replanner) {
 		this.replanner = replanner;
-		return this;
 	}
 	
 	public DemandObject build() {

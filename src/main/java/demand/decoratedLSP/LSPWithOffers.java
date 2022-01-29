@@ -58,9 +58,8 @@ public class LSPWithOffers implements LSPDecorator {
 
 	}
 	
-	public Builder setSolutionScheduler(SolutionScheduler solutionScheduler){
+	public void setSolutionScheduler(SolutionScheduler solutionScheduler){
 		this.solutionScheduler = solutionScheduler;
-		return this;
 	}
 	
 	public Builder setSolutionScorer(LSPScorer scorer){
@@ -78,7 +77,7 @@ public class LSPWithOffers implements LSPDecorator {
 		return this;
 	}
 	
-	public Builder setInitialPlan(LSPPlanDecorator plan){
+	public void setInitialPlan(LSPPlanDecorator plan){
 		this.initialPlan = plan;
 		for(LogisticsSolution solution : plan.getSolutions()) {
 			for(LogisticsSolutionElement element : solution.getSolutionElements()) {
@@ -87,12 +86,10 @@ public class LSPWithOffers implements LSPDecorator {
 				}
 			}
 		}
-		return this;
 	}
 	
-	public Builder setId(Id<LSP> id){
+	public void setId(Id<LSP> id){
 		this.id = id;
-		return this;
 	}
 	
 	public LSPWithOffers build(){

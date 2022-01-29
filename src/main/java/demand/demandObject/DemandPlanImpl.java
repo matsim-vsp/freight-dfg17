@@ -27,24 +27,20 @@ public class DemandPlanImpl implements DemandPlan{
 		private Builder(){
 		}
 		
-		public Builder setShipperShipment(ShipperShipment shipment){
+		public void setShipperShipment(ShipperShipment shipment){
 			this.shipment = shipment;
-			return this;
 		}
 		
-		public Builder setLsp(LSPDecorator  lsp){
+		public void setLsp(LSPDecorator  lsp){
 			this.lsp = lsp;
-			return this;
 		}
 		
-		public Builder setDemandObject(DemandObject  demandObject){
+		public void setDemandObject(DemandObject  demandObject){
 			this.demandObject = demandObject;
-			return this;
 		}
 		
-		public Builder setLogisticsSolutionId(Id<LogisticsSolution> solutionId){
+		public void setLogisticsSolutionId(Id<LogisticsSolution> solutionId){
 			this.solutionId = solutionId;
-			return this;
 		}
 		
 		public DemandPlanImpl build() {
