@@ -188,10 +188,10 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		for(DemandObject demandObject : demandObjects) {
     		Offer offer = lsp.getOffer(demandObject, "nonsense", null);
     		for(Requirement requirement : demandObject.getRequirements()) {
-    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString() == "RedSolution")) {
+    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString().equals("RedSolution"))) {
     				System.out.println(demandObject.getId()  +" is red and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
-    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString() == "BlueSolution")){
+    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString().equals("BlueSolution"))){
     				System.out.println(demandObject.getId()  +" is blue and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
     			else {

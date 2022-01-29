@@ -23,7 +23,7 @@ public class OfferFactoryImpl implements OfferFactory{
 	@Override
 	public Offer makeOffer(DemandObject object, String offerType) {
 		for(Offer offer : offerList) {
-			if(offer.getType() == offerType) {
+			if(offer.getType().equals(offerType)) {
 				offer.setLSP(lsp);
 				return offer;
 			}
