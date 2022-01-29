@@ -115,7 +115,7 @@ class ExampleCheckRequirementsOfAssigner {
 		
 		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
 		lspBuilder.setInitialPlan(plan);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
@@ -126,8 +126,8 @@ class ExampleCheckRequirementsOfAssigner {
 	
 	public static Collection<LSPShipment> createShipmentsWithRequirements(Network network){
 		//Create ten shipments with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
-		ArrayList<LSPShipment> shipmentList = new ArrayList<LSPShipment>();
-		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
+		ArrayList<LSPShipment> shipmentList = new ArrayList<>();
+		ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
 
 		Random rand = new Random(1);
 	    

@@ -20,7 +20,7 @@ public class LinearOfferFactoryImpl implements OfferFactory{
 	public LinearOfferFactoryImpl(LogisticsSolutionDecorator solution) {
 		this.solution = solution;
 		this.lsp = solution.getLSP();
-		offerList = new ArrayList<Offer>();
+		offerList = new ArrayList<>();
 		offerList.add(new LinearOffer(solution));
 	}	
 	

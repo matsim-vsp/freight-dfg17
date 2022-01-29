@@ -23,7 +23,7 @@ public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehi
 	
 	public DistanceAndTimeHandler(Network network) {
 		this.network = network;
-		this.events = new ArrayList<LSPFreightLinkEnterEvent>();
+		this.events = new ArrayList<>();
 	}
 	
 	

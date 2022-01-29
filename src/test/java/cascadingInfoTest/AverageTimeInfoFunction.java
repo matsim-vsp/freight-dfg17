@@ -13,7 +13,7 @@ public class AverageTimeInfoFunction implements LSPInfoFunction {
 	private final Collection<LSPInfoFunctionValue<?>> values;
 	
 	public AverageTimeInfoFunction() {
-		values = new ArrayList<LSPInfoFunctionValue<?>>();
+		values = new ArrayList<>();
 		values.add(new AverageTimeInfoFunctionValue());
 	}
 		

@@ -17,7 +17,7 @@ public class OfferFactoryImpl implements OfferFactory{
 	public OfferFactoryImpl(LogisticsSolutionDecorator solution) {
 		this.solution = solution;
 		this.lsp = solution.getLSP();
-		offerList = new ArrayList<Offer>();
+		offerList = new ArrayList<>();
 	}	
 	
 	@Override

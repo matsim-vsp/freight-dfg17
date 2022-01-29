@@ -8,7 +8,7 @@ class LSPInfoFunctionImpl implements LSPInfoFunction {
 	private final Collection<LSPInfoFunctionValue<?>> values;
 	
 	LSPInfoFunctionImpl() {
-		this.values = new ArrayList<LSPInfoFunctionValue<?>>();
+		this.values = new ArrayList<>();
 	}
 	
 	@Override

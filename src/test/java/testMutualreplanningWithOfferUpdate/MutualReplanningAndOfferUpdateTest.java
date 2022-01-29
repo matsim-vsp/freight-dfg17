@@ -75,7 +75,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		Scenario scenario = ScenarioUtils.createScenario(config);
 		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
 		Network network = scenario.getNetwork();
-		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
+		ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
 		Random random = new Random(1);
 
 		Id<Carrier> collectionCarrierId = Id.create("CollectionCarrier", Carrier.class);
@@ -141,7 +141,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(collectionAdapter);
 						
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
@@ -159,7 +159,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		updater.getOfferVisitors().add(linearVisitor);
 
 		
-		ArrayList<DemandObject>demandObjects = new ArrayList<DemandObject>();
+		ArrayList<DemandObject>demandObjects = new ArrayList<>();
 	     
 		for(int i = 1; i < 11 ; i++) {
         	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();

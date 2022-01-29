@@ -34,7 +34,7 @@ import org.matsim.vehicles.VehicleType;
  *
  */
 public class VehicleTypeListener implements StartupListener, IterationEndsListener {
-	private final List<Id<VehicleType>> typeList = new ArrayList<Id<VehicleType>>();
+	private final List<Id<VehicleType>> typeList = new ArrayList<>();
 	private final Carriers carriers;
 	private final int run;
 //	private int tw;

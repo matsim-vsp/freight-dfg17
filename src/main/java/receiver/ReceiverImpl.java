@@ -58,8 +58,8 @@ class ReceiverImpl implements Receiver {
 	ReceiverImpl(final Id<Receiver> id){
 		super();
 		this.id = id;
-		this.plans = new ArrayList<ReceiverPlan>();
-		this.products = new ArrayList<ReceiverProduct>();
+		this.plans = new ArrayList<>();
+		this.products = new ArrayList<>();
 	}
 	
 

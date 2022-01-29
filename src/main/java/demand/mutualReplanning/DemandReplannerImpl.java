@@ -19,11 +19,11 @@ public class DemandReplannerImpl implements DemandReplanner{
 	
 	public DemandReplannerImpl(DemandObject demandObject) {
 		this.demandObject = demandObject;
-		this.strategyManager = new GenericStrategyManager<DemandPlan, DemandObject>();
+		this.strategyManager = new GenericStrategyManager<>();
 	}
 	
 	public DemandReplannerImpl() {
-		this.strategyManager = new GenericStrategyManager<DemandPlan, DemandObject>();
+		this.strategyManager = new GenericStrategyManager<>();
 	}
 		
 	

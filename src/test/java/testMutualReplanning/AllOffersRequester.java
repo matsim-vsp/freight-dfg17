@@ -19,7 +19,7 @@ public class AllOffersRequester implements OfferRequester{
 	
 	@Override
 	public Collection<Offer> requestOffers(Collection<LSPDecorator> lsps) {
-		ArrayList<Offer> offers = new ArrayList<Offer>();
+		ArrayList<Offer> offers = new ArrayList<>();
 		for(LSPDecorator lsp : lsps) {
 			for(LogisticsSolutionDecorator solution : lsp.getSelectedPlan().getSolutionDecorators()) {
 				offers.add(lsp.getOffer(demandObject, "linear", solution.getId()));

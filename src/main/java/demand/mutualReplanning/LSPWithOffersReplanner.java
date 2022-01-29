@@ -29,7 +29,7 @@ public class LSPWithOffersReplanner implements LSPReplanner{
 	@Override
 	public void replan(ReplanningEvent event) {
 		if(strategyManager != null) {
-			ArrayList<LSP> lspList = new ArrayList <LSP>();
+			ArrayList<LSP> lspList = new ArrayList<>();
 			lspList.add(lsp);
 			strategyManager.run(lspList, null, event.getIteration(), event.getReplanningContext());
 		}

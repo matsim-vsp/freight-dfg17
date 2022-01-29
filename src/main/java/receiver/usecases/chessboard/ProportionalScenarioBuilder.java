@@ -270,7 +270,7 @@ class ProportionalScenarioBuilder {
 			Order rOrder2 = createProductOrder(Id.create("Order"+ r +"2",  Order.class), receiver,
 					receiverProductTwo, Time.parseTime(serdur));
 			rOrder2.setNumberOfWeeklyDeliveries(numDel);
-			Collection<Order> rOrders = new ArrayList<Order>();
+			Collection<Order> rOrders = new ArrayList<>();
 			rOrders.add(rOrder1);
 			rOrders.add(rOrder2);
 

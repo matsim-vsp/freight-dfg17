@@ -44,7 +44,7 @@ import receiver.collaboration.MarginalCostSharing;
 	private final Scenario sc;
 	
 	//private final Receivers receivers;
-	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
+	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<>();
 
 	public ReceiverTracker(ReceiverScoringFunctionFactory scorFuncFac, Scenario sc){
 		this.sc = sc;

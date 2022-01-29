@@ -54,7 +54,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 		
 	private Builder(){
-		this.resources = new ArrayList<LSPResource>();
+		this.resources = new ArrayList<>();
 
 	}
 	
@@ -99,8 +99,8 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 	
 	private LSPWithOffers(LSPWithOffers.Builder builder){
-		this.shipments = new ArrayList<LSPShipment>();
-		this.plans= new ArrayList<LSPPlan>();
+		this.shipments = new ArrayList<>();
+		this.plans= new ArrayList<>();
 		this.id = builder.id;
 		this.solutionScheduler = builder.solutionScheduler;
 		this.solutionScheduler.setLSP(this);
@@ -300,7 +300,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 
 	public static LSPPlanDecorator copyPlan(LSPPlanDecorator plan2copy) {
-		List<LogisticsSolutionDecorator> copiedSolutions = new ArrayList<LogisticsSolutionDecorator>();
+		List<LogisticsSolutionDecorator> copiedSolutions = new ArrayList<>();
 		for (LogisticsSolution solution : plan2copy.getSolutions()) {
 				LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 				LogisticsSolutionDecorator copiedSolution = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionDecorator.getId()).build();

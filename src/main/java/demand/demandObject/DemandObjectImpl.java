@@ -53,9 +53,9 @@ public class DemandObjectImpl implements DemandObject{
 		}
 	
 	private Builder() {
-		this.requirements = new ArrayList<Requirement>();
-		this.utilityFunctions = new ArrayList<UtilityFunction>();
-		this.infos = new ArrayList<LSPInfo>();
+		this.requirements = new ArrayList<>();
+		this.utilityFunctions = new ArrayList<>();
+		this.infos = new ArrayList<>();
 	}
 	
 	public void setShipper(DemandAgent shipper) {
@@ -123,7 +123,7 @@ public class DemandObjectImpl implements DemandObject{
 	}
 	
 	private DemandObjectImpl(Builder builder) {
-		this.plans = new ArrayList<DemandPlan>();
+		this.plans = new ArrayList<>();
 //		this.utilityFunctions = new ArrayList<UtilityFunction>();
 		DemandAgent shipper = builder.shipper;
 		if(shipper != null) {

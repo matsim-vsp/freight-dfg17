@@ -13,7 +13,7 @@ public class OfferUpdaterImpl implements OfferUpdater{
 	private final Collection <OfferVisitor> visitors;
 	
 	public OfferUpdaterImpl() {
-		this.visitors = new ArrayList<OfferVisitor>();
+		this.visitors = new ArrayList<>();
 	}
 	
 	

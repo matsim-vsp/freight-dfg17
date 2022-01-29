@@ -14,7 +14,7 @@ class DemandAgentImpl implements DemandAgent {
 //	private ArrayList <UtilityFunction> utilityFunctions;
 
 	DemandAgentImpl(DemandUtils.DemandAgentImplBuilder builder) {
-		this.demandObjects = new ArrayList<DemandObject>();
+		this.demandObjects = new ArrayList<>();
 //		this.utilityFunctions = new ArrayList<UtilityFunction>();
 //		this.utilityFunctions = builder.utilityFunctions;
 		this.id = builder.getId();

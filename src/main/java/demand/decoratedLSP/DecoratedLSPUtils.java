@@ -26,10 +26,10 @@ public class DecoratedLSPUtils {
 		}
 
 		private LogisticsSolutionDecoratorImpl_wOffersBuilder(Id<LogisticsSolution> id){
-			this.elements = new ArrayList<LogisticsSolutionElement>();
-			this.solutionInfos = new ArrayList<LSPInfo>();
-			this.eventHandlers = new ArrayList<EventHandler>();
-			this.trackers = new ArrayList<LSPSimulationTracker>();
+			this.elements = new ArrayList<>();
+			this.solutionInfos = new ArrayList<>();
+			this.eventHandlers = new ArrayList<>();
+			this.trackers = new ArrayList<>();
 			this.id = id;
 		}
 

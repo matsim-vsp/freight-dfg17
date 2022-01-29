@@ -237,7 +237,7 @@ import receiver.product.ReceiverProduct;
 	}
 	
 	private void startPlan(Attributes atts) {
-		this.currentOrders = new ArrayList<Order>();
+		this.currentOrders = new ArrayList<>();
 		boolean collaborationStatus = (boolean) currentReceiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
 		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver, collaborationStatus);
 		

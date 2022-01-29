@@ -29,9 +29,9 @@ public class LinearCostTracker implements LSPSimulationTracker{
 	public LinearCostTracker(double shareOfFixedCosts) {
 		this.shareOfFixedCosts = shareOfFixedCosts;
 		CostInfo costInfo = new CostInfo();
-		infos = new ArrayList<LSPInfo>();
+		infos = new ArrayList<>();
 		infos.add(costInfo);
-		this.eventHandlers = new ArrayList<EventHandler>();
+		this.eventHandlers = new ArrayList<>();
 	}
 	
 	

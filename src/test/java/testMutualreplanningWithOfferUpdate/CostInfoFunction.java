@@ -11,7 +11,7 @@ public class CostInfoFunction implements LSPInfoFunction {
 	private final Collection<LSPInfoFunctionValue<?>> values;
 	
 	public CostInfoFunction() {
-		values = new ArrayList<LSPInfoFunctionValue<?>>();
+		values = new ArrayList<>();
 		FixedCostFunctionValue fixedValue = new FixedCostFunctionValue();
 		LinearCostFunctionValue linearValue = new LinearCostFunctionValue();
 		values.add(fixedValue);

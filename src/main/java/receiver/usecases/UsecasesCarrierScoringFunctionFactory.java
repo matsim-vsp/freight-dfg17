@@ -129,7 +129,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	        public DriversLegScoring(Carrier carrier, Network network) {
 	            this.network = network;
 	            this.carrier = carrier;
-	            employedVehicles = new HashSet<CarrierVehicle>();
+	            employedVehicles = new HashSet<>();
 	        }
 
 

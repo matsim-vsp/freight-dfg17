@@ -59,7 +59,7 @@ import java.util.Collection;
 		
 		carrierResourceTracker = new CarrierAgentTracker(carriers, creators, eventsManager );
 		eventsManager.addHandler(carrierResourceTracker);
-		registeredHandlers = new ArrayList<EventHandler>();
+		registeredHandlers = new ArrayList<>();
 
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LSPShipment shipment : lsp.getShipments()) {
@@ -109,7 +109,7 @@ import java.util.Collection;
 	public void notifyAfterMobsim(AfterMobsimEvent event) {
 		eventsManager.removeHandler(carrierResourceTracker);
 
-		ArrayList<LSPSimulationTracker> alreadyUpdatedTrackers = new ArrayList<LSPSimulationTracker>();
+		ArrayList<LSPSimulationTracker> alreadyUpdatedTrackers = new ArrayList<>();
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {

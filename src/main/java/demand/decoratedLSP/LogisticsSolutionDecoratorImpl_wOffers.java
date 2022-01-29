@@ -35,7 +35,7 @@ import lsp.controler.LSPSimulationTracker;
 		for(LogisticsSolutionElement element : this.solutionElements) {
 			element.setLogisticsSolution(this);
 		}
-		this.shipments = new ArrayList <LSPShipment>();
+		this.shipments = new ArrayList<>();
 		this.solutionInfos = builder.getSolutionInfos();
 		this.eventHandlers = builder.getEventHandlers();
 		this.trackers = builder.getTrackers();

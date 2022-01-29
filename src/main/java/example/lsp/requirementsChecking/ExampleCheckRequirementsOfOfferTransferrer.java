@@ -135,7 +135,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
@@ -148,7 +148,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 	
 	public static Collection<DemandObject> createDemandObjectsWithRequirements(){
 		//Create ten demand objects with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
-		ArrayList<DemandObject> demandObjects = new ArrayList<DemandObject>();
+		ArrayList<DemandObject> demandObjects = new ArrayList<>();
 	    
 	    Random rand = new Random(1); 
 	    

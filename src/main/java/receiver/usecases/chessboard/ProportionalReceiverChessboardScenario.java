@@ -318,7 +318,7 @@ class ProportionalReceiverChessboardScenario {
 //			receiver.addProduct( receiverProductTwo );
 
 			/* Generate and collate orders for the different receiver/order combination. */
-			Collection<Order> rOrders = new ArrayList<Order>();
+			Collection<Order> rOrders = new ArrayList<>();
 			{
 				Order rOrder1 = createProductOrder( Id.create( "Order" + r + "1", Order.class ), receiver,
 					  receiverProductOne, Time.parseTime( serdur ) );

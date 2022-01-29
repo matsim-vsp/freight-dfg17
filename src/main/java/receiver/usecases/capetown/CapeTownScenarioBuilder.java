@@ -373,7 +373,7 @@ public class CapeTownScenarioBuilder {
 //			Order rOrder3 = createProductOrder(Id.create("Order"+Integer.toString(r)+"3",  Order.class), receiver, 
 //					receiverProductThree, Time.parseTime(serdur));
 //			rOrder3.setNumberOfWeeklyDeliveries(numDel);
-			Collection<Order> rOrders = new ArrayList<Order>();
+			Collection<Order> rOrders = new ArrayList<>();
 			rOrders.add(rOrder1);
 //			rOrders.add(rOrder2);
 //			rOrders.add(rOrder3);

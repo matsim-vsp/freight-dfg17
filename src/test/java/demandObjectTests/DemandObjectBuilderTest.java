@@ -47,8 +47,8 @@ public class DemandObjectBuilderTest {
         Scenario scenario = ScenarioUtils.createScenario(config);
         new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
 		Network network = scenario.getNetwork();
-        ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-        this.demandObjects = new ArrayList<DemandObject>();
+        ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
+        this.demandObjects = new ArrayList<>();
         Random random = new Random(1);
         lsp = new InitialLSPGenerator().createInitialLSP();
         

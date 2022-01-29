@@ -41,7 +41,7 @@ public class CollectionServiceHandler implements LSPServiceStartEventHandler, LS
 	private int totalWeightOfShipments;
 	
 	public  CollectionServiceHandler() {
-		this.tuples = new ArrayList<ServiceTuple>();
+		this.tuples = new ArrayList<>();
 	}
 	
 	@Override

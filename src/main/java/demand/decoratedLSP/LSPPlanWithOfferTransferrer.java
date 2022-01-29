@@ -17,7 +17,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 	private OfferTransferrer transferrer;
 	
 	public LSPPlanWithOfferTransferrer() {
-		this.solutions = new ArrayList<LogisticsSolutionDecorator>();
+		this.solutions = new ArrayList<>();
 		this.assigner = new DefaultAssigner();
 	}
 	
@@ -37,7 +37,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	@Override
 	public Collection<LogisticsSolution> getSolutions() {
-		Collection<LogisticsSolution> solutionDecorators = new ArrayList<LogisticsSolution>();
+		Collection<LogisticsSolution> solutionDecorators = new ArrayList<>();
 		for(LogisticsSolution  solution : solutions) {
 			LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 			solutionDecorators.add(solutionDecorator);
@@ -93,7 +93,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	@Override
 	public Collection<LogisticsSolutionDecorator> getSolutionDecorators() {
-		Collection<LogisticsSolutionDecorator> solutionDecorators = new ArrayList<LogisticsSolutionDecorator>();
+		Collection<LogisticsSolutionDecorator> solutionDecorators = new ArrayList<>();
 		for(LogisticsSolution  solution : solutions) {
 			LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 			solutionDecorators.add(solutionDecorator);

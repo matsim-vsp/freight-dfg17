@@ -21,8 +21,8 @@ import receiver.Receiver;
 	//private final Logger log = Logger.getLogger(MutableCoalition.class);
 	private double coalitionCost = 0.0;
 	private final Attributes attributes = new Attributes();
-	private final ArrayList<Receiver> receiverMembers = new ArrayList<Receiver>();
-	private final ArrayList<Carrier> carrierMembers = new ArrayList<Carrier>();
+	private final ArrayList<Receiver> receiverMembers = new ArrayList<>();
+	private final ArrayList<Carrier> carrierMembers = new ArrayList<>();
 
 
 	/* package-private */ MutableCoalition(){

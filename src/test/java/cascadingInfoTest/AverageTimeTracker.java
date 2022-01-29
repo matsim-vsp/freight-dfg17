@@ -19,10 +19,10 @@ public class AverageTimeTracker implements LSPSimulationTracker{
 	private final TimeSpanHandler handler;
 	
 	public AverageTimeTracker() {
-		handlers = new ArrayList<EventHandler>();
+		handlers = new ArrayList<>();
 		handler = new TimeSpanHandler();
 		handlers.add(handler);
-		infos = new ArrayList<LSPInfo>();
+		infos = new ArrayList<>();
 		timeInfo = new AverageTimeInfo();
 		infos.add(timeInfo);
 	}

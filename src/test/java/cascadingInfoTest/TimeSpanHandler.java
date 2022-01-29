@@ -18,7 +18,7 @@ public class TimeSpanHandler implements LSPTourStartEventHandler, LSPServiceStar
 	private final Collection<LSPTourStartEvent> startEvents;
 	
 	public TimeSpanHandler() {
-		startEvents = new ArrayList<LSPTourStartEvent>();
+		startEvents = new ArrayList<>();
 	}
 	
 	@Override
