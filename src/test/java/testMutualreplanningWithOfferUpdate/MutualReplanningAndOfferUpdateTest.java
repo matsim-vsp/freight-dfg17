@@ -1,7 +1,5 @@
 package testMutualreplanningWithOfferUpdate;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -56,6 +54,8 @@ import lsp.resources.LSPResource;
 import testMutualReplanning.FortyTwoDemandScorer;
 import testMutualReplanning.HalfLotSizeDemandPlanGenerator;
 import testMutualReplanning.SimpleOfferTransferrer;
+
+import static org.junit.Assert.*;
 
 
 @SuppressWarnings("unused")
@@ -238,8 +238,8 @@ public class MutualReplanningAndOfferUpdateTest {
 
 	@Test
 	public void testOfferUpdater() {
-		
-		assertTrue(tracker == solution.getSimulationTrackers().iterator().next());
+
+		assertSame(tracker, solution.getSimulationTrackers().iterator().next());
 		int numberOfHandlers = 0;
 		for(EventHandler solutionHandler : solution.getEventHandlers()) {
 			for(EventHandler trackerHandler : tracker.getEventHandlers()) {
@@ -248,23 +248,23 @@ public class MutualReplanningAndOfferUpdateTest {
 				}
 			}
 		}
-		assertTrue(numberOfHandlers == tracker.getEventHandlers().size());
+		assertEquals(numberOfHandlers, tracker.getEventHandlers().size());
 		
 		for(LSPInfo solutionInfo : solution.getInfos()) {
 			for(LSPInfo trackerInfo : tracker.getInfos()) {
-				assertTrue(solutionInfo == trackerInfo);
+				assertSame(solutionInfo, trackerInfo);
 			}
 		}
-		
-		
-		assertTrue(offerFactory.getOffers().size() == 1 );
+
+
+		assertEquals(1, offerFactory.getOffers().size());
 		for(Offer offer : offerFactory.getOffers()) {
 			assertTrue(offer instanceof LinearOffer);
 			LinearOffer linearOffer = (LinearOffer) offer;
-			assertTrue(linearOffer.getSolution() == solution);
-			assertTrue(linearOffer.getSolution().getLSP() == solution.getLSP());
-			assertTrue(linearOffer.getSolution().getLSP() == lsp);
-			assertTrue(linearOffer.getLsp() == lsp);
+			assertSame(linearOffer.getSolution(), solution);
+			assertSame(linearOffer.getSolution().getLSP(), solution.getLSP());
+			assertSame(linearOffer.getSolution().getLSP(), lsp);
+			assertSame(linearOffer.getLsp(), lsp);
 			assertTrue(linearOffer.getFix() != initialFixed);
 			assertTrue(linearOffer.getLinear() != initialVariable);
 		}

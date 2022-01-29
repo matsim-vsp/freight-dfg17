@@ -173,30 +173,30 @@ public class CascadingInfoTest {
 
 	@Test
 	public void testCascadingInfos() {
-		assertTrue(timeTracker.getInfos().iterator().next() == elementInfo.getPredecessorInfos().iterator().next());
+		assertSame(timeTracker.getInfos().iterator().next(), elementInfo.getPredecessorInfos().iterator().next());
 		assertTrue(timeTracker.getInfos().iterator().next() instanceof AverageTimeInfo);
 		AverageTimeInfo resourceInfo = (AverageTimeInfo) timeTracker.getInfos().iterator().next();
 		assertTrue(resourceInfo.getFunction() instanceof AverageTimeInfoFunction);
 		AverageTimeInfoFunction resourceInfoFunction = (AverageTimeInfoFunction) resourceInfo.getFunction();
-		assertTrue(resourceInfoFunction.getValues().size() == 1);
+		assertEquals(1, resourceInfoFunction.getValues().size());
 		assertTrue(resourceInfoFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
 		AverageTimeInfoFunctionValue averageResourceValue = (AverageTimeInfoFunctionValue) resourceInfoFunction.getValues().iterator().next();
 		assertTrue(elementInfo.getFunction() instanceof AverageTimeInfoFunction);
 		AverageTimeInfoFunction averageElementFunction = (AverageTimeInfoFunction) elementInfo.getFunction();
-		assertTrue(averageElementFunction.getValues().size() == 1);
+		assertEquals(1, averageElementFunction.getValues().size());
 		assertTrue(averageElementFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
 		AverageTimeInfoFunctionValue averageElementValue = (AverageTimeInfoFunctionValue) averageElementFunction.getValues().iterator().next();
 		assertTrue(averageElementValue.getValue() > 0);
 		assertTrue(averageElementFunction.getValues().iterator().next().getValue() instanceof Double);
 		assertTrue(solutionInfo.getFunction() instanceof AverageTimeInfoFunction);
-		assertTrue(solutionInfo.getPredecessorInfos().iterator().next() == elementInfo);
+		assertSame(solutionInfo.getPredecessorInfos().iterator().next(), elementInfo);
 		AverageTimeInfoFunction averageSolutionFunction = (AverageTimeInfoFunction) solutionInfo.getFunction();
-		assertTrue(averageSolutionFunction.getValues().size() == 1);
+		assertEquals(1, averageSolutionFunction.getValues().size());
 		assertTrue(averageSolutionFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
 		AverageTimeInfoFunctionValue averageSolutionValue = (AverageTimeInfoFunctionValue) averageSolutionFunction.getValues().iterator().next();
 		assertTrue(averageSolutionValue.getValue() > 0);
-		assertTrue(averageElementValue.getValue() == averageResourceValue.getValue());
-		assertTrue(averageElementValue.getValue() == averageSolutionValue.getValue());
+		assertSame(averageElementValue.getValue(), averageResourceValue.getValue());
+		assertSame(averageElementValue.getValue(), averageSolutionValue.getValue());
 	}
 
 }

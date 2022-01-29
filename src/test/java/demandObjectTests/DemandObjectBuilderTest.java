@@ -1,8 +1,5 @@
 package demandObjectTests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,6 +31,8 @@ import demand.mutualReplanning.DemandReplannerImpl;
 import demand.mutualReplanning.OfferReplanningStrategyModule;
 import demand.mutualReplanning.OfferReplanningStrategyModuleImpl;
 import demand.offer.Offer;
+
+import static org.junit.Assert.*;
 
 public class DemandObjectBuilderTest {
 
@@ -123,9 +122,9 @@ public class DemandObjectBuilderTest {
 			offerList.add(offer);
 			DemandPlan newPlan = demandObject.getDemandPlanGenerator().createDemandPlan(offerList); 
 			DemandPlan oldPlan = demandObject.getSelectedPlan();
-			assertTrue(newPlan.getLsp() == oldPlan.getLsp());
-			assertTrue(newPlan.getSolutionId()  == oldPlan.getSolutionId());
-			assertTrue(newPlan.getShipment().getShipmentSize() == oldPlan.getShipment().getShipmentSize()/2);
+			assertSame(newPlan.getLsp(), oldPlan.getLsp());
+			assertSame(newPlan.getSolutionId(), oldPlan.getSolutionId());
+			assertEquals(newPlan.getShipment().getShipmentSize(), oldPlan.getShipment().getShipmentSize() / 2, 0.0);
 			assertNotNull(demandObject.getOfferRequester());
 			assertNotNull(demandObject.getReplanner());
 			

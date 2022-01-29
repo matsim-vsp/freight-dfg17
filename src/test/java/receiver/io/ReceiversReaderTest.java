@@ -101,18 +101,18 @@ public class ReceiversReaderTest {
 		ReceiverPlan plan = r1.getSelectedPlan();
 		ReceiverOrder ro = plan.getReceiverOrder(Id.create("Carrier1", Carrier.class));
 		Assert.assertNotNull("Should find ReceiverOrder.", ro);
-		
-		Assert.assertTrue("Wrong carrier", ro.getCarrierId().equals(Id.create("Carrier1", Carrier.class)));
-		Assert.assertTrue("Wrong receiver", ro.getReceiverId().equals(Id.create("1", Receiver.class)));
+
+		Assert.assertEquals("Wrong carrier", ro.getCarrierId(), Id.create("Carrier1", Carrier.class));
+		Assert.assertEquals("Wrong receiver", ro.getReceiverId(), Id.create("1", Receiver.class));
 		Assert.assertNull("Should not have score now", ro.getScore());
 		
 		/* Order (items) */
 		Assert.assertEquals("Wrong number of order (items)", 2, ro.getReceiverProductOrders().size());
 		Order o = ro.getReceiverProductOrders().iterator().next();
-		Assert.assertTrue("Wrong order id.", o.getId().equals(Id.create("Order11", Order.class)));
+		Assert.assertEquals("Wrong order id.", o.getId(), Id.create("Order11", Order.class));
 		Assert.assertEquals("Wrong order quantity.", 5000, o.getOrderQuantity(), MatsimTestUtils.EPSILON);
-		Assert.assertTrue("Wrong product type.", o.getProduct().getProductType().getId().equals(Id.create("P1", ProductType.class)));
-		Assert.assertTrue("Wrong receiver.", o.getReceiver().getId().equals(Id.create("1", Receiver.class)));
+		Assert.assertEquals("Wrong product type.", o.getProduct().getProductType().getId(), Id.create("P1", ProductType.class));
+		Assert.assertEquals("Wrong receiver.", o.getReceiver().getId(), Id.create("1", Receiver.class));
 		Assert.assertEquals("Wrong service duration.", Time.parseTime("03:00:00"), o.getServiceDuration(), MatsimTestUtils.EPSILON);
 	}
 

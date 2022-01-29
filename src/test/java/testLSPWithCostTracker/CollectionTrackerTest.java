@@ -176,7 +176,7 @@ public class CollectionTrackerTest {
 
 	@Test
 	public void testCollectionTracker() {
-		assertTrue(collectionSolution.getSimulationTrackers().size() == 1);
+		assertEquals(1, collectionSolution.getSimulationTrackers().size());
 		LSPSimulationTracker tracker = collectionSolution.getSimulationTrackers().iterator().next();
 		assertTrue(tracker instanceof LinearCostTracker);
 		LinearCostTracker linearTracker = (LinearCostTracker) tracker;
@@ -272,7 +272,7 @@ public class CollectionTrackerTest {
 		assertEquals(linearTrackedCostsPerShipment, linearScheduledCostsPerShipment, Math.max(linearTrackedCostsPerShipment, linearScheduledCostsPerShipment)*0.01);
 		assertEquals(fixedScheduledCostsPerShipment, fixedTrackedCostsPerShipment, Math.max(fixedTrackedCostsPerShipment, fixedScheduledCostsPerShipment)*0.01);
 
-		assertTrue(collectionSolution.getInfos().size() == 1);
+		assertEquals(1, collectionSolution.getInfos().size());
 		LSPInfo info = collectionSolution.getInfos().iterator().next();
 		assertTrue(info instanceof CostInfo);
 		CostInfo costInfo = (CostInfo) info;
