@@ -110,8 +110,7 @@ public class MarginalScenarioBuilder {
 		config.setContext( context );
 		config.network().setInputFile("grid9x9.xml");
 
-		Scenario sc = ScenarioUtils.loadScenario(config);
-		return sc;
+		return ScenarioUtils.loadScenario(config);
 	}
 	
 	/*
@@ -288,11 +287,10 @@ public class MarginalScenarioBuilder {
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();
-		ReceiverProduct rProd = builder
+		return builder
 				.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel))
 				.setProductType(productType)
 				.build();
-		return rProd;
 	}
 
 	/**
@@ -305,12 +303,11 @@ public class MarginalScenarioBuilder {
 	 */
 	private static Order createProductOrder(Id<Order> number, Receiver receiver, ReceiverProduct receiverProduct, double serviceTime) {
 		Order.Builder builder = Order.Builder.newInstance(number, receiver, receiverProduct);
-		Order order = builder
+
+		return builder
 				.calculateOrderQuantity()
 				.setServiceTime(serviceTime)
 				.build();
-
-		return order;
 	}
 
 }

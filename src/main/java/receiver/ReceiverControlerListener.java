@@ -106,7 +106,6 @@ class ReceiverControlerListener implements ScoringListener,
             }
 
             /* Replanning for grand coalition receivers.*/
-            GenericStrategyManager<ReceiverPlan, Receiver> collaborationStratMan = stratMan;
             //		GenericPlanStrategyImpl<ReceiverPlan, Receiver> strategy = new GenericPlanStrategyImpl<>(new KeepSelected<ReceiverPlan, Receiver>());
             //		strategy.addStrategyModule(new CollaborationStatusMutator());
             //		collaborationStratMan.addStrategy(strategy, null, 0.2);
@@ -121,7 +120,7 @@ class ReceiverControlerListener implements ScoringListener,
             stratMan.run(receiverControlCollection, null, event.getIteration(), event.getReplanningContext());
 
             /* Run replanning for grand coalition receivers.*/
-            collaborationStratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());
+            stratMan.run(receiverCollection, null, event.getIteration(), event.getReplanningContext());
         }
     }
 

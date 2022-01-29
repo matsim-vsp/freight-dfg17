@@ -128,10 +128,8 @@ class ExampleCheckRequirementsOfAssigner {
 		//Create ten shipments with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
 		ArrayList<LSPShipment> shipmentList = new ArrayList<LSPShipment>();
 		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
-		Id<Link> toLinkId = collectionLinkId;
-	
-	    Random rand = new Random(1); 
+
+		Random rand = new Random(1);
 	    
 	    for(int i = 1; i < 11; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
@@ -151,7 +149,7 @@ class ExampleCheckRequirementsOfAssigner {
         		}	
         	}
         	
-        	builder.setToLinkId(toLinkId);
+        	builder.setToLinkId(Id.createLinkId("(4 2) (4 3)"));
         	TimeWindow endTimeWindow = TimeWindow.newInstance(0,(24*3600));
         	builder.setEndTimeWindow(endTimeWindow);
         	TimeWindow startTimeWindow = TimeWindow.newInstance(0,(24*3600));

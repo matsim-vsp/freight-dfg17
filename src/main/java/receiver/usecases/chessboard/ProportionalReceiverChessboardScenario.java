@@ -430,11 +430,10 @@ class ProportionalReceiverChessboardScenario {
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();
-		ReceiverProduct rProd = builder
+		return builder
 				.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel))
 				.setProductType(productType)
 				.build();
-		return rProd;
 	}
 
 	/**
@@ -447,12 +446,11 @@ class ProportionalReceiverChessboardScenario {
 	 */
 	private static Order createProductOrder(Id<Order> number, Receiver receiver, ReceiverProduct receiverProduct, double serviceTime) {
 		Order.Builder builder = Order.Builder.newInstance(number, receiver, receiverProduct);
-		Order order = builder
+
+		return builder
 				.calculateOrderQuantity()
 				.setServiceTime(serviceTime)
 				.build();
-
-		return order;
 	}
 
 }

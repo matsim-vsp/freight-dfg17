@@ -122,7 +122,6 @@ public class CascadingInfoTest {
 		LSP collectionLSP = collectionLSPBuilder.build();
 
 		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-		Id<Link> toLinkId = collectionLinkId;
 
 
 		for(int i = 1; i < 11; i++) {
@@ -144,7 +143,7 @@ public class CascadingInfoTest {
 				}
 			}
 
-			builder.setToLinkId(toLinkId);
+			builder.setToLinkId(collectionLinkId);
 			TimeWindow endTimeWindow = TimeWindow.newInstance(0,(24*3600));
 			builder.setEndTimeWindow(endTimeWindow);
 			TimeWindow startTimeWindow = TimeWindow.newInstance(0,(24*3600));

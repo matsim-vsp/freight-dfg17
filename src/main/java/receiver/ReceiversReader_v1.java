@@ -268,8 +268,7 @@ import receiver.product.ReceiverProduct;
 	}
 
 	private void startOrder(Attributes atts) {
-		Id<Carrier> carrierId = Id.create(atts.getValue(ATTR_ORDER_CARRIER), Carrier.class);
-		this.currentOrderCarrierId = carrierId;
+		this.currentOrderCarrierId = Id.create(atts.getValue(ATTR_ORDER_CARRIER), Carrier.class);
 	}
 	
 	private void endOrder() {
