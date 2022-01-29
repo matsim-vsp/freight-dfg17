@@ -144,7 +144,7 @@ class ReceiverControlerListener implements ScoringListener,
             for (Receiver receiver : ReceiverUtils.getReceivers(sc).getReceivers().values()) {
                 double score = (double) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_RECEIVER_SCORE);
 //				double score = (double) receiver.getSelectedPlan().getScore();
-                receiver.getSelectedPlan().setScore(new Double(score));
+                receiver.getSelectedPlan().setScore(score);
             }
         }
     }
