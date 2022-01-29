@@ -113,10 +113,8 @@ class ExampleCheckRequirementsOfAssigner {
 		plan.addSolution(redSolution);
 		plan.addSolution(blueSolution);
 		
-		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance();
+		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
 		lspBuilder.setInitialPlan(plan);
-		Id<LSP> lspId = Id.create("CollectionLSP", LSP.class);
-		lspBuilder.setId(lspId);
 		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
