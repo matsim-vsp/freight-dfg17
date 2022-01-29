@@ -10,8 +10,8 @@ import demand.demandObject.DemandObject;
 
 public abstract class MutualReplanningModule implements ReplanningListener{
 
-	protected Collection<LSPDecorator> lsps;
-	protected Collection<DemandObject> demandObjects;
+	protected final Collection<LSPDecorator> lsps;
+	protected final Collection<DemandObject> demandObjects;
 	
 	public MutualReplanningModule(Collection<LSPDecorator> lsps, Collection<DemandObject> demandObjects) {
 		this.lsps = lsps;

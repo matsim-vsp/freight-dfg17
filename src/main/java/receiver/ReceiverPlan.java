@@ -83,7 +83,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 		return this.score;
 	}
 	
-	public final Receiver getReceiver() {
+	public Receiver getReceiver() {
 		return this.receiver;
 	}
 	
@@ -108,7 +108,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	 * @param carriedId
 	 * @return
 	 */
-	public final ReceiverOrder getReceiverOrder(Id<Carrier> carriedId) {
+	public ReceiverOrder getReceiverOrder(Id<Carrier> carriedId) {
 		if(!orderMap.containsKey(carriedId)) {
 			log.warn("Receiver '" + this.receiver.getId().toString() + 
 					"' does not have an order with carrier '" + 
@@ -158,7 +158,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 		return strb + "]" ;
 	}
 	
-	public final Collection<ReceiverOrder> getReceiverOrders(){
+	public Collection<ReceiverOrder> getReceiverOrders(){
 		return this.orderMap.values();
 	}
 

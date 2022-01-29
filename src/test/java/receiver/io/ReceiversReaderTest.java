@@ -36,7 +36,7 @@ import receiver.product.ReceiverOrder;
 import receiver.product.ReceiverProduct;
 
 public class ReceiversReaderTest {
-	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
+	@Rule public final MatsimTestUtils utils = new MatsimTestUtils();
 	
 	@Test
 	public void testV1() {

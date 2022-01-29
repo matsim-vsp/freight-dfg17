@@ -36,7 +36,7 @@ import lsp.shipment.LSPShipment;
 
 
 public class CascadingInfoTest {
-	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
+	@Rule public final MatsimTestUtils utils = new MatsimTestUtils();
 
 	private AverageTimeInfo elementInfo;
 	private AverageTimeInfo solutionInfo;

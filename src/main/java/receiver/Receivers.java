@@ -163,7 +163,7 @@ public final class Receivers implements Attributable{
 		return null;
 	}
 	
-	public final Collection<ProductType> getAllProductTypes(){
+	public Collection<ProductType> getAllProductTypes(){
 		return this.productTypeMap.values();
 	}
 
