@@ -88,7 +88,7 @@ public class RunCapeTownReceiverWithPopulation {
 		/* Generic strategy */
 		Config config = controler.getConfig();
 		StrategySettings changeExpBetaStrategySettings = new StrategySettings( );
-		changeExpBetaStrategySettings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		changeExpBetaStrategySettings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta);
 		changeExpBetaStrategySettings.setWeight(0.8);
 		config.strategy().addStrategySettings(changeExpBetaStrategySettings);
 		/* People subpopulation strategy. */

@@ -53,13 +53,11 @@ public final class Order {
 
 	@Override
 	public String toString() {
-		StringBuilder strb = new StringBuilder(  ) ;
-		strb.append( "[orderId=" ).append( orderId ) ;
 
-		strb.append("; serviceTime=").append( serviceTime ) ;
-
-		strb.append( "]" ) ;
-		return strb.toString() ;
+		String strb = "[orderId=" + orderId +
+				"; serviceTime=" + serviceTime +
+				"]";
+		return strb;
 	}
 
 	

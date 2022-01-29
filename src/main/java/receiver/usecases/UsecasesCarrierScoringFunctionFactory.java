@@ -169,9 +169,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	                Id<Vehicle> vehicleId = nRoute.getVehicleId();
 	                CarrierVehicle vehicle = getVehicle(vehicleId);
 	                if(vehicle == null) throw new IllegalStateException("vehicle with id " + vehicleId + " is missing");
-	                if(!employedVehicles.contains(vehicle)){
-	                    employedVehicles.add(vehicle);
-	                }
+					employedVehicles.add(vehicle);
 	                double distance = 0.0;
 
 	                if(leg.getRoute() instanceof NetworkRoute){
