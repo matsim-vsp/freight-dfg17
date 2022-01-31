@@ -45,8 +45,8 @@ import receiver.product.ReceiverOrder;
  */
 public final class Receivers implements Attributable{
 	
-	private Logger log = Logger.getLogger(Receivers.class);
-	private Attributes attributes = new Attributes();
+	private final Logger log = Logger.getLogger(Receivers.class);
+	private final Attributes attributes = new Attributes();
 	private String desc = "";
 
 	
@@ -54,8 +54,8 @@ public final class Receivers implements Attributable{
 	 * Create empty receiver collection.
 	 */
 	
-	private Map<Id<Receiver>, Receiver> receiverMap = new TreeMap<>();
-	private Map<Id<ProductType>, ProductType> productTypeMap = new TreeMap<>();
+	private final Map<Id<Receiver>, Receiver> receiverMap = new TreeMap<>();
+	private final Map<Id<ProductType>, ProductType> productTypeMap = new TreeMap<>();
 	
 //	public Receivers(Collection<Receiver> receivers){
 //		makeMap(receivers);
@@ -163,7 +163,7 @@ public final class Receivers implements Attributable{
 		return null;
 	}
 	
-	public final Collection<ProductType> getAllProductTypes(){
+	public Collection<ProductType> getAllProductTypes(){
 		return this.productTypeMap.values();
 	}
 

@@ -7,6 +7,6 @@ import org.matsim.contrib.freight.carrier.Carrier;
  */
 public interface LSPCarrierResource extends LSPResource {
 
-	public Carrier getCarrier();
+	Carrier getCarrier();
 	
 }

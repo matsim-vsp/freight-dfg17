@@ -31,25 +31,25 @@ import receiver.replanning.ReceiverReplanningType;
  */
 class ExperimentParameters {
 	
-	public static int NUM_ITERATIONS = 200;
+	public static final int NUM_ITERATIONS = 200;
 	
-	public static int STAT_INTERVAL = 1;
+	public static final int STAT_INTERVAL = 1;
 	
-	public static int REPLAN_INTERVAL = 10;
+	public static final int REPLAN_INTERVAL = 10;
 	
-	public static int NUMBER_OF_RECEIVERS = 5;
+	public static final int NUMBER_OF_RECEIVERS = 5;
 	
-	public static int TIME_WINDOW_DURATION = 12;
+	public static final int TIME_WINDOW_DURATION = 12;
 	
-	public static String SERVICE_TIME = "02:00:00";
+	public static final String SERVICE_TIME = "02:00:00";
 	
-	public static int NUM_DELIVERIES = 5;
+	public static final int NUM_DELIVERIES = 5;
 	
-	public static String DAY_START = "06:00:00";
+	public static final String DAY_START = "06:00:00";
 
-	public static String DAY_END = "18:00:00";
+	public static final String DAY_END = "18:00:00";
 	
-	public static double TIME_WINDOW_HOURLY_COST = 0.0;
+	public static final double TIME_WINDOW_HOURLY_COST = 0.0;
 	
-	public static ReceiverReplanningType REPLANNING_STRATEGY = ReceiverReplanningType.serviceTime;
+	public static final ReceiverReplanningType REPLANNING_STRATEGY = ReceiverReplanningType.serviceTime;
 }

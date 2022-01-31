@@ -8,7 +8,7 @@ import org.matsim.api.core.v01.Id;
 
 public class DemandObjects {
 
-	private Map<Id<DemandObject>, DemandObject> demandObjects = new HashMap<>();
+	private final Map<Id<DemandObject>, DemandObject> demandObjects = new HashMap<>();
 	
 	public DemandObjects(Collection<DemandObject> demandObjects) {
 		makeMap(demandObjects);

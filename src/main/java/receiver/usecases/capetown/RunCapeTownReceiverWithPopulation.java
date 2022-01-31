@@ -35,9 +35,7 @@ import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.misc.Time;
 import receiver.usecases.chessboard.ReceiverChessboardUtils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +88,7 @@ public class RunCapeTownReceiverWithPopulation {
 		/* Generic strategy */
 		Config config = controler.getConfig();
 		StrategySettings changeExpBetaStrategySettings = new StrategySettings( );
-		changeExpBetaStrategySettings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta.toString());
+		changeExpBetaStrategySettings.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta);
 		changeExpBetaStrategySettings.setWeight(0.8);
 		config.strategy().addStrategySettings(changeExpBetaStrategySettings);
 		/* People subpopulation strategy. */

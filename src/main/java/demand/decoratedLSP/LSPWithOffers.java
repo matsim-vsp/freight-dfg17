@@ -23,16 +23,16 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 
 public class LSPWithOffers implements LSPDecorator {
 
-	private Id<LSP> id;
-	private Collection<LSPShipment> shipments;
-	private ArrayList<LSPPlan> plans; 
-	private SolutionScheduler solutionScheduler;
+	private final Id<LSP> id;
+	private final Collection<LSPShipment> shipments;
+	private final ArrayList<LSPPlan> plans;
+	private final SolutionScheduler solutionScheduler;
 	private LSPPlanDecorator selectedPlan;
-	private Collection<LSPResource> resources;
+	private final Collection<LSPResource> resources;
 	private LSPScorer scorer;
 	private LSPReplanner replanner;
 	private OfferUpdater offerUpdater;
-	private Attributes attributes = new Attributes();
+	private final Attributes attributes = new Attributes();
 
 	@Override
 	public Attributes getAttributes() {
@@ -43,7 +43,7 @@ public class LSPWithOffers implements LSPDecorator {
 		private Id<LSP> id;
 		private SolutionScheduler solutionScheduler;
 		private LSPPlanDecorator initialPlan;
-		private Collection<LSPResource> resources;
+		private final Collection<LSPResource> resources;
 		private LSPScorer scorer;
 		private LSPReplanner replanner;
 		private OfferUpdater offerUpdater;
@@ -54,13 +54,12 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 		
 	private Builder(){
-		this.resources = new ArrayList<LSPResource>();
+		this.resources = new ArrayList<>();
 
 	}
 	
-	public Builder setSolutionScheduler(SolutionScheduler solutionScheduler){
+	public void setSolutionScheduler(SolutionScheduler solutionScheduler){
 		this.solutionScheduler = solutionScheduler;
-		return this;
 	}
 	
 	public Builder setSolutionScorer(LSPScorer scorer){
@@ -78,7 +77,7 @@ public class LSPWithOffers implements LSPDecorator {
 		return this;
 	}
 	
-	public Builder setInitialPlan(LSPPlanDecorator plan){
+	public void setInitialPlan(LSPPlanDecorator plan){
 		this.initialPlan = plan;
 		for(LogisticsSolution solution : plan.getSolutions()) {
 			for(LogisticsSolutionElement element : solution.getSolutionElements()) {
@@ -87,12 +86,10 @@ public class LSPWithOffers implements LSPDecorator {
 				}
 			}
 		}
-		return this;
 	}
 	
-	public Builder setId(Id<LSP> id){
+	public void setId(Id<LSP> id){
 		this.id = id;
-		return this;
 	}
 	
 	public LSPWithOffers build(){
@@ -102,8 +99,8 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 	
 	private LSPWithOffers(LSPWithOffers.Builder builder){
-		this.shipments = new ArrayList<LSPShipment>();
-		this.plans= new ArrayList<LSPPlan>();
+		this.shipments = new ArrayList<>();
+		this.plans= new ArrayList<>();
 		this.id = builder.id;
 		this.solutionScheduler = builder.solutionScheduler;
 		this.solutionScheduler.setLSP(this);
@@ -138,7 +135,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 
 	@Override
-	public void scheduleSoultions() {
+	public void scheduleSolutions() {
 		solutionScheduler.scheduleSolutions();
 	}
 
@@ -195,7 +192,7 @@ public class LSPWithOffers implements LSPDecorator {
 			}
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
+			System.out.println("The class " + this + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
 			System.exit(1);
 		}
 	}
@@ -243,7 +240,7 @@ public class LSPWithOffers implements LSPDecorator {
 			return plans.add(plan);
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
+			System.out.println("The class " + this + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
 			System.exit(1);
 		}	
 		return false;
@@ -303,7 +300,7 @@ public class LSPWithOffers implements LSPDecorator {
 	}
 
 	public static LSPPlanDecorator copyPlan(LSPPlanDecorator plan2copy) {
-		List<LogisticsSolutionDecorator> copiedSolutions = new ArrayList<LogisticsSolutionDecorator>();
+		List<LogisticsSolutionDecorator> copiedSolutions = new ArrayList<>();
 		for (LogisticsSolution solution : plan2copy.getSolutions()) {
 				LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 				LogisticsSolutionDecorator copiedSolution = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionDecorator.getId()).build();

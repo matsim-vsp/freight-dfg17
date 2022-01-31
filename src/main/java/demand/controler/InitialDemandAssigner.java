@@ -17,8 +17,8 @@ import lsp.shipment.LSPShipment;
 
 /*package-private*/ class InitialDemandAssigner implements StartupListener{
 
-	private DemandObjects demandObjects;
-	private LSPDecorators lsps;
+	private final DemandObjects demandObjects;
+	private final LSPDecorators lsps;
 	
 	InitialDemandAssigner(DemandObjects demandObjects, LSPDecorators lsps) {
 		this.demandObjects = demandObjects;
@@ -35,7 +35,7 @@ import lsp.shipment.LSPShipment;
 		}
 
 		for(LSPDecorator lsp : lsps.getLSPs().values()) {
-			lsp.scheduleSoultions();
+			lsp.scheduleSolutions();
 		}
 	}
 

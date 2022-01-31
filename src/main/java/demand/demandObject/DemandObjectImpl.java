@@ -17,22 +17,20 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
 
 public class DemandObjectImpl implements DemandObject{
 
-	private DemandAgent shipper;
-	private DemandAgent recipient;
-	private Id<DemandObject> id;
-	private ArrayList<DemandPlan> plans;
-	private double strengthOfFlow;
-	private Id<Link> fromLinkId;
-	private Id<Link> toLinkId;
+	private final Id<DemandObject> id;
+	private final ArrayList<DemandPlan> plans;
+	private final double strengthOfFlow;
+	private final Id<Link> fromLinkId;
+	private final Id<Link> toLinkId;
 //	private ArrayList <UtilityFunction> utilityFunctions;
 	private DemandPlan selectedPlan;
 	private DemandScorer scorer;
-	private DemandReplanner replanner;
-	private Collection<Requirement> requirements;
-	private OfferRequester offerRequester;
-	private DemandPlanGenerator generator;
-	private Collection<LSPInfo> infos;
-	private Attributes attributes = new Attributes();
+	private final DemandReplanner replanner;
+	private final Collection<Requirement> requirements;
+	private final OfferRequester offerRequester;
+	private final DemandPlanGenerator generator;
+	private final Collection<LSPInfo> infos;
+	private final Attributes attributes = new Attributes();
 
 	public static class Builder{
 		private DemandAgent shipper;
@@ -41,68 +39,59 @@ public class DemandObjectImpl implements DemandObject{
 		private double strengthOfFlow;
 		private Id<Link> fromLinkId;
 		private Id<Link> toLinkId;
-		private ArrayList <UtilityFunction> utilityFunctions;
+		private final ArrayList <UtilityFunction> utilityFunctions;
 		private DemandPlan initialPlan;
 		private DemandScorer scorer;
 		private DemandReplanner replanner;
-		private Collection<Requirement> requirements;
+		private final Collection<Requirement> requirements;
 		private OfferRequester offerRequester;
 		private DemandPlanGenerator generator;
-		private Collection<LSPInfo> infos;
+		private final Collection<LSPInfo> infos;
 		
 		public static Builder newInstance() {
 			return new Builder();
 		}
 	
 	private Builder() {
-		this.requirements = new ArrayList<Requirement>();
-		this.utilityFunctions = new ArrayList<UtilityFunction>();
-		this.infos = new ArrayList<LSPInfo>();
+		this.requirements = new ArrayList<>();
+		this.utilityFunctions = new ArrayList<>();
+		this.infos = new ArrayList<>();
 	}
 	
-	public Builder setShipper(DemandAgent shipper) {
+	public void setShipper(DemandAgent shipper) {
 		this.shipper = shipper;
-		return this;
 	}
 	
-	public Builder setRecipient(DemandAgent recipient) {
+	public void setRecipient(DemandAgent recipient) {
 		this.recipient = recipient;
-		return this;
 	}
 	
-	public Builder setId(Id<DemandObject> id) {
+	public void setId(Id<DemandObject> id) {
 		this.id = id;
-		return this;
 	}
 	
-	public Builder setInitialPlan(DemandPlan plan){
+	public void setInitialPlan(DemandPlan plan){
 		this.initialPlan = plan;
-		return this;
 	}
 	
-	public Builder setStrengthOfFlow(double strength){
+	public void setStrengthOfFlow(double strength){
 		this.strengthOfFlow = strength;
-		return this;
 	}
 	
-	public Builder setFromLinkId(Id<Link> fromLinkId){
+	public void setFromLinkId(Id<Link> fromLinkId){
 		this.fromLinkId = fromLinkId;
-		return this;
 	}
 	
-	public Builder setToLinkId(Id<Link> toLinkId){
+	public void setToLinkId(Id<Link> toLinkId){
 		this.toLinkId = toLinkId;
-		return this;
 	}
 	
-	public Builder setOfferRequester(OfferRequester offerRequester){
+	public void setOfferRequester(OfferRequester offerRequester){
 		this.offerRequester = offerRequester;
-		return this;
 	}
 	
-	public Builder setDemandPlanGenerator(DemandPlanGenerator generator){
+	public void setDemandPlanGenerator(DemandPlanGenerator generator){
 		this.generator = generator;
-		return this;
 	}
 
 	public Builder addUtilityFunction(UtilityFunction utilityFunction) {
@@ -110,9 +99,8 @@ public class DemandObjectImpl implements DemandObject{
 		return this;
 	}
 	
-	public Builder addRequirement(Requirement requirement) {
+	public void addRequirement(Requirement requirement) {
 		this.requirements.add(requirement);
-		return this;
 	}
 	
 	public Builder addInfo(LSPInfo info) {
@@ -120,14 +108,12 @@ public class DemandObjectImpl implements DemandObject{
 		return this;
 	}
 	
-	public Builder setScorer(DemandScorer scorer) {
+	public void setScorer(DemandScorer scorer) {
 		this.scorer = scorer;
-		return this;
 	}
 	
-	public Builder setReplanner(DemandReplanner replanner) {
+	public void setReplanner(DemandReplanner replanner) {
 		this.replanner = replanner;
-		return this;
 	}
 	
 	public DemandObject build() {
@@ -137,15 +123,15 @@ public class DemandObjectImpl implements DemandObject{
 	}
 	
 	private DemandObjectImpl(Builder builder) {
-		this.plans = new ArrayList<DemandPlan>();
+		this.plans = new ArrayList<>();
 //		this.utilityFunctions = new ArrayList<UtilityFunction>();
-		this.shipper = builder.shipper;
-		if(this.shipper != null) {
-			this.shipper.getDemandObjects().add(this);
+		DemandAgent shipper = builder.shipper;
+		if(shipper != null) {
+			shipper.getDemandObjects().add(this);
 		}
-		this.recipient = builder.recipient;
-		if(this.recipient != null) {
-			this.recipient.getDemandObjects().add(this);
+		DemandAgent recipient = builder.recipient;
+		if(recipient != null) {
+			recipient.getDemandObjects().add(this);
 		}
 		this.id = builder.id;
 		this.strengthOfFlow = builder.strengthOfFlow;

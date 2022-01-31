@@ -38,7 +38,7 @@ import receiver.product.ReceiverProduct;
 public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attributable {
 
 
-	public Id<Link> getLinkId();
+	Id<Link> getLinkId();
 
 	/**
 	 * Set the link Id from which the receiver is accessed. This is an easy-option 
@@ -46,20 +46,20 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	 * @param linkId
 	 * @return
 	 */
-	public Receiver setLinkId(Id<Link> linkId);
+	Receiver setLinkId(Id<Link> linkId);
 
 	/**
 	 * Gets a collection of receiver orders.
 	 */
 	@Override
-	public abstract List<ReceiverPlan> getPlans();
+	List<ReceiverPlan> getPlans();
 
-	Receiver addProduct( ReceiverProduct product );
+	void addProduct(ReceiverProduct product );
 
 	/**
 	 * Gets a collection of receiver products.
 	 */
-	public abstract Collection<ReceiverProduct> getProducts();
+	Collection<ReceiverProduct> getProducts();
 
 	/**
 	 * Gets a specific product for the receiver.
@@ -67,7 +67,7 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	 * @param productType
 	 * @return
 	 */
-	public abstract ReceiverProduct getProduct(Id<ProductType> productType);
+	ReceiverProduct getProduct(Id<ProductType> productType);
 
 
 	/**
@@ -84,12 +84,12 @@ public interface Receiver extends HasPlansAndId<ReceiverPlan, Receiver>, Attribu
 	/**
 	 * Sets the receiver's initial cost (in order to calculate the coalition cost allocations)
 	 */
-	public abstract void setInitialCost(double cost);
+	void setInitialCost(double cost);
 	
 	/**
 	 * Gets the receiver collaboration status
 	 */
-	public abstract double getInitialCost();
+	double getInitialCost();
 	
 
 }

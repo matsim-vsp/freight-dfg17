@@ -52,8 +52,8 @@ class ProductTypeImpl implements ProductType{
 	 */
 	private String descr = "";
 	private double reqCapacity = 1;
-	private Id<ProductType> typeId;
-	private Id<Link> originLinkId;
+	private final Id<ProductType> typeId;
+	private final Id<Link> originLinkId;
 	
 	@Deprecated
 	ProductTypeImpl( final Id<ProductType> typeId ){

@@ -5,7 +5,7 @@ import java.util.Set;
 
 public abstract class LSPInfo {
 
-	protected Set<LSPInfo> predecessorInfos;
+	protected final Set<LSPInfo> predecessorInfos;
 	
 	protected LSPInfo() {
 		this.predecessorInfos = new HashSet<>();

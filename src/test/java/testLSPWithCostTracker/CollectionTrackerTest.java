@@ -45,10 +45,7 @@ import static org.junit.Assert.assertTrue;
 public class CollectionTrackerTest {
 
 	private Network network;
-	private LSP collectionLSP;	
 	private Carrier carrier;
-	private LSPResource collectionAdapter;
-	private LogisticsSolutionElement collectionElement;
 	private LogisticsSolution collectionSolution;
 	private double shareOfFixedCosts;
 
@@ -92,12 +89,12 @@ public class CollectionTrackerTest {
 		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		adapterBuilder.setCarrier(carrier);
 		adapterBuilder.setLocationLinkId(collectionLinkId);
-		collectionAdapter = adapterBuilder.build();
+		LSPResource collectionAdapter = adapterBuilder.build();
 
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
-		collectionElement = collectionElementBuilder.build();
+		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
 		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
@@ -117,22 +114,19 @@ public class CollectionTrackerTest {
 		collectionPlan.setAssigner(assigner);
 		collectionPlan.addSolution(collectionSolution);
 
-		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance();
+		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
 		collectionLSPBuilder.setInitialPlan(collectionPlan);
-		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
-		collectionLSPBuilder.setId(collectionLSPId);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(collectionAdapter);
 
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
-		collectionLSP = collectionLSPBuilder.build();
+		LSP collectionLSP = collectionLSPBuilder.build();
 
-		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-	    Id<Link> toLinkId = collectionLinkId;
+		ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
 
 
-	    for(int i = 1; i < 2; i++) {
+		for(int i = 1; i < 2; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
         	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
         	Random random = new Random(1);
@@ -151,7 +145,7 @@ public class CollectionTrackerTest {
         		}
         	}
 
-        	builder.setToLinkId(toLinkId);
+        	builder.setToLinkId(collectionLinkId);
         	TimeWindow endTimeWindow = TimeWindow.newInstance(0,(24*3600));
         	builder.setEndTimeWindow(endTimeWindow);
         	TimeWindow startTimeWindow = TimeWindow.newInstance(0,(24*3600));
@@ -160,11 +154,11 @@ public class CollectionTrackerTest {
         	LSPShipment shipment = builder.build();
         	collectionLSP.assignShipmentToLSP(shipment);
         }
-		collectionLSP.scheduleSoultions();
+		collectionLSP.scheduleSolutions();
 
 
 
-		ArrayList<LSP> lspList = new ArrayList<LSP>();
+		ArrayList<LSP> lspList = new ArrayList<>();
 		lspList.add(collectionLSP);
 		LSPs lsps = new LSPs(lspList);
 
@@ -182,7 +176,7 @@ public class CollectionTrackerTest {
 
 	@Test
 	public void testCollectionTracker() {
-		assertTrue(collectionSolution.getSimulationTrackers().size() == 1);
+		assertEquals(1, collectionSolution.getSimulationTrackers().size());
 		LSPSimulationTracker tracker = collectionSolution.getSimulationTrackers().iterator().next();
 		assertTrue(tracker instanceof LinearCostTracker);
 		LinearCostTracker linearTracker = (LinearCostTracker) tracker;
@@ -278,13 +272,13 @@ public class CollectionTrackerTest {
 		assertEquals(linearTrackedCostsPerShipment, linearScheduledCostsPerShipment, Math.max(linearTrackedCostsPerShipment, linearScheduledCostsPerShipment)*0.01);
 		assertEquals(fixedScheduledCostsPerShipment, fixedTrackedCostsPerShipment, Math.max(fixedTrackedCostsPerShipment, fixedScheduledCostsPerShipment)*0.01);
 
-		assertTrue(collectionSolution.getInfos().size() == 1);
+		assertEquals(1, collectionSolution.getInfos().size());
 		LSPInfo info = collectionSolution.getInfos().iterator().next();
 		assertTrue(info instanceof CostInfo);
 		CostInfo costInfo = (CostInfo) info;
 		assertTrue(costInfo.getFunction() instanceof CostInfoFunction);
 		CostInfoFunction function = (CostInfoFunction) costInfo.getFunction();
-		ArrayList<LSPInfoFunctionValue<?>> values = new ArrayList<LSPInfoFunctionValue<?>>(function.getValues());
+		ArrayList<LSPInfoFunctionValue<?>> values = new ArrayList<>(function.getValues());
 		for(LSPInfoFunctionValue<?> value : values) {
 			if(value instanceof LinearCostFunctionValue) {
 				LinearCostFunctionValue linearValue = (LinearCostFunctionValue) value;

@@ -30,8 +30,8 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
 //	private Attributes attributes = new Attributes();
 //	private String descr = "Marginal sharing of costs between carrier(s) and receiver(s)";
-	private double fee;
-	private Scenario sc;
+	private final double fee;
+	private final Scenario sc;
 
 	/**
 	 * Create a new marginal cost sharing instance where a fixed fee per tonne (as specified) is 
@@ -72,16 +72,14 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 			
 			/* Count the number of grand coalition receiver members. */			
 			boolean status = (boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_GRANDCOALITION_MEMBER );
-			if (status == true){
+			if (status){
 				counter += 1;
 			}
 		}
 
 		/* Determine coalition scores and allocate carrier score. */
-		Iterator<Id<Carrier>> iterator = carriers.iterator();
-		while (iterator.hasNext()){
+		for (Id<Carrier> carrierId : carriers) {
 
-			Id<Carrier> carrierId = iterator.next();
 			Carrier carrier = FreightUtils.getCarriers(sc).getCarriers().get(carrierId);
 //			double fixedFeeVolume = 0.0;
 //			
@@ -98,29 +96,29 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 			double cost = carrier.getSelectedPlan().getScore();
 
 			/* Capture the grand coalition score */
-			if (counter == ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().size()){
-				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N)")){
-					ReceiverUtils.getCoalition( sc ).getAttributes().removeAttribute("C(N)");
+			if (counter == ReceiverUtils.getCoalition(sc).getReceiverCoalitionMembers().size()) {
+				if (ReceiverUtils.getCoalition(sc).getAttributes().getAsMap().containsKey("C(N)")) {
+					ReceiverUtils.getCoalition(sc).getAttributes().removeAttribute("C(N)");
 				}
-				ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute("C(N)", cost);
+				ReceiverUtils.getCoalition(sc).getAttributes().putAttribute("C(N)", cost);
 
 			} else {
 
 				/* Capture all the sub-coalition scores */
-				String coalitionDesc = "C(N|{" ;
-				
-				for (Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
-					if ((boolean) receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) == false){
-						coalitionDesc =  coalitionDesc + receiver.getId().toString();
+				String coalitionDesc = "C(N|{";
+
+				for (Receiver receiver : ReceiverUtils.getReceivers(sc).getReceivers().values()) {
+					if (!((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS))) {
+						coalitionDesc = coalitionDesc + receiver.getId().toString();
 					}
 				}
 				coalitionDesc = coalitionDesc + "})";
-				
+
 				/* Remove old attribute of this sub-coalition before updating with new attribute.*/
-				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey(coalitionDesc)){
-					ReceiverUtils.getCoalition( sc ).getAttributes().removeAttribute(coalitionDesc);
+				if (ReceiverUtils.getCoalition(sc).getAttributes().getAsMap().containsKey(coalitionDesc)) {
+					ReceiverUtils.getCoalition(sc).getAttributes().removeAttribute(coalitionDesc);
 				}
-				ReceiverUtils.getCoalition( sc ).getAttributes().putAttribute(coalitionDesc, cost);
+				ReceiverUtils.getCoalition(sc).getAttributes().putAttribute(coalitionDesc, cost);
 
 				/* Calculate carrier score */
 //				double subScore = 0.0;
@@ -151,7 +149,7 @@ public final class MarginalCostSharing implements ReceiverCarrierCostAllocation 
 			 */
 //			if ( !ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
 //			double total = 0.0;
-			if((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
+			if((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS)){
 				double subScore = 0;
 				if ( ReceiverUtils.getCoalition( sc ).getAttributes().getAsMap().containsKey("C(N|{" + receiver.getId().toString() + "})")){
 					subScore = (double) ReceiverUtils.getCoalition( sc )

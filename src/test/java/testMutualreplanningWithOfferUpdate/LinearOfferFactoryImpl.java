@@ -13,21 +13,21 @@ import demand.offer.OfferFactory;
 public class LinearOfferFactoryImpl implements OfferFactory{
 
 	
-	private ArrayList<Offer> offerList;
+	private final ArrayList<Offer> offerList;
 	private LogisticsSolutionDecorator solution;
 	private LSPDecorator lsp;
 	
 	public LinearOfferFactoryImpl(LogisticsSolutionDecorator solution) {
 		this.solution = solution;
 		this.lsp = solution.getLSP();
-		offerList = new ArrayList<Offer>();
+		offerList = new ArrayList<>();
 		offerList.add(new LinearOffer(solution));
 	}	
 	
 	@Override
 	public Offer makeOffer(DemandObject object, String offerType) {
 		for(Offer offer : offerList) {
-			if(offer.getType() == offerType) {
+			if(offer.getType().equals(offerType)) {
 				offer.setLSP(lsp);
 				return offer;
 			}

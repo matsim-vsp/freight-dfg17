@@ -16,9 +16,9 @@ public class CollectionServiceHandler implements LSPServiceStartEventHandler, LS
 
 	
 	
-	private class ServiceTuple {
-		private CarrierService service;
-		private double startTime;
+	private static class ServiceTuple {
+		private final CarrierService service;
+		private final double startTime;
 		
 		public ServiceTuple(CarrierService service, double startTime) {
 			this.service = service;
@@ -35,13 +35,13 @@ public class CollectionServiceHandler implements LSPServiceStartEventHandler, LS
 		
 	}
 
-	private Collection<ServiceTuple> tuples;
+	private final Collection<ServiceTuple> tuples;
 	private double totalLoadingCosts;
 	private int totalNumberOfShipments;
 	private int totalWeightOfShipments;
 	
 	public  CollectionServiceHandler() {
-		this.tuples = new ArrayList<ServiceTuple>();
+		this.tuples = new ArrayList<>();
 	}
 	
 	@Override

@@ -35,7 +35,7 @@ import java.util.Calendar;
 
 public class ReceiversWriterTest {
 
-	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
+	@Rule public final MatsimTestUtils utils = new MatsimTestUtils();
 	
 	@Test
 	public void testV1() {

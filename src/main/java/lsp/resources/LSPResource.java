@@ -13,28 +13,28 @@ import lsp.controler.LSPSimulationTracker;
 
 public interface LSPResource {
 
-	public Id<LSPResource> getId();
+	Id<LSPResource> getId();
 	
-	public Id<Link> getStartLinkId();
+	Id<Link> getStartLinkId();
 	
-	public Class<?> getClassOfResource();
+	Class<?> getClassOfResource();
 	// yyyyyy is it really necessary to use reflection in a code that we fully own?  kai, may'18
 	//One could also leave this method signature out tm, august'18
 	
-	public Id<Link> getEndLinkId();
+	Id<Link> getEndLinkId();
 	
-    public Collection <LogisticsSolutionElement> getClientElements();
+    Collection <LogisticsSolutionElement> getClientElements();
     
-    public void schedule(int bufferTime);
+    void schedule(int bufferTime);
     
-    public Collection <EventHandler> getEventHandlers();
+    Collection <EventHandler> getEventHandlers();
     
-    public Collection <LSPInfo> getInfos();
+    Collection <LSPInfo> getInfos();
     
-    public void addSimulationTracker( LSPSimulationTracker tracker );
+    void addSimulationTracker(LSPSimulationTracker tracker);
     
-    public Collection<LSPSimulationTracker> getSimulationTrackers();
+    Collection<LSPSimulationTracker> getSimulationTrackers();
     
-    public void setEventsManager(EventsManager eventsManager);
+    void setEventsManager(EventsManager eventsManager);
    
 }

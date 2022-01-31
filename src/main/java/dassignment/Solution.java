@@ -385,11 +385,9 @@ class Solution
 
 	void saveFile( ArrayList<Store> list, double re, String filename ) throws IOException
 	{
-		list.sort(new Comparator<Store>()
-		{
+		list.sort(new Comparator<>() {
 			@Override
-			public int compare( Store o1, Store o2 )
-			{
+			public int compare(Store o1, Store o2) {
 				return o1.getId().compareTo(o2.getId());
 			}
 		});
@@ -417,16 +415,17 @@ class Solution
 		}
 	}
 
-	private static boolean deleteFile(File dirFile)
+	private static void deleteFile(File dirFile)
 	{
 		if (!dirFile.exists())
 		{
-			return false;
+			return;
 		}
 
 		if (dirFile.isFile())
 		{
-			return dirFile.delete();
+			dirFile.delete();
+			return;
 		}
 		else
 		{
@@ -437,6 +436,6 @@ class Solution
 			}
 		}
 
-		return dirFile.delete();
+		dirFile.delete();
 	}
 }

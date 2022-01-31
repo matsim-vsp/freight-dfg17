@@ -2,10 +2,8 @@ package demand.mutualReplanning;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.population.HasPlansAndId;
 import org.matsim.core.replanning.GenericPlanStrategy;
-import org.matsim.core.replanning.PlanStrategyImpl;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 import org.matsim.core.replanning.selectors.PlanSelector;

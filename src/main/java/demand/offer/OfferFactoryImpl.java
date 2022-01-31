@@ -10,20 +10,20 @@ import demand.demandObject.DemandObject;
 public class OfferFactoryImpl implements OfferFactory{
 
 	
-	private ArrayList<Offer> offerList;
+	private final ArrayList<Offer> offerList;
 	private LogisticsSolutionDecorator solution;
 	private LSPDecorator lsp;
 	
 	public OfferFactoryImpl(LogisticsSolutionDecorator solution) {
 		this.solution = solution;
 		this.lsp = solution.getLSP();
-		offerList = new ArrayList<Offer>();
+		offerList = new ArrayList<>();
 	}	
 	
 	@Override
 	public Offer makeOffer(DemandObject object, String offerType) {
 		for(Offer offer : offerList) {
-			if(offer.getType() == offerType) {
+			if(offer.getType().equals(offerType)) {
 				offer.setLSP(lsp);
 				return offer;
 			}

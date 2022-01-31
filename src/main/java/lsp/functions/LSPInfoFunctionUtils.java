@@ -5,6 +5,6 @@ public class LSPInfoFunctionUtils {
 		return new LSPInfoFunctionImpl();
 	}
 	public static <T> LSPInfoFunctionValueImpl<T> createInfoFunctionValue(String name ){
-		return new LSPInfoFunctionValueImpl<T>( name );
+		return new LSPInfoFunctionValueImpl<>(name);
 	}
 }

@@ -91,12 +91,11 @@ import receiver.product.ReceiverProduct;
 	private Id<Carrier> currentOrderCarrierId = null;
 	private List<Order> currentOrders = null;
 	private ReceiverPlan.Builder currentPlanBuilder = null;
-	private Boolean currentPlanSelected = null;
 	private ReceiverProduct.Builder currentProductBuilder = null;
 
 	private final Receivers receivers;
 	
-	private Counter counter = new Counter("   receiver # ");
+	private final Counter counter = new Counter("   receiver # ");
 
 	public ReceiversReader_v1(final Receivers receivers) {
 		this.receivers = receivers;
@@ -238,7 +237,7 @@ import receiver.product.ReceiverProduct;
 	}
 	
 	private void startPlan(Attributes atts) {
-		this.currentOrders = new ArrayList<Order>();
+		this.currentOrders = new ArrayList<>();
 		boolean collaborationStatus = (boolean) currentReceiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS);
 		currentPlanBuilder = ReceiverPlan.Builder.newInstance(currentReceiver, collaborationStatus);
 		
@@ -248,6 +247,7 @@ import receiver.product.ReceiverProduct;
 		}
 		
 		String selected = atts.getValue(ATTR_PLAN_SELECTED);
+		Boolean currentPlanSelected = null;
 		if(selected.equalsIgnoreCase("yes")) {
 			currentPlanSelected = true;
 		} else if (selected.equalsIgnoreCase("no")) {
@@ -268,8 +268,7 @@ import receiver.product.ReceiverProduct;
 	}
 
 	private void startOrder(Attributes atts) {
-		Id<Carrier> carrierId = Id.create(atts.getValue(ATTR_ORDER_CARRIER), Carrier.class);
-		this.currentOrderCarrierId = carrierId;
+		this.currentOrderCarrierId = Id.create(atts.getValue(ATTR_ORDER_CARRIER), Carrier.class);
 	}
 	
 	private void endOrder() {

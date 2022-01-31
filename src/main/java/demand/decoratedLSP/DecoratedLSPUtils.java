@@ -14,11 +14,11 @@ import java.util.Collection;
 public class DecoratedLSPUtils {
 
 	public static class LogisticsSolutionDecoratorImpl_wOffersBuilder {
-		private Id<LogisticsSolution> id;
-		private Collection<LogisticsSolutionElement> elements;
-		private Collection<LSPInfo> solutionInfos;
-		private Collection<EventHandler> eventHandlers;
-		private Collection<LSPSimulationTracker>trackers;
+		private final Id<LogisticsSolution> id;
+		private final Collection<LogisticsSolutionElement> elements;
+		private final Collection<LSPInfo> solutionInfos;
+		private final Collection<EventHandler> eventHandlers;
+		private final Collection<LSPSimulationTracker>trackers;
 		private OfferFactory offerFactory;
 
 		public static LogisticsSolutionDecoratorImpl_wOffersBuilder newInstance(Id<LogisticsSolution>id){
@@ -26,10 +26,10 @@ public class DecoratedLSPUtils {
 		}
 
 		private LogisticsSolutionDecoratorImpl_wOffersBuilder(Id<LogisticsSolution> id){
-			this.elements = new ArrayList<LogisticsSolutionElement>();
-			this.solutionInfos = new ArrayList<LSPInfo>();
-			this.eventHandlers = new ArrayList<EventHandler>();
-			this.trackers = new ArrayList<LSPSimulationTracker>();
+			this.elements = new ArrayList<>();
+			this.solutionInfos = new ArrayList<>();
+			this.eventHandlers = new ArrayList<>();
+			this.trackers = new ArrayList<>();
 			this.id = id;
 		}
 

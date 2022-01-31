@@ -1,8 +1,5 @@
 package demandObjectTests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,25 +32,23 @@ import demand.mutualReplanning.OfferReplanningStrategyModule;
 import demand.mutualReplanning.OfferReplanningStrategyModuleImpl;
 import demand.offer.Offer;
 
+import static org.junit.Assert.*;
+
 public class DemandObjectBuilderTest {
 
-	private Network network;
 	private ArrayList<DemandObject> demandObjects;
 	private OfferRequester offerRequester;
 	private LSPDecorator lsp;
-	private DemandReplannerImpl replanner;
-	private DemandPlanStrategyImpl planStrategy;
-	private OfferReplanningStrategyModule offerModule ;
-	
+
 	@Before
 	public void initialize() {
 		Config config = new Config();
         config.addCoreModules();
         Scenario scenario = ScenarioUtils.createScenario(config);
         new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
-        this.network = scenario.getNetwork();
-        ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-        this.demandObjects = new ArrayList<DemandObject>();
+		Network network = scenario.getNetwork();
+        ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
+        this.demandObjects = new ArrayList<>();
         Random random = new Random(1);
         lsp = new InitialLSPGenerator().createInitialLSP();
         
@@ -106,9 +101,9 @@ public class DemandObjectBuilderTest {
         	planBuilder.setLogisticsSolutionId(lsp.getSelectedPlan().getSolutions().iterator().next().getId());
         	builder.setInitialPlan(planBuilder.build());
         	builder.setScorer(new FortyTwoDemandScorer());
-        	replanner = new DemandReplannerImpl();
-        	planStrategy = new DemandPlanStrategyImpl(new BestPlanSelector());
-        	offerModule = new OfferReplanningStrategyModuleImpl();
+			DemandReplannerImpl replanner = new DemandReplannerImpl();
+			DemandPlanStrategyImpl planStrategy = new DemandPlanStrategyImpl(new BestPlanSelector());
+			OfferReplanningStrategyModule offerModule = new OfferReplanningStrategyModuleImpl();
         	planStrategy.addStrategyModule(offerModule);
         	replanner.addStrategy(planStrategy);
         	builder.setReplanner(replanner);
@@ -127,9 +122,9 @@ public class DemandObjectBuilderTest {
 			offerList.add(offer);
 			DemandPlan newPlan = demandObject.getDemandPlanGenerator().createDemandPlan(offerList); 
 			DemandPlan oldPlan = demandObject.getSelectedPlan();
-			assertTrue(newPlan.getLsp() == oldPlan.getLsp());
-			assertTrue(newPlan.getSolutionId()  == oldPlan.getSolutionId());
-			assertTrue(newPlan.getShipment().getShipmentSize() == oldPlan.getShipment().getShipmentSize()/2);
+			assertSame(newPlan.getLsp(), oldPlan.getLsp());
+			assertSame(newPlan.getSolutionId(), oldPlan.getSolutionId());
+			assertEquals(newPlan.getShipment().getShipmentSize(), oldPlan.getShipment().getShipmentSize() / 2, 0.0);
 			assertNotNull(demandObject.getOfferRequester());
 			assertNotNull(demandObject.getReplanner());
 			

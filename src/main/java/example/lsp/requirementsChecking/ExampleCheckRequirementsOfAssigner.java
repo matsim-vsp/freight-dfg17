@@ -113,11 +113,9 @@ class ExampleCheckRequirementsOfAssigner {
 		plan.addSolution(redSolution);
 		plan.addSolution(blueSolution);
 		
-		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance();
+		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
 		lspBuilder.setInitialPlan(plan);
-		Id<LSP> lspId = Id.create("CollectionLSP", LSP.class);
-		lspBuilder.setId(lspId);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
@@ -128,12 +126,10 @@ class ExampleCheckRequirementsOfAssigner {
 	
 	public static Collection<LSPShipment> createShipmentsWithRequirements(Network network){
 		//Create ten shipments with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
-		ArrayList<LSPShipment> shipmentList = new ArrayList<LSPShipment>();
-		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
-		Id<Link> toLinkId = collectionLinkId;
-	
-	    Random rand = new Random(1); 
+		ArrayList<LSPShipment> shipmentList = new ArrayList<>();
+		ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
+
+		Random rand = new Random(1);
 	    
 	    for(int i = 1; i < 11; i++) {
         	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
@@ -153,14 +149,14 @@ class ExampleCheckRequirementsOfAssigner {
         		}	
         	}
         	
-        	builder.setToLinkId(toLinkId);
+        	builder.setToLinkId(Id.createLinkId("(4 2) (4 3)"));
         	TimeWindow endTimeWindow = TimeWindow.newInstance(0,(24*3600));
         	builder.setEndTimeWindow(endTimeWindow);
         	TimeWindow startTimeWindow = TimeWindow.newInstance(0,(24*3600));
         	builder.setStartTimeWindow(startTimeWindow);
         	builder.setDeliveryServiceTime(capacityDemand * 60 );
         	boolean blue = rand.nextBoolean();
-        	if (blue == true) {
+        	if (blue) {
         		builder.addRequirement(new BlueRequirement());
         	}
         	else {
@@ -192,7 +188,7 @@ class ExampleCheckRequirementsOfAssigner {
         }
         
         for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
-        	if(solution.getId().toString() == "RedSolution") {
+        	if(solution.getId().toString().equals("RedSolution")) {
         		for(LSPShipment shipment : solution.getShipments()) {
         			if(!(shipment.getRequirements().iterator().next() instanceof RedRequirement)) {
         				break;
@@ -200,7 +196,7 @@ class ExampleCheckRequirementsOfAssigner {
         		}
         		System.out.println("All shipments in " + solution.getId() + " are red");
         	}
-        	if(solution.getId().toString() == "BlueSolution") {
+        	if(solution.getId().toString().equals("BlueSolution")) {
         		for(LSPShipment shipment : solution.getShipments()) {
         			if(!(shipment.getRequirements().iterator().next() instanceof BlueRequirement)) {
         				break;

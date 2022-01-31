@@ -23,9 +23,9 @@ public class UsecasesCarrierStrategyManagerFactory implements CarrierPlanStrateg
 	/*
 	 * Adapted from RunChessboard.java by sschroeder and gliedtke.
 	 */
-	private Network network;
-	private MatsimServices controler;
-	private CarrierVehicleTypes types;
+	private final Network network;
+	private final MatsimServices controler;
+	private final CarrierVehicleTypes types;
 
 	public UsecasesCarrierStrategyManagerFactory( final CarrierVehicleTypes types, final Network network, final MatsimServices controler ) {
 		this.types = types;

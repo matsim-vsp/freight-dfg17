@@ -7,6 +7,6 @@ import demand.offer.Offer;
 
 public interface OfferRequester {
 
-	public Collection<Offer> requestOffers(Collection<LSPDecorator> lsps);
-	public void setDemandObject(DemandObject demandObject);
+	Collection<Offer> requestOffers(Collection<LSPDecorator> lsps);
+	void setDemandObject(DemandObject demandObject);
 }

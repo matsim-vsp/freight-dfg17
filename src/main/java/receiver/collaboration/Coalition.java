@@ -19,17 +19,17 @@ import receiver.Receiver;
 
 public interface Coalition extends Attributable {
 	
-	public void addReceiverCoalitionMember(Receiver receiver);
+	void addReceiverCoalitionMember(Receiver receiver);
 	
-	public void addCarrierCoalitionMember(Carrier carrier);
+	void addCarrierCoalitionMember(Carrier carrier);
 	
-	public void removeReceiverCoalitionMember(Receiver receiver);
+	void removeReceiverCoalitionMember(Receiver receiver);
 	
-	public void removeCarrierCoalitionMember(Carrier carrier);
+	void removeCarrierCoalitionMember(Carrier carrier);
 	
-	public Collection<Carrier> getCarrierCoalitionMembers();
+	Collection<Carrier> getCarrierCoalitionMembers();
 	
-	public Collection<Receiver> getReceiverCoalitionMembers();
+	Collection<Receiver> getReceiverCoalitionMembers();
 
 	//public void addAttribute(String coalitionDesc, double cost);
 

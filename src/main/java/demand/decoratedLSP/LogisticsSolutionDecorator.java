@@ -7,9 +7,9 @@ import lsp.LogisticsSolution;
 
 public interface LogisticsSolutionDecorator  extends LogisticsSolution {
 
-	public Offer getOffer(DemandObject object, String type);
-	public void setOfferFactory(OfferFactory factory);
-	public OfferFactory getOfferFactory();
-	public LSPDecorator getLSP();
+	Offer getOffer(DemandObject object, String type);
+	void setOfferFactory(OfferFactory factory);
+	OfferFactory getOfferFactory();
+	LSPDecorator getLSP();
 	
 }

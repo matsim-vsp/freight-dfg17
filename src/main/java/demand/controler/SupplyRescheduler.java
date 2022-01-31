@@ -9,7 +9,7 @@ import lsp.LSP;
 
 class SupplyRescheduler implements BeforeMobsimListener{
 
-	private LSPDecorators lsps;
+	private final LSPDecorators lsps;
 	
 	SupplyRescheduler(LSPDecorators  lsps) {
 		this.lsps = lsps;
@@ -19,7 +19,7 @@ class SupplyRescheduler implements BeforeMobsimListener{
 	public void notifyBeforeMobsim(BeforeMobsimEvent arg0) {
 		if(arg0.getIteration() !=  0) {
 			for(LSP lsp : lsps.getLSPs().values()){
-				lsp.scheduleSoultions();
+				lsp.scheduleSolutions();
 			}		
 		}	
 	}

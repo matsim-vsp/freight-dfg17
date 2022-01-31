@@ -4,6 +4,6 @@ import java.util.Collection;
 
 public interface LSPInfoFunction {
 
-	public Collection<LSPInfoFunctionValue<?>> getValues();
+	Collection<LSPInfoFunctionValue<?>> getValues();
 	
 }

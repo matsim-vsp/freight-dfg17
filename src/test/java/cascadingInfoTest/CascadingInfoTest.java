@@ -36,14 +36,8 @@ import lsp.shipment.LSPShipment;
 
 
 public class CascadingInfoTest {
-	@Rule public MatsimTestUtils utils = new MatsimTestUtils();
+	@Rule public final MatsimTestUtils utils = new MatsimTestUtils();
 
-	private Network network;
-	private LSP collectionLSP;
-	private Carrier carrier;
-	private LSPResource collectionAdapter;
-	private LogisticsSolutionElement collectionElement;
-	private LogisticsSolution collectionSolution;
 	private AverageTimeInfo elementInfo;
 	private AverageTimeInfo solutionInfo;
 	private AverageTimeTracker timeTracker;
@@ -57,7 +51,7 @@ public class CascadingInfoTest {
 		config.controler().setOutputDirectory( utils.getOutputDirectory() );
 		Scenario scenario = ScenarioUtils.createScenario(config);
 		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
-		this.network = scenario.getNetwork();
+		Network network = scenario.getNetwork();
 
 		Id<Carrier> carrierId = Id.create("CollectionCarrier", Carrier.class);
 		Id<VehicleType> vehicleTypeId = Id.create("CollectionCarrierVehicleType", VehicleType.class);
@@ -81,7 +75,7 @@ public class CascadingInfoTest {
 		capabilitiesBuilder.addVehicle(carrierVehicle);
 		capabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
 		CarrierCapabilities capabilities = capabilitiesBuilder.build();
-		carrier = CarrierUtils.createCarrier( carrierId );
+		Carrier carrier = CarrierUtils.createCarrier(carrierId);
 		carrier.setCarrierCapabilities(capabilities);
 
 
@@ -90,7 +84,7 @@ public class CascadingInfoTest {
 		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
 		adapterBuilder.setCarrier(carrier);
 		adapterBuilder.setLocationLinkId(collectionLinkId);
-		collectionAdapter = adapterBuilder.build();
+		LSPResource collectionAdapter = adapterBuilder.build();
 		timeTracker = new AverageTimeTracker();
 		collectionAdapter.addSimulationTracker(timeTracker);
 
@@ -98,7 +92,7 @@ public class CascadingInfoTest {
 		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(elementId );
 		collectionElementBuilder.setResource(collectionAdapter);
-		collectionElement = collectionElementBuilder.build();
+		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
 
 		elementInfo = new AverageTimeInfo();
 		elementInfo.addPredecessorInfo(collectionAdapter.getInfos().iterator().next());
@@ -107,7 +101,7 @@ public class CascadingInfoTest {
 		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
 		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(collectionSolutionId );
 		collectionSolutionBuilder.addSolutionElement(collectionElement);
-		collectionSolution = collectionSolutionBuilder.build();
+		LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
 
 		solutionInfo = new AverageTimeInfo();
 		solutionInfo.addPredecessorInfo(collectionElement.getInfos().iterator().next());
@@ -118,19 +112,16 @@ public class CascadingInfoTest {
 		collectionPlan.setAssigner(assigner);
 		collectionPlan.addSolution(collectionSolution);
 
-		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance();
+		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
 		collectionLSPBuilder.setInitialPlan(collectionPlan);
-		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
-		collectionLSPBuilder.setId(collectionLSPId);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(collectionAdapter);
 
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
 		collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
-		collectionLSP = collectionLSPBuilder.build();
+		LSP collectionLSP = collectionLSPBuilder.build();
 
-		ArrayList <Link> linkList = new ArrayList<Link>(network.getLinks().values());
-		Id<Link> toLinkId = collectionLinkId;
+		ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
 
 
 		for(int i = 1; i < 11; i++) {
@@ -152,7 +143,7 @@ public class CascadingInfoTest {
 				}
 			}
 
-			builder.setToLinkId(toLinkId);
+			builder.setToLinkId(collectionLinkId);
 			TimeWindow endTimeWindow = TimeWindow.newInstance(0,(24*3600));
 			builder.setEndTimeWindow(endTimeWindow);
 			TimeWindow startTimeWindow = TimeWindow.newInstance(0,(24*3600));
@@ -162,9 +153,9 @@ public class CascadingInfoTest {
 			collectionLSP.assignShipmentToLSP(shipment);
 		}
 
-		collectionLSP.scheduleSoultions();
+		collectionLSP.scheduleSolutions();
 
-		ArrayList<LSP> lspList = new ArrayList<LSP>();
+		ArrayList<LSP> lspList = new ArrayList<>();
 		lspList.add(collectionLSP);
 		LSPs lsps = new LSPs(lspList);
 
@@ -182,30 +173,30 @@ public class CascadingInfoTest {
 
 	@Test
 	public void testCascadingInfos() {
-		assertTrue(timeTracker.getInfos().iterator().next() == elementInfo.getPredecessorInfos().iterator().next());
+		assertSame(timeTracker.getInfos().iterator().next(), elementInfo.getPredecessorInfos().iterator().next());
 		assertTrue(timeTracker.getInfos().iterator().next() instanceof AverageTimeInfo);
 		AverageTimeInfo resourceInfo = (AverageTimeInfo) timeTracker.getInfos().iterator().next();
 		assertTrue(resourceInfo.getFunction() instanceof AverageTimeInfoFunction);
 		AverageTimeInfoFunction resourceInfoFunction = (AverageTimeInfoFunction) resourceInfo.getFunction();
-		assertTrue(resourceInfoFunction.getValues().size() == 1);
+		assertEquals(1, resourceInfoFunction.getValues().size());
 		assertTrue(resourceInfoFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
 		AverageTimeInfoFunctionValue averageResourceValue = (AverageTimeInfoFunctionValue) resourceInfoFunction.getValues().iterator().next();
 		assertTrue(elementInfo.getFunction() instanceof AverageTimeInfoFunction);
 		AverageTimeInfoFunction averageElementFunction = (AverageTimeInfoFunction) elementInfo.getFunction();
-		assertTrue(averageElementFunction.getValues().size() == 1);
+		assertEquals(1, averageElementFunction.getValues().size());
 		assertTrue(averageElementFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
 		AverageTimeInfoFunctionValue averageElementValue = (AverageTimeInfoFunctionValue) averageElementFunction.getValues().iterator().next();
 		assertTrue(averageElementValue.getValue() > 0);
 		assertTrue(averageElementFunction.getValues().iterator().next().getValue() instanceof Double);
 		assertTrue(solutionInfo.getFunction() instanceof AverageTimeInfoFunction);
-		assertTrue(solutionInfo.getPredecessorInfos().iterator().next() == elementInfo);
+		assertSame(solutionInfo.getPredecessorInfos().iterator().next(), elementInfo);
 		AverageTimeInfoFunction averageSolutionFunction = (AverageTimeInfoFunction) solutionInfo.getFunction();
-		assertTrue(averageSolutionFunction.getValues().size() == 1);
+		assertEquals(1, averageSolutionFunction.getValues().size());
 		assertTrue(averageSolutionFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
 		AverageTimeInfoFunctionValue averageSolutionValue = (AverageTimeInfoFunctionValue) averageSolutionFunction.getValues().iterator().next();
 		assertTrue(averageSolutionValue.getValue() > 0);
-		assertTrue(averageElementValue.getValue() == averageResourceValue.getValue());
-		assertTrue(averageElementValue.getValue() == averageSolutionValue.getValue());
+		assertSame(averageElementValue.getValue(), averageResourceValue.getValue());
+		assertSame(averageElementValue.getValue(), averageSolutionValue.getValue());
 	}
 
 }

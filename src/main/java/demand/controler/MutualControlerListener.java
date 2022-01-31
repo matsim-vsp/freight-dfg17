@@ -12,7 +12,6 @@ import lsp.functions.LSPInfo;
 import lsp.resources.LSPCarrierResource;
 import lsp.shipment.LSPShipment;
 import org.matsim.api.core.v01.events.Event;
-import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.Carriers;
 import org.matsim.contrib.freight.controler.CarrierAgentTracker;
@@ -30,12 +29,12 @@ import java.util.Collection;
 		ScoringListener, ReplanningListener, IterationEndsListener, StartupListener, IterationStartsListener {
 
 	private CarrierAgentTracker carrierResourceTracker;
-	private Carriers carriers;
-	private LSPDecorators lsps;
-	private DemandObjects demandObjects;
-	private MutualScoringModule mutualScoringModule;
-	private MutualReplanningModule replanningModule;
-	private Collection<LSPEventCreator> creators;
+	private final Carriers carriers;
+	private final LSPDecorators lsps;
+	private final DemandObjects demandObjects;
+	private final MutualScoringModule mutualScoringModule;
+	private final MutualReplanningModule replanningModule;
+	private final Collection<LSPEventCreator> creators;
 	private ArrayList<EventHandler> registeredHandlers;
 
 	@Inject	EventsManager eventsManager;
@@ -60,7 +59,7 @@ import java.util.Collection;
 		
 		carrierResourceTracker = new CarrierAgentTracker(carriers, creators, eventsManager );
 		eventsManager.addHandler(carrierResourceTracker);
-		registeredHandlers = new ArrayList<EventHandler>();
+		registeredHandlers = new ArrayList<>();
 
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LSPShipment shipment : lsp.getShipments()) {
@@ -110,7 +109,7 @@ import java.util.Collection;
 	public void notifyAfterMobsim(AfterMobsimEvent event) {
 		eventsManager.removeHandler(carrierResourceTracker);
 
-		ArrayList<LSPSimulationTracker> alreadyUpdatedTrackers = new ArrayList<LSPSimulationTracker>();
+		ArrayList<LSPSimulationTracker> alreadyUpdatedTrackers = new ArrayList<>();
 		for (LSP lsp : lsps.getLSPs().values()) {
 			for (LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
 				for (LogisticsSolutionElement element : solution.getSolutionElements()) {

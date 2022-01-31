@@ -7,11 +7,11 @@ import lsp.shipment.LSPShipment;
 
 public class ShipperShipmentImpl implements ShipperShipment{
 
-	private Id<ShipperShipment> id;
-	private double shipmentSize;
+	private final Id<ShipperShipment> id;
+	private final double shipmentSize;
 	private TimeWindow startTimeWindow;
 	private TimeWindow endTimeWindow;
-	private double serviceTime;
+	private final double serviceTime;
 	private LSPShipment lspShipment;
 	private DemandObject demandObject;
 	
@@ -27,34 +27,28 @@ public class ShipperShipmentImpl implements ShipperShipment{
 			return new Builder();
 		}
 	
-		public Builder setId(Id<ShipperShipment> id) {
+		public void setId(Id<ShipperShipment> id) {
 			this.id = id;
-			return this;
 		}
 	
-		public Builder setShipmentSize(double shipmentSize) {
+		public void setShipmentSize(double shipmentSize) {
 			this.shipmentSize = shipmentSize;
-			return this;
 		}
 	
-		public Builder setStartTimeWindow(TimeWindow startTimeWindow) {
+		public void setStartTimeWindow(TimeWindow startTimeWindow) {
 			this.startTimeWindow = startTimeWindow;
-			return this;
 		}
 	
-		public Builder setEndTimeWindow(TimeWindow endTimeWindow) {
+		public void setEndTimeWindow(TimeWindow endTimeWindow) {
 			this.endTimeWindow = endTimeWindow;
-			return this;
 		}
 	
-		public Builder setServiceTime(double serviceTime) {
+		public void setServiceTime(double serviceTime) {
 			this.serviceTime = serviceTime;
-			return this;
 		}
 		
-		public Builder setDemandObject(DemandObject demandObject) {
+		public void setDemandObject(DemandObject demandObject) {
 			this.demandObject = demandObject;
-			return this;
 		}
 	
 		public ShipperShipment build() {

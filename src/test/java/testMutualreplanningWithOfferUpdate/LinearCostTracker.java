@@ -12,8 +12,8 @@ import lsp.controler.LSPSimulationTracker;
 
 public class LinearCostTracker implements LSPSimulationTracker{
 
-	private Collection<EventHandler> eventHandlers;
-	private Collection<LSPInfo> infos;
+	private final Collection<EventHandler> eventHandlers;
+	private final Collection<LSPInfo> infos;
 	private double distanceCosts;
 	private double timeCosts;
 	private double loadingCosts;
@@ -24,14 +24,14 @@ public class LinearCostTracker implements LSPSimulationTracker{
 	private double fixedUnitCosts;
 	private double linearUnitCosts;
 	
-	private double shareOfFixedCosts;
+	private final double shareOfFixedCosts;
 	
 	public LinearCostTracker(double shareOfFixedCosts) {
 		this.shareOfFixedCosts = shareOfFixedCosts;
 		CostInfo costInfo = new CostInfo();
-		infos = new ArrayList<LSPInfo>();
+		infos = new ArrayList<>();
 		infos.add(costInfo);
-		this.eventHandlers = new ArrayList<EventHandler>();
+		this.eventHandlers = new ArrayList<>();
 	}
 	
 	

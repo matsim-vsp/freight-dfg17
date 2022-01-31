@@ -34,7 +34,6 @@ import com.graphhopper.jsprit.io.algorithm.VehicleRoutingAlgorithms;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.freight.Freight;
 import org.matsim.contrib.freight.FreightConfigGroup;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlan;
@@ -50,7 +49,6 @@ import org.matsim.contrib.freight.utils.FreightUtils;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 
-import receiver.*;
 import receiver.usecases.UsecasesCarrierScoringFunctionFactory;
 import receiver.usecases.UsecasesCarrierStrategyManagerFactory;
 
@@ -63,7 +61,7 @@ public class ReceiverChessboardUtils {
 	final public static int STATISTICS_INTERVAL = 50;
 	
 	public static void setupCarriers(Controler controler) {
-		Carriers carriers = FreightUtils.getCarriers(controler.getScenario());;
+		Carriers carriers = FreightUtils.getCarriers(controler.getScenario());
 
 		BaseRunReceiver.setupCarrierReplanning(controler );
 
@@ -106,10 +104,8 @@ public class ReceiverChessboardUtils {
 		//get best (here, there is only one)
 		VehicleRoutingProblemSolution solution = null;
 
-		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-		while(iterator.hasNext()){
-			solution = iterator.next();
+		for (VehicleRoutingProblemSolution vehicleRoutingProblemSolution : solutions) {
+			solution = vehicleRoutingProblemSolution;
 		}
 
 		//create a carrierPlan from the solution

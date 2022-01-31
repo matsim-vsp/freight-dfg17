@@ -135,7 +135,7 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);
-		ArrayList<LSPResource> resourcesList = new ArrayList<LSPResource>();
+		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
@@ -148,17 +148,17 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 	
 	public static Collection<DemandObject> createDemandObjectsWithRequirements(){
 		//Create ten demand objects with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
-		ArrayList<DemandObject> demandObjects = new ArrayList<DemandObject>();
+		ArrayList<DemandObject> demandObjects = new ArrayList<>();
 	    
 	    Random rand = new Random(1); 
 	    
 	    for(int i = 1; i < 11; i++) {
-        	Id<DemandObject> id = Id.create(("DemandObject_" + Integer.toString(i)), DemandObject.class);
+        	Id<DemandObject> id = Id.create(("DemandObject_" + i), DemandObject.class);
         	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
         	builder.setId(id);
         	
         	boolean blue = rand.nextBoolean();
-        	if (blue == true) {
+        	if (blue) {
         		builder.addRequirement(new BlueRequirement());
         	}
         	else {
@@ -188,10 +188,10 @@ class ExampleCheckRequirementsOfOfferTransferrer {
 		for(DemandObject demandObject : demandObjects) {
     		Offer offer = lsp.getOffer(demandObject, "nonsense", null);
     		for(Requirement requirement : demandObject.getRequirements()) {
-    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString() == "RedSolution")) {
+    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString().equals("RedSolution"))) {
     				System.out.println(demandObject.getId()  +" is red and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
-    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString() == "BlueSolution")){
+    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString().equals("BlueSolution"))){
     				System.out.println(demandObject.getId()  +" is blue and gets an offer from a " + offer.getSolution().getId().toString() );
     			}
     			else {

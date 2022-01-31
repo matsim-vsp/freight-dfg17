@@ -8,11 +8,11 @@ import demand.demandObject.DemandObject;
 
 public interface OfferFactory {
 
-	public Offer makeOffer(DemandObject object, String offerType);
-	public Collection<Offer> getOffers();
-	public LSPDecorator getLSP();
-	public LogisticsSolutionDecorator getLogisticsSolution();
-	public void setLogisticsSolution(LogisticsSolutionDecorator solution);
-	public void setLSP(LSPDecorator lsp);
-	public void addOffer(Offer offer);
+	Offer makeOffer(DemandObject object, String offerType);
+	Collection<Offer> getOffers();
+	LSPDecorator getLSP();
+	LogisticsSolutionDecorator getLogisticsSolution();
+	void setLogisticsSolution(LogisticsSolutionDecorator solution);
+	void setLSP(LSPDecorator lsp);
+	void addOffer(Offer offer);
 }

@@ -34,8 +34,8 @@ public class CapeTownCollaborationStatusMutator implements GenericPlanStrategyMo
 		boolean grandMember = (boolean) receiverPlan.getReceiver().getAttributes().getAttribute( ReceiverUtils.ATTR_GRANDCOALITION_MEMBER );
 		boolean status = (boolean) receiverPlan.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS );
 
-		if (grandMember == true){
-			if (status == true){
+		if (grandMember){
+			if (status){
 				newstatus = false;
 				/* Select a random day time window for non-collaborating receivers */
 				TimeWindow newWindow = CapeTownScenarioBuilder.selectRandomDayTimeStart(CapeTownExperimentParameters.TIME_WINDOW_DURATION);

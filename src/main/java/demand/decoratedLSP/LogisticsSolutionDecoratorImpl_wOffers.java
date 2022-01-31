@@ -19,14 +19,13 @@ import lsp.controler.LSPSimulationTracker;
 
 /*package-private*/ class LogisticsSolutionDecoratorImpl_wOffers implements LogisticsSolutionDecorator {
 
-	private Id<LogisticsSolution> id;
+	private final Id<LogisticsSolution> id;
 	private LSPWithOffers lsp;
-	private Collection<LogisticsSolutionElement> solutionElements; 
-	private Collection<LSPShipment> shipments;
-	private Collection<LSPInfo> solutionInfos;
-	private Collection<EventHandler> eventHandlers;
-	private Collection<LSPSimulationTracker>trackers;
-	private EventsManager eventsManager;
+	private final Collection<LogisticsSolutionElement> solutionElements;
+	private final Collection<LSPShipment> shipments;
+	private final Collection<LSPInfo> solutionInfos;
+	private final Collection<EventHandler> eventHandlers;
+	private final Collection<LSPSimulationTracker>trackers;
 	private OfferFactory offerFactory;
 
 
@@ -36,7 +35,7 @@ import lsp.controler.LSPSimulationTracker;
 		for(LogisticsSolutionElement element : this.solutionElements) {
 			element.setLogisticsSolution(this);
 		}
-		this.shipments = new ArrayList <LSPShipment>();
+		this.shipments = new ArrayList<>();
 		this.solutionInfos = builder.getSolutionInfos();
 		this.eventHandlers = builder.getEventHandlers();
 		this.trackers = builder.getTrackers();
@@ -60,7 +59,7 @@ import lsp.controler.LSPSimulationTracker;
 			this.lsp = (LSPWithOffers) lsp;
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPWithOffers and not any other implementation of LSP");
+			System.out.println("The class " + this + " expects an LSPWithOffers and not any other implementation of LSP");
 			System.exit(1);
 		}
 	}
@@ -84,16 +83,7 @@ import lsp.controler.LSPSimulationTracker;
 	public void assignShipment(LSPShipment shipment) {
 		shipments.add(shipment);			
 	}
-	
-	private LogisticsSolutionElement getFirstElement(){
-		for(LogisticsSolutionElement element : solutionElements){
-			if(element.getPreviousElement() == null){
-				return element;
-			}
-			
-		}
-		return null;
-	}
+
 
 	@Override
 	public Collection<LSPInfo> getInfos() {
@@ -119,7 +109,6 @@ import lsp.controler.LSPSimulationTracker;
 	
 	@Override
 	public void setEventsManager(EventsManager eventsManager) {
-		this.eventsManager = eventsManager;
 	}
 
 	@Override

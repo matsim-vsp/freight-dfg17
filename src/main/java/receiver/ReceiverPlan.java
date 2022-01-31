@@ -51,7 +51,7 @@ import receiver.product.ReceiverOrder;
  */
 public final class ReceiverPlan implements BasicPlan, Attributable {
 	private final Logger log = Logger.getLogger(ReceiverPlan.class);
-	private Attributes attributes;
+	private final Attributes attributes;
 	private Receiver receiver = null;
 	private Double score;
 	private Map<Id<Carrier>, ReceiverOrder> orderMap;
@@ -83,7 +83,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 		return this.score;
 	}
 	
-	public final Receiver getReceiver() {
+	public Receiver getReceiver() {
 		return this.receiver;
 	}
 	
@@ -108,7 +108,7 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	 * @param carriedId
 	 * @return
 	 */
-	public final ReceiverOrder getReceiverOrder(Id<Carrier> carriedId) {
+	public ReceiverOrder getReceiverOrder(Id<Carrier> carriedId) {
 		if(!orderMap.containsKey(carriedId)) {
 			log.warn("Receiver '" + this.receiver.getId().toString() + 
 					"' does not have an order with carrier '" + 
@@ -155,10 +155,10 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			strb.append( "[carrierId=" ).append( entry.getKey() ).append( "; order=" ).append( entry.getValue() ).append( "]" ) ;
 		}
 
-		return strb.toString() + "]" ;
+		return strb + "]" ;
 	}
 	
-	public final Collection<ReceiverOrder> getReceiverOrders(){
+	public Collection<ReceiverOrder> getReceiverOrders(){
 		return this.orderMap.values();
 	}
 
@@ -217,11 +217,11 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 	 */
 	public static class Builder{
 		private Receiver receiver = null;
-		private Map<Id<Carrier>, ReceiverOrder> map = new HashMap<>();
+		private final Map<Id<Carrier>, ReceiverOrder> map = new HashMap<>();
 		private boolean selected = false;
 		private Double score = null;
-		private List<TimeWindow> timeWindows = new ArrayList<>();
-		private boolean status;
+		private final List<TimeWindow> timeWindows = new ArrayList<>();
+		private final boolean status;
 		
 		private Builder(Receiver receiver, boolean status) {
 			this.receiver = receiver;
@@ -230,8 +230,8 @@ public final class ReceiverPlan implements BasicPlan, Attributable {
 			
 		public static Builder newInstance(Receiver receiver, boolean status) {
 			return new Builder(receiver, status);
-		};
-		
+		}
+
 
 		public Builder addReceiverOrder(ReceiverOrder ro) {
 			this.map.put(ro.getCarrierId(), ro);

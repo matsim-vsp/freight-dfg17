@@ -10,7 +10,7 @@ import lsp.shipment.LSPShipment;
 
 /*package-private*/ class SupplyClearer implements IterationEndsListener{
 	
-	private LSPDecorators lsps;
+	private final LSPDecorators lsps;
 	
 	SupplyClearer(LSPDecorators lsps) {
 		this.lsps = lsps;

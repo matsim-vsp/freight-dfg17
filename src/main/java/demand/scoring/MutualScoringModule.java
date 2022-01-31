@@ -5,6 +5,6 @@ import org.matsim.core.controler.listener.ScoringListener;
 
 public interface MutualScoringModule extends ScoringListener{
 	
-	public void scoreDemandObjects(ScoringEvent event);
-	public void scoreLSPs(ScoringEvent event);
+	void scoreDemandObjects(ScoringEvent event);
+	void scoreLSPs(ScoringEvent event);
 }

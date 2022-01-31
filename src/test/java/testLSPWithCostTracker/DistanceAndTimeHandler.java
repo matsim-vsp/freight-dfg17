@@ -16,14 +16,14 @@ import org.matsim.vehicles.Vehicle;
 
 public class DistanceAndTimeHandler implements LSPLinkEnterEventHandler, LSPVehicleLeavesTrafficEventHandler, LSPLinkLeaveEventHandler{
 
-	private Collection<LSPFreightLinkEnterEvent> events;
+	private final Collection<LSPFreightLinkEnterEvent> events;
 	private double distanceCosts;
 	private double timeCosts;
-	private Network network;
+	private final Network network;
 	
 	public DistanceAndTimeHandler(Network network) {
 		this.network = network;
-		this.events = new ArrayList<LSPFreightLinkEnterEvent>();
+		this.events = new ArrayList<>();
 	}
 	
 	

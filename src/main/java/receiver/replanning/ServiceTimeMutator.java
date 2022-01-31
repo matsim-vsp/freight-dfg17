@@ -34,9 +34,9 @@ import receiver.product.ReceiverOrder;
 public final class ServiceTimeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
 	private static final Logger log = Logger.getLogger( ServiceTimeMutator.class ) ;
 
-	private double time;
-	private double range;
-	private boolean increase;
+	private final double time;
+	private final double range;
+	private final boolean increase;
 	
 	/**
 	 * This class changes the service time of a receivers' orders with the 
@@ -76,15 +76,11 @@ public final class ServiceTimeMutator implements GenericPlanStrategyModule<Recei
 
 				double duration = order.getServiceDuration();
 				
-				if (increase == true){
-					if ( duration + time <= range){
-						duration = duration + time;		
-					} else duration = range;
+				if (increase){
+					duration = Math.min(duration + time, range);
 				}
-				else 
-					if (duration - time >= range){
-						duration = duration - time;		
-					} else duration = range;
+				else
+					duration = Math.max(duration - time, range);
 				
 				order.setServiceDuration(duration);
 			}

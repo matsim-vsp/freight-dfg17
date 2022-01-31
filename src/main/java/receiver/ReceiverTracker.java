@@ -30,7 +30,6 @@ import org.matsim.core.events.handler.EventHandler;
 import org.matsim.core.scoring.ScoringFunction;
 
 import receiver.collaboration.MarginalCostSharing;
-import receiver.collaboration.ProportionalCostSharing;
 
 /**
  * This keeps track of all receiver agents during simulation.
@@ -42,10 +41,10 @@ import receiver.collaboration.ProportionalCostSharing;
 
  final class ReceiverTracker implements EventHandler {
 //	@Inject Scenario sc;
-	private Scenario sc;
+	private final Scenario sc;
 	
 	//private final Receivers receivers;
-	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<ReceiverAgent>();
+	private final Collection<ReceiverAgent> receiverAgents = new ArrayList<>();
 
 	public ReceiverTracker(ReceiverScoringFunctionFactory scorFuncFac, Scenario sc){
 		this.sc = sc;

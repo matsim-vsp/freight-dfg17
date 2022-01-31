@@ -29,7 +29,7 @@ public class LSPWithOffersReplanner implements LSPReplanner{
 	@Override
 	public void replan(ReplanningEvent event) {
 		if(strategyManager != null) {
-			ArrayList<LSP> lspList = new ArrayList <LSP>();
+			ArrayList<LSP> lspList = new ArrayList<>();
 			lspList.add(lsp);
 			strategyManager.run(lspList, null, event.getIteration(), event.getReplanningContext());
 		}
@@ -66,7 +66,7 @@ public class LSPWithOffersReplanner implements LSPReplanner{
 			}
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPWithOffers and not any other implementation of LSP");
+			System.out.println("The class " + this + " expects an LSPWithOffers and not any other implementation of LSP");
 			System.exit(1);
 		}
 	}

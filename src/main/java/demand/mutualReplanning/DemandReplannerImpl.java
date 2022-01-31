@@ -14,16 +14,16 @@ import demand.demandObject.DemandPlan;
 public class DemandReplannerImpl implements DemandReplanner{
 
 	private DemandObject demandObject;
-	private GenericStrategyManager<DemandPlan, DemandObject> strategyManager;
+	private final GenericStrategyManager<DemandPlan, DemandObject> strategyManager;
 	
 	
 	public DemandReplannerImpl(DemandObject demandObject) {
 		this.demandObject = demandObject;
-		this.strategyManager = new GenericStrategyManager<DemandPlan, DemandObject>();
+		this.strategyManager = new GenericStrategyManager<>();
 	}
 	
 	public DemandReplannerImpl() {
-		this.strategyManager = new GenericStrategyManager<DemandPlan, DemandObject>();
+		this.strategyManager = new GenericStrategyManager<>();
 	}
 		
 	

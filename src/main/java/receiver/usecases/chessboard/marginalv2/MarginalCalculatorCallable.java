@@ -36,14 +36,8 @@ import java.util.concurrent.Callable;
  */
 class MarginalCalculatorCallable implements Callable<Double> {
 	final private Logger log = Logger.getLogger(MarginalCalculatorCallable.class);
-	final private long seed;
-	final private Scenario scenario;
-	final private Id<Receiver> receiverId;
 
 	MarginalCalculatorCallable(long seed, final Scenario scenario, Id<Receiver> receiverId){
-		this.seed = seed;
-		this.scenario = scenario;
-		this.receiverId = receiverId;
 	}
 
 	@Override

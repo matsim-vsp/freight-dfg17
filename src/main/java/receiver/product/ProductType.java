@@ -35,13 +35,13 @@ import receiver.Receiver;
  */
 public interface ProductType extends Identifiable<ProductType>, Attributable{	
 	
-	public void setDescription(String description);
+	void setDescription(String description);
 
-	public void setRequiredCapacity(double reqCapacity);
+	void setRequiredCapacity(double reqCapacity);
 
-	public String getDescription();
+	String getDescription();
 
-	public double getRequiredCapacity();
+	double getRequiredCapacity();
 	
 	/**
 	 * TODO The origin of a product is currently (Dec '18, JWJ) associated with
@@ -50,7 +50,7 @@ public interface ProductType extends Identifiable<ProductType>, Attributable{
 	 * with the {@link ReceiverProduct}. 
 	 * @return
 	 */
-	public Id<Link> getOriginLinkId();
+	Id<Link> getOriginLinkId();
 	
 //	public void setOriginLinkId(Id<Link> originLinkId);
 }

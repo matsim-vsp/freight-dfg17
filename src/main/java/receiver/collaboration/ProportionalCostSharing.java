@@ -44,10 +44,10 @@ import receiver.product.ReceiverOrder;
  * @author jwjoubert, wlbean
  */
 public final class ProportionalCostSharing implements ReceiverCarrierCostAllocation {
-	private Scenario sc;
+	private final Scenario sc;
 
 	final private Logger log = Logger.getLogger(ProportionalCostSharing.class);
-	private double fee;
+	private final double fee;
 
 	/**
 	 * Create a new proportional cost sharing instance where a fixed fee per tonne (as specified) is 

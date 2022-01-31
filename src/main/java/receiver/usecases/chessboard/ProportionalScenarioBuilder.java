@@ -148,8 +148,7 @@ class ProportionalScenarioBuilder {
 		config.network().setInputFile(inputNetwork);
 		config.controler().setOutputDirectory(outputDirectory);
 
-		Scenario sc = ScenarioUtils.loadScenario(config);
-		return sc;
+		return ScenarioUtils.loadScenario(config);
 	}
 	
 	public static void writeFreightScenario(Scenario sc) {
@@ -265,13 +264,13 @@ class ProportionalScenarioBuilder {
 			receiver.addProduct(receiverProductTwo);
 
 			/* Generate and collate orders for the different receiver/order combination. */
-			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
+			Order rOrder1 = createProductOrder(Id.create("Order"+ r +"1",  Order.class), receiver,
 					receiverProductOne, Time.parseTime(serdur));
 			rOrder1.setNumberOfWeeklyDeliveries(numDel);
-			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
+			Order rOrder2 = createProductOrder(Id.create("Order"+ r +"2",  Order.class), receiver,
 					receiverProductTwo, Time.parseTime(serdur));
 			rOrder2.setNumberOfWeeklyDeliveries(numDel);
-			Collection<Order> rOrders = new ArrayList<Order>();
+			Collection<Order> rOrders = new ArrayList<>();
 			rOrders.add(rOrder1);
 			rOrders.add(rOrder2);
 
@@ -342,11 +341,10 @@ class ProportionalScenarioBuilder {
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();
-		ReceiverProduct rProd = builder
+		return builder
 				.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel))
 				.setProductType(productType)
 				.build();
-		return rProd;
 	}
 
 	/**
@@ -359,12 +357,11 @@ class ProportionalScenarioBuilder {
 	 */
 	private static Order createProductOrder(Id<Order> number, Receiver receiver, ReceiverProduct receiverProduct, double serviceTime) {
 		Order.Builder builder = Order.Builder.newInstance(number, receiver, receiverProduct);
-		Order order = builder
+
+		return builder
 				.calculateOrderQuantity()
 				.setServiceTime(serviceTime)
 				.build();
-
-		return order;
 	}
 
 }

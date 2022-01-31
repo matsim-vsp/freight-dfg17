@@ -28,9 +28,9 @@ import org.matsim.vehicles.Vehicle;
  */
 public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunctionFactory {
 
-	private static Logger log = Logger.getLogger(UsecasesCarrierScoringFunctionFactory.class);
+	private static final Logger log = Logger.getLogger(UsecasesCarrierScoringFunctionFactory.class);
 	
-	private Network network;
+	private final Network network;
 	
 	public UsecasesCarrierScoringFunctionFactory( Network network ) {
 		this.network = network;
@@ -40,12 +40,9 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	        private double score;
 
-//	        private double timeParameter = 0.0889;
-	        private double timeParameter = 1.0000;
-	        // yyyyyy I have set the time parameter to a relatively high value.
+// yyyyyy I have set the time parameter to a relatively high value.
 
-	        private double missedTimeWindowPenalty = 0.01667;
-//	        private double missedTimeWindowPenalty = 1.000;
+		   //	        private double missedTimeWindowPenalty = 1.000;
 
 	        public DriversActivityScoring() {
 	            super();
@@ -71,11 +68,14 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	                double actStartTime = act.getStartTime().seconds();
 	                TimeWindow tw = ((FreightActivity) act).getTimeWindow();
 	                if(actStartTime > tw.getEnd()){
-	                    double penalty_score = (-1)*(actStartTime - tw.getEnd())*missedTimeWindowPenalty;
+						double missedTimeWindowPenalty = 0.01667;
+						double penalty_score = (-1)*(actStartTime - tw.getEnd())* missedTimeWindowPenalty;
 	                    assert penalty_score <= 0.0 : "penalty score must be negative";
 	                    score += penalty_score;
-	                }	     
-	                double actTimeCosts = (act.getEndTime().seconds()-actStartTime)*timeParameter;
+	                }
+					//	        private double timeParameter = 0.0889;
+					double timeParameter = 1.0000;
+					double actTimeCosts = (act.getEndTime().seconds()-actStartTime)* timeParameter;
 	                assert actTimeCosts >= 0.0 : "actTimeCosts must be positive";
 	                score += actTimeCosts*(-1);
 	            }
@@ -90,7 +90,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	    static class VehicleEmploymentScoring implements SumScoringFunction.BasicScoring {
 
-	        private Carrier carrier;
+	        private final Carrier carrier;
 
 	        public VehicleEmploymentScoring(Carrier carrier) {
 	            this.carrier = carrier;
@@ -124,12 +124,12 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 
 	        private final Carrier carrier;
 
-	        private Set<CarrierVehicle> employedVehicles;
+	        private final Set<CarrierVehicle> employedVehicles;
 
 	        public DriversLegScoring(Carrier carrier, Network network) {
 	            this.network = network;
 	            this.carrier = carrier;
-	            employedVehicles = new HashSet<CarrierVehicle>();
+	            employedVehicles = new HashSet<>();
 	        }
 
 
@@ -169,9 +169,7 @@ public class UsecasesCarrierScoringFunctionFactory implements CarrierScoringFunc
 	                Id<Vehicle> vehicleId = nRoute.getVehicleId();
 	                CarrierVehicle vehicle = getVehicle(vehicleId);
 	                if(vehicle == null) throw new IllegalStateException("vehicle with id " + vehicleId + " is missing");
-	                if(!employedVehicles.contains(vehicle)){
-	                    employedVehicles.add(vehicle);
-	                }
+					employedVehicles.add(vehicle);
 	                double distance = 0.0;
 
 	                if(leg.getRoute() instanceof NetworkRoute){

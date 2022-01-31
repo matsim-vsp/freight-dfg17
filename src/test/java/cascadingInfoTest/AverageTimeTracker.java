@@ -13,16 +13,16 @@ import lsp.controler.LSPSimulationTracker;
 
 public class AverageTimeTracker implements LSPSimulationTracker{
 
-	private Collection<EventHandler> handlers;
-	private Collection<LSPInfo> infos;
-	private AverageTimeInfo timeInfo;
-	private TimeSpanHandler handler;
+	private final Collection<EventHandler> handlers;
+	private final Collection<LSPInfo> infos;
+	private final AverageTimeInfo timeInfo;
+	private final TimeSpanHandler handler;
 	
 	public AverageTimeTracker() {
-		handlers = new ArrayList<EventHandler>();
+		handlers = new ArrayList<>();
 		handler = new TimeSpanHandler();
 		handlers.add(handler);
-		infos = new ArrayList<LSPInfo>();
+		infos = new ArrayList<>();
 		timeInfo = new AverageTimeInfo();
 		infos.add(timeInfo);
 	}

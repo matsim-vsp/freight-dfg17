@@ -9,16 +9,16 @@ import lsp.shipment.LSPShipment;
 
 public interface ShipperShipment {
 
-	public Id<ShipperShipment> getId();
-	public double getShipmentSize();
-	public TimeWindow getStartTimeWindow();
-	public void setStartTimeWindow(TimeWindow timeWindow);
-	public TimeWindow getEndTimeWindow();
-	public void setEndTimeWindow(TimeWindow timeWindow);
-	public double getServiceTime();
-	public void setLSPShipment(LSPShipment lspShipment);
-	public LSPShipment getLSPShipment();
-	public void setDemandObject(DemandObject demandObject);
-	public DemandObject getDemandObject();
+	Id<ShipperShipment> getId();
+	double getShipmentSize();
+	TimeWindow getStartTimeWindow();
+	void setStartTimeWindow(TimeWindow timeWindow);
+	TimeWindow getEndTimeWindow();
+	void setEndTimeWindow(TimeWindow timeWindow);
+	double getServiceTime();
+	void setLSPShipment(LSPShipment lspShipment);
+	LSPShipment getLSPShipment();
+	void setDemandObject(DemandObject demandObject);
+	DemandObject getDemandObject();
 	
 }

@@ -34,35 +34,35 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 *
 	 * ok
 	 */
-	public Id<DemandObject> getId();
+	Id<DemandObject> getId();
 	
 	/**
 	 * @return
 	 *
 	 * yyyy is it necessary to expose the plans to the outside?
 	 */
-	public List<? extends DemandPlan> getPlans();
+	List<? extends DemandPlan> getPlans();
 	
 	/**
 	 * @return
 	 *
 	 * yy what does this mean?
 	 */
-	public double getStrengthOfFlow();
+	double getStrengthOfFlow();
 	
 	/**
 	 * @return
 	 *
 	 * yy use coordinate or (better) facility
 	 */
-	public Id<Link> getFromLinkId();
+	Id<Link> getFromLinkId();
 	
 	/**
 	 * @return
 	 *
 	 * yy use coordinate or (better) facility
 	 */
-	public Id<Link> getToLinkId();
+	Id<Link> getToLinkId();
 	
 //	/**
 //	 * @return
@@ -74,7 +74,7 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	/**
 	 * probably ok (behavioral method, but it is not so clear how the DemandObject should have behavior)
 	 */
-	public void scoreSelectedPlan();
+	void scoreSelectedPlan();
 	
 	/**
 	 * @return
@@ -82,35 +82,35 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 * probably ok (it implies that the DemandObject knows its plan, and not the handler the plan for
 	 * the demand object)
 	 */
-	public DemandPlan getSelectedPlan();
+	DemandPlan getSelectedPlan();
 	
 	/**
 	 * @param plan
 	 *
 	 * yyyy not ok for a behavioral object
 	 */
-	public void setSelectedPlan(DemandPlan plan);
+	void setSelectedPlan(DemandPlan plan);
 	
 	/**
 	 * @param scorer
 	 *
 	 * yyyy not ok for a behavioral object (can the scorer be changed during iterations?)
 	 */
-	public void setScorer(DemandScorer scorer);
+	void setScorer(DemandScorer scorer);
 	
 	/**
 	 * @return
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public DemandScorer getScorer();
+	DemandScorer getScorer();
 	
 	/**
 	 * @return
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public DemandReplanner getReplanner();
+	DemandReplanner getReplanner();
 	
 //	/**
 //	 * @param replanner
@@ -133,7 +133,7 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public OfferRequester getOfferRequester();
+	OfferRequester getOfferRequester();
 	
 //	/**
 //	 * @param generator
@@ -149,19 +149,19 @@ public interface DemandObject extends HasPlansAndId<DemandPlan,DemandObject>{
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public DemandPlanGenerator getDemandPlanGenerator();
+	DemandPlanGenerator getDemandPlanGenerator();
 	
 	/**
 	 * @return
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public Collection<Requirement> getRequirements();
+	Collection<Requirement> getRequirements();
 	
 	/**
 	 * @return
 	 *
 	 * yyyy is it necessary to expose this to the outside?
 	 */
-	public Collection<LSPInfo> getInfos();
+	Collection<LSPInfo> getInfos();
 }

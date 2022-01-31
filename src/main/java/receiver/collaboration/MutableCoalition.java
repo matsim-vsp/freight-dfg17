@@ -20,9 +20,9 @@ import receiver.Receiver;
 /* package-private */ final class MutableCoalition implements Coalition {
 	//private final Logger log = Logger.getLogger(MutableCoalition.class);
 	private double coalitionCost = 0.0;
-	private Attributes attributes = new Attributes();
-	private ArrayList<Receiver> receiverMembers = new ArrayList<Receiver>();
-	private ArrayList<Carrier> carrierMembers = new ArrayList<Carrier>();
+	private final Attributes attributes = new Attributes();
+	private final ArrayList<Receiver> receiverMembers = new ArrayList<>();
+	private final ArrayList<Carrier> carrierMembers = new ArrayList<>();
 
 
 	/* package-private */ MutableCoalition(){

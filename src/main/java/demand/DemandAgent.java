@@ -8,7 +8,7 @@ import demand.demandObject.DemandObject;
 
 public interface DemandAgent {
  
-	public Id<DemandAgent> getId();
-	public Collection<DemandObject> getDemandObjects();
+	Id<DemandAgent> getId();
+	Collection<DemandObject> getDemandObjects();
 //	public Collection<UtilityFunction> getUtilityFunctions();
 }

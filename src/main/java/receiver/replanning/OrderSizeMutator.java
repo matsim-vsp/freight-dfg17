@@ -36,7 +36,7 @@ import receiver.product.ReceiverOrder;
  */
 
 public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan> {
-	private boolean increase;
+	private final boolean increase;
 
 	/**
 	 * This class changes the delivery frequency of a receiver by either
@@ -72,36 +72,29 @@ public class OrderSizeMutator implements GenericPlanStrategyModule<ReceiverPlan>
 				double weekdemand = order.getOrderQuantity();
 				double pdeliver = numDel/5;
 					
-			if (increase == true){
+			if (increase){
 					if (numDel + 1 <= 5){
 						newNumDel = numDel + 1;
-						pdeliver = newNumDel/5;
 					} else {
 						newNumDel = numDel;
-						pdeliver = newNumDel/5;
 					}
-				
-					if (random <= pdeliver){
-						sdemand = weekdemand/newNumDel;
-					} else sdemand = 0;
-			
+
 			} else {
 
 				if (numDel - 1 >= 1){					
 					newNumDel = numDel - 1;
-					pdeliver = newNumDel/5;
 				} else {
 					newNumDel = numDel;
-					pdeliver = newNumDel/5;
 				}
-							
-					
-				if (random <= pdeliver){
-					sdemand = weekdemand/newNumDel;
-				} else sdemand = 0;
+
+
 			}
-			
-			order.setNumberOfWeeklyDeliveries(newNumDel);
+				pdeliver = newNumDel/5;
+				if (random <= pdeliver){
+						sdemand = weekdemand/newNumDel;
+					} else sdemand = 0;
+
+				order.setNumberOfWeeklyDeliveries(newNumDel);
 			order.setDailyOrderQuantity(sdemand);
 
 			}

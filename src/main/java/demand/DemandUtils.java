@@ -9,19 +9,18 @@ public class DemandUtils {
 	public static class DemandAgentImplBuilder {
 
 		private Id<DemandAgent> id;
-		private ArrayList<UtilityFunction> utilityFunctions;
+		private final ArrayList<UtilityFunction> utilityFunctions;
 
 		public static DemandAgentImplBuilder newInstance() {
 			return new DemandAgentImplBuilder();
 		}
 
 		private DemandAgentImplBuilder() {
-			this.utilityFunctions = new ArrayList<UtilityFunction>();
+			this.utilityFunctions = new ArrayList<>();
 		}
 
-		public DemandAgentImplBuilder setId(Id<DemandAgent> id) {
+		public void setId(Id<DemandAgent> id) {
 			this.id = id;
-			return this;
 		}
 
 //		public Builder addUtilityFunction(UtilityFunction utilityFunction) {

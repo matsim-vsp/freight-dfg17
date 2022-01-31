@@ -2,8 +2,6 @@ package demand.offer;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
-import lsp.LSP;
-import lsp.LogisticsSolution;
 
 public class DefaultOfferImpl implements Offer {
 

@@ -9,12 +9,12 @@ import demand.demandObject.DemandObject;
 
 class DemandAgentImpl implements DemandAgent {
 
-	private Id<DemandAgent> id;
-	private ArrayList<DemandObject> demandObjects;
+	private final Id<DemandAgent> id;
+	private final ArrayList<DemandObject> demandObjects;
 //	private ArrayList <UtilityFunction> utilityFunctions;
 
 	DemandAgentImpl(DemandUtils.DemandAgentImplBuilder builder) {
-		this.demandObjects = new ArrayList<DemandObject>();
+		this.demandObjects = new ArrayList<>();
 //		this.utilityFunctions = new ArrayList<UtilityFunction>();
 //		this.utilityFunctions = builder.utilityFunctions;
 		this.id = builder.getId();

@@ -291,10 +291,8 @@ public class CapeTownScenarioBuilder {
 		//get best (here, there is only one)
 		VehicleRoutingProblemSolution solution = null;
 
-		Iterator<VehicleRoutingProblemSolution> iterator = solutions.iterator();
-
-		while(iterator.hasNext()){
-			solution = iterator.next();
+		for (VehicleRoutingProblemSolution vehicleRoutingProblemSolution : solutions) {
+			solution = vehicleRoutingProblemSolution;
 		}
 
 		//create a carrierPlan from the solution 
@@ -347,7 +345,7 @@ public class CapeTownScenarioBuilder {
 //			ReceiverProduct receiverProductTwo;
 //			ReceiverProduct receiverProductThree;
 
-			if((boolean) receiver.getAttributes().getAttribute("corporate") == true){
+			if((boolean) receiver.getAttributes().getAttribute("corporate")){
 				receiverProductOne = createReceiverProduct(receiver, productTypeOne, 1000, 9000);
 //				receiverProductTwo = createReceiverProduct(receiver, productTypeTwo, 750, 4500);
 //				receiverProductThree = createReceiverProduct(receiver, productTypeThree, 1000, 6000);
@@ -364,7 +362,7 @@ public class CapeTownScenarioBuilder {
 			}
 
 			/* Generate and collate orders for the different receiver/order combination. */
-			Order rOrder1 = createProductOrder(Id.create("Order"+Integer.toString(r)+"1",  Order.class), receiver, 
+			Order rOrder1 = createProductOrder(Id.create("Order"+ r +"1",  Order.class), receiver,
 					receiverProductOne, Time.parseTime(serdur));
 			rOrder1.setNumberOfWeeklyDeliveries(numDel);
 //			Order rOrder2 = createProductOrder(Id.create("Order"+Integer.toString(r)+"2",  Order.class), receiver, 
@@ -373,13 +371,13 @@ public class CapeTownScenarioBuilder {
 //			Order rOrder3 = createProductOrder(Id.create("Order"+Integer.toString(r)+"3",  Order.class), receiver, 
 //					receiverProductThree, Time.parseTime(serdur));
 //			rOrder3.setNumberOfWeeklyDeliveries(numDel);
-			Collection<Order> rOrders = new ArrayList<Order>();
+			Collection<Order> rOrders = new ArrayList<>();
 			rOrders.add(rOrder1);
 //			rOrders.add(rOrder2);
 //			rOrders.add(rOrder3);
 
 			/* Combine product orders into single receiver order for a specific carrier. */
-			if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS ) == true){
+			if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS)){
 				ReceiverOrder receiverOrder = new ReceiverOrder(receiver.getId(), rOrders, carrierOne.getId());
 				ReceiverPlan receiverPlan = ReceiverPlan.Builder.newInstance(receiver, true)
 						.addReceiverOrder(receiverOrder)
@@ -581,11 +579,10 @@ public class CapeTownScenarioBuilder {
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();
-		ReceiverProduct rProd = builder
+		return builder
 				.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel))
 				.setProductType(productType)
 				.build();
-		return rProd;
 	}
 
 	/**
@@ -598,12 +595,11 @@ public class CapeTownScenarioBuilder {
 	 */
 	private static Order createProductOrder(Id<Order> number, Receiver receiver, ReceiverProduct receiverProduct, double serviceTime) {
 		Order.Builder builder = Order.Builder.newInstance(number, receiver, receiverProduct);
-		Order order = builder
+
+		return builder
 				.calculateOrderQuantity()
 				.setServiceTime(serviceTime)
 				.build();
-
-		return order;
 	}
 
 	public static TimeWindow selectRandomDayTimeStart(int tw) {
@@ -612,8 +608,7 @@ public class CapeTownScenarioBuilder {
 		//		Random randomTime = new Random();
 		int randomStart =  (min +
 				MatsimRandom.getRandom().nextInt(max - tw - min + 1));
-		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		return randomTimeWindow;
+		return TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 	}
 
 	public static TimeWindow selectRandomNightTimeStart(int tw) {
@@ -622,8 +617,7 @@ public class CapeTownScenarioBuilder {
 		//		Random randomTime = new Random();
 		int randomStart =  (min +
 				MatsimRandom.getRandom().nextInt(max - tw - min + 1));
-		final TimeWindow randomTimeWindow = TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
-		return randomTimeWindow;
+		return TimeWindow.newInstance(randomStart*3600, randomStart*3600 + tw*3600);
 	}
 
 

@@ -318,9 +318,9 @@ class ProportionalReceiverChessboardScenario {
 //			receiver.addProduct( receiverProductTwo );
 
 			/* Generate and collate orders for the different receiver/order combination. */
-			Collection<Order> rOrders = new ArrayList<Order>();
+			Collection<Order> rOrders = new ArrayList<>();
 			{
-				Order rOrder1 = createProductOrder( Id.create( "Order" + Integer.toString( r ) + "1", Order.class ), receiver,
+				Order rOrder1 = createProductOrder( Id.create( "Order" + r + "1", Order.class ), receiver,
 					  receiverProductOne, Time.parseTime( serdur ) );
 				rOrder1.setNumberOfWeeklyDeliveries( numDel );
 				rOrder1.setDailyOrderQuantity(rOrder1.getOrderQuantity()/rOrder1.getNumberOfWeeklyDeliveries());
@@ -430,11 +430,10 @@ class ProportionalReceiverChessboardScenario {
 	 */
 	private static ReceiverProduct createReceiverProduct(Receiver receiver, ProductType productType, int minLevel, int maxLevel) {
 		ReceiverProduct.Builder builder = ReceiverProduct.Builder.newInstance();
-		ReceiverProduct rProd = builder
+		return builder
 				.setReorderingPolicy(new SSReorderPolicy(minLevel, maxLevel))
 				.setProductType(productType)
 				.build();
-		return rProd;
 	}
 
 	/**
@@ -447,12 +446,11 @@ class ProportionalReceiverChessboardScenario {
 	 */
 	private static Order createProductOrder(Id<Order> number, Receiver receiver, ReceiverProduct receiverProduct, double serviceTime) {
 		Order.Builder builder = Order.Builder.newInstance(number, receiver, receiverProduct);
-		Order order = builder
+
+		return builder
 				.calculateOrderQuantity()
 				.setServiceTime(serviceTime)
 				.build();
-
-		return order;
 	}
 
 }

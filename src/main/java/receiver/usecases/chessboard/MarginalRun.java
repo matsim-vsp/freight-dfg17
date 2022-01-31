@@ -33,7 +33,6 @@ import org.matsim.api.core.v01.Scenario;
 import receiver.Receiver;
 import receiver.ReceiverUtils;
 import receiver.ReceiversWriter;
-import receiver.collaboration.Coalition;
 
 /**
  * Executes the receiver run by starting off with calculating the grand

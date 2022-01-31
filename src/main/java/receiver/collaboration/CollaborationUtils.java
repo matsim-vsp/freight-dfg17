@@ -16,7 +16,7 @@ public class CollaborationUtils{
 	public static void setCoalitionFromReceiverAttributes( Scenario sc ){
 		for ( Receiver receiver : ReceiverUtils.getReceivers( sc ).getReceivers().values()){
 			if (receiver.getAttributes().getAttribute( ReceiverUtils.ATTR_COLLABORATION_STATUS ) != null){
-				if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS) == true){
+				if ((boolean) receiver.getAttributes().getAttribute(ReceiverUtils.ATTR_COLLABORATION_STATUS)){
 					if (!ReceiverUtils.getCoalition( sc ).getReceiverCoalitionMembers().contains(receiver)){
 						ReceiverUtils.getCoalition( sc ).addReceiverCoalitionMember(receiver);
 					}

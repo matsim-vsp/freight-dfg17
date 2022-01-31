@@ -43,7 +43,7 @@ import receiver.product.ReceiverProduct;
 class ReceiverImpl implements Receiver {
 	final private Logger log = Logger.getLogger(Receiver.class);
 	
-	private Attributes attributes = new Attributes();
+	private final Attributes attributes = new Attributes();
 	private Id<Link> location;
 	//private List<TimeWindow> timeWindows = new ArrayList<>();
 	
@@ -52,14 +52,14 @@ class ReceiverImpl implements Receiver {
 	private final List<ReceiverPlan> plans;
 	private final List<ReceiverProduct> products;
 	private ReceiverPlan selectedPlan;
-	private boolean status = false;
+	private final boolean status = false;
 	private double cost = 0.0;
 
 	ReceiverImpl(final Id<Receiver> id){
 		super();
 		this.id = id;
-		this.plans = new ArrayList<ReceiverPlan>();
-		this.products = new ArrayList<ReceiverProduct>();
+		this.plans = new ArrayList<>();
+		this.products = new ArrayList<>();
 	}
 	
 
@@ -111,12 +111,11 @@ class ReceiverImpl implements Receiver {
 		return plans;
 	}
 	@Override
-	public Receiver addProduct( ReceiverProduct product ) {
+	public void addProduct(ReceiverProduct product ) {
 		if ( products.contains( product ) ) {
 			throw new IllegalArgumentException( "receiver already has product " + product + "; not adding it a second time." ) ;
 		}
 		products.add( product ) ;
-		return this ;
 	}
 
 	/*

@@ -12,12 +12,12 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	private LSPDecorator lsp;
 	private double score;
-	private Collection<LogisticsSolutionDecorator> solutions;
-	private ShipmentAssigner assigner; 
+	private final Collection<LogisticsSolutionDecorator> solutions;
+	private final ShipmentAssigner assigner;
 	private OfferTransferrer transferrer;
 	
 	public LSPPlanWithOfferTransferrer() {
-		this.solutions = new ArrayList<LogisticsSolutionDecorator>();
+		this.solutions = new ArrayList<>();
 		this.assigner = new DefaultAssigner();
 	}
 	
@@ -29,7 +29,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 			solution.setLSP(this.lsp);	
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LogisticsSolutionDecorator and not any other implementation of LogisticsSolution");
+			System.out.println("The class " + this + " expects an LogisticsSolutionDecorator and not any other implementation of LogisticsSolution");
 			System.exit(1);
 		}
 		return this;
@@ -37,7 +37,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	@Override
 	public Collection<LogisticsSolution> getSolutions() {
-		Collection<LogisticsSolution> solutionDecorators = new ArrayList<LogisticsSolution>();
+		Collection<LogisticsSolution> solutionDecorators = new ArrayList<>();
 		for(LogisticsSolution  solution : solutions) {
 			LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 			solutionDecorators.add(solutionDecorator);
@@ -57,15 +57,14 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 	}
 
 	@Override
-	public LSPPlanDecorator setLSP(LSP lsp) {
+	public void setLSP(LSP lsp) {
 		try {
 			this.lsp = (LSPDecorator) lsp;
 		}
 		catch(ClassCastException e) {
-			System.out.println("The class " + this.toString() + " expects an LSPDecorator and not any other implementation of LSP");
+			System.out.println("The class " + this + " expects an LSPDecorator and not any other implementation of LSP");
 			System.exit(1);
 		}
-		return this;
 	}
 
 	@Override
@@ -94,7 +93,7 @@ public class LSPPlanWithOfferTransferrer implements LSPPlanDecorator{
 
 	@Override
 	public Collection<LogisticsSolutionDecorator> getSolutionDecorators() {
-		Collection<LogisticsSolutionDecorator> solutionDecorators = new ArrayList<LogisticsSolutionDecorator>();
+		Collection<LogisticsSolutionDecorator> solutionDecorators = new ArrayList<>();
 		for(LogisticsSolution  solution : solutions) {
 			LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
 			solutionDecorators.add(solutionDecorator);

@@ -105,7 +105,7 @@ public class ParsePnP {
 		for(ActivityFacility facility : facilities.getFacilities().values()) {
 			Object nameO = facility.getAttributes().getAttribute("name");
 			if(nameO != null) {
-				LOG.info("  --> " + nameO.toString());
+				LOG.info("  --> " + nameO);
 			}
 		}
 		
