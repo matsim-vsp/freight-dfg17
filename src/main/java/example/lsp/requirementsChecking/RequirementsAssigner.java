@@ -19,7 +19,7 @@ class RequirementsAssigner implements  ShipmentAssigner {
 	}
 	
 	@Override
-	public void assignShipment(LSPShipment shipment) {
+	public void assignToSolution(LSPShipment shipment) {
 		feasibleSolutions.clear();
 		
 		label:
