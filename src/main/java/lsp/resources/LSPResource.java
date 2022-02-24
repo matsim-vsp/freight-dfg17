@@ -11,6 +11,10 @@ import lsp.LogisticsSolutionElement;
 import lsp.functions.LSPInfo;
 import lsp.controler.LSPSimulationTracker;
 
+/**
+ *
+ *
+ */
 public interface LSPResource {
 
 	Id<LSPResource> getId();

@@ -1,8 +1,23 @@
 package lsp.functions;
 
+import lsp.LogisticsSolution;
+import lsp.LogisticsSolutionElement;
+import lsp.resources.LSPResource;
+import lsp.shipment.LSPShipment;
+
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * In order to enable a wide range of data to be represented, the abstract class {@link LSPInfo} was created.
+ * It contains data about the object to which it is attached.
+ *
+ * Infos can be attached to {@link LogisticsSolution}s, {@link LSPShipment}s, {@link LogisticsSolutionElement}s and {@link LSPResource}s.
+ *
+ * Further, they can be valid only during a certain period of time.
+ *
+ * Every Info contains one {@link LSPInfoFunction}. An {@link LSPInfoFunction}, in turn, contains one or several {@link LSPInfoFunctionValue}s
+ */
 public abstract class LSPInfo {
 
 	protected final Set<LSPInfo> predecessorInfos;

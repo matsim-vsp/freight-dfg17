@@ -13,7 +13,7 @@ import lsp.shipment.LSPShipment;
 //	}
 	
 	@Override
-	public void assignShipment(LSPShipment shipment) {
+	public void assignToSolution(LSPShipment shipment) {
 		//Has to be empty, as an LSPWithOffers does not assign with the assigner. 
 		//This job is done by the OfferTransferrer who gives the right solution in the offer
 	}
