@@ -1,4 +1,4 @@
-package example.lsp.requirementsChecking;
+package example.lspAndDemand.requirementsChecking;
 
 import java.util.ArrayList;
 import java.util.Collection;
