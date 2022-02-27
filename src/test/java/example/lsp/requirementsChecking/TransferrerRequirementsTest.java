@@ -1,4 +1,4 @@
-package requirementsCheckerTests;
+package example.lsp.requirementsChecking;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import demand.decoratedLSP.*;
+import example.lsp.requirementsChecking.BlueInfo;
 import example.lsp.requirementsChecking.BlueRequirement;
+import example.lsp.requirementsChecking.RedInfo;
 import example.lsp.requirementsChecking.RedRequirement;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
@@ -32,6 +34,8 @@ import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
 import lsp.resources.LSPResource;
 import lsp.shipment.Requirement;
+import requirementsCheckerTests.NonsenseOffer;
+import requirementsCheckerTests.RequirementsTransferrer;
 
 public class TransferrerRequirementsTest {
 	private LogisticsSolutionDecorator blueOfferSolution;
@@ -86,9 +90,9 @@ public class TransferrerRequirementsTest {
 		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder redOfferSolutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(redCollectionSolutionId);
 		redOfferSolutionBuilder.addSolutionElement(redCollectionElement);
 		redOfferSolution = redOfferSolutionBuilder.build();
-		redOfferSolution.getInfos().add(new RedInfo());
+		redOfferSolution.getInfos().add(new RedInfo() );
 		OfferFactoryImpl redOfferFactory = new OfferFactoryImpl(redOfferSolution);
-		redOfferFactory.addOffer(new NonsenseOffer());
+		redOfferFactory.addOffer(new requirementsCheckerTests.NonsenseOffer() );
 		redOfferSolution.setOfferFactory(redOfferFactory);
 
 		LSPPlanDecorator collectionPlan = new LSPPlanWithOfferTransferrer();
@@ -123,9 +127,9 @@ public class TransferrerRequirementsTest {
 		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder blueOfferSolutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(blueCollectionSolutionId);
 		blueOfferSolutionBuilder.addSolutionElement(blueCollectionElement);
 		blueOfferSolution = blueOfferSolutionBuilder.build();
-		blueOfferSolution.getInfos().add(new BlueInfo());
+		blueOfferSolution.getInfos().add(new BlueInfo() );
 		OfferFactoryImpl blueOfferFactory = new OfferFactoryImpl(blueOfferSolution);
-		blueOfferFactory.addOffer(new NonsenseOffer());
+		blueOfferFactory.addOffer(new NonsenseOffer() );
 		blueOfferSolution.setOfferFactory(blueOfferFactory);
 		collectionPlan.addSolution(blueOfferSolution);
 

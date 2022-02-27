@@ -11,6 +11,7 @@ import lsp.replanning.LSPReplanningUtils;
 import lsp.scoring.LSPScoringUtils;
 import lsp.shipment.ShipmentUtils;
 import lsp.usecase.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -176,27 +177,30 @@ public class CascadingInfoTest {
 		assertSame(timeTracker.getInfos().iterator().next(), elementInfo.getPredecessorInfos().iterator().next());
 		assertTrue(timeTracker.getInfos().iterator().next() instanceof AverageTimeInfo);
 		AverageTimeInfo resourceInfo = (AverageTimeInfo) timeTracker.getInfos().iterator().next();
-		assertTrue(resourceInfo.getFunction() instanceof AverageTimeInfoFunction);
-		AverageTimeInfoFunction resourceInfoFunction = (AverageTimeInfoFunction) resourceInfo.getFunction();
-		assertEquals(1, resourceInfoFunction.getValues().size());
-		assertTrue(resourceInfoFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
-		AverageTimeInfoFunctionValue averageResourceValue = (AverageTimeInfoFunctionValue) resourceInfoFunction.getValues().iterator().next();
-		assertTrue(elementInfo.getFunction() instanceof AverageTimeInfoFunction);
-		AverageTimeInfoFunction averageElementFunction = (AverageTimeInfoFunction) elementInfo.getFunction();
-		assertEquals(1, averageElementFunction.getValues().size());
-		assertTrue(averageElementFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
-		AverageTimeInfoFunctionValue averageElementValue = (AverageTimeInfoFunctionValue) averageElementFunction.getValues().iterator().next();
-		assertTrue(averageElementValue.getValue() > 0);
-		assertTrue(averageElementFunction.getValues().iterator().next().getValue() instanceof Double);
-		assertTrue(solutionInfo.getFunction() instanceof AverageTimeInfoFunction);
-		assertSame(solutionInfo.getPredecessorInfos().iterator().next(), elementInfo);
-		AverageTimeInfoFunction averageSolutionFunction = (AverageTimeInfoFunction) solutionInfo.getFunction();
-		assertEquals(1, averageSolutionFunction.getValues().size());
-		assertTrue(averageSolutionFunction.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue);
-		AverageTimeInfoFunctionValue averageSolutionValue = (AverageTimeInfoFunctionValue) averageSolutionFunction.getValues().iterator().next();
-		assertTrue(averageSolutionValue.getValue() > 0);
-		assertSame(averageElementValue.getValue(), averageResourceValue.getValue());
-		assertSame(averageElementValue.getValue(), averageSolutionValue.getValue());
+//		assertTrue(resourceInfo.getAttributes() instanceof AverageTimeInfoFunction );
+//		AverageTimeInfoFunction resourceInfoFunction = (AverageTimeInfoFunction) resourceInfo.getAttributes();
+//		assertEquals(1, resourceInfoFunction.getAttributes().size() );
+//		assertTrue(resourceInfoFunction.getAttributes().iterator().next() instanceof AverageTimeInfoFunctionValue );
+//		AverageTimeInfoFunctionValue averageResourceValue = (AverageTimeInfoFunctionValue) resourceInfoFunction.getAttributes().iterator().next();
+//		assertTrue(elementInfo.getAttributes() instanceof AverageTimeInfoFunction );
+//		AverageTimeInfoFunction averageElementFunction = (AverageTimeInfoFunction) elementInfo.getAttributes();
+//		assertEquals(1, averageElementFunction.getAttributes().size() );
+//		assertTrue(averageElementFunction.getAttributes().iterator().next() instanceof AverageTimeInfoFunctionValue );
+//		AverageTimeInfoFunctionValue averageElementValue = (AverageTimeInfoFunctionValue) averageElementFunction.getAttributes().iterator().next();
+//		assertTrue(averageElementValue.getValue() > 0);
+//		assertTrue(averageElementFunction.getAttributes().iterator().next().getValue() instanceof Double );
+//		assertTrue(solutionInfo.getAttributes() instanceof AverageTimeInfoFunction );
+//		assertSame(solutionInfo.getPredecessorInfos().iterator().next(), elementInfo);
+//		AverageTimeInfoFunction averageSolutionFunction = (AverageTimeInfoFunction) solutionInfo.getAttributes();
+//		assertEquals(1, averageSolutionFunction.getAttributes().size() );
+//		assertTrue(averageSolutionFunction.getAttributes().iterator().next() instanceof AverageTimeInfoFunctionValue );
+//		AverageTimeInfoFunctionValue averageSolutionValue = (AverageTimeInfoFunctionValue) averageSolutionFunction.getAttributes().iterator().next();
+//		assertTrue(averageSolutionValue.getValue() > 0);
+//		assertSame(averageElementValue.getValue(), averageResourceValue.getValue());
+//		assertSame(averageElementValue.getValue(), averageSolutionValue.getValue());
+
+		Assert.fail("not yet adapted");
+
 	}
 
 }

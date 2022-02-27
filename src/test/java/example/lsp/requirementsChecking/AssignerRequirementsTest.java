@@ -1,6 +1,8 @@
-package requirementsCheckerTests;
+package example.lsp.requirementsChecking;
 
+import example.lsp.requirementsChecking.BlueInfo;
 import example.lsp.requirementsChecking.BlueRequirement;
+import example.lsp.requirementsChecking.RedInfo;
 import example.lsp.requirementsChecking.RedRequirement;
 import lsp.*;
 import lsp.resources.LSPResource;
@@ -20,6 +22,7 @@ import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
+import requirementsCheckerTests.RequirementsAssigner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +83,7 @@ public class AssignerRequirementsTest {
 		LSPUtils.LogisticsSolutionBuilder redCollectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(redCollectionSolutionId );
 		redCollectionSolutionBuilder.addSolutionElement(redCollectionElement);
 		redSolution = redCollectionSolutionBuilder.build();
-		redSolution.getInfos().add(new RedInfo());
+		redSolution.getInfos().add(new RedInfo() );
 
 		ShipmentAssigner assigner = new RequirementsAssigner();
 		LSPPlan collectionPlan = LSPUtils.createLSPPlan();
@@ -116,7 +119,7 @@ public class AssignerRequirementsTest {
 		LSPUtils.LogisticsSolutionBuilder blueCollectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(blueCollectionSolutionId );
 		blueCollectionSolutionBuilder.addSolutionElement(blueCollectionElement);
 		blueSolution = blueCollectionSolutionBuilder.build();
-		blueSolution.getInfos().add(new BlueInfo());
+		blueSolution.getInfos().add(new BlueInfo() );
 		collectionPlan.addSolution(blueSolution);
 		
 		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));

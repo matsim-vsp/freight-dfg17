@@ -43,8 +43,11 @@ public class AverageTimeTracker implements LSPSimulationTracker{
 		int numberOfStops = handler.getNumberOfStops();
 		double totalTransportTime = handler.getTotalTime();
 		double averageTransportTime = totalTransportTime/numberOfStops;
-		AverageTimeInfoFunctionValue value =  (AverageTimeInfoFunctionValue) timeInfo.getFunction().getValues().iterator().next();
-		value.setValue(averageTransportTime);
+//		AverageTimeInfoFunctionValue value =  (AverageTimeInfoFunctionValue) timeInfo.getAttributes().getAttributes().iterator().next();
+//		value.setValue(averageTransportTime);
+
+		timeInfo.setAverageTime( averageTransportTime );
+
 	}
 
 

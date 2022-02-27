@@ -9,6 +9,7 @@ import demand.demandObject.DemandObject;
 import demand.offer.DefaultOfferImpl;
 import demand.offer.Offer;
 import demand.offer.OfferFactory;
+import example.lsp.simulationTrackers.LinearOffer;
 
 public class LinearOfferFactoryImpl implements OfferFactory{
 
@@ -21,7 +22,7 @@ public class LinearOfferFactoryImpl implements OfferFactory{
 		this.solution = solution;
 		this.lsp = solution.getLSP();
 		offerList = new ArrayList<>();
-		offerList.add(new LinearOffer(solution));
+		offerList.add(new LinearOffer(solution) );
 	}	
 	
 	@Override

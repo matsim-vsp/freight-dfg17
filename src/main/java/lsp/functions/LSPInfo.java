@@ -4,6 +4,8 @@ import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.resources.LSPResource;
 import lsp.shipment.LSPShipment;
+import org.matsim.utils.objectattributes.attributable.Attributable;
+import org.matsim.utils.objectattributes.attributable.Attributes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,9 +18,11 @@ import java.util.Set;
  *
  * Further, they can be valid only during a certain period of time.
  *
- * Every Info contains one {@link LSPInfoFunction}. An {@link LSPInfoFunction}, in turn, contains one or several {@link LSPInfoFunctionValue}s
+ * Every Info contains one {@link LSPAttributes}. An {@link LSPAttributes}.
  */
-public abstract class LSPInfo {
+public abstract class LSPInfo implements Attributable {
+
+	private final Attributes attributes = new Attributes();
 
 	protected final Set<LSPInfo> predecessorInfos;
 	
@@ -43,9 +47,14 @@ public abstract class LSPInfo {
 	
 	public abstract void setName(String name);
 	public abstract String getName();
-	public abstract LSPInfoFunction getFunction();
 	public abstract double getFromTime();
 	public abstract double getToTime();
 	public abstract void update();
-	
+
+	@Override
+	public Attributes getAttributes(){
+		return attributes;
+	}
+
+
 }
