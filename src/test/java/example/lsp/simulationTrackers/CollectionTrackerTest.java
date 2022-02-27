@@ -4,7 +4,7 @@ import lsp.*;
 import lsp.controler.LSPModule;
 import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
 import lsp.functions.LSPInfo;
-import lsp.functions.LSPInfoFunctionValue;
+import lsp.functions.LSPAttribute;
 import lsp.replanning.LSPReplanningUtils;
 import lsp.resources.LSPResource;
 import lsp.scoring.LSPScoringUtils;
@@ -32,6 +32,7 @@ import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
+import testMutualreplanningWithOfferUpdate.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -274,18 +275,18 @@ public class CollectionTrackerTest {
 
 		assertEquals(1, collectionSolution.getInfos().size());
 		LSPInfo info = collectionSolution.getInfos().iterator().next();
-		assertTrue(info instanceof CostInfo);
+		assertTrue(info instanceof CostInfo );
 		CostInfo costInfo = (CostInfo) info;
-		assertTrue(costInfo.getFunction() instanceof CostInfoFunction);
-		CostInfoFunction function = (CostInfoFunction) costInfo.getFunction();
-		ArrayList<LSPInfoFunctionValue<?>> values = new ArrayList<>(function.getValues());
-		for(LSPInfoFunctionValue<?> value : values) {
-			if(value instanceof LinearCostFunctionValue) {
+		assertTrue(costInfo.getAttributes() instanceof CostInfoFunction );
+		CostInfoFunction function = (CostInfoFunction) costInfo.getAttributes();
+		ArrayList<LSPAttribute<?>> values = new ArrayList<>(function.getAttributes());
+		for( LSPAttribute<?> value : values) {
+			if(value instanceof LinearCostFunctionValue ) {
 				LinearCostFunctionValue linearValue = (LinearCostFunctionValue) value;
 				assertEquals(linearValue.getValue(),linearTrackedCostsPerShipment, Math.max(linearTrackedCostsPerShipment,linearValue.getValue()) * 0.01 );
 				assertEquals(linearValue.getValue(),linearScheduledCostsPerShipment, Math.max(linearScheduledCostsPerShipment,linearValue.getValue()) * 0.01 );
 			}
-			if(value instanceof FixedCostFunctionValue) {
+			if(value instanceof FixedCostFunctionValue ) {
 				FixedCostFunctionValue fixedValue = (FixedCostFunctionValue) value;
 				assertEquals(fixedValue.getValue(),fixedTrackedCostsPerShipment, Math.max(fixedTrackedCostsPerShipment,fixedValue.getValue()) * 0.01 );
 				assertEquals(fixedValue.getValue(),fixedScheduledCostsPerShipment, Math.max(fixedScheduledCostsPerShipment,fixedValue.getValue()) * 0.01 );

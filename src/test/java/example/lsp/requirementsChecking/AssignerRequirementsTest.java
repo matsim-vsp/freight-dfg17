@@ -1,5 +1,7 @@
 package requirementsCheckerTests;
 
+import example.lsp.requirementsChecking.BlueRequirement;
+import example.lsp.requirementsChecking.RedRequirement;
 import lsp.*;
 import lsp.resources.LSPResource;
 import lsp.shipment.LSPShipment;
@@ -157,10 +159,10 @@ public class AssignerRequirementsTest {
         	builder.setDeliveryServiceTime(capacityDemand * 60 );
         	boolean blue = rand.nextBoolean();
         	if (blue) {
-        		builder.addRequirement(new BlueRequirement());
+        		builder.addRequirement(new BlueRequirement() );
         	}
         	else {
-        		builder.addRequirement(new RedRequirement());
+        		builder.addRequirement(new RedRequirement() );
         	}
         	
         	LSPShipment shipment = builder.build();

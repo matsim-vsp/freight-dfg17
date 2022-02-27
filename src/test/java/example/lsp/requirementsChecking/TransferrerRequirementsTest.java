@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import demand.decoratedLSP.*;
+import example.lsp.requirementsChecking.BlueRequirement;
+import example.lsp.requirementsChecking.RedRequirement;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
 import org.junit.Before;
@@ -153,10 +155,10 @@ public class TransferrerRequirementsTest {
         	
         	boolean blue = rand.nextBoolean();
         	if (blue) {
-        		builder.addRequirement(new BlueRequirement());
+        		builder.addRequirement(new BlueRequirement() );
         	}
         	else {
-        		builder.addRequirement(new RedRequirement());
+        		builder.addRequirement(new RedRequirement() );
         	}
         	
         	DemandObject demandObject = builder.build();

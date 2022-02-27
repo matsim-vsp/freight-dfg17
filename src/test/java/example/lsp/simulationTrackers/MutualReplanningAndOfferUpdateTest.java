@@ -7,6 +7,7 @@ import java.util.Random;
 import demand.DemandUtils;
 import demand.controler.DemandControlerUtils;
 import demand.decoratedLSP.*;
+import example.lsp.simulationTrackers.LinearOffer;
 import lsp.*;
 import lsp.usecase.UsecaseUtils;
 import org.junit.Before;
