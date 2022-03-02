@@ -1,9 +1,11 @@
-package example.lsp.requirementsChecking;
+package example.lspAndDemand.requirementsChecking;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
+
+import demand.decoratedLSP.*;
 import lsp.*;
-import lsp.resources.LSPResource;
-import lsp.shipment.LSPShipment;
-import lsp.shipment.ShipmentUtils;
 import lsp.usecase.UsecaseUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -17,18 +19,21 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vehicles.Vehicle;
 import org.matsim.vehicles.VehicleType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
+import demand.demandObject.DemandObject;
+import demand.demandObject.DemandObjectImpl;
+import demand.offer.Offer;
+import demand.offer.OfferFactoryImpl;
+import demand.offer.OfferTransferrer;
+import lsp.resources.LSPResource;
+import lsp.shipment.Requirement;
 
-class ExampleCheckRequirementsOfAssigner {
+class ExampleCheckRequirementsOfOfferTransferrer {
 
-	public static LSP createLSPWithProperties(Network network) {
+	public static LSPDecorator createLSPWithProperties(Network network) {
 		
 		//Create red LogisticsSolution which has the corresponding info
 		Id<Carrier> redCarrierId = Id.create("RedCarrier", Carrier.class);
-		Id<VehicleType> vehicleTypeId = Id.create("RedCarrierVehicleType", VehicleType.class);
+		Id<VehicleType> vehicleTypeId = Id.create("CollectionCarrierVehicleType", VehicleType.class);
 		CarrierVehicleType.Builder vehicleTypeBuilder = CarrierVehicleType.Builder.newInstance(vehicleTypeId);
 		vehicleTypeBuilder.setCapacity(10);
 		vehicleTypeBuilder.setCostPerDistanceUnit(0.0004);
@@ -63,14 +68,20 @@ class ExampleCheckRequirementsOfAssigner {
 		LogisticsSolutionElement redElement = redElementBuilder.build();
 		
 		Id<LogisticsSolution> redSolutionId = Id.create("RedSolution", LogisticsSolution.class);
-		LSPUtils.LogisticsSolutionBuilder redSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(redSolutionId );
-		redSolutionBuilder.addSolutionElement(redElement);
-		LogisticsSolution redSolution = redSolutionBuilder.build();
+		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder redOfferSolutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(redSolutionId);
+		redOfferSolutionBuilder.addSolutionElement(redElement);
+		LogisticsSolutionDecorator redOfferSolution = redOfferSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		redSolution.getInfos().add(new example.lsp.requirementsChecking.RedInfo());
+		redOfferSolution.getInfos().add(new RedInfo());
 		
+		//Add OfferFactory that gives some nonsense offer, as in this case only the work of the transferrer i.e. the solution from which the offer
+		//comes is relevant
+		OfferFactoryImpl redOfferFactory = new OfferFactoryImpl(redOfferSolution);
+		redOfferFactory.addOffer(new NonsenseOffer());
+		redOfferSolution.setOfferFactory(redOfferFactory);
 		
+
 		//Create blue LogisticsSolution which has the corresponding info
 		Id<Carrier> blueCarrierId = Id.create("BlueCarrier", Carrier.class);
 		Id<Vehicle> blueVehicleId = Id.createVehicleId("BlueVehicle");
@@ -92,69 +103,60 @@ class ExampleCheckRequirementsOfAssigner {
 		blueAdapterBuilder.setLocationLinkId(collectionLinkId);
 		LSPResource blueAdapter = blueAdapterBuilder.build();
 		
-		Id<LogisticsSolutionElement> blueElementId = Id.create("BlueCElement", LogisticsSolutionElement.class);
+		Id<LogisticsSolutionElement> blueElementId = Id.create("BlueElement", LogisticsSolutionElement.class);
 		LSPUtils.LogisticsSolutionElementBuilder blueElementBuilder = LSPUtils.LogisticsSolutionElementBuilder.newInstance(blueElementId );
 		blueElementBuilder.setResource(blueAdapter);
 		LogisticsSolutionElement blueElement = blueElementBuilder.build();
 		
 		Id<LogisticsSolution> blueSolutionId = Id.create("BlueSolution", LogisticsSolution.class);
-		LSPUtils.LogisticsSolutionBuilder blueSolutionBuilder = LSPUtils.LogisticsSolutionBuilder.newInstance(blueSolutionId );
-		blueSolutionBuilder.addSolutionElement(blueElement);
-		LogisticsSolution blueSolution = blueSolutionBuilder.build();
+		DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder blueOfferSolutionBuilder = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(blueSolutionId);
+		blueOfferSolutionBuilder.addSolutionElement(blueElement);
+		LogisticsSolutionDecorator blueOfferSolution = blueOfferSolutionBuilder.build();
 		
 		//Add info that shows the world the color of the solution
-		blueSolution.getInfos().add(new BlueInfo());
-				
-		//Create the initial plan, add assigner that checks requirements of the shipments when assigning and add both solutions (red and blue) to the 
-		//plan.
-		LSPPlan plan = LSPUtils.createLSPPlan();
-		ShipmentAssigner assigner = new RequirementsAssigner();
-		plan.setAssigner(assigner);
-		plan.addSolution(redSolution);
-		plan.addSolution(blueSolution);
+		blueOfferSolution.getInfos().add(new BlueInfo());
 		
-		LSPUtils.LSPBuilder lspBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
-		lspBuilder.setInitialPlan(plan);
+		//Add OfferFactory that gives some nonsense offer, as in this case only the work of the transferrer i.e. the solution from which the offer
+		//comes is relevant
+		OfferFactoryImpl blueOfferFactory = new OfferFactoryImpl(blueOfferSolution);
+		blueOfferFactory.addOffer(new NonsenseOffer());
+		blueOfferSolution.setOfferFactory(blueOfferFactory);
+		
+		//Create PlanDecorator (i.e. Plan that has an OfferTransferrer) and add solutions
+		LSPPlanDecorator plan = new LSPPlanWithOfferTransferrer();
+		plan.addSolution(redOfferSolution);
+		plan.addSolution(blueOfferSolution);
+		
+		//Create OfferTransferrer that only gives the offer of the suitable solution with the right color to the outside
+		OfferTransferrer transferrer = new RequirementsTransferrer();
+		plan.setOfferTransferrer(transferrer);
+		
+		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.getInstance();
+		offerLSPBuilder.setInitialPlan(plan);
+		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
+		offerLSPBuilder.setId(collectionLSPId);
 		ArrayList<LSPResource> resourcesList = new ArrayList<>();
 		resourcesList.add(redAdapter);
 		resourcesList.add(blueAdapter);
 			
 		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
-		lspBuilder.setSolutionScheduler(simpleScheduler);
-		return lspBuilder.build();
+		offerLSPBuilder.setSolutionScheduler(simpleScheduler);
+		return offerLSPBuilder.build();
+
 	}
 	
-	public static Collection<LSPShipment> createShipmentsWithRequirements(Network network){
-		//Create ten shipments with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
-		ArrayList<LSPShipment> shipmentList = new ArrayList<>();
-		ArrayList <Link> linkList = new ArrayList<>(network.getLinks().values());
-
-		Random rand = new Random(1);
+	
+	public static Collection<DemandObject> createDemandObjectsWithRequirements(){
+		//Create ten demand objects with either a red or blue requirement, i.e. that they only can be transported in a solution with the matching color
+		ArrayList<DemandObject> demandObjects = new ArrayList<>();
+	    
+	    Random rand = new Random(1); 
 	    
 	    for(int i = 1; i < 11; i++) {
-        	Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-        	ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
-        	int capacityDemand = rand.nextInt(10);
-        	builder.setCapacityDemand(capacityDemand);
+        	Id<DemandObject> id = Id.create(("DemandObject_" + i), DemandObject.class);
+        	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
+        	builder.setId(id);
         	
-        	while(true) {
-        		Collections.shuffle(linkList);
-        		Link pendingFromLink = linkList.get(0);
-        		if(pendingFromLink.getFromNode().getCoord().getX() <= 4000 &&
-        		   pendingFromLink.getFromNode().getCoord().getY() <= 4000 &&
-        		   pendingFromLink.getToNode().getCoord().getX() <= 4000 &&
-        		   pendingFromLink.getToNode().getCoord().getY() <= 4000    ) {
-        		   builder.setFromLinkId(pendingFromLink.getId());
-        		   break;	
-        		}	
-        	}
-        	
-        	builder.setToLinkId(Id.createLinkId("(4 2) (4 3)"));
-        	TimeWindow endTimeWindow = TimeWindow.newInstance(0,(24*3600));
-        	builder.setEndTimeWindow(endTimeWindow);
-        	TimeWindow startTimeWindow = TimeWindow.newInstance(0,(24*3600));
-        	builder.setStartTimeWindow(startTimeWindow);
-        	builder.setDeliveryServiceTime(capacityDemand * 60 );
         	boolean blue = rand.nextBoolean();
         	if (blue) {
         		builder.addRequirement(new BlueRequirement());
@@ -163,14 +165,15 @@ class ExampleCheckRequirementsOfAssigner {
         		builder.addRequirement(new RedRequirement());
         	}
         	
-        	shipmentList.add(builder.build());
-	    }
+        	DemandObject demandObject = builder.build();
+        	demandObjects.add(demandObject);
+	    }	
 		
-		return shipmentList;
+		return demandObjects;
 	}
 	
+	
 	public static void main (String[]args) {
-		
 		//Set up required MATSim classes
 		Config config = new Config();
 		config.addCoreModules();
@@ -178,34 +181,27 @@ class ExampleCheckRequirementsOfAssigner {
 		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
 		Network network = scenario.getNetwork();
 		
-		//Create LSP and shipments
-        LSP lsp = createLSPWithProperties(network);
-        Collection<LSPShipment> shipments =  createShipmentsWithRequirements(network);
-	
-        //assign the shipments to the LSP
-        for(LSPShipment shipment : shipments) {
-        	lsp.assignShipmentToLSP(shipment);
-        }
-        
-        for(LogisticsSolution solution : lsp.getSelectedPlan().getSolutions()) {
-        	if(solution.getId().toString().equals("RedSolution")) {
-        		for(LSPShipment shipment : solution.getShipments()) {
-        			if(!(shipment.getRequirements().iterator().next() instanceof RedRequirement)) {
-        				break;
-        			}
-        		}
-        		System.out.println("All shipments in " + solution.getId() + " are red");
-        	}
-        	if(solution.getId().toString().equals("BlueSolution")) {
-        		for(LSPShipment shipment : solution.getShipments()) {
-        			if(!(shipment.getRequirements().iterator().next() instanceof BlueRequirement)) {
-        				break;
-        			}
-        		}
-        		System.out.println("All shipments in " + solution.getId() + " are blue");
-        	}
-        }
-       
+		//Create LSP and demand objects
+		LSPDecorator lsp = createLSPWithProperties(network);
+		Collection<DemandObject> demandObjects =  createDemandObjectsWithRequirements();
+		
+		for(DemandObject demandObject : demandObjects) {
+    		Offer offer = lsp.getOffer(demandObject, "nonsense", null);
+    		for(Requirement requirement : demandObject.getRequirements()) {
+    			if((requirement instanceof RedRequirement) && (offer.getSolution().getId().toString().equals("RedSolution"))) {
+    				System.out.println(demandObject.getId()  +" is red and gets an offer from a " + offer.getSolution().getId().toString() );
+    			}
+    			else if((requirement instanceof BlueRequirement) && (offer.getSolution().getId().toString().equals("BlueSolution"))){
+    				System.out.println(demandObject.getId()  +" is blue and gets an offer from a " + offer.getSolution().getId().toString() );
+    			}
+    			else {
+    				System.out.println("Wrong sort of offer for " + demandObject.getId()+ ": " + offer.getSolution().getId().toString() +
+    						" was wrong for shipment with " + requirement.getClass());
+    			}
+    		}
+    	}
+		        
+		        
 	}
 	
 }
