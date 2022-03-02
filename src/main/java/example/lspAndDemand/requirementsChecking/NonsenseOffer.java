@@ -1,4 +1,4 @@
-package example.lsp.requirementsChecking;
+package example.lspAndDemand.requirementsChecking;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
