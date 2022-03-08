@@ -1,15 +1,15 @@
-package example.lsp.requirementsChecking;
+package example.lspAndDemand.requirementsChecking;
 
 import lsp.functions.LSPInfo;
 import lsp.LogisticsSolution;
 import lsp.shipment.Requirement;
 
-public class RedRequirement implements Requirement{
+public class BlueRequirement implements Requirement{
 
 	@Override
 	public boolean checkRequirement(LogisticsSolution solution) {
 		for(LSPInfo info : solution.getInfos()) {
-			if(info instanceof RedInfo) {
+			if(info instanceof BlueInfo) {
 				return true;
 			}
 		}	
