@@ -177,6 +177,29 @@ public class CascadingInfoTest {
 		assertSame(timeTracker.getInfos().iterator().next(), elementInfo.getPredecessorInfos().iterator().next());
 		assertTrue(timeTracker.getInfos().iterator().next() instanceof AverageTimeInfo);
 		AverageTimeInfo resourceInfo = (AverageTimeInfo) timeTracker.getInfos().iterator().next();
+
+		assertTrue(resourceInfo instanceof  AverageTimeInfo);
+		assertEquals(1, resourceInfo.getAttributes().size() );
+		Double averageResourceValue = ((AverageTimeInfo) resourceInfo).getAverageTime();
+
+		assertTrue(elementInfo instanceof  AverageTimeInfo);
+		Double averageElementValue = ((AverageTimeInfo) elementInfo).getAverageTime();
+		assertEquals(1, elementInfo.getAttributes().size() );
+		assertTrue(averageElementValue> 0);
+
+		assertTrue(solutionInfo instanceof AverageTimeInfo );
+		assertSame(solutionInfo.getPredecessorInfos().iterator().next(), elementInfo);
+
+		assertEquals(1, solutionInfo.getAttributes().size() );
+		Double averageSolutionValue = ((AverageTimeInfo) solutionInfo).getAverageTime();
+		assertTrue(averageSolutionValue > 0);
+
+		assertSame(averageElementValue, averageResourceValue);
+		assertSame(averageElementValue, averageSolutionValue);
+// Todo: Ich bin nicht sicher, ob das obige nun genau dem unteren entspricht. Gerade was das assertSame angeht. Mir ist auch bisher nur bewgrenzt klar, wer da nu was wohin speichert und warum... kmt mrz22
+		
+
+		//---- Before adoption ... KMT Mrz22
 //		assertTrue(resourceInfo.getAttributes() instanceof AverageTimeInfoFunction );
 //		AverageTimeInfoFunction resourceInfoFunction = (AverageTimeInfoFunction) resourceInfo.getAttributes();
 //		assertEquals(1, resourceInfoFunction.getAttributes().size() );
@@ -185,7 +208,7 @@ public class CascadingInfoTest {
 //		assertTrue(elementInfo.getAttributes() instanceof AverageTimeInfoFunction );
 //		AverageTimeInfoFunction averageElementFunction = (AverageTimeInfoFunction) elementInfo.getAttributes();
 //		assertEquals(1, averageElementFunction.getAttributes().size() );
-//		assertTrue(averageElementFunction.getAttributes().iterator().next() instanceof AverageTimeInfoFunctionValue );
+// 		assertTrue(averageElementFunction.getAttributes().iterator().next() instanceof AverageTimeInfoFunctionValue );
 //		AverageTimeInfoFunctionValue averageElementValue = (AverageTimeInfoFunctionValue) averageElementFunction.getAttributes().iterator().next();
 //		assertTrue(averageElementValue.getValue() > 0);
 //		assertTrue(averageElementFunction.getAttributes().iterator().next().getValue() instanceof Double );
@@ -198,8 +221,9 @@ public class CascadingInfoTest {
 //		assertTrue(averageSolutionValue.getValue() > 0);
 //		assertSame(averageElementValue.getValue(), averageResourceValue.getValue());
 //		assertSame(averageElementValue.getValue(), averageSolutionValue.getValue());
+		///------
 
-		Assert.fail("not yet adapted");
+//		Assert.fail("not yet adapted");
 
 	}
 
