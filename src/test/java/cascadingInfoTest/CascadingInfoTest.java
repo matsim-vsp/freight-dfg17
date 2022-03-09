@@ -197,7 +197,7 @@ public class CascadingInfoTest {
 		assertSame(averageElementValue, averageResourceValue);
 		assertSame(averageElementValue, averageSolutionValue);
 // Todo: Ich bin nicht sicher, ob das obige nun genau dem unteren entspricht. Gerade was das assertSame angeht. Mir ist auch bisher nur bewgrenzt klar, wer da nu was wohin speichert und warum... kmt mrz22
-		
+
 
 		//---- Before adoption ... KMT Mrz22
 //		assertTrue(resourceInfo.getAttributes() instanceof AverageTimeInfoFunction );
