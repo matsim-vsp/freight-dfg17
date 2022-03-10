@@ -48,56 +48,56 @@ public class LSPWithOffers implements LSPDecorator {
 		private LSPReplanner replanner;
 		private OfferUpdater offerUpdater;
 
-		
-		public static Builder getInstance(){
-		return new Builder();
-	}
-		
-	private Builder(){
-		this.resources = new ArrayList<>();
 
-	}
-	
-	public void setSolutionScheduler(SolutionScheduler solutionScheduler){
-		this.solutionScheduler = solutionScheduler;
-	}
-	
-	public Builder setSolutionScorer(LSPScorer scorer){
-		this.scorer = scorer;
-		return this;
-	}
-	
-	public Builder setReplanner(LSPReplanner replanner){
-		this.replanner= replanner;
-		return this;
-	}
-	
-	public Builder setOfferUpdater(OfferUpdater offerUpdater){
-		this.offerUpdater= offerUpdater;
-		return this;
-	}
-	
-	public void setInitialPlan(LSPPlanDecorator plan){
-		this.initialPlan = plan;
-		for(LogisticsSolution solution : plan.getSolutions()) {
-			for(LogisticsSolutionElement element : solution.getSolutionElements()) {
-				if(!resources.contains(element.getResource())) {
-					resources.add(element.getResource());
+		public static Builder newInstance(){
+			return new Builder();
+		}
+
+		private Builder(){
+			this.resources = new ArrayList<>();
+
+		}
+
+		public void setSolutionScheduler(SolutionScheduler solutionScheduler){
+			this.solutionScheduler = solutionScheduler;
+		}
+
+		public Builder setSolutionScorer(LSPScorer scorer){
+			this.scorer = scorer;
+			return this;
+		}
+
+		public Builder setReplanner(LSPReplanner replanner){
+			this.replanner= replanner;
+			return this;
+		}
+
+		public Builder setOfferUpdater(OfferUpdater offerUpdater){
+			this.offerUpdater= offerUpdater;
+			return this;
+		}
+
+		public void setInitialPlan(LSPPlanDecorator plan){
+			this.initialPlan = plan;
+			for(LogisticsSolution solution : plan.getSolutions()) {
+				for(LogisticsSolutionElement element : solution.getSolutionElements()) {
+					if(!resources.contains(element.getResource())) {
+						resources.add(element.getResource());
+					}
 				}
 			}
 		}
+
+		public void setId(Id<LSP> id){
+			this.id = id;
+		}
+
+		public LSPWithOffers build(){
+			return new LSPWithOffers(this);
+		}
+
 	}
-	
-	public void setId(Id<LSP> id){
-		this.id = id;
-	}
-	
-	public LSPWithOffers build(){
-		return new LSPWithOffers(this);
-	}
-	
-	}
-	
+
 	private LSPWithOffers(LSPWithOffers.Builder builder){
 		this.shipments = new ArrayList<>();
 		this.plans= new ArrayList<>();
@@ -122,8 +122,8 @@ public class LSPWithOffers implements LSPDecorator {
 		if(offerUpdater != null) {
 			offerUpdater.setLSP(this);
 		}
-	}	
-	
+	}
+
 	@Override
 	public Id<LSP> getId() {
 		return id;
@@ -209,14 +209,14 @@ public class LSPWithOffers implements LSPDecorator {
 	public void assignShipmentToLSP(LSPShipment shipment) {
 		this.shipments.add(shipment);
 	}
-	
+
 	public void replan( final ReplanningEvent arg0 ) {
 		if ( this.replanner!=null ) {
 			this.replanner.replan( arg0 );
 		}
 	}
 
-//	@Override
+	//	@Override
 //	public LSPScorer getScorer() {
 //		return scorer;
 //	}
@@ -242,7 +242,7 @@ public class LSPWithOffers implements LSPDecorator {
 		catch(ClassCastException e) {
 			System.out.println("The class " + this + " expects an LSPPlanDecorator and not any other implementation of LSPPlan");
 			System.exit(1);
-		}	
+		}
 		return false;
 	}
 
@@ -302,11 +302,11 @@ public class LSPWithOffers implements LSPDecorator {
 	public static LSPPlanDecorator copyPlan(LSPPlanDecorator plan2copy) {
 		List<LogisticsSolutionDecorator> copiedSolutions = new ArrayList<>();
 		for (LogisticsSolution solution : plan2copy.getSolutions()) {
-				LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
-				LogisticsSolutionDecorator copiedSolution = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionDecorator.getId()).build();
-				copiedSolution.getSolutionElements().addAll(solutionDecorator.getSolutionElements());		
-				copiedSolution.setOfferFactory(solutionDecorator.getOfferFactory());
-				copiedSolutions.add(copiedSolution);
+			LogisticsSolutionDecorator solutionDecorator = (LogisticsSolutionDecorator) solution;
+			LogisticsSolutionDecorator copiedSolution = DecoratedLSPUtils.LogisticsSolutionDecoratorImpl_wOffersBuilder.newInstance(solutionDecorator.getId()).build();
+			copiedSolution.getSolutionElements().addAll(solutionDecorator.getSolutionElements());
+			copiedSolution.setOfferFactory(solutionDecorator.getOfferFactory());
+			copiedSolutions.add(copiedSolution);
 		}
 		LSPPlanDecorator copiedPlan = new LSPPlanWithOfferTransferrer();
 		copiedPlan.setOfferTransferrer(plan2copy.getOfferTransferrer());

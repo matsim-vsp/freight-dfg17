@@ -22,7 +22,7 @@ public class DemandObjectImpl implements DemandObject{
 	private final double strengthOfFlow;
 	private final Id<Link> fromLinkId;
 	private final Id<Link> toLinkId;
-//	private ArrayList <UtilityFunction> utilityFunctions;
+	//	private ArrayList <UtilityFunction> utilityFunctions;
 	private DemandPlan selectedPlan;
 	private DemandScorer scorer;
 	private final DemandReplanner replanner;
@@ -35,7 +35,7 @@ public class DemandObjectImpl implements DemandObject{
 	public static class Builder{
 		private DemandAgent shipper;
 		private DemandAgent recipient;
-		private Id<DemandObject> id;
+		private final Id<DemandObject> id;
 		private double strengthOfFlow;
 		private Id<Link> fromLinkId;
 		private Id<Link> toLinkId;
@@ -47,81 +47,79 @@ public class DemandObjectImpl implements DemandObject{
 		private OfferRequester offerRequester;
 		private DemandPlanGenerator generator;
 		private final Collection<LSPInfo> infos;
-		
-		public static Builder newInstance() {
-			return new Builder();
+
+		public static Builder newInstance(Id<DemandObject> id) {
+			return new Builder(id);
 		}
-	
-	private Builder() {
-		this.requirements = new ArrayList<>();
-		this.utilityFunctions = new ArrayList<>();
-		this.infos = new ArrayList<>();
-	}
-	
-	public void setShipper(DemandAgent shipper) {
-		this.shipper = shipper;
-	}
-	
-	public void setRecipient(DemandAgent recipient) {
-		this.recipient = recipient;
-	}
-	
-	public void setId(Id<DemandObject> id) {
-		this.id = id;
-	}
-	
-	public void setInitialPlan(DemandPlan plan){
-		this.initialPlan = plan;
-	}
-	
-	public void setStrengthOfFlow(double strength){
-		this.strengthOfFlow = strength;
-	}
-	
-	public void setFromLinkId(Id<Link> fromLinkId){
-		this.fromLinkId = fromLinkId;
-	}
-	
-	public void setToLinkId(Id<Link> toLinkId){
-		this.toLinkId = toLinkId;
-	}
-	
-	public void setOfferRequester(OfferRequester offerRequester){
-		this.offerRequester = offerRequester;
-	}
-	
-	public void setDemandPlanGenerator(DemandPlanGenerator generator){
-		this.generator = generator;
-	}
 
-	public Builder addUtilityFunction(UtilityFunction utilityFunction) {
-		this.utilityFunctions.add(utilityFunction);
-		return this;
-	}
-	
-	public void addRequirement(Requirement requirement) {
-		this.requirements.add(requirement);
-	}
-	
-	public Builder addInfo(LSPInfo info) {
-		this.infos.add(info);
-		return this;
-	}
-	
-	public void setScorer(DemandScorer scorer) {
-		this.scorer = scorer;
-	}
-	
-	public void setReplanner(DemandReplanner replanner) {
-		this.replanner = replanner;
-	}
-	
-	public DemandObject build() {
-		return new DemandObjectImpl(this);
-	}
+		private Builder(Id<DemandObject> id) {
+			this.id = id;
+			this.requirements = new ArrayList<>();
+			this.utilityFunctions = new ArrayList<>();
+			this.infos = new ArrayList<>();
+		}
+
+		public void setShipper(DemandAgent shipper) {
+			this.shipper = shipper;
+		}
+
+		public void setRecipient(DemandAgent recipient) {
+			this.recipient = recipient;
+		}
+
+
+		public void setInitialPlan(DemandPlan plan){
+			this.initialPlan = plan;
+		}
+
+		public void setStrengthOfFlow(double strength){
+			this.strengthOfFlow = strength;
+		}
+
+		public void setFromLinkId(Id<Link> fromLinkId){
+			this.fromLinkId = fromLinkId;
+		}
+
+		public void setToLinkId(Id<Link> toLinkId){
+			this.toLinkId = toLinkId;
+		}
+
+		public void setOfferRequester(OfferRequester offerRequester){
+			this.offerRequester = offerRequester;
+		}
+
+		public void setDemandPlanGenerator(DemandPlanGenerator generator){
+			this.generator = generator;
+		}
+
+		public Builder addUtilityFunction(UtilityFunction utilityFunction) {
+			this.utilityFunctions.add(utilityFunction);
+			return this;
+		}
+
+		public void addRequirement(Requirement requirement) {
+			this.requirements.add(requirement);
+		}
+
+		public Builder addInfo(LSPInfo info) {
+			this.infos.add(info);
+			return this;
+		}
+
+		public void setScorer(DemandScorer scorer) {
+			this.scorer = scorer;
+		}
+
+		public void setReplanner(DemandReplanner replanner) {
+			this.replanner = replanner;
+		}
+
+		public DemandObject build() {
+			return new DemandObjectImpl(this);
+		}
 
 	}
-	
+
 	private DemandObjectImpl(Builder builder) {
 		this.plans = new ArrayList<>();
 //		this.utilityFunctions = new ArrayList<UtilityFunction>();
@@ -156,15 +154,15 @@ public class DemandObjectImpl implements DemandObject{
 		this.offerRequester = builder.offerRequester;
 		if(this.offerRequester != null) {
 			this.offerRequester.setDemandObject(this);
-		}		
+		}
 		this.infos = builder.infos;
 		this.generator = builder.generator;
 		if(this.generator != null) {
 			generator.setDemandObject(this);
 		}
 	}
-	
-	
+
+
 	@Override
 	public boolean addPlan(DemandPlan plan) {
 		return plans.add(plan);
@@ -208,7 +206,7 @@ public class DemandObjectImpl implements DemandObject{
 //	public DemandAgent getRecipient() {
 //		return recipient;
 //	}
-	
+
 	@Override
 	public Id<DemandObject> getId() {
 		return id;
@@ -252,7 +250,7 @@ public class DemandObjectImpl implements DemandObject{
 	@Override
 	public void scoreSelectedPlan() {
 		double score = scorer.scoreCurrentPlan(this);
-		this.selectedPlan.setScore(score);	
+		this.selectedPlan.setScore(score);
 	}
 
 	@Override
