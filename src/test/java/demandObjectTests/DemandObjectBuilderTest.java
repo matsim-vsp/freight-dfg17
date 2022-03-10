@@ -54,8 +54,7 @@ public class DemandObjectBuilderTest {
         
         
         for(int i = 1; i < 11 ; i++) {
-        	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
-        	builder.setId(Id.create("DemandObject_" + i, DemandObject.class));
+        	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance(Id.create("DemandObject_" + i, DemandObject.class));
 			DemandUtils.DemandAgentImplBuilder shipperBuilder = DemandUtils.DemandAgentImplBuilder.newInstance();
         	shipperBuilder.setId(Id.create("DemandObject_" + i+ "_Shipper", DemandAgent.class));
         	builder.setShipper(shipperBuilder.build());

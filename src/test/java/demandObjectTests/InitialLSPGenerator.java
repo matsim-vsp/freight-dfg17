@@ -200,7 +200,7 @@ public class InitialLSPGenerator {
 		OfferTransferrer transferrer = new SimpleOfferTransferrer();
 		plan.setOfferTransferrer(transferrer);
 				
-		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.getInstance();
+		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.newInstance();
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);

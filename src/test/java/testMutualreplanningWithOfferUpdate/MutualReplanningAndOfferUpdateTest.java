@@ -137,7 +137,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		OfferTransferrer transferrer = new SimpleOfferTransferrer();
 		plan.setOfferTransferrer(transferrer);
 				
-		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.getInstance();
+		LSPWithOffers.Builder offerLSPBuilder = LSPWithOffers.Builder.newInstance();
 		offerLSPBuilder.setInitialPlan(plan);
 		Id<LSP> collectionLSPId = Id.create("CollectionLSP", LSP.class);
 		offerLSPBuilder.setId(collectionLSPId);
@@ -162,8 +162,7 @@ public class MutualReplanningAndOfferUpdateTest {
 		ArrayList<DemandObject>demandObjects = new ArrayList<>();
 	     
 		for(int i = 1; i < 11 ; i++) {
-        	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance();
-        	builder.setId(Id.create("DemandObject_" + i, DemandObject.class));
+        	DemandObjectImpl.Builder builder = DemandObjectImpl.Builder.newInstance(Id.create("DemandObject_" + i, DemandObject.class));
         	DemandUtils.DemandAgentImplBuilder shipperBuilder = DemandUtils.DemandAgentImplBuilder.newInstance();
         	shipperBuilder.setId(Id.create("DemandObject_" + i+ "_Shipper", DemandAgent.class));
         	builder.setShipper(shipperBuilder.build());
