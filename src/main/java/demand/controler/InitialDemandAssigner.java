@@ -2,7 +2,7 @@ package demand.controler;
 
 import java.util.Collection;
 
-import lsp.shipment.ShipmentUtils;
+import lsp.shipment.LSPShipmentImpl;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
@@ -47,7 +47,7 @@ import lsp.shipment.LSPShipment;
 	
 	private void assignShipmentToLSP(DemandObject demandObject) {
 		Id<LSPShipment> id = Id.create(demandObject.getSelectedPlan().getShipment().getId(), LSPShipment.class);
-		ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
+		LSPShipmentImpl.LSPShipmentBuilder builder = LSPShipmentImpl.LSPShipmentBuilder.newInstance(id );
 		builder.setFromLinkId(demandObject.getFromLinkId());
 		builder.setToLinkId(demandObject.getToLinkId());
 		builder.setCapacityDemand((int)demandObject.getSelectedPlan().getShipment().getShipmentSize());
