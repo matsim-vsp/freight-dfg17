@@ -9,7 +9,7 @@ import java.util.Random;
 import lsp.*;
 import lsp.replanning.LSPReplanningUtils;
 import lsp.scoring.LSPScoringUtils;
-import lsp.shipment.ShipmentUtils;
+import lsp.shipment.LSPShipmentImpl;
 import lsp.usecase.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -127,7 +127,7 @@ public class CascadingInfoTest {
 
 		for(int i = 1; i < 11; i++) {
 			Id<LSPShipment> id = Id.create(i, LSPShipment.class);
-			ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
+			LSPShipmentImpl.LSPShipmentBuilder builder = LSPShipmentImpl.LSPShipmentBuilder.newInstance(id );
 			Random random = new Random(1);
 			int capacityDemand = 1 + random.nextInt(4);
 			builder.setCapacityDemand(capacityDemand);
