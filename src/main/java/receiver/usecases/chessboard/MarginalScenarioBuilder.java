@@ -230,12 +230,11 @@ public class MarginalScenarioBuilder {
 				.setCostPerDistanceUnit(7.34E-3)
 				.setCostPerTimeUnit(0.171)
 				.build();
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation, typeHeavy);
 		CarrierVehicle heavy = carrierHVehicleBuilder
 				.setEarliestStart(Time.parseTime(ExperimentParameters.DAY_START))
 				.setLatestEnd(Time.parseTime(ExperimentParameters.DAY_END))
-				.setType(typeHeavy)
-				.setTypeId(typeHeavy.getId())
+//				.setTypeId(typeHeavy.getId())
 				.build();
 
 		/* Light vehicle. */
@@ -246,12 +245,11 @@ public class MarginalScenarioBuilder {
 				.setCostPerDistanceUnit(4.22E-3)
 				.setCostPerTimeUnit(0.089)
 				.build();
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation, typeLight);
 		CarrierVehicle light = carrierLVehicleBuilder
 				.setEarliestStart(Time.parseTime(ExperimentParameters.DAY_START))
 				.setLatestEnd(Time.parseTime(ExperimentParameters.DAY_END))
-				.setType(typeLight)
-				.setTypeId(typeLight.getId())
+//				.setTypeId(typeLight.getId())
 				.build();
 
 		/* Assign vehicles to carrier. */

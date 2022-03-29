@@ -72,10 +72,12 @@ class MarginalReceiverRun {
 		* - receivers */
 		Scenario scenario = ScenarioUtils.createScenario(ConfigUtils.createConfig());
 		new MatsimNetworkReader(scenario.getNetwork()).readFile(folder + FILE_NETWORK);
-		new CarrierPlanXmlReader(FreightUtils.getOrCreateCarriers(scenario)).readFile(folder + FILE_CARRIERS);
+		CarrierVehicleTypes carrierVehicleTypes = CarrierVehicleTypes.getVehicleTypes(FreightUtils.getCarriers(scenario));
+		new CarrierVehicleTypeReader(carrierVehicleTypes).readFile(folder + FILE_CARRIER_VEHICLE_TYPES);
+
+		new CarrierPlanXmlReader(FreightUtils.addOrGetCarriers(scenario), carrierVehicleTypes).readFile(folder + FILE_CARRIERS);
 		new ReceiversReader(ReceiverUtils.getReceivers(scenario)).readFile(folder + FILE_RECEIVERS);
-		new CarrierVehicleTypeReader(
-				CarrierVehicleTypes.getVehicleTypes(FreightUtils.getCarriers(scenario))).readFile(folder + FILE_CARRIER_VEHICLE_TYPES);
+
 
 
 	}

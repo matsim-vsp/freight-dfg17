@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.freight.carrier.Carrier;
 import org.matsim.contrib.freight.carrier.CarrierPlanXmlReader;
+import org.matsim.contrib.freight.carrier.CarrierVehicleTypes;
 import org.matsim.contrib.freight.carrier.Carriers;
 import receiver.Receiver;
 
@@ -128,7 +129,7 @@ class MarginalCalculateCallable implements Callable<Double> {
 		
 		/* Calculate the marginal contribution. */
 		Carriers outputCarriers = new Carriers();
-		new CarrierPlanXmlReader(outputCarriers).readFile(newfoldername + "output/output_carrierPlans.xml.gz" );
+		new CarrierPlanXmlReader(outputCarriers, new CarrierVehicleTypes()).readFile(newfoldername + "output/output_carrierPlans.xml.gz" );
 
 		double coalitionCost = outputCarriers.getCarriers().get(Id.create("Carrier1", Carrier.class)).getSelectedPlan().getScore();
 		

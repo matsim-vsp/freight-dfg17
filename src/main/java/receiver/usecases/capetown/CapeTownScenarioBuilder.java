@@ -489,12 +489,11 @@ public class CapeTownScenarioBuilder {
 				.setCostPerDistanceUnit(8.99E-3)
 				.setCostPerTimeUnit(0.2072)
 				.build();		
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation);
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierHVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("heavy"), carrierLocation, typeHeavy);
 		CarrierVehicle heavy = carrierHVehicleBuilder
 				.setEarliestStart(Time.parseTime(CapeTownExperimentParameters.DAY_START))
 				.setLatestEnd(Time.parseTime(CapeTownExperimentParameters.DAY_END))
-				.setType(typeHeavy)
-				.setTypeId(typeHeavy.getId())
+//				.setTypeId(typeHeavy.getId())
 				.build();
 
 		/* Medium vehicle (14 tonnes). */		
@@ -505,12 +504,11 @@ public class CapeTownScenarioBuilder {
 				.setCostPerDistanceUnit(8.32E-3)
 				.setCostPerTimeUnit(0.2072)
 				.build();
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierMVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("medium"), carrierLocation);
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierMVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("medium"), carrierLocation, typeMedium);
 		CarrierVehicle medium = carrierMVehicleBuilder
 				.setEarliestStart(Time.parseTime(CapeTownExperimentParameters.DAY_START))
 				.setLatestEnd(Time.parseTime(CapeTownExperimentParameters.DAY_END))
-				.setType(typeMedium)
-				.setTypeId(typeMedium.getId())
+//				.setTypeId(typeMedium.getId())
 				.build();
 
 
@@ -522,12 +520,11 @@ public class CapeTownScenarioBuilder {
 				.setCostPerDistanceUnit(6.21E-3)
 				.setCostPerTimeUnit(0.1083)
 				.build();
-		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation);
+		org.matsim.contrib.freight.carrier.CarrierVehicle.Builder carrierLVehicleBuilder = CarrierVehicle.Builder.newInstance(Id.createVehicleId("light"), carrierLocation, typeLight);
 		CarrierVehicle light = carrierLVehicleBuilder
 				.setEarliestStart(Time.parseTime(CapeTownExperimentParameters.DAY_START))
 				.setLatestEnd(Time.parseTime(CapeTownExperimentParameters.DAY_END))
-				.setType(typeLight)
-				.setTypeId(typeLight.getId())
+//				.setTypeId(typeLight.getId())
 				.build();
 
 		/* Assign vehicles to carrier. */
