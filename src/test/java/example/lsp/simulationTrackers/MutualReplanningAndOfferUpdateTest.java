@@ -1,4 +1,4 @@
-package testMutualreplanningWithOfferUpdate;
+package example.lsp.simulationTrackers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +54,7 @@ import lsp.resources.LSPResource;
 import testMutualReplanning.FortyTwoDemandScorer;
 import testMutualReplanning.HalfLotSizeDemandPlanGenerator;
 import testMutualReplanning.SimpleOfferTransferrer;
+import testMutualreplanningWithOfferUpdate.*;
 
 import static org.junit.Assert.*;
 
@@ -119,9 +120,9 @@ public class MutualReplanningAndOfferUpdateTest {
 		solution = solutionBuilder.build();
 
 		tracker = new LinearCostTracker(0.2);
-		tracker.getEventHandlers().add(new TourStartHandler());
-		tracker.getEventHandlers().add(new CollectionServiceHandler());
-		tracker.getEventHandlers().add(new DistanceAndTimeHandler(network));	
+		tracker.getEventHandlers().add(new TourStartHandler() );
+		tracker.getEventHandlers().add(new CollectionServiceHandler() );
+		tracker.getEventHandlers().add(new DistanceAndTimeHandler(network) );
 		solution.addSimulationTracker(tracker);
 		
 		offerFactory = new OfferFactoryImpl(solution);
@@ -201,7 +202,7 @@ public class MutualReplanningAndOfferUpdateTest {
         	planStrategy.addStrategyModule(new OfferReplanningStrategyModuleImpl());
         	demandReplanner.addStrategy(planStrategy);
         	builder.setReplanner(demandReplanner);
-        	builder.setOfferRequester(new AllOffersRequester());
+        	builder.setOfferRequester(new AllOffersRequester() );
         	builder.setDemandPlanGenerator(new HalfLotSizeDemandPlanGenerator());
         	DemandObject demandObject = builder.build();
            	demandObjects.add(demandObject);

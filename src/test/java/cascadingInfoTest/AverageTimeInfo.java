@@ -1,26 +1,18 @@
 package cascadingInfoTest;
 
 import lsp.functions.LSPInfo;
-import lsp.functions.LSPInfoFunction;
-import lsp.functions.LSPInfoFunctionValue;
 
-public class AverageTimeInfo extends LSPInfo {
+class AverageTimeInfo extends LSPInfo {
 
-	private final LSPInfoFunction function;
+//	private final LSPAttributes function;
 	private String name = "averageTime";
 		
-	public AverageTimeInfo() {
-		function = new AverageTimeInfoFunction();
-	}	
+	AverageTimeInfo() {
+	}
 	
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	@Override
-	public LSPInfoFunction getFunction() {
-		return function;
 	}
 
 	@Override
@@ -36,18 +28,28 @@ public class AverageTimeInfo extends LSPInfo {
 	@Override
 	public void update() {
 		LSPInfo preInfo = predecessorInfos.iterator().next();
-		AverageTimeInfo avgInfo = (AverageTimeInfo)preInfo;
-		LSPInfoFunctionValue<?> infoVal  = avgInfo.getFunction().getValues().iterator().next();
-		if( infoVal.getValue() instanceof Double) {
-			if(function.getValues().iterator().next() instanceof AverageTimeInfoFunctionValue) {
-				AverageTimeInfoFunctionValue avgVal = (AverageTimeInfoFunctionValue) function.getValues().iterator().next();
-				avgVal.setValue((Double)infoVal.getValue());
-			}
-		}	
+//		AverageTimeInfo avgInfo = (AverageTimeInfo)preInfo;
+//		LSPAttribute<?> infoVal  = avgInfo.getAttributes().getAttributes().iterator().next();
+//		if( infoVal.getValue() instanceof Double) {
+//			if(function.getAttributes().iterator().next() instanceof AverageTimeInfoFunctionValue) {
+//				AverageTimeInfoFunctionValue avgVal = (AverageTimeInfoFunctionValue) function.getAttributes().iterator().next();
+//				avgVal.setValue((Double)infoVal.getValue());
+//			}
+//		}
+		this.setAverageTime(  ((AverageTimeInfo)preInfo).getAverageTime() );
+		// I think that this is all what the above lines do, but maybe not.  kai, feb'22
+
 	}
 
 	@Override
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	void setAverageTime( Double value ) {
+		this.getAttributes().putAttribute( name, value );
+	}
+	Double getAverageTime() {
+		return (Double) this.getAttributes().getAttribute( name );
 	}
 }

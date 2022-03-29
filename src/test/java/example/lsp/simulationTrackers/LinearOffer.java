@@ -1,13 +1,12 @@
-package testMutualreplanningWithOfferUpdate;
-
-import java.util.Random;
+package example.lsp.simulationTrackers;
 
 import demand.decoratedLSP.LSPDecorator;
 import demand.decoratedLSP.LogisticsSolutionDecorator;
 import demand.offer.Offer;
 import demand.offer.OfferVisitor;
 import lsp.functions.LSPInfo;
-import lsp.functions.LSPInfoFunctionValue;
+
+import java.util.Random;
 
 
 public class LinearOffer implements Offer{
@@ -66,21 +65,10 @@ public class LinearOffer implements Offer{
 	@Override
 	public void update() {
 		for(LSPInfo info : solution.getInfos()) {
-			if(info instanceof CostInfo) {
+			if(info instanceof CostInfo ) {
 				CostInfo costInfo = (CostInfo) info;
-				CostInfoFunction costFunction = (CostInfoFunction) costInfo.getFunction();
-				FixedCostFunctionValue fixedValue;
-				LinearCostFunctionValue linearValue;
-				for(LSPInfoFunctionValue value : costFunction.getValues()) {
-					if(value instanceof FixedCostFunctionValue) {
-						fixedValue = (FixedCostFunctionValue) value;
-						this.fix = fixedValue.getValue();
-					}
-					if(value instanceof LinearCostFunctionValue) {
-						linearValue = (LinearCostFunctionValue) value;
-						this.linear = linearValue.getValue();
-					}
-				}
+				this.fix = costInfo.getFixedCost();
+				this.linear = costInfo.getVariableCost();
 			}
 		}
 	}
