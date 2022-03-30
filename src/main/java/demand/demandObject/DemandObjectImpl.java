@@ -11,7 +11,7 @@ import demand.DemandAgent;
 import demand.mutualReplanning.DemandReplanner;
 import demand.scoring.DemandScorer;
 import demand.UtilityFunction;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import lsp.shipment.Requirement;
 import org.matsim.utils.objectattributes.attributable.Attributes;
 

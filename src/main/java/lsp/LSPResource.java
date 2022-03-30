@@ -1,4 +1,4 @@
-package lsp.resources;
+package lsp;
 
 import java.util.Collection;
 
@@ -7,8 +7,6 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.events.handler.EventHandler;
 
-import lsp.LogisticsSolutionElement;
-import lsp.functions.LSPInfo;
 import lsp.controler.LSPSimulationTracker;
 
 /**

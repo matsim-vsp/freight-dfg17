@@ -1,6 +1,6 @@
 package cascadingInfoTest;
 
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 
 class AverageTimeInfo extends LSPInfo {
 

@@ -12,7 +12,7 @@ import demand.demandObject.DemandObject;
 import demand.demandObject.DemandObjects;
 import demand.demandObject.DemandPlan;
 import demand.offer.Offer;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import lsp.shipment.LSPShipment;
 
 /*package-private*/ class InitialDemandAssigner implements StartupListener{

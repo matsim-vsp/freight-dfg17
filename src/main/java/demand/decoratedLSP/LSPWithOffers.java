@@ -15,7 +15,7 @@ import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.SolutionScheduler;
 import lsp.replanning.LSPReplanner;
-import lsp.resources.LSPResource;
+import lsp.LSPResource;
 import lsp.scoring.LSPScorer;
 import lsp.shipment.LSPShipment;
 import org.matsim.core.controler.events.ReplanningEvent;

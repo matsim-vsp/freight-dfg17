@@ -1,8 +1,5 @@
-package lsp.functions;
+package lsp;
 
-import lsp.LogisticsSolution;
-import lsp.LogisticsSolutionElement;
-import lsp.resources.LSPResource;
 import lsp.shipment.LSPShipment;
 import org.matsim.utils.objectattributes.attributable.Attributable;
 import org.matsim.utils.objectattributes.attributable.Attributes;

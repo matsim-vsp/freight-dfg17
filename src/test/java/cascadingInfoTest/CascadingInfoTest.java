@@ -11,7 +11,6 @@ import lsp.replanning.LSPReplanningUtils;
 import lsp.scoring.LSPScoringUtils;
 import lsp.shipment.LSPShipmentImpl;
 import lsp.usecase.*;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +31,7 @@ import org.matsim.vehicles.VehicleType;
 
 import lsp.controler.LSPModule;
 import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
-import lsp.resources.LSPResource;
+import lsp.LSPResource;
 import lsp.shipment.LSPShipment;
 
 

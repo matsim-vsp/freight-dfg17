@@ -10,7 +10,7 @@ import demand.decoratedLSP.LSPDecorator;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandPlan;
 import demand.offer.Offer;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import lsp.shipment.LSPShipment;
 
 public abstract class OfferReplanningStrategyModule implements GenericPlanStrategyModule<DemandPlan>{
