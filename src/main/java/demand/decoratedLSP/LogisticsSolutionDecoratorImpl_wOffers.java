@@ -10,7 +10,7 @@ import org.matsim.core.events.handler.EventHandler;
 import demand.demandObject.DemandObject;
 import demand.offer.Offer;
 import demand.offer.OfferFactory;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import lsp.LSP;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;

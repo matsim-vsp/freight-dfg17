@@ -1,4 +1,4 @@
-package lsp.resources;
+package lsp;
 
 import org.matsim.contrib.freight.carrier.Carrier;
 

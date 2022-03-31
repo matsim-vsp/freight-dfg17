@@ -9,7 +9,7 @@ import org.matsim.api.core.v01.population.HasPlansAndId;
 
 import demand.mutualReplanning.DemandReplanner;
 import demand.scoring.DemandScorer;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import lsp.shipment.Requirement;
 
 

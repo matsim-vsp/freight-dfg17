@@ -2,7 +2,7 @@ package demand.mutualReplanning;
 
 import java.util.Collection;
 
-import lsp.shipment.LSPShipmentImpl;
+import lsp.shipment.ShipmentUtils;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.replanning.modules.GenericPlanStrategyModule;
 
@@ -10,7 +10,7 @@ import demand.decoratedLSP.LSPDecorator;
 import demand.demandObject.DemandObject;
 import demand.demandObject.DemandPlan;
 import demand.offer.Offer;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import lsp.shipment.LSPShipment;
 
 public abstract class OfferReplanningStrategyModule implements GenericPlanStrategyModule<DemandPlan>{
@@ -41,7 +41,7 @@ public abstract class OfferReplanningStrategyModule implements GenericPlanStrate
 	@Override
 	public void finishReplanning() {
 		Id<LSPShipment> id = Id.create(plan.getShipment().getId(), LSPShipment.class);
-		LSPShipmentImpl.LSPShipmentBuilder builder = LSPShipmentImpl.LSPShipmentBuilder.newInstance(id );
+		ShipmentUtils.LSPShipmentBuilder builder = ShipmentUtils.LSPShipmentBuilder.newInstance(id );
 		builder.setFromLinkId(demandObject.getFromLinkId());
 		builder.setToLinkId(demandObject.getToLinkId());
 		builder.setCapacityDemand((int)plan.getShipment().getShipmentSize());

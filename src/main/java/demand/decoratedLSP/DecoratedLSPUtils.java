@@ -4,7 +4,7 @@ import demand.offer.OfferFactory;
 import lsp.LogisticsSolution;
 import lsp.LogisticsSolutionElement;
 import lsp.controler.LSPSimulationTracker;
-import lsp.functions.LSPInfo;
+import lsp.LSPInfo;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.events.handler.EventHandler;
 

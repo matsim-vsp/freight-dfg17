@@ -19,7 +19,7 @@ import org.matsim.vehicles.VehicleType;
 
 import demand.offer.OfferFactoryImpl;
 import demand.offer.OfferTransferrer;
-import lsp.resources.LSPResource;
+import lsp.LSPResource;
 
 public class InitialLSPGenerator {
 

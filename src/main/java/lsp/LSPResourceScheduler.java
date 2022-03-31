@@ -1,9 +1,7 @@
-package lsp.resources;
+package lsp;
 
 import java.util.ArrayList;
 
-import lsp.LogisticsSolutionElement;
-import lsp.ShipmentWithTime;
 import lsp.shipment.LSPShipment;
 import lsp.shipment.ShipmentComparator;
 
