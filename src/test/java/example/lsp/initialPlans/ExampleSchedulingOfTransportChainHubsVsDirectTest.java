@@ -16,11 +16,9 @@ public class ExampleSchedulingOfTransportChainHubsVsDirectTest{
 
 	@Test
 	public void testMain1(){
-	fail();
+
 		try{
 			ExampleSchedulingOfTransportChainHubsVsDirect.main( new String []{
-//					IOUtils.extendUrl( ExamplesUtils.getTestScenarioURL( "equil" ), "config.xml" ).toString()
-//					,
 					"--config:controler.outputDirectory=" + utils.getOutputDirectory()
 					, "--config:controler.lastIteration=2"
 					,"--solutionType=" + SolutionType.onePlan_withHub
@@ -39,8 +37,6 @@ public class ExampleSchedulingOfTransportChainHubsVsDirectTest{
 
 		try{
 			ExampleSchedulingOfTransportChainHubsVsDirect.main( new String []{
-//					IOUtils.extendUrl( ExamplesUtils.getTestScenarioURL( "equil" ), "config.xml" ).toString()
-//					,
 					"--config:controler.outputDirectory=" + utils.getOutputDirectory()
 					, "--config:controler.lastIteration=2"
 					, "--solutionType=" + SolutionType.onePlan_direct
