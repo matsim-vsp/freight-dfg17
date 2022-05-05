@@ -16,7 +16,7 @@ public class ExampleSchedulingOfTransportChainHubsVsDirectTest{
 
 	@Test
 	public void testMain1(){
-
+	fail();
 		try{
 			ExampleSchedulingOfTransportChainHubsVsDirect.main( new String []{
 //					IOUtils.extendUrl( ExamplesUtils.getTestScenarioURL( "equil" ), "config.xml" ).toString()
