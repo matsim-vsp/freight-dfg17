@@ -1,9 +1,8 @@
 package demand.scoring;
 
 import demand.demandObject.DemandObject;
-import lsp.scoring.Scorer;
 
-public interface DemandScorer extends Scorer{
+public interface DemandScorer {
 
 	double scoreCurrentPlan(DemandObject demandObject);
 	void setDemandObject(DemandObject demandObject);
