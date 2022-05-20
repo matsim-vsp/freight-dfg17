@@ -22,6 +22,10 @@ package example.lsp.lspScoring;
 
 import lsp.*;
 import lsp.controler.LSPModule;
+import lsp.replanning.LSPReplanningModule;
+import lsp.replanning.LSPReplanningModuleImpl;
+import lsp.scoring.LSPScoringModule;
+import lsp.scoring.LSPScoringModuleImpl;
 import lsp.shipment.ShipmentUtils;
 import org.matsim.contrib.freight.events.eventsCreator.LSPEventCreatorUtils;
 import lsp.replanning.LSPReplanningUtils;
@@ -39,6 +43,8 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.freight.carrier.*;
 import org.matsim.contrib.freight.carrier.CarrierCapabilities.FleetSize;
 import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.network.io.MatsimNetworkReader;
@@ -47,8 +53,10 @@ import org.matsim.vehicles.VehicleType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
+import static lsp.usecase.UsecaseUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -59,68 +67,33 @@ public class CollectionLSPScoringTest {
 
 	@Before
 	public void initialize() {
-
-		Config config = new Config();
-		config.addCoreModules();
-		Scenario scenario = ScenarioUtils.createScenario(config);
-		new MatsimNetworkReader(scenario.getNetwork()).readFile("scenarios/2regions/2regions-network.xml");
+		Config config = ConfigUtils.createConfig();
+		config.network().setInputFile( "scenarios/2regions/2regions-network.xml" );
+		Scenario scenario = ScenarioUtils.loadScenario(config);
 		Network network = scenario.getNetwork();
 
-		Id<Carrier> carrierId = Id.create("CollectionCarrier", Carrier.class);
-		Id<VehicleType> vehicleTypeId = Id.create("CollectionCarrierVehicleType", VehicleType.class);
-		CarrierVehicleType.Builder vehicleTypeBuilder = CarrierVehicleType.Builder.newInstance(vehicleTypeId);
-		vehicleTypeBuilder.setCapacity(10);
-		vehicleTypeBuilder.setCostPerDistanceUnit(0.0004);
-		vehicleTypeBuilder.setCostPerTimeUnit(0.38);
-		vehicleTypeBuilder.setFixCost(49);
-		vehicleTypeBuilder.setMaxVelocity(50 / 3.6);
-		org.matsim.vehicles.VehicleType collectionType = vehicleTypeBuilder.build();
+		VehicleType collectionType = CarrierVehicleType.Builder.newInstance( Id.create("CollectionCarrierVehicleType", VehicleType.class ) )
+								       .setCapacity(10 ).setCostPerDistanceUnit(0.0004 ).setCostPerTimeUnit(0.38 ).setFixCost(49 ).setMaxVelocity(50 / 3.6 ).build();
 
-		Id<Link> collectionLinkId = Id.createLinkId("(4 2) (4 3)");
-		Link collectionLink = network.getLinks().get(collectionLinkId);
+		Link collectionLink = network.getLinks().get( Id.createLinkId("(4 2) (4 3)" ) ); // (make sure that the link exists)
+
 		CarrierVehicle carrierVehicle = CarrierVehicle.newInstance(Id.createVehicleId("CollectionVehicle"), collectionLink.getId(), collectionType);
 
-		CarrierCapabilities.Builder capabilitiesBuilder = CarrierCapabilities.Builder.newInstance();
-		capabilitiesBuilder.addType(collectionType);
-		capabilitiesBuilder.addVehicle(carrierVehicle);
-		capabilitiesBuilder.setFleetSize(FleetSize.INFINITE);
-		CarrierCapabilities capabilities = capabilitiesBuilder.build();
-		Carrier carrier = CarrierUtils.createCarrier(carrierId);
-		carrier.setCarrierCapabilities(capabilities);
+		Carrier carrier = CarrierUtils.createCarrier( Id.create("CollectionCarrier", Carrier.class ) );
+		carrier.setCarrierCapabilities( CarrierCapabilities.Builder.newInstance().addType(collectionType ).addVehicle(carrierVehicle ).setFleetSize(FleetSize.INFINITE ).build() );
 
-		Id<LSPResource> adapterId = Id.create("CollectionCarrierAdapter", LSPResource.class);
-		UsecaseUtils.CollectionCarrierAdapterBuilder adapterBuilder = UsecaseUtils.CollectionCarrierAdapterBuilder.newInstance(adapterId,
-				network);
-		adapterBuilder.setCollectionScheduler(UsecaseUtils.createDefaultCollectionCarrierScheduler());
-		adapterBuilder.setCarrier(carrier);
-		adapterBuilder.setLocationLinkId(collectionLinkId);
-		LSPResource collectionAdapter = adapterBuilder.build();
+		LSPResource collectionAdapter = CollectionCarrierAdapterBuilder.newInstance( Id.create("CollectionCarrierAdapter", LSPResource.class ), network)
+									       .setCollectionScheduler( createDefaultCollectionCarrierScheduler() ).setCarrier(carrier ).setLocationLinkId(collectionLink.getId() ).build();
 
-		Id<LogisticsSolutionElement> elementId = Id.create("CollectionElement", LogisticsSolutionElement.class);
-		LSPUtils.LogisticsSolutionElementBuilder collectionElementBuilder = LSPUtils.LogisticsSolutionElementBuilder
-				.newInstance(elementId);
-		collectionElementBuilder.setResource(collectionAdapter);
-		LogisticsSolutionElement collectionElement = collectionElementBuilder.build();
+		LogisticsSolutionElement collectionElement = LSPUtils.LogisticsSolutionElementBuilder
+				.newInstance( Id.create("CollectionElement", LogisticsSolutionElement.class ) ).setResource(collectionAdapter ).build();
 
-		Id<LogisticsSolution> collectionSolutionId = Id.create("CollectionSolution", LogisticsSolution.class);
-		LSPUtils.LogisticsSolutionBuilder collectionSolutionBuilder = LSPUtils.LogisticsSolutionBuilder
-				.newInstance(collectionSolutionId);
-		collectionSolutionBuilder.addSolutionElement(collectionElement);
-		LogisticsSolution collectionSolution = collectionSolutionBuilder.build();
+		LogisticsSolution collectionSolution = LSPUtils.LogisticsSolutionBuilder.newInstance( Id.create("CollectionSolution", LogisticsSolution.class ) )
+											.addSolutionElement(collectionElement ).build();
 
-		ShipmentAssigner assigner = UsecaseUtils.createDeterministicShipmentAssigner();
-		LSPPlan collectionPlan = LSPUtils.createLSPPlan();
-		collectionPlan.setAssigner(assigner);
-		collectionPlan.addSolution(collectionSolution);
-
-		LSPUtils.LSPBuilder collectionLSPBuilder = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class));
-		collectionLSPBuilder.setInitialPlan(collectionPlan);
-		ArrayList<LSPResource> resourcesList = new ArrayList<>();
-		resourcesList.add(collectionAdapter);
-
-		SolutionScheduler simpleScheduler = UsecaseUtils.createDefaultSimpleForwardSolutionScheduler(resourcesList);
-		collectionLSPBuilder.setSolutionScheduler(simpleScheduler);
-		collectionLSP = collectionLSPBuilder.build();
+		collectionLSP = LSPUtils.LSPBuilder.getInstance(Id.create("CollectionLSP", LSP.class))
+						   .setInitialPlan( LSPUtils.createLSPPlan().setAssigner( createDeterministicShipmentAssigner() ).addSolution(collectionSolution ) )
+						   .setSolutionScheduler( createDefaultSimpleForwardSolutionScheduler( Collections.singletonList( collectionAdapter ) ) ).build();
 
 		TipEventHandler handler = new TipEventHandler();
 //		LSPAttribute<Double> value = LSPInfoFunctionUtils.createInfoFunctionValue("TIP IN EUR" );
@@ -153,7 +126,7 @@ public class CollectionLSPScoringTest {
 				}
 			}
 
-			builder.setToLinkId(collectionLinkId);
+			builder.setToLinkId( collectionLink.getId() );
 			TimeWindow endTimeWindow = TimeWindow.newInstance(0, (24 * 3600));
 			builder.setEndTimeWindow(endTimeWindow);
 			TimeWindow startTimeWindow = TimeWindow.newInstance(0, (24 * 3600));
@@ -169,16 +142,21 @@ public class CollectionLSPScoringTest {
 		lspList.add(collectionLSP);
 		LSPs lsps = new LSPs(lspList);
 
-		Controler controler = new Controler(config);
+		LSPUtils.addLSPs( scenario, lsps );
 
-		LSPModule module = new LSPModule(lsps, LSPReplanningUtils.createDefaultLSPReplanningModule(lsps), LSPScoringUtils.createDefaultLSPScoringModule(lsps ),
-				LSPEventCreatorUtils.getStandardEventCreators());
+		Controler controler = new Controler(scenario);
 
-		controler.addOverridingModule(module);
+		controler.addOverridingModule( new AbstractModule(){
+			@Override public void install(){
+				install( new LSPModule() );
+				this.bind( LSPReplanningModule.class ).to( LSPReplanningModuleImpl.class );
+				this.bind( LSPScoringModule.class ).to( LSPScoringModuleImpl.class );
+			}
+		});
 		config.controler().setFirstIteration(0);
 		config.controler().setLastIteration(0);
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
-		config.network().setInputFile("scenarios/2regions/2regions-network.xml");
+//		config.network().setInputFile("scenarios/2regions/2regions-network.xml");
 		controler.run();
 	}
 

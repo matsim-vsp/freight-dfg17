@@ -20,17 +20,23 @@
 
 package lsp.scoring;
 
+import com.google.inject.Inject;
 import lsp.LSP;
+import lsp.LSPUtils;
 import lsp.LSPs;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.events.ScoringEvent;
 
-class LSPScoringModuleImpl implements LSPScoringModule{
+public class LSPScoringModuleImpl implements LSPScoringModule{
 
-	private final LSPs lsps;
-	
-	LSPScoringModuleImpl(LSPs lsps) {
-		this.lsps = lsps;
+	private final Scenario scenario;
+	@Inject LSPScoringModuleImpl( Scenario scenario ) {
+		this.scenario = scenario;
 	}
+	
+//	LSPScoringModuleImpl(LSPs lsps) {
+//		this.lsps = lsps;
+//	}
 		
 	@Override
 	public void notifyScoring(ScoringEvent event) {
@@ -39,6 +45,7 @@ class LSPScoringModuleImpl implements LSPScoringModule{
 
 	@Override
 	public void scoreLSPs(ScoringEvent arg0) {
+		LSPs lsps = LSPUtils.getLSPs( scenario );
 		for(LSP lsp : lsps.getLSPs().values()) {
 			lsp.scoreSelectedPlan();
 		}

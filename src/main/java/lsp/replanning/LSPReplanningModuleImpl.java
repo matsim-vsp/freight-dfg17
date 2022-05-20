@@ -20,18 +20,25 @@
 
 package lsp.replanning;
 
+import com.google.inject.Inject;
+import lsp.LSPUtils;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.events.ReplanningEvent;
 
 import lsp.LSP;
 import lsp.LSPs;
 
-class LSPReplanningModuleImpl implements LSPReplanningModule{
+public class LSPReplanningModuleImpl implements LSPReplanningModule{
 
-	private final LSPs lsps;
-	
-	LSPReplanningModuleImpl(LSPs lsps) {
-		this.lsps = lsps;
+
+	private final Scenario scenario;
+	@Inject LSPReplanningModuleImpl( Scenario scenario ){
+		this.scenario = scenario;
 	}
+	
+//	LSPReplanningModuleImpl(LSPs lsps) {
+//		this.lsps = lsps;
+//	}
 		
 	@Override
 	public void notifyReplanning(ReplanningEvent arg0) {
@@ -41,6 +48,7 @@ class LSPReplanningModuleImpl implements LSPReplanningModule{
 	
 	@Override
 	public void replanLSPs(ReplanningEvent arg0) {
+		LSPs lsps = LSPUtils.getLSPs( scenario );
 		for(LSP lsp : lsps.getLSPs().values()) {
 			lsp.replan(arg0);
 		}
